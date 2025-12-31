@@ -25,6 +25,7 @@ export const MemoryPlugin: Plugin = async (ctx) => {
   const sessionsPath = join(memoryDir, "sessions.jsonl");
   const metricsPath = join(memoryDir, "metrics.json");
   const logPath = join(memoryDir, "realtime.log");
+  const handoffStatePath = join(memoryDir, ".handoff-state.json");
 
   // Only activate if memory system is present
   if (!existsSync(memoryDir)) {
@@ -38,6 +39,31 @@ export const MemoryPlugin: Plugin = async (ctx) => {
   let toolCallCount = 0;
   let sessionBootRan = false;
   let coordinator: MultiAgentCoordinator | null = null;
+
+  // Persistent handoff state - shared across plugin instances via file
+  const getHandoffEnabled = (): boolean => {
+    try {
+      if (existsSync(handoffStatePath)) {
+        const state = JSON.parse(readFileSync(handoffStatePath, "utf-8"));
+        return state.handoff_enabled !== false; // default true if not set
+      }
+    } catch (e) {
+      // Ignore errors, default to true
+    }
+    return true;
+  };
+
+  const setHandoffEnabled = (enabled: boolean): void => {
+    try {
+      writeFileSync(handoffStatePath, JSON.stringify({
+        handoff_enabled: enabled,
+        updated_at: new Date().toISOString(),
+        session_id: currentSessionId
+      }, null, 2));
+    } catch (e) {
+      console.error("[Memory] Failed to write handoff state:", e);
+    }
+  };
 
   // Real-time logger helper
   const log = (
@@ -132,19 +158,19 @@ ${
               coordinator.startHeartbeat();
               log("INFO", `Agent registered with role: ${role}`);
 
-              return {
+              return JSON.stringify({
                 success: true,
                 message: `Agent registered as ${role}`,
                 agent_id: (coordinator as any).agentId,
-              };
+              });
             }
 
-            return {
+            return JSON.stringify({
               success: false,
               message: "Agent already registered",
-            };
+            });
           } catch (error) {
-            return { success: false, error: String(error) };
+            return JSON.stringify({ success: false, error: String(error) });
           }
         },
       },
@@ -159,14 +185,14 @@ ${
         execute: async () => {
           try {
             if (!coordinator) {
-              return {
+              return JSON.stringify({
                 success: false,
                 message: "Agent not registered. Use agent_register first.",
-              };
+              });
             }
 
             const agents = coordinator.getActiveAgents();
-            return {
+            return JSON.stringify({
               success: true,
               agent_count: agents.length,
               agents: agents.map((a) => ({
@@ -177,9 +203,9 @@ ${
                 task: a.current_task,
                 last_heartbeat: a.last_heartbeat,
               })),
-            };
+            });
           } catch (error) {
-            return { success: false, error: String(error) };
+            return JSON.stringify({ success: false, error: String(error) });
           }
         },
       },
@@ -215,10 +241,10 @@ ${
         execute: async ({ type, payload, to_agent }) => {
           try {
             if (!coordinator) {
-              return {
+              return JSON.stringify({
                 success: false,
                 message: "Agent not registered. Use agent_register first.",
-              };
+              });
             }
 
             coordinator.sendMessage({
@@ -228,12 +254,12 @@ ${
             });
             log("INFO", `Message sent: ${type}`, { to: to_agent || "all" });
 
-            return {
+            return JSON.stringify({
               success: true,
               message: `Message sent: ${type}`,
-            };
+            });
           } catch (error) {
-            return { success: false, error: String(error) };
+            return JSON.stringify({ success: false, error: String(error) });
           }
         },
       },
@@ -254,10 +280,10 @@ ${
         execute: async ({ mark_read = true }) => {
           try {
             if (!coordinator) {
-              return {
+              return JSON.stringify({
                 success: false,
                 message: "Agent not registered. Use agent_register first.",
-              };
+              });
             }
 
             const messages = coordinator.readMessages();
@@ -266,7 +292,7 @@ ${
               coordinator.markAsRead(messages.map((m) => m.message_id));
             }
 
-            return {
+            return JSON.stringify({
               success: true,
               message_count: messages.length,
               messages: messages.map((m) => ({
@@ -276,9 +302,9 @@ ${
                 timestamp: m.timestamp,
                 payload: m.payload,
               })),
-            };
+            });
           } catch (error) {
-            return { success: false, error: String(error) };
+            return JSON.stringify({ success: false, error: String(error) });
           }
         },
       },
@@ -304,20 +330,58 @@ ${
         execute: async ({ status, task }) => {
           try {
             if (!coordinator) {
-              return {
+              return JSON.stringify({
                 success: false,
                 message: "Agent not registered. Use agent_register first.",
-              };
+              });
             }
 
             coordinator.updateStatus(status as any, task);
-            return {
+            return JSON.stringify({
               success: true,
               message: `Status updated: ${status}`,
-            };
+            });
           } catch (error) {
-            return { success: false, error: String(error) };
+            return JSON.stringify({ success: false, error: String(error) });
           }
+        },
+      },
+
+      agent_set_handoff: {
+        description:
+          "Control whether this agent hands off when session goes idle. Main/orchestrator agents should disable handoff to stay running continuously.",
+        parameters: {
+          type: "object",
+          properties: {
+            enabled: {
+              type: "boolean",
+              description:
+                "If true, agent will handoff on idle. If false, agent stays running (for main/orchestrator agents).",
+            },
+          },
+          required: ["enabled"],
+        },
+        execute: async ({ enabled }) => {
+          // Handle string "false" from OpenCode
+          const isEnabled = enabled === true || enabled === "true";
+          
+          // CRITICAL: Write to persistent file so BOTH plugin instances see the same state
+          setHandoffEnabled(isEnabled);
+          log("INFO", `Handoff ${isEnabled ? "enabled" : "disabled"} for this agent (persisted to file)`);
+          
+          // Also update coordinator if registered
+          if (coordinator) {
+            coordinator.updateStatus(isEnabled ? "active" : "working", 
+              isEnabled ? undefined : "Orchestrator mode - no handoff");
+          }
+          
+          return JSON.stringify({
+            success: true,
+            handoff_enabled: isEnabled,
+            message: isEnabled 
+              ? "Agent will handoff when idle" 
+              : "Agent will NOT handoff - running as main/orchestrator (PERSISTENT)",
+          });
         },
       },
 
@@ -345,7 +409,7 @@ ${
                 ? JSON.parse(readFileSync(metricsPath, "utf-8"))
                 : null;
 
-            return {
+            return JSON.stringify({
               success: true,
               data: {
                 session: state.session_count,
@@ -362,9 +426,9 @@ ${
                     }
                   : {}),
               },
-            };
+            });
           } catch (error) {
-            return { success: false, error: String(error) };
+            return JSON.stringify({ success: false, error: String(error) });
           }
         },
       },
@@ -441,12 +505,12 @@ ${
               }
             }
 
-            return {
+            return JSON.stringify({
               success: true,
               data: results,
-            };
+            });
           } catch (error) {
-            return { success: false, error: String(error) };
+            return JSON.stringify({ success: false, error: String(error) });
           }
         },
       },
@@ -515,7 +579,7 @@ ${
             state.last_updated = new Date().toISOString();
             writeFileSync(statePath, JSON.stringify(state, null, 2));
 
-            return {
+            return JSON.stringify({
               success: true,
               message: `Updated: ${action}`,
               new_state: {
@@ -523,9 +587,9 @@ ${
                 active_tasks: state.active_tasks,
                 recent_achievements: state.recent_achievements?.slice(0, 3),
               },
-            };
+            });
           } catch (error) {
-            return { success: false, error: String(error) };
+            return JSON.stringify({ success: false, error: String(error) });
           }
         },
       },
@@ -671,7 +735,15 @@ ${
         }
 
         if (event.type === "session.idle") {
-          log("INFO", `Session idle: ${event.properties.sessionID}`);
+          // CRITICAL: Read handoff state from persistent file (shared across plugin instances)
+          const handoffEnabled = getHandoffEnabled();
+          log("INFO", `Session idle: ${event.properties.sessionID} (handoff: ${handoffEnabled}, from file)`);
+
+          // If handoff is disabled, this agent stays running (main/orchestrator)
+          if (!handoffEnabled) {
+            log("INFO", "Handoff disabled (persistent) - agent continues running as orchestrator");
+            return; // Don't unregister or update working.md
+          }
 
           // Unregister from multi-agent coordinator
           if (coordinator) {

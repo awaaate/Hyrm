@@ -14,7 +14,7 @@
  * - Live watchdog status
  */
 
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, watch } from 'fs';
 import { join } from 'path';
 
 const PORT = process.env.PORT || 3000;
@@ -146,6 +146,38 @@ async function getKnowledge() {
   return { articles };
 }
 
+// API: Get agents
+async function getAgents() {
+  const agentRegistry = readJSON('../agent-registry.json');
+  const messageBus = readText('../message-bus.jsonl');
+  
+  if (!agentRegistry) {
+    return { error: 'Agent registry not found', agents: [] };
+  }
+  
+  // Parse messages for recent activity
+  const recentMessages: any[] = [];
+  if (messageBus) {
+    const lines = messageBus.trim().split('\n');
+    const last10Lines = lines.slice(-10);
+    for (const line of last10Lines) {
+      try {
+        const msg = JSON.parse(line);
+        recentMessages.push(msg);
+      } catch (e) {
+        // Skip invalid lines
+      }
+    }
+  }
+  
+  return {
+    agents: agentRegistry.agents || [],
+    agent_count: agentRegistry.agent_count || 0,
+    messages: recentMessages,
+    timestamp: new Date().toISOString()
+  };
+}
+
 // API: Health check
 async function getHealth() {
   return {
@@ -155,10 +187,50 @@ async function getHealth() {
   };
 }
 
+// WebSocket clients
+const wsClients = new Set<any>();
+
+// Broadcast to all connected WebSocket clients
+function broadcast(data: any) {
+  const message = JSON.stringify(data);
+  for (const client of wsClients) {
+    try {
+      client.send(message);
+    } catch (error) {
+      // Client disconnected, remove it
+      wsClients.delete(client);
+    }
+  }
+}
+
+// Watch for changes in agent-registry.json and message-bus.jsonl
+const agentRegistryPath = join(MEMORY_DIR, '../agent-registry.json');
+const messageBusPath = join(MEMORY_DIR, '../message-bus.jsonl');
+
+// File watcher for agent registry
+if (existsSync(agentRegistryPath)) {
+  watch(agentRegistryPath, async (eventType) => {
+    if (eventType === 'change') {
+      const agents = await getAgents();
+      broadcast({ type: 'agents', data: agents });
+    }
+  });
+}
+
+// File watcher for message bus
+if (existsSync(messageBusPath)) {
+  watch(messageBusPath, async (eventType) => {
+    if (eventType === 'change') {
+      const agents = await getAgents();
+      broadcast({ type: 'agents', data: agents });
+    }
+  });
+}
+
 // Main server
 const server = Bun.serve({
   port: PORT,
-  async fetch(req) {
+  async fetch(req, server) {
     const url = new URL(req.url);
     
     // CORS headers
@@ -172,6 +244,15 @@ const server = Bun.serve({
     // Handle CORS preflight
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers });
+    }
+    
+    // WebSocket upgrade
+    if (url.pathname === '/ws') {
+      const upgraded = server.upgrade(req);
+      if (upgraded) {
+        return undefined;
+      }
+      return new Response('WebSocket upgrade failed', { status: 400 });
     }
     
     // API routes
@@ -205,6 +286,11 @@ const server = Bun.serve({
       return new Response(JSON.stringify(data), { headers });
     }
     
+    if (url.pathname === '/api/agents') {
+      const data = await getAgents();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    
     // Static file serving
     if (url.pathname === '/' || url.pathname === '/index.html') {
       const html = readText('dashboard/public/index.html');
@@ -235,6 +321,30 @@ const server = Bun.serve({
     
     // 404
     return new Response('Not Found', { status: 404 });
+  },
+  
+  websocket: {
+    open(ws) {
+      console.log('WebSocket client connected');
+      wsClients.add(ws);
+      
+      // Send initial agent data
+      getAgents().then(data => {
+        ws.send(JSON.stringify({ type: 'agents', data }));
+      });
+    },
+    
+    close(ws) {
+      console.log('WebSocket client disconnected');
+      wsClients.delete(ws);
+    },
+    
+    message(ws, message) {
+      // Handle ping/pong
+      if (message === 'ping') {
+        ws.send('pong');
+      }
+    }
   }
 });
 

@@ -19,7 +19,10 @@ const elements = {
   conversations: document.getElementById('conversations'),
   knowledge: document.getElementById('knowledge'),
   lastUpdated: document.getElementById('last-updated'),
-  healthText: document.getElementById('health-text')
+  healthText: document.getElementById('health-text'),
+  agentCount: document.getElementById('agent-count'),
+  agentList: document.getElementById('agent-list'),
+  recentMessages: document.getElementById('recent-messages')
 };
 
 // Utility: Format percentage
@@ -209,6 +212,179 @@ async function checkHealth() {
   }
 }
 
+// Fetch and update agents
+async function updateAgents() {
+  try {
+    const response = await fetch(`${API_BASE}/api/agents`);
+    const data = await response.json();
+    
+    if (data.error) {
+      console.error('Agents error:', data.error);
+      return;
+    }
+    
+    // Update agent count
+    if (elements.agentCount) {
+      elements.agentCount.textContent = data.agent_count || 0;
+    }
+    
+    // Update agent list
+    if (elements.agentList) {
+      if (data.agents && data.agents.length > 0) {
+        elements.agentList.innerHTML = data.agents
+          .map(agent => {
+            const statusClass = agent.status === 'working' ? 'agent-working' :
+                              agent.status === 'idle' ? 'agent-idle' : 'agent-offline';
+            return `
+              <div class="agent-item ${statusClass}">
+                <div class="agent-header">
+                  <span class="agent-id">${agent.id}</span>
+                  <span class="agent-status">${agent.status}</span>
+                </div>
+                <div class="agent-task">${agent.current_task || 'No active task'}</div>
+                <div class="agent-meta">
+                  <span>Role: ${agent.role || 'unknown'}</span>
+                  <span>Updated: ${formatDate(agent.last_update)}</span>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+      } else {
+        elements.agentList.innerHTML = '<div class="loading">No agents registered</div>';
+      }
+    }
+    
+    // Update recent messages
+    if (elements.recentMessages) {
+      if (data.messages && data.messages.length > 0) {
+        elements.recentMessages.innerHTML = data.messages
+          .map(msg => {
+            const typeClass = msg.type === 'task_complete' ? 'message-success' :
+                            msg.type === 'task_started' ? 'message-info' : 'message-default';
+            return `
+              <div class="message-item ${typeClass}">
+                <div class="message-header">
+                  <span class="message-from">${msg.from}</span>
+                  <span class="message-arrow">→</span>
+                  <span class="message-to">${msg.to || 'broadcast'}</span>
+                </div>
+                <div class="message-type">${msg.type}</div>
+                ${msg.payload ? `<div class="message-payload">${JSON.stringify(msg.payload, null, 2)}</div>` : ''}
+                <div class="message-time">${formatDate(msg.timestamp)}</div>
+              </div>
+            `;
+          })
+          .join('');
+      } else {
+        elements.recentMessages.innerHTML = '<div class="loading">No recent messages</div>';
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching agents:', error);
+  }
+}
+
+// WebSocket connection
+let ws = null;
+let reconnectTimer = null;
+
+function connectWebSocket() {
+  const wsUrl = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+  ws = new WebSocket(`${wsUrl}${window.location.host}/ws`);
+  
+  ws.onopen = () => {
+    console.log('WebSocket connected');
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+      reconnectTimer = null;
+    }
+  };
+  
+  ws.onmessage = (event) => {
+    try {
+      const message = JSON.parse(event.data);
+      console.log('WebSocket message:', message);
+      
+      if (message.type === 'agents') {
+        // Update agent display with real-time data
+        const data = message.data;
+        
+        // Update agent count
+        if (elements.agentCount) {
+          elements.agentCount.textContent = data.agent_count || 0;
+        }
+        
+        // Update agent list
+        if (elements.agentList && data.agents) {
+          elements.agentList.innerHTML = data.agents
+            .map(agent => {
+              const statusClass = agent.status === 'working' ? 'agent-working' :
+                                agent.status === 'idle' ? 'agent-idle' : 'agent-offline';
+              return `
+                <div class="agent-item ${statusClass}">
+                  <div class="agent-header">
+                    <span class="agent-id">${agent.id}</span>
+                    <span class="agent-status">${agent.status}</span>
+                  </div>
+                  <div class="agent-task">${agent.current_task || 'No active task'}</div>
+                  <div class="agent-meta">
+                    <span>Role: ${agent.role || 'unknown'}</span>
+                    <span>Updated: ${formatDate(agent.last_update)}</span>
+                  </div>
+                </div>
+              `;
+            })
+            .join('');
+        }
+        
+        // Update recent messages
+        if (elements.recentMessages && data.messages) {
+          elements.recentMessages.innerHTML = data.messages
+            .map(msg => {
+              const typeClass = msg.type === 'task_complete' ? 'message-success' :
+                              msg.type === 'task_started' ? 'message-info' : 'message-default';
+              return `
+                <div class="message-item ${typeClass}">
+                  <div class="message-header">
+                    <span class="message-from">${msg.from}</span>
+                    <span class="message-arrow">→</span>
+                    <span class="message-to">${msg.to || 'broadcast'}</span>
+                  </div>
+                  <div class="message-type">${msg.type}</div>
+                  ${msg.payload ? `<div class="message-payload">${JSON.stringify(msg.payload, null, 2)}</div>` : ''}
+                  <div class="message-time">${formatDate(msg.timestamp)}</div>
+                </div>
+              `;
+            })
+            .join('');
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing WebSocket message:', error);
+    }
+  };
+  
+  ws.onclose = () => {
+    console.log('WebSocket disconnected');
+    // Attempt to reconnect after 5 seconds
+    if (!reconnectTimer) {
+      reconnectTimer = setTimeout(connectWebSocket, 5000);
+    }
+  };
+  
+  ws.onerror = (error) => {
+    console.error('WebSocket error:', error);
+  };
+  
+  // Send ping every 30 seconds to keep connection alive
+  setInterval(() => {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send('ping');
+    }
+  }, 30000);
+}
+
 // Update all data
 async function updateAll() {
   await Promise.all([
@@ -217,6 +393,7 @@ async function updateAll() {
     updateMemory(),
     updateConversations(),
     updateKnowledge(),
+    updateAgents(),
     checkHealth()
   ]);
   
@@ -232,6 +409,9 @@ async function init() {
   
   // Set up periodic refresh
   setInterval(updateAll, REFRESH_INTERVAL);
+  
+  // Connect WebSocket for real-time agent updates
+  connectWebSocket();
   
   console.log('Dashboard ready. Auto-refresh every', REFRESH_INTERVAL / 1000, 'seconds');
 }

@@ -1,23 +1,14 @@
 {
-  "version": "1.0",
-  "last_session": "2025-12-31T20:01:56.372Z",
-  "current_objective": "Build persistence system for cross-session memory",
+  "version": "2.0",
+  "session_count": 22,
+  "status": "initialized",
   "active_tasks": [
-    "Build intelligent memory pruning when context approaches limit",
-    "Validate plugin provides actual value vs baseline",
-    "Document system limitations and capabilities honestly"
+    null
   ],
-  "session_count": 98,
-  "total_tokens_used": 850000,
-  "memory_version": 4,
-  "status": "phase_4_week3_native_tools_complete",
-  "current_conversation": "default",
   "recent_achievements": [
-    "Session 70: Native memory tools (memory_status, memory_search, memory_update) - 500-800 tokens saved per session",
-    "Session 68: Auto-handoff on session.idle (complete automation), cleaned 23 files",
-    "Session 66: Migrated boot logic to plugin hooks (removed 2 shell scripts)",
-    "Session 15: Auto-context injection via plugin (404 tokens saved per cycle)",
-    "Session 14: Knowledge extraction from 19 OpenCode sessions (564 messages)"
+    "Session 14: undefined"
   ],
-  "current_session_id": "ses_489ff4b6effe5P3qMXyBr12Vo6"
+  "last_session": "2025-12-31T20:39:54.304Z",
+  "current_session_id": "ses_489dc8942ffe1z6CvIiG76Nv3O",
+  "last_updated": "2025-12-31T20:42:18.979Z"
 }
