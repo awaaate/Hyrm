@@ -1,0 +1,99 @@
+{
+  "investigation": "Token counting inconsistency in metrics.json",
+  "started": "2025-12-31T17:18:20Z",
+  "status": "resolved",
+  "completed": "2025-12-31T17:21:00Z",
+  "hypotheses": [
+    {
+      "id": "H1",
+      "description": "metrics.json value (942 tokens) hasn't been updated since optimization",
+      "confidence": "high",
+      "status": "testing"
+    },
+    {
+      "id": "H2",
+      "description": "Token counting methodology differs between analyzer and metrics",
+      "confidence": "medium",
+      "status": "pending"
+    },
+    {
+      "id": "H3",
+      "description": "Definition of 'core memory' differs - analyzer counts more files",
+      "confidence": "high",
+      "status": "pending"
+    }
+  ],
+  "experiments": [
+    {
+      "id": "E1",
+      "hypothesis": "H1",
+      "description": "Run analyze-tokens.ts and compare with metrics.json",
+      "results": {
+        "analyzer_core_memory": 5763,
+        "analyzer_percentage": 2.88,
+        "metrics_overhead": 942,
+        "metrics_percentage": 0.47,
+        "discrepancy": "6x difference - significant!"
+      },
+      "conclusion": "Major discrepancy confirmed. Need to understand what each considers 'core memory'."
+    },
+    {
+      "id": "E2",
+      "hypothesis": "H3",
+      "description": "Check what files analyzer includes in core memory vs what should be loaded on boot",
+      "results": {
+        "actual_boot_files": ["state.json", "working.md", "metrics.json"],
+        "analyzer_counts": "5763 tokens across 'essential files'",
+        "need_to_verify": "What does analyzer define as 'essential'?"
+      },
+      "conclusion": "Need to check analyzer source code"
+    }
+  ],
+  "findings": [
+    {
+      "timestamp": "2025-12-31T17:19:00Z",
+      "finding": "Analyzer reports 5,763 tokens for core memory (2.88%), metrics.json reports 942 tokens (0.47%)",
+      "significance": "high"
+    },
+    {
+      "timestamp": "2025-12-31T17:19:30Z",
+      "finding": "state.json + working.md + metrics.json = 4,338 bytes (~1,084 tokens at 4 chars/token)",
+      "significance": "medium",
+      "note": "This is closer to metrics.json value, suggesting analyzer may count additional files"
+    }
+  ],
+  "dead_ends": [],
+  "breakthrough": {
+    "timestamp": "2025-12-31T17:20:00Z",
+    "description": "Found root cause! analyze-tokens.ts defines 'core files' as [state.json, working.md, metrics.json, sessions.jsonl, DASHBOARD.md] but boot.sh only loads [state.json, working.md, metrics.json]",
+    "evidence": "Line 82 of analyze-tokens.ts hardcodes coreFiles array incorrectly",
+    "impact": "Analyzer over-reports core memory by ~4.5K tokens (sessions.jsonl + DASHBOARD.md)"
+  },
+  "solution": {
+    "approach": "Fix analyze-tokens.ts to correctly identify only files loaded on boot",
+    "files_to_change": ["memory/analyze-tokens.ts"],
+    "correct_core_files": ["state.json", "working.md", "metrics.json"],
+    "expected_result": "Core memory should report ~1,084 tokens (closer to metrics.json value of 942)",
+    "implementation": "Changed line 82 to only include files actually loaded on boot",
+    "validation": {
+      "before": "5,763 tokens (2.88%)",
+      "after": "1,332 tokens (0.67%)",
+      "metrics_json": "942 tokens (0.47%)",
+      "status": "FIXED - Much closer alignment. Remaining difference likely due to file growth since last metrics update."
+    }
+  },
+  "lessons_learned": [
+    {
+      "lesson": "Definition of 'core memory' must match actual boot behavior, not aspirational or documentation files",
+      "application": "Audit all measurement tools to ensure they measure what they claim to measure"
+    },
+    {
+      "lesson": "Token counting methodology should be consistent across tools",
+      "application": "Consider creating a shared utility function for accurate token counting"
+    },
+    {
+      "lesson": "Documentation files (like DASHBOARD.md) and logs (sessions.jsonl) are reference, not runtime context",
+      "application": "Clearly distinguish between 'loaded' and 'available' files in metrics"
+    }
+  ]
+}

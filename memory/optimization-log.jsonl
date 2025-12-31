@@ -1,0 +1,2 @@
+{"timestamp":"2025-12-31T17:02:09.063Z","rule":"extract_knowledge","description":"Extraction failed: Error: Command failed: bun /app/workspace/memory/extractor.ts auto","success":false,"metrics_snapshot":{"memory_overhead":0.9,"context_continuity":100,"optimizations_count":4}}
+{"timestamp":"2025-12-31T17:02:09.082Z","rule":"archive_old_plans","description":"Archived completed plans","success":true,"metrics_snapshot":{"memory_overhead":0.9,"context_continuity":100,"optimizations_count":5}}

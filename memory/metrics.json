@@ -1,0 +1,63 @@
+{
+  "efficiency": {
+    "avg_tokens_per_session": 19250,
+    "total_sessions": 16,
+    "total_tokens_used": 231000,
+    "memory_overhead_tokens": 1843,
+    "memory_overhead_percent": 0.8,
+    "successful_recoveries": 10,
+    "failed_recoveries": 0
+  },
+  "effectiveness": {
+    "tasks_completed": 41,
+    "tasks_abandoned": 0,
+    "tasks_in_progress": 0,
+    "context_continuity_score": 1,
+    "recovery_confidence_scores": [
+      0.95,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "learning": {
+    "knowledge_articles": 5,
+    "patterns_identified": 16,
+    "optimizations_applied": 10,
+    "discoveries": 34
+  },
+  "memory_footprint": {
+    "total_tokens": 1843,
+    "breakdown": [
+      {
+        "file": "state.json",
+        "tokens": 242,
+        "percentage": 13.1
+      },
+      {
+        "file": "working.md",
+        "tokens": 1324,
+        "percentage": 71.8
+      },
+      {
+        "file": "metrics.json",
+        "tokens": 277,
+        "percentage": 15
+      }
+    ]
+  },
+  "sessions": {
+    "first_session": "2025-12-31T16:21:00Z",
+    "last_session": "2025-12-31T18:33:52.492Z",
+    "total_duration_minutes": 91
+  },
+  "total_sessions": 44,
+  "total_tool_calls": 1218,
+  "last_session": "2025-12-31T20:02:04.234Z"
+}

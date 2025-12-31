@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session Intelligence Dashboard</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 Session Intelligence Dashboard</h1>
+      <p class="subtitle">Real-time memory system monitoring</p>
+      <div id="health-status" class="health-status">
+        <span class="status-dot"></span>
+        <span id="health-text">Connecting...</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- Current Stats Section -->
+      <section class="card">
+        <h2>📈 Current Stats</h2>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">Sessions</div>
+            <div class="stat-value" id="session-count">-</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Recovery Rate</div>
+            <div class="stat-value" id="recovery-rate">-</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Token Efficiency</div>
+            <div class="stat-value" id="token-efficiency">-</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Status</div>
+            <div class="stat-value" id="status">-</div>
+          </div>
+        </div>
+        <div class="meta-info">
+          <div><strong>Conversation:</strong> <span id="current-conversation">-</span></div>
+          <div><strong>Last Session:</strong> <span id="last-session">-</span></div>
+        </div>
+      </section>
+
+      <!-- Active Tasks Section -->
+      <section class="card">
+        <h2>✓ Active Tasks</h2>
+        <ul id="active-tasks" class="task-list">
+          <li class="loading">Loading tasks...</li>
+        </ul>
+      </section>
+
+      <!-- Recent Achievements Section -->
+      <section class="card">
+        <h2>🏆 Recent Achievements</h2>
+        <ul id="recent-achievements" class="achievement-list">
+          <li class="loading">Loading achievements...</li>
+        </ul>
+      </section>
+
+      <!-- Memory Footprint Section -->
+      <section class="card">
+        <h2>💾 Memory Footprint</h2>
+        <div class="memory-total">
+          Total: <strong id="memory-total">-</strong> tokens
+        </div>
+        <div id="memory-breakdown" class="memory-breakdown">
+          <div class="loading">Loading memory data...</div>
+        </div>
+      </section>
+
+      <!-- Session History Section -->
+      <section class="card">
+        <h2>📚 Session History</h2>
+        <div id="session-history" class="session-history">
+          <div class="loading">Loading session history...</div>
+        </div>
+      </section>
+
+      <!-- Conversations Section -->
+      <section class="card">
+        <h2>💬 Conversations</h2>
+        <div id="conversations" class="conversations">
+          <div class="loading">Loading conversations...</div>
+        </div>
+      </section>
+
+      <!-- Knowledge Base Section -->
+      <section class="card">
+        <h2>📖 Knowledge Base</h2>
+        <div id="knowledge" class="knowledge">
+          <div class="loading">Loading knowledge articles...</div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Last updated: <span id="last-updated">-</span></p>
+      <p class="version">Memory System v1.0 | Session 8</p>
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+2025-12-31T19:58:53.554Z [INFO] [agent-1767211133553-vlgag] Agent registered: agent-1767211133553-vlgag (role: general)
+2025-12-31T19:58:53.555Z [INFO] [agent-1767211133555-s47v4] Agent registered: agent-1767211133555-s47v4 (role: general)
+2025-12-31T19:58:53.556Z [INFO] [agent-1767211133553-vlgag] Message sent: heartbeat (broadcast)
+2025-12-31T19:58:53.556Z [INFO] [agent-1767211133555-s47v4] Message sent: heartbeat (broadcast)
+2025-12-31T19:58:55.814Z [INFO] [agent-1767211133553-vlgag] Agent unregistered: agent-1767211133553-vlgag
+2025-12-31T19:58:55.814Z [INFO] [agent-1767211133555-s47v4] Agent unregistered: agent-1767211133555-s47v4
+2025-12-31T20:01:02.164Z [INFO] [agent-1767211262164-bcsz6f] Agent registered: agent-1767211262164-bcsz6f (role: general)
+2025-12-31T20:01:02.166Z [INFO] [agent-1767211262165-r3igk9] Agent registered: agent-1767211262165-r3igk9 (role: general)
+2025-12-31T20:01:02.166Z [INFO] [agent-1767211262164-bcsz6f] Message sent: heartbeat (broadcast)
+2025-12-31T20:01:02.166Z [INFO] [agent-1767211262164-bcsz6f] Message sent: broadcast (broadcast)
+2025-12-31T20:01:02.166Z [INFO] [agent-1767211262165-r3igk9] Message sent: heartbeat (broadcast)
+2025-12-31T20:01:02.166Z [INFO] [agent-1767211262165-r3igk9] Message sent: broadcast (broadcast)
+2025-12-31T20:01:02.200Z [INFO] [agent-1767211262164-bcsz6f] Agent unregistered: agent-1767211262164-bcsz6f
+2025-12-31T20:01:02.200Z [INFO] [agent-1767211262165-r3igk9] Agent unregistered: agent-1767211262165-r3igk9
+2025-12-31T20:01:41.745Z [INFO] [agent-1767211301745-regulp] Agent registered: agent-1767211301745-regulp (role: general)
+2025-12-31T20:01:41.746Z [INFO] [agent-1767211301746-44fjv] Agent registered: agent-1767211301746-44fjv (role: general)
+2025-12-31T20:01:41.746Z [INFO] [agent-1767211301745-regulp] Message sent: heartbeat (broadcast)
+2025-12-31T20:01:41.748Z [INFO] [agent-1767211301745-regulp] Message sent: broadcast (broadcast)
+2025-12-31T20:01:41.748Z [INFO] [agent-1767211301746-44fjv] Message sent: heartbeat (broadcast)
+2025-12-31T20:01:41.748Z [INFO] [agent-1767211301746-44fjv] Message sent: broadcast (broadcast)
+2025-12-31T20:01:47.058Z [INFO] [agent-1767211301745-regulp] Agent unregistered: agent-1767211301745-regulp
+2025-12-31T20:01:47.059Z [INFO] [agent-1767211301746-44fjv] Agent unregistered: agent-1767211301746-44fjv
+2025-12-31T20:01:56.371Z [INFO] [agent-1767211316371-tihsx] Agent registered: agent-1767211316371-tihsx (role: general)
+2025-12-31T20:01:56.373Z [INFO] [agent-1767211316373-d6134m] Agent registered: agent-1767211316373-d6134m (role: general)
+2025-12-31T20:01:56.373Z [INFO] [agent-1767211316371-tihsx] Message sent: heartbeat (broadcast)
+2025-12-31T20:01:56.373Z [INFO] [agent-1767211316371-tihsx] Message sent: broadcast (broadcast)
+2025-12-31T20:01:56.373Z [INFO] [agent-1767211316373-d6134m] Message sent: heartbeat (broadcast)
+2025-12-31T20:01:56.374Z [INFO] [agent-1767211316373-d6134m] Message sent: broadcast (broadcast)
+2025-12-31T20:02:04.231Z [INFO] [agent-1767211316371-tihsx] Agent unregistered: agent-1767211316371-tihsx
+2025-12-31T20:02:04.231Z [INFO] [agent-1767211316373-d6134m] Agent unregistered: agent-1767211316373-d6134m
