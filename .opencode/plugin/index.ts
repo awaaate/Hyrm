@@ -764,6 +764,7 @@ Multi-Agent Mode Active: Check agent_status() to see other agents working in par
 
     // Tool execution timing - before hook (capture start time)
     "tool.execute.before": async (input) => {
+      if (!isPrimaryInstance()) return;
       try {
         const callId = input.callID || `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
         const inputSize = JSON.stringify(input.args || {}).length;
@@ -780,6 +781,7 @@ Multi-Agent Mode Active: Check agent_status() to see other agents working in par
 
     // Tool execution tracking - after hook (calculate duration and log)
     "tool.execute.after": async (input, output) => {
+      if (!isPrimaryInstance()) return;
       try {
         toolCallCount++;
         const endTime = Date.now();
@@ -893,6 +895,7 @@ Multi-Agent Mode Active: Check agent_status() to see other agents working in par
 
     // Plugin loaded callback
     config: async (config) => {
+      if (!isPrimaryInstance()) return;
       log("INFO", "Plugin loaded - monitoring session events", {
         agent: config.agent,
         log_file: logPath,
