@@ -1,21 +1,30 @@
 #!/usr/bin/env bun
 /**
- * OpenCode Conversation Tracker
+ * OpenCode Session Tracker (Primary Tool)
  * 
- * Tracks and logs all OpenCode conversations by reading from the OpenCode storage.
- * Location: ~/.local/share/opencode/storage/
+ * The main tool for tracking and analyzing OpenCode conversations.
+ * Reads from OpenCode's native storage at ~/.local/share/opencode/storage/
+ * 
+ * NOTE: This supersedes tools/conversation-tracker.ts which is now deprecated.
  * 
  * Commands:
  *   sessions [limit]     - List all sessions with metadata, tool counts, duration
  *   messages <sessionId> - Show all messages for a session
  *   view <sessionId>     - Full conversation view with tool calls formatted nicely
  *   tools <sessionId>    - Show all tool calls with inputs/outputs
- *   search <query>       - Search across sessions (messages, tools, outputs)
+ *   search <query> [limit] - Search across sessions (messages, tools, outputs)
  *   export <sessionId>   - Export full conversation as JSON
  *   watch               - Watch for new messages in real-time
- *   stats               - Show statistics
- *   sync                - Sync OpenCode sessions to our memory system
- *   learn               - Extract learnings and patterns from recent sessions
+ *   stats               - Show statistics about all sessions
+ *   sync                - Sync OpenCode sessions to our memory system (memory/opencode-sessions.json)
+ *   learn [limit]       - Extract learnings and patterns from recent sessions
+ * 
+ * Examples:
+ *   bun tools/opencode-tracker.ts sessions 20
+ *   bun tools/opencode-tracker.ts view ses_xxx
+ *   bun tools/opencode-tracker.ts tools ses_xxx
+ *   bun tools/opencode-tracker.ts search "error" 30
+ *   bun tools/opencode-tracker.ts sync && bun tools/opencode-tracker.ts learn
  */
 
 import { existsSync, readdirSync, readFileSync, watch } from "fs";

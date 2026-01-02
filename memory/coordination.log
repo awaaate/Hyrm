@@ -1210,3 +1210,4 @@
 2026-01-02T11:23:01.145Z [INFO] [agent-1767351123719-x4lnrh] Agent unregistered: agent-1767351123719-x4lnrh
 2026-01-02T11:23:01.145Z [INFO] [agent-1767351123735-n0ypvm] Agent unregistered: agent-1767351123735-n0ypvm
 2026-01-02T11:23:01.146Z [INFO] [agent-1767351123740-fin1ue] Agent unregistered: agent-1767351123740-fin1ue
+2026-01-02T11:23:42.884Z [INFO] [agent-1767351072014-rf3roz] Message sent: heartbeat (broadcast)

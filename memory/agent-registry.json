@@ -15,13 +15,13 @@
       "agent_id": "agent-1767351072014-rf3roz",
       "session_id": "session-1767351072014",
       "started_at": "2026-01-02T10:51:12.015Z",
-      "last_heartbeat": "2026-01-02T11:22:42.873Z",
+      "last_heartbeat": "2026-01-02T11:24:42.889Z",
       "status": "active",
       "assigned_role": "orchestrator",
       "pid": 454043,
       "current_task": "Session 122 - Orchestrator resumed, assessing work queue"
     }
   ],
-  "last_updated": "2026-01-02T11:23:01.146Z",
+  "last_updated": "2026-01-02T11:24:42.889Z",
   "lock_version": 170
 }

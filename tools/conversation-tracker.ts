@@ -2,10 +2,30 @@
 /**
  * OpenCode Conversation Tracker
  * 
- * Tracks and logs all OpenCode conversations by reading from storage.
- * Provides session listing, conversation export, and real-time monitoring.
+ * @deprecated Use tools/opencode-tracker.ts instead
  * 
- * Usage:
+ * This tool has been superseded by opencode-tracker.ts which provides:
+ * - All the same functionality (list → sessions, show → view, export, watch, stats)
+ * - Additional features: sync to memory system, learn patterns, search, tools view
+ * - Uses shared utilities for consistency
+ * 
+ * Migration guide:
+ *   OLD: bun tools/conversation-tracker.ts list
+ *   NEW: bun tools/opencode-tracker.ts sessions
+ * 
+ *   OLD: bun tools/conversation-tracker.ts show <id>
+ *   NEW: bun tools/opencode-tracker.ts view <id>
+ * 
+ *   OLD: bun tools/conversation-tracker.ts export <id>
+ *   NEW: bun tools/opencode-tracker.ts export <id>
+ * 
+ *   OLD: bun tools/conversation-tracker.ts watch
+ *   NEW: bun tools/opencode-tracker.ts watch
+ * 
+ *   OLD: bun tools/conversation-tracker.ts stats
+ *   NEW: bun tools/opencode-tracker.ts stats
+ * 
+ * Legacy Usage (still works):
  *   bun tools/conversation-tracker.ts list [--limit N] [--project]
  *   bun tools/conversation-tracker.ts show <session_id>
  *   bun tools/conversation-tracker.ts export <session_id> [--format json|markdown]

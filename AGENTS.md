@@ -122,14 +122,13 @@ bun tools/knowledge-deduplicator.ts analyze
 - `terminal-dashboard.ts` - TUI dashboard
 
 **UTILITY TOOLS:**
-- `conversation-tracker.ts` - Read OpenCode's native session storage
-- `opencode-tracker.ts` - Parse OpenCode conversations
+- `opencode-tracker.ts` - **Primary** tool for OpenCode session tracking (sessions, view, tools, search, sync, learn)
 - `session-analytics.ts` - Analyze session patterns
 - `knowledge-extractor.ts` - Extract knowledge from sessions
 - `knowledge-deduplicator.ts` - Clean duplicate knowledge
 
 **DEPRECATED/LEGACY:**
-- None currently - all tools are maintained
+- `conversation-tracker.ts` - Use `opencode-tracker.ts` instead (same features + more)
 
 ## Multi-Agent System
 
