@@ -22,6 +22,8 @@ import {
   writeFileSync,
   appendFileSync,
   mkdirSync,
+  readdirSync,
+  unlinkSync,
 } from "fs";
 import { join } from "path";
 import { MultiAgentCoordinator } from "../../tools/multi-agent-coordinator";
@@ -92,93 +94,91 @@ export const MemoryPlugin: Plugin = async (ctx) => {
   // ============================================================================
 
   // Instance locking for primary/secondary coordination
-  // New approach: Atomic registration with list-based primary election
-  // Solves race condition where multiple instances read lock simultaneously
+  // Directory-based approach: Each instance creates its own file (atomic operation)
+  // Solves race condition where multiple instances read/write same JSON file
   //
   // How it works:
-  // 1. All instances register immediately on load (append to list in lock file)
-  // 2. First isPrimaryInstance() call waits ELECTION_DELAY_MS to let others register
-  // 3. After delay, smallest INSTANCE_ID alphabetically wins (deterministic)
-  // 4. Result is cached - no re-election until next session
+  // 1. Each instance creates its own file: .plugin-instances/{INSTANCE_ID}.lock
+  // 2. File creation is atomic - no race condition possible
+  // 3. First isPrimaryInstance() call waits ELECTION_DELAY_MS to let others register
+  // 4. After delay, reads all files in directory, smallest ID wins
+  // 5. Result is cached - no re-election until next session
+  // 6. Stale files (older than LOCK_STALE_THRESHOLD) are cleaned up
   
   const ELECTION_DELAY_MS = 150; // Wait for other instances to register
-  
-  interface InstanceEntry {
-    id: string;
-    timestamp: number;
-  }
-  
-  interface LockFile {
-    instances: InstanceEntry[];
-  }
+  const instancesDir = join(memoryDir, ".plugin-instances");
+  const instanceLockPath = join(instancesDir, `${INSTANCE_ID}.lock`);
   
   let primaryElectionDone = false;
   let isPrimary = false;
   const instanceStartTime = Date.now();
   
-  // Register this instance immediately (append to list)
+  // Register this instance by creating its own lock file (atomic)
   const registerInstance = (): void => {
     try {
-      let lock: LockFile = { instances: [] };
-      if (existsSync(lockPath)) {
-        try {
-          lock = JSON.parse(readFileSync(lockPath, "utf-8"));
-          if (!Array.isArray(lock.instances)) {
-            // Migrate from old format
-            lock = { instances: [] };
-          }
-        } catch {
-          lock = { instances: [] };
-        }
+      // Ensure instances directory exists
+      if (!existsSync(instancesDir)) {
+        mkdirSync(instancesDir, { recursive: true });
       }
       
-      // Add our instance if not already present
-      const now = Date.now();
-      const existing = lock.instances.find(i => i.id === INSTANCE_ID);
-      if (!existing) {
-        lock.instances.push({ id: INSTANCE_ID, timestamp: now });
-      } else {
-        existing.timestamp = now;
-      }
-      
-      writeFileSync(lockPath, JSON.stringify(lock, null, 2));
+      // Create our instance file with timestamp
+      const data = JSON.stringify({ id: INSTANCE_ID, timestamp: Date.now() });
+      writeFileSync(instanceLockPath, data);
     } catch {
       // Ignore errors during registration
     }
   };
   
-  // Determine primary by reading lock file and selecting smallest active ID
+  // Get all active instances from directory
+  const getActiveInstances = (): Array<{ id: string; timestamp: number }> => {
+    try {
+      if (!existsSync(instancesDir)) return [];
+      
+      const files = readdirSync(instancesDir);
+      const now = Date.now();
+      const instances: Array<{ id: string; timestamp: number }> = [];
+      
+      for (const file of files) {
+        if (!file.endsWith(".lock")) continue;
+        
+        const filePath = join(instancesDir, file);
+        try {
+          const content = readFileSync(filePath, "utf-8");
+          const data = JSON.parse(content);
+          
+          // Only include non-stale instances
+          if (now - data.timestamp < LOCK_STALE_THRESHOLD) {
+            instances.push(data);
+          } else {
+            // Clean up stale file
+            try { unlinkSync(filePath); } catch {}
+          }
+        } catch {
+          // Invalid file, try to remove it
+          try { unlinkSync(filePath); } catch {}
+        }
+      }
+      
+      return instances;
+    } catch {
+      return [];
+    }
+  };
+  
+  // Determine primary by reading all instance files and selecting smallest ID
   const electPrimary = (): boolean => {
     try {
-      if (!existsSync(lockPath)) {
-        // No lock file = we become primary
-        primaryInstance = INSTANCE_ID;
-        return true;
-      }
+      const instances = getActiveInstances();
       
-      const lock: LockFile = JSON.parse(readFileSync(lockPath, "utf-8"));
-      if (!Array.isArray(lock.instances)) {
-        // Invalid format, we become primary
-        primaryInstance = INSTANCE_ID;
-        return true;
-      }
-      
-      const now = Date.now();
-      
-      // Filter out stale instances (older than LOCK_STALE_THRESHOLD)
-      const activeInstances = lock.instances.filter(
-        i => now - i.timestamp < LOCK_STALE_THRESHOLD
-      );
-      
-      if (activeInstances.length === 0) {
-        // All stale, we become primary
+      if (instances.length === 0) {
+        // No instances registered (shouldn't happen, but be safe)
         primaryInstance = INSTANCE_ID;
         return true;
       }
       
       // Sort by ID alphabetically - smallest ID is primary (deterministic)
-      activeInstances.sort((a, b) => a.id.localeCompare(b.id));
-      const primaryId = activeInstances[0].id;
+      instances.sort((a, b) => a.id.localeCompare(b.id));
+      const primaryId = instances[0].id;
       
       if (primaryId === INSTANCE_ID) {
         primaryInstance = INSTANCE_ID;
@@ -214,29 +214,16 @@ export const MemoryPlugin: Plugin = async (ctx) => {
   };
 
   const refreshLock = () => {
-    // Only primary should refresh, but all instances update their timestamp
+    // Update our instance file timestamp to show we're still alive
     try {
-      if (!existsSync(lockPath)) return;
-      
-      const lock: LockFile = JSON.parse(readFileSync(lockPath, "utf-8"));
-      if (!Array.isArray(lock.instances)) return;
-      
-      const now = Date.now();
-      
-      // Update our timestamp
-      const ourEntry = lock.instances.find(i => i.id === INSTANCE_ID);
-      if (ourEntry) {
-        ourEntry.timestamp = now;
-      } else {
-        lock.instances.push({ id: INSTANCE_ID, timestamp: now });
+      if (!existsSync(instanceLockPath)) {
+        // Re-register if our file was deleted
+        registerInstance();
+        return;
       }
       
-      // Clean up stale instances while we're here
-      lock.instances = lock.instances.filter(
-        i => now - i.timestamp < LOCK_STALE_THRESHOLD
-      );
-      
-      writeFileSync(lockPath, JSON.stringify(lock, null, 2));
+      const data = JSON.stringify({ id: INSTANCE_ID, timestamp: Date.now() });
+      writeFileSync(instanceLockPath, data);
     } catch {
       // Ignore refresh errors
     }

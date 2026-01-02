@@ -9,43 +9,255 @@
 ## Estado Actual
 
 **Sistema**: Watchdog activo (`orchestrator-watchdog.sh`)
-**Última actualización**: 2026-01-02 18:15 UTC
-**Orchestrator**: Session 170 - IN PROGRESS
+**Última actualización**: 2026-01-02 18:38 UTC
+**Orchestrator**: Session 176 - IN PROGRESS
 **Workers activos**: 0
+
+---
+
+## Session 176 - PLUGIN RACE CONDITION FIX (2026-01-02)
+
+**Orchestrator**: agent-1767378789512-gmaxn
+**Status**: IN PROGRESS
+**Workers**: 0
+**Started**: 18:33 UTC
+
+### Bug Crítico Encontrado y Arreglado
+
+El fix de la sesión 170 (commit 90a5f78) **NO RESOLVIÓ** el bug de duplicación 4x. Los logs seguían duplicándose.
+
+**Causa raíz real identificada**:
+- El mecanismo de lista en un archivo JSON tiene race condition
+- Cuando 4 instancias se registran simultáneamente:
+  1. Todas leen el lock file vacío
+  2. Cada una escribe solo su ID
+  3. La última en escribir sobrescribe las demás
+  4. Después de 150ms, cada una lee un estado diferente
+
+**Solución implementada**: Directory-based locking (atómico)
+
+En lugar de un archivo JSON con lista, ahora cada instancia crea su propio archivo:
+```
+memory/.plugin-instances/
+  plugin-12345-abc.lock
+  plugin-12345-def.lock
+  ...
+```
+
+**Cambios en `.opencode/plugin/index.ts`**:
+1. Nuevo directorio: `memory/.plugin-instances/`
+2. `registerInstance()`: Crea archivo individual (operación atómica)
+3. `getActiveInstances()`: Lee todos los archivos del directorio
+4. `electPrimary()`: Ordena IDs y elige el más pequeño
+5. `refreshLock()`: Actualiza timestamp del archivo propio
+6. Limpieza automática de archivos stale (>30 segundos)
+
+**Imports añadidos**: `readdirSync`, `unlinkSync` de fs
+
+**Estado**: Pendiente de commit y verificación en siguiente sesión
+
+### Otras Observaciones
+
+- realtime.log: 44,288 líneas (necesita limpieza)
+- sessions.jsonl: 996 líneas (recomendado archivar)
+- message-bus.jsonl: 126 mensajes antiguos
+- Knowledge base: 36 duplicados detectados
+
+---
+
+## Session 175 - USER REQUESTS COMPLETED (2026-01-02)
+
+**Orchestrator**: agent-1767378301453-0f5he
+**Status**: COMPLETED
+**Workers**: 2 (both COMPLETED)
+**Started**: 18:25 UTC
+**Duration**: ~7 minutos
+**Commit**: cd0ea50
+
+### User Requests (PRIORITY)
+
+**Message 1** (umsg_1767378194656_215unk):
+> "quiero que mejores el cli con un monitor en tiempo real donde puedas ver los mensajes, mensajes de opencode, añadir user messages, tasks, y etc"
+
+**Message 2** (umsg_1767378236434_uiavyh):
+> "crea un agente de documentación y documenta todo"
+
+### Worker 1: Interactive Monitor Enhancement - COMPLETED
+
+**Task ID**: task_1767378361269_59v2s2
+**Agent**: agent-1767378386724-tujhx (worker)
+**Status**: COMPLETED
+
+**Cambios en `tools/realtime-monitor.ts`:**
+
+1. **Nuevo modo interactivo** (tecla `i`):
+   - Entra en modo interactivo con menú visual
+   - Indicador visual `[INTERACTIVE]` en el footer
+
+2. **Acciones interactivas:**
+   - `s` - Send user message: Usa readline para pedir input, soporta `--urgent`
+   - `n` - Create new task: Pide título y prioridad (c/h/m/l)
+   - `o` - Show OpenCode sessions: Lista las 15 sesiones más recientes
+
+3. **Navegación:**
+   - `ESC` - Salir del modo interactivo y volver al modo normal
+   - Mantiene todos los shortcuts existentes (d/a/m/t/l/q/r)
+
+4. **Nuevos imports:**
+   - `createInterface` from readline
+   - `writeJson`, `getAllOpenCodeSessions`, `getOpenCodeSessionStats` from shared
+   - Tipos: Task, TaskStore, OpenCodeSession
+
+5. **Funciones añadidas:**
+   - `generateUserMessageId()`, `sendUserMessage()` - Para enviar mensajes
+   - `generateTaskId()`, `createTask()` - Para crear tareas
+   - `renderOpenCodeSessions()` - Para mostrar sesiones
+   - `enterInteractiveMode()`, `exitInteractiveMode()` - Gestión del modo
+   - `promptForInput()` - Wrapper de readline
+   - `handleInteractiveSendMessage()`, `handleInteractiveCreateTask()`, `handleInteractiveShowSessions()`
+   - `renderInteractiveMenu()` - Menú visual del modo interactivo
+
+**Verificación**: Compila correctamente con `bun build`
+
+### Worker 2: Documentation Agent - COMPLETED
+
+**Task ID**: task_1767378364900_osxp1x
+**Agent**: agent-1767378393923-70l95 (worker)
+**Status**: COMPLETED
+
+**Files Created:**
+- `docs/TOOLS_REFERENCE.md` - Complete documentation for all 23 CLI tools
+
+**Files Updated:**
+- `AGENTS.md` - Fixed tool list (23 tools, not 24), corrected categories
+
+**TOOLS_REFERENCE.md Contents:**
+- Quick reference table
+- 23 tools documented by category:
+  - CLI Principal (1): cli.ts
+  - Agent Tools (8): health-monitor, conversation-viewer, performance-profiler, multi-agent-coordinator, critique-agent, message-bus-manager, generate-orchestrator-prompt, generate-worker-prompt
+  - Memory Tools (3): working-memory-manager, knowledge-extractor, knowledge-deduplicator
+  - Task Tools (3): task-manager, task-router, quality-assessor
+  - Session Tools (2): opencode-tracker, session-summarizer
+  - Monitor Tools (2): realtime-monitor, daily-report-generator
+  - CLI/Core Tools (4): user-message, system-message-config, git-integration, debug-capture
+
+**AGENTS.md Fixes:**
+- Removed non-existent tools: smart-memory-manager.ts, session-analytics.ts, terminal-dashboard.ts, opencode-cli.ts
+- Added missing tools: cli.ts, generate-worker-prompt.ts, debug-capture.ts
+- Fixed category counts and organization
+
+### All User Requests Completed
+
+---
+
+## Session 174 - SHELL ESCAPE BUG FIX (2026-01-02)
+
+**Orchestrator**: agent-1767378055677-45g5ko
+**Status**: COMPLETED
+**Workers**: 0 (fix hecho directamente)
+**Started**: 18:21 UTC
+**Duration**: ~3 minutos
+
+### Bug Arreglado: ctx.$ Shell Escape
+
+**Problema**: El plugin usaba `ctx.$\`echo \${json} >> file\`` para escribir logs JSONL. Cuando el JSON contenía caracteres especiales (`{`, `"`), bash los interpretaba incorrectamente causando errores.
+
+**Error típico**: "expected a command or assignment but got: Redirect"
+
+**Solución (Commit ae87c93)**:
+- Reemplazadas 5 instancias de `ctx.$` + echo con `appendFileSync()`
+- Líneas afectadas: 841, 855, 866, 1181, 1256
+- `appendFileSync` ya se usaba correctamente en otros lugares (ej. línea 938)
+
+**Cambios**:
+```typescript
+// Antes:
+await ctx.$`echo ${jsonLog} >> ${sessionsPath}`.quiet();
+
+// Después:
+appendFileSync(sessionsPath, jsonLog + "\n");
+```
+
+### Task Completada
+
+- **Task ID**: task_1767377976707_t4l4jk
+- **Quality Score**: 9.2/10
+- **Lesson Learned**: Siempre usar operaciones de filesystem directas (appendFileSync) en vez de redirecciones shell cuando se escribe data estructurada.
 
 ---
 
 ## Session 170 - BUG FIX: PLUGIN RACE CONDITION (2026-01-02)
 
 **Orchestrator**: agent-iw0YC2YR
-**Status**: IN PROGRESS
-**Workers**: 0
+**Status**: COMPLETED
+**Workers**: 1 (agent-1767377678189-tivexsm)
 **Started**: 18:13 UTC
+**Duration**: ~8 minutos
 
-### Bug Crítico Detectado
+### Bug Crítico Detectado y Arreglado
 
-El fix del commit `5882dc9` (Session 166) **NO funcionó**. Los logs todavía se duplican 4x.
-
-**Evidencia actual**:
-- realtime.log tiene 42,178 líneas
-- Cada evento se escribe 4 veces (verificado en tail del log)
+El fix del commit `5882dc9` (Session 166) **NO funcionó**. Los logs todavía se duplicaban 4x.
 
 **Causa raíz identificada**:
-- `isPrimaryInstance()` tiene una race condition
+- `isPrimaryInstance()` tenía una race condition
 - 4 instancias del plugin se crean simultáneamente
-- Todas leen el lock file al mismo tiempo
-- Todas creen que son la instancia primaria antes de que cualquiera pueda escribir
+- Todas leían el lock file al mismo tiempo
+- Todas creían que eran la instancia primaria
 
-**Solución propuesta**:
-- Usar `INSTANCE_ID` como tiebreaker determinístico
-- La instancia con el ID más bajo alfabéticamente será la primaria
-- Esto elimina la race condition sin cambiar la arquitectura
+### Solución Implementada (Commit 90a5f78)
 
-### Acciones
+Nueva arquitectura de elección de primaria:
 
-1. [ ] Spawnar worker para arreglar la race condition en `isPrimaryInstance()`
-2. [ ] Verificar que el fix funciona
-3. [ ] Actualizar working.md con resultados
+1. **Registro inmediato**: Todas las instancias se registran en una lista al cargar
+2. **Election delay**: Primera llamada a `isPrimaryInstance()` espera 150ms
+3. **Elección determinística**: El INSTANCE_ID más pequeño alfabéticamente gana
+4. **Caching**: Resultado cacheado - no re-elección necesaria
+
+**Cambios en `.opencode/plugin/index.ts`**:
+- Añadido `ELECTION_DELAY_MS = 150`
+- Añadido interface `LockFile { instances: InstanceEntry[] }`
+- Añadido `registerInstance()` - llamado al cargar el plugin
+- Añadido `electPrimary()` - determina primaria después del delay
+- Añadido `primaryElectionDone` y `isPrimary` para caching
+- Modificado `isPrimaryInstance()` para usar el nuevo sistema
+
+**Lock file nuevo formato**:
+```json
+{
+  "instances": [
+    { "id": "plugin-xxx", "timestamp": 123 },
+    ...
+  ]
+}
+```
+
+### Verificación
+
+El fix tomará efecto en la próxima sesión de OpenCode.
+Lock file viejo eliminado para forzar el nuevo formato.
+
+### Commits Esta Sesión
+
+1. `90a5f78` - fix(plugin): Solve isPrimaryInstance() race condition with election delay
+
+### Otros Problemas Detectados
+
+**Error de Shell (Medium priority)**:
+- Plugin usa `ctx.$` con `echo >> file` que falla cuando JSON tiene caracteres especiales
+- Error: "expected a command or assignment but got: Redirect"
+- Task creada: `task_1767377976707_t4l4jk`
+- Solución: Reemplazar con `appendFileSync()`
+
+**Knowledge extraction failed**:
+- Exit code 1 - posiblemente relacionado con el error de shell
+- Se resolverá junto con el fix de ctx.$
+
+### Cleanup Realizado
+
+- Knowledge base deduplicado: 21 entradas removidas
+- Agente stale (agent-itj05o4L) limpiado automáticamente
+- Lock file viejo eliminado para nuevo formato
 
 ---
 
