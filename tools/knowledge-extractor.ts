@@ -16,18 +16,20 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { PATHS, OPENCODE_STORAGE, OPENCODE_PATHS } from './shared';
 
+interface ToolState {
+  status?: string;
+  input?: Record<string, unknown>;
+  output?: string;
+}
+
 interface MessagePart {
   type: string;
   text?: string;
   name?: string;
-  input?: any;
+  input?: Record<string, unknown>;
   content?: string;
   tool?: string;
-  state?: {
-    status?: string;
-    input?: any;
-    output?: string;
-  };
+  state?: ToolState;
 }
 
 interface Message {
