@@ -15,6 +15,7 @@
 
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
+import type { Task, TaskPriority } from "./shared/types";
 
 const MEMORY_DIR = join(process.cwd(), "memory");
 const CONFIG_PATH = join(MEMORY_DIR, "system-message-config.json");
@@ -29,6 +30,18 @@ interface SectionConfig {
   description?: string;
   content?: string[];
 }
+
+/** User message entry from user-messages.jsonl */
+interface UserMessageEntry {
+  id: string;
+  from: string;
+  message: string;
+  timestamp: string;
+  read: boolean;
+}
+
+/** Section keys for type-safe access */
+type SectionKey = keyof SystemMessageConfig["sections"];
 
 interface SystemMessageConfig {
   version: string;
@@ -122,7 +135,7 @@ function enableSection(sectionName: string) {
   const config = loadConfig();
   
   if (sectionName in config.sections) {
-    (config.sections as any)[sectionName].enabled = true;
+    config.sections[sectionName as SectionKey].enabled = true;
     saveConfig(config);
     console.log(`Enabled section: ${sectionName}`);
   } else {
@@ -145,7 +158,7 @@ function disableSection(sectionName: string) {
   const config = loadConfig();
   
   if (sectionName in config.sections) {
-    (config.sections as any)[sectionName].enabled = false;
+    config.sections[sectionName as SectionKey].enabled = false;
     saveConfig(config);
     console.log(`Disabled section: ${sectionName}`);
   } else {
@@ -201,7 +214,7 @@ function setPriority(sectionName: string, priority: number) {
   const config = loadConfig();
   
   if (sectionName in config.sections) {
-    (config.sections as any)[sectionName].priority = priority;
+    config.sections[sectionName as SectionKey].priority = priority;
     saveConfig(config);
     console.log(`Set priority ${priority} for section: ${sectionName}`);
   } else {
@@ -220,7 +233,7 @@ function setMaxItems(sectionName: string, maxItems: number) {
   const config = loadConfig();
   
   if (sectionName in config.sections) {
-    (config.sections as any)[sectionName].max_items = maxItems;
+    config.sections[sectionName as SectionKey].max_items = maxItems;
     saveConfig(config);
     console.log(`Set max_items ${maxItems} for section: ${sectionName}`);
   } else {
@@ -278,12 +291,12 @@ ${state.recent_achievements?.slice(0, 3).map((a: string) => `- ${a}`).join("\n")
   
   // Pending tasks
   if (config.sections.pending_tasks?.enabled && existsSync(TASKS_PATH)) {
-    const tasksStore = JSON.parse(readFileSync(TASKS_PATH, "utf-8"));
+    const tasksStore = JSON.parse(readFileSync(TASKS_PATH, "utf-8")) as { tasks?: Task[] };
     const pending = (tasksStore.tasks || [])
-      .filter((t: any) => t.status === "pending")
-      .sort((a: any, b: any) => {
-        const order: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
-        return (order[a.priority] || 4) - (order[b.priority] || 4);
+      .filter((t: Task) => t.status === "pending")
+      .sort((a: Task, b: Task) => {
+        const order: Record<TaskPriority, number> = { critical: 0, high: 1, medium: 2, low: 3 };
+        return (order[a.priority] ?? 4) - (order[b.priority] ?? 4);
       })
       .slice(0, config.sections.pending_tasks.max_items || 5);
     
@@ -291,7 +304,7 @@ ${state.recent_achievements?.slice(0, 3).map((a: string) => `- ${a}`).join("\n")
       sections.push({
         priority: config.sections.pending_tasks.priority,
         content: `**Pending Tasks** (${pending.length}):
-${pending.map((t: any) => `- [${t.priority.toUpperCase()}] ${t.title}`).join("\n")}`
+${pending.map((t: Task) => `- [${t.priority.toUpperCase()}] ${t.title}`).join("\n")}`
       });
     }
   }
@@ -303,15 +316,15 @@ ${pending.map((t: any) => `- [${t.priority.toUpperCase()}] ${t.title}`).join("\n
       .trim()
       .split("\n")
       .filter(Boolean)
-      .map((line) => JSON.parse(line))
-      .filter((m: any) => !m.read);
+      .map((line) => JSON.parse(line) as UserMessageEntry)
+      .filter((m: UserMessageEntry) => !m.read);
     
     if (messages.length > 0) {
       const maxItems = config.sections.user_messages.max_items || 5;
       sections.push({
         priority: config.sections.user_messages.priority,
         content: `**Unread User Messages** (${messages.length}):
-${messages.slice(-maxItems).map((m: any) => `- ${m.from}: "${m.message.slice(0, 80)}${m.message.length > 80 ? "..." : ""}"`).join("\n")}`
+${messages.slice(-maxItems).map((m: UserMessageEntry) => `- ${m.from}: "${m.message.slice(0, 80)}${m.message.length > 80 ? "..." : ""}"`).join("\n")}`
       });
     }
   }

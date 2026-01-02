@@ -10,24 +10,32 @@ import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { readJsonl, readJson } from "./shared/json-utils";
 import { PATHS, MEMORY_DIR } from "./shared/paths";
+import type { SystemState, Task, TaskStore, Agent, AgentRegistry, UserMessage } from "./shared/types";
 
-function loadState(): any {
-  return readJson<any>(PATHS.state, { session_count: 0 });
+function loadState(): SystemState {
+  return readJson<SystemState>(PATHS.state, { 
+    session_count: 0, 
+    status: "", 
+    last_updated: "", 
+    achievements: [], 
+    active_tasks: [], 
+    total_tokens: 0 
+  });
 }
 
-function loadPendingTasks(): any[] {
-  const store = readJson<{ tasks?: any[] }>(PATHS.tasks, { tasks: [] });
-  return (store.tasks || []).filter((t: any) => t.status === "pending");
+function loadPendingTasks(): Task[] {
+  const store = readJson<TaskStore>(PATHS.tasks, { version: "1.0", tasks: [], completed_count: 0, last_updated: "" });
+  return (store.tasks || []).filter((t: Task) => t.status === "pending");
 }
 
-function loadUnreadUserMessages(): any[] {
-  return readJsonl<any>(PATHS.userMessages).filter((m: any) => !m.read);
+function loadUnreadUserMessages(): UserMessage[] {
+  return readJsonl<UserMessage>(PATHS.userMessages).filter((m: UserMessage) => !m.read);
 }
 
-function loadActiveAgents(): any[] {
-  const registry = readJson<any>(PATHS.agentRegistry, { agents: [] });
+function loadActiveAgents(): Agent[] {
+  const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
   const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
-  return (registry.agents || []).filter((a: any) => {
+  return (registry.agents || []).filter((a: Agent) => {
     return new Date(a.last_heartbeat).getTime() > fiveMinutesAgo;
   });
 }

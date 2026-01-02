@@ -1,8 +1,13 @@
-[91m[1m| [0m[90m Bash     [0mCheck changes
 
 
- tools/session-summarizer.ts | 80 +++++++++++++++++++++++++++++++++++----------
- 1 file changed, 63 insertions(+), 17 deletions(-)
+generate-orchestrator-prompt.ts: 0
+system-message-config.ts: 2
+
+[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01A15BtLVSdsejoPCoAfJMLC","duration_ms":0,"output_length":641,"success":true}
+[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01A15BtLVSdsejoPCoAfJMLC","duration_ms":2,"output_length":641,"success":true}
+[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01A15BtLVSdsejoPCoAfJMLC","duration_ms":2,"output_length":641,"success":true}
+[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01A15BtLVSdsejoPCoAfJMLC","duration_ms":2,"output_length":641,"success":true}
+[94m[1m| [0m[90m agent_status  [0mUnknown
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
@@ -11,4 +16,8 @@
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
-Hay cambios. Espero al commit:
+Progreso:
+- `generate-orchestrator-prompt.ts`: 10 → 0 (completado)
+- `system-message-config.ts`: 9 → 2 (en progreso)
+
+Hay 4 agentes activos (1 orquestador + 3 workers). Los cambios aún no están commiteados. Espero un poco más:

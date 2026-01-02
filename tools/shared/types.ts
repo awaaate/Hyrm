@@ -141,13 +141,19 @@ export interface Message {
 
 /**
  * User message to agents.
+ * Note: Actual JSONL structure uses `message` field, not `content`
  */
 export interface UserMessage {
   id: string;
   timestamp: string;
-  content: string;
+  message: string;
   read: boolean;
+  priority?: "critical" | "high" | "normal" | "low";
+  from?: string;
+  tags?: string[];
   processed_by?: string;
+  read_at?: string;
+  read_by?: string;
   response?: string;
 }
 
