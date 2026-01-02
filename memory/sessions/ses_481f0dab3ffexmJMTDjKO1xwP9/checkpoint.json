@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "checkpoint_id": "ckpt_1767348501741_tkm9bk",
+  "created_at": "2026-01-02T10:08:21.741Z",
+  "agent_id": "agent-1767346480506-r842f",
+  "session_id": "ses_481f0dab3ffexmJMTDjKO1xwP9",
+  "current_task": {
+    "task_id": "task_1767348386518_cgkx0r",
+    "title": "Unknown task",
+    "started_at": "2026-01-02T10:08:21.741Z",
+    "progress_description": "Deep analysis of OpenCode source code from GitHub. Analyzed task.ts, task.txt, agent structure. Ready to document findings and plan customizations.",
+    "progress_percentage": 60
+  },
+  "files_modified": [],
+  "context": {
+    "what_was_happening": "Deep analysis of OpenCode source code from GitHub. Analyzed task.ts, task.txt, agent structure. Ready to document findings and plan customizations.",
+    "next_steps": [
+      "Create OpenCode analysis document",
+      "Plan customization approach for Task tool integration",
+      "Implement customizations via plugin hooks"
+    ]
+  },
+  "recovery": {
+    "can_resume": true,
+    "estimated_remaining_work": "40% remaining"
+  }
+}

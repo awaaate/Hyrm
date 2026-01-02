@@ -1,215 +1,136 @@
-2025-12-31 16:02:27 - opencode inactive, waking up
-2025-12-31 16:07:27 - opencode active
-2025-12-31 16:12:27 - opencode active
-2025-12-31 16:17:27 - opencode active
-2025-12-31 16:21:07 - opencode inactive, waking up
-2025-12-31 16:22:27 - opencode active
-2025-12-31 16:26:07 - opencode active
-2025-12-31 16:27:27 - opencode active
-2025-12-31 16:31:07 - opencode inactive, waking up
-2025-12-31 16:32:27 - opencode active
-2025-12-31 16:36:07 - opencode inactive, waking up
-2025-12-31 16:37:27 - opencode active
-2025-12-31 16:41:07 - opencode active
-2025-12-31 16:42:27 - opencode active
-2025-12-31 16:46:07 - opencode inactive, waking up
-2025-12-31 16:47:27 - opencode active
-2025-12-31 16:51:07 - opencode active
-2025-12-31 16:52:27 - opencode active
-2025-12-31 16:56:07 - opencode active
-2025-12-31 16:57:27 - opencode inactive, waking up
-2025-12-31 17:01:07 - opencode active
-2025-12-31 17:02:27 - opencode active
-2025-12-31 17:06:07 - opencode inactive, waking up
-2025-12-31 17:07:27 - opencode active
-2025-12-31 17:11:07 - opencode active
-2025-12-31 17:12:27 - opencode active
-2025-12-31 17:16:07 - opencode inactive, waking up
-2025-12-31 17:17:27 - opencode inactive, waking up
-2025-12-31 17:21:07 - opencode active
-2025-12-31 17:22:27 - opencode active
-2025-12-31 17:26:07 - opencode inactive, waking up
-2025-12-31 17:27:28 - opencode inactive, waking up
-2025-12-31 17:31:07 - opencode active
-2025-12-31 17:32:28 - opencode active
-2025-12-31 17:36:07 - opencode active
-2025-12-31 17:37:28 - opencode inactive, waking up
-2025-12-31 17:41:08 - opencode active
-2025-12-31 17:42:28 - opencode active
-2025-12-31 17:46:08 - opencode inactive, waking up
-2025-12-31 17:47:12 - opencode active
-2025-12-31 17:47:12 - Assessment: session=9, status=phase_4_week1_watchdog_optimization, tasks=2, session_count:9
-2025-12-31 17:52:12 - opencode active
-2025-12-31 17:52:12 - Assessment: session=10, status=phase_4_week1_complete_transitioning_to_week2, tasks=3, session_count:10
-2025-12-31 17:57:12 - opencode inactive, assessing state...
-2025-12-31 17:57:12 - Assessment: session=10, status=phase_4_week1_complete_transitioning_to_week2, tasks=3, session_count:10
-2025-12-31 17:57:12 - Waking up with assessment code: 0
-2025-12-31 18:02:12 - opencode inactive, assessing state...
-2025-12-31 18:02:12 - Assessment: session=12, status=phase_4_week2_sync_engine_deployed, tasks=3, session_count:12
-2025-12-31 18:02:12 - Waking up with assessment code: 0
-2025-12-31 18:07:13 - opencode active
-2025-12-31 18:07:13 - Assessment: session=13, status=phase_4_week2_token_analytics_deployed, tasks=3, session_count:13
-2025-12-31 18:12:13 - opencode inactive, assessing state...
-2025-12-31 18:12:13 - Assessment: session=13, status=phase_4_week2_token_analytics_deployed, tasks=3, session_count:13
-2025-12-31 18:12:13 - Waking up with assessment code: 0
-2025-12-31 18:14:19 - opencode active
-✅ Session metrics recorded
-2025-12-31 18:14:19 - Assessment: session=13, status=phase_4_week2_token_analytics_deployed, tasks=3, session_count:13
-2025-12-31 18:17:13 - opencode active
-2025-12-31 18:17:13 - Assessment: session=13, status=phase_4_week2_token_analytics_deployed, tasks=3, session_count:13
-2025-12-31 18:19:20 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 18:19:20 - Assessment: session=14, status=phase_4_week2_knowledge_extraction_complete, tasks=3, session_count:14
-2025-12-31 18:19:20 - Waking up with assessment code: 0
-2025-12-31 18:22:13 - opencode active
-2025-12-31 18:22:13 - Assessment: session=14, status=phase_4_week2_knowledge_extraction_complete, tasks=3, session_count:14
-2025-12-31 18:24:20 - opencode active
-✅ Session metrics recorded
-2025-12-31 18:24:20 - Assessment: session=14, status=phase_4_week2_knowledge_extraction_complete, tasks=3, session_count:14
-2025-12-31 18:27:13 - opencode active
-2025-12-31 18:27:13 - Assessment: session=14, status=phase_4_week2_knowledge_extraction_complete, tasks=3, session_count:14
-2025-12-31 18:29:21 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 18:29:21 - Assessment: session=15, status=phase_4_week2_auto_context_injection_active, tasks=3, session_count:15
-2025-12-31 18:29:21 - Waking up with assessment code: 0
-2025-12-31 18:32:13 - opencode inactive, assessing state...
-2025-12-31 18:32:13 - Assessment: session=15, status=phase_4_week2_auto_context_injection_active, tasks=3, session_count:15
-2025-12-31 18:32:13 - Waking up with assessment code: 0
-2025-12-31 18:34:21 - opencode active
-✅ Session metrics recorded
-2025-12-31 18:34:21 - Assessment: session=16, status=phase_4_week2_auto_context_injection_active, tasks=3, session_count:16
-2025-12-31 18:37:13 - opencode active
-2025-12-31 18:37:13 - Assessment: session=16, status=phase_4_week3_critical_assessment, tasks=3, session_count:16
-2025-12-31 18:39:22 - opencode active
-2025-12-31 18:42:13 - opencode active
-2025-12-31 18:42:13 - Assessment: session=16, status=phase_4_week3_critical_assessment, tasks=3, session_count:16
-2025-12-31 18:47:13 - opencode active
-2025-12-31 18:47:13 - Assessment: session=16, status=phase_4_week3_critical_assessment, tasks=3, session_count:16
-2025-12-31 18:48:43 - opencode active
-✅ Session metrics recorded
-2025-12-31 18:48:43 - Assessment: session=16, status=phase_4_week3_critical_assessment, tasks=3, session_count:16
-2025-12-31 18:50:12 - opencode active
-✅ Session metrics recorded
-2025-12-31 18:50:12 - Assessment: session=16, status=phase_4_week3_critical_assessment, tasks=3, session_count:16
-2025-12-31 18:51:07 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 18:51:07 - Assessment: session=16, status=phase_4_week3_critical_assessment, tasks=3, session_count:16
-2025-12-31 18:51:07 - Waking up with assessment code: 0
-2025-12-31 18:54:03 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 18:54:03 - Assessment: session=16, status=phase_4_week3_critical_assessment, tasks=3, session_count:16
-2025-12-31 18:54:03 - Waking up with assessment code: 0
-2025-12-31 18:56:19 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 18:56:19 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 18:56:19 - Waking up with assessment code: 0
-2025-12-31 18:57:28 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 18:57:28 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 18:57:28 - Waking up with assessment code: 0
-2025-12-31 19:01:39 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:01:39 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:01:39 - Waking up with assessment code: 0
-2025-12-31 19:02:02 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:02:02 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:02:02 - Waking up with assessment code: 0
-2025-12-31 19:05:12 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:05:12 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:05:12 - Waking up with assessment code: 0
-2025-12-31 19:05:43 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:05:43 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:05:43 - Waking up with assessment code: 0
-2025-12-31 19:06:13 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:06:13 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:06:13 - Waking up with assessment code: 0
-2025-12-31 19:06:44 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:06:44 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:06:44 - Waking up with assessment code: 0
-2025-12-31 19:07:14 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:07:14 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:07:14 - Waking up with assessment code: 0
-2025-12-31 19:07:45 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:07:45 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:07:45 - Waking up with assessment code: 0
-2025-12-31 19:08:15 - opencode active
-✅ Session metrics recorded
-2025-12-31 19:08:15 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:08:46 - opencode active
-✅ Session metrics recorded
-2025-12-31 19:08:46 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:09:16 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:09:16 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:09:16 - Waking up with assessment code: 0
-2025-12-31 19:09:47 - opencode active
-✅ Session metrics recorded
-2025-12-31 19:09:47 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:10:17 - opencode active
-✅ Session metrics recorded
-2025-12-31 19:10:17 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:10:48 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:10:48 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:10:48 - Waking up with assessment code: 0
-2025-12-31 19:11:18 - opencode active
-✅ Session metrics recorded
-2025-12-31 19:11:18 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:11:49 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:11:49 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:11:49 - Waking up with assessment code: 0
-2025-12-31 19:12:19 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:12:19 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:12:19 - Waking up with assessment code: 0
-2025-12-31 19:12:50 - opencode inactive, assessing state...
-✅ Session metrics recorded
-2025-12-31 19:12:50 - Assessment: session=66, status=phase_4_week3_critical_assessment, tasks=3, session_count:66
-2025-12-31 19:12:50 - Waking up with assessment code: 0
-2025-12-31 19:16:22 - opencode inactive, waking up
-2025-12-31 19:16:52 - opencode active
-2025-12-31 19:17:22 - opencode active
-2025-12-31 19:17:52 - opencode active
-2025-12-31 19:18:22 - opencode active
-2025-12-31 19:18:52 - opencode active
-2025-12-31 19:19:22 - opencode active
-2025-12-31 19:19:52 - opencode active
-2025-12-31 19:20:22 - opencode inactive, waking up
-2025-12-31 19:20:52 - opencode active
-2025-12-31 19:21:22 - opencode active
-2025-12-31 19:21:52 - opencode active
-2025-12-31 19:22:22 - opencode active
-2025-12-31 19:22:52 - opencode active
-2025-12-31 19:23:22 - opencode active
-2025-12-31 19:23:52 - opencode inactive, waking up
-2025-12-31 19:24:22 - opencode active
-2025-12-31 19:24:52 - opencode active
-2025-12-31 19:25:22 - opencode active
-2025-12-31 19:25:52 - opencode active
-2025-12-31 19:26:22 - opencode active
-2025-12-31 19:26:52 - opencode active
-2025-12-31 19:27:22 - opencode active
-2025-12-31 19:27:52 - opencode active
-2025-12-31 19:28:22 - opencode active
-2025-12-31 19:28:52 - opencode active
-2025-12-31 19:29:22 - opencode active
-2025-12-31 19:29:52 - opencode active
-2025-12-31 19:30:22 - opencode active
-2025-12-31 19:30:52 - opencode inactive, waking up
-2025-12-31 19:31:22 - opencode inactive, waking up
-2025-12-31 19:31:52 - opencode inactive, waking up
-2025-12-31 19:32:22 - opencode inactive, waking up
-2025-12-31 19:32:52 - opencode inactive, waking up
-2025-12-31 19:33:23 - opencode inactive, waking up
-2025-12-31 19:33:53 - opencode inactive, waking up
-2025-12-31 19:34:23 - opencode inactive, waking up
-2025-12-31 19:34:53 - opencode inactive, waking up
-2025-12-31 19:35:00 - opencode inactive, waking up
+[2026-01-01T21:14:47+00:00] [INFO] Starting watchdog in background...
+[2026-01-01T21:14:47+00:00] [INFO] =========================================
+[2026-01-01T21:14:47+00:00] [INFO] Orchestrator Watchdog v2.0 started
+[2026-01-01T21:14:47+00:00] [INFO] Check interval: 30s
+[2026-01-01T21:14:47+00:00] [INFO] Max restarts/hour: 10
+[2026-01-01T21:14:47+00:00] [INFO] Watchdog PID: 287250
+[2026-01-01T21:14:47+00:00] [INFO] =========================================
+[2026-01-01T21:14:47+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-01T21:14:47+00:00] [OK] Orchestrator started with PID: 287285
+[2026-01-01T21:14:52+00:00] [ERROR] Orchestrator failed to start!
+[2026-01-01T21:15:19+00:00] [INFO] Starting watchdog in background...
+[2026-01-01T21:15:19+00:00] [INFO] =========================================
+[2026-01-01T21:15:19+00:00] [INFO] Orchestrator Watchdog v2.0 started
+[2026-01-01T21:15:19+00:00] [INFO] Check interval: 30s
+[2026-01-01T21:15:19+00:00] [INFO] Max restarts/hour: 10
+[2026-01-01T21:15:19+00:00] [INFO] Watchdog PID: 287375
+[2026-01-01T21:15:19+00:00] [INFO] =========================================
+[2026-01-01T21:15:19+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-01T21:15:19+00:00] [OK] Orchestrator started with PID: 287411
+[2026-01-01T21:15:24+00:00] [ERROR] Orchestrator failed to start!
+[2026-01-01T21:15:25+00:00] [INFO] =========================================
+[2026-01-01T21:15:25+00:00] [INFO] Orchestrator Watchdog v2.0 started
+[2026-01-01T21:15:25+00:00] [INFO] Check interval: 30s
+[2026-01-01T21:15:25+00:00] [INFO] Max restarts/hour: 10
+[2026-01-01T21:15:25+00:00] [INFO] Watchdog PID: 287488
+[2026-01-01T21:15:25+00:00] [INFO] =========================================
+[2026-01-01T21:15:25+00:00] [INFO] Starting orchestrator agent (restart #3 this hour)...
+[2026-01-01T21:15:25+00:00] [OK] Orchestrator started with PID: 287524
+[2026-01-01T21:15:30+00:00] [ERROR] Orchestrator failed to start!
+[2026-01-01T21:16:12+00:00] [INFO] Stopping orchestrator...
+[2026-01-01T21:16:12+00:00] [OK] Orchestrator stopped
+[2026-01-01T21:20:49+00:00] [INFO] =========================================
+[2026-01-01T21:20:49+00:00] [INFO] Orchestrator Watchdog v2.0 started
+[2026-01-01T21:20:49+00:00] [INFO] Check interval: 30s
+[2026-01-01T21:20:49+00:00] [INFO] Max restarts/hour: 10
+[2026-01-01T21:20:49+00:00] [INFO] Watchdog PID: 288090
+[2026-01-01T21:20:49+00:00] [INFO] =========================================
+[2026-01-01T21:20:49+00:00] [INFO] Starting orchestrator agent (restart #4 this hour)...
+[2026-01-01T21:20:49+00:00] [OK] Orchestrator started with PID: 288123
+[2026-01-01T21:20:55+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T21:21:15+00:00] [WARN] Received shutdown signal
+[2026-01-01T21:21:15+00:00] [INFO] Stopping watchdog...
+[2026-01-01T21:21:15+00:00] [INFO] Stopping orchestrator...
+[2026-01-01T21:21:16+00:00] [OK] Orchestrator stopped
+[2026-01-01T21:21:16+00:00] [OK] Watchdog stopped
+[2026-01-01T21:21:40+00:00] [INFO] Starting watchdog in background...
+[2026-01-01T21:21:40+00:00] [INFO] =========================================
+[2026-01-01T21:21:40+00:00] [INFO] Orchestrator Watchdog v2.0 started
+[2026-01-01T21:21:40+00:00] [INFO] Check interval: 30s
+[2026-01-01T21:21:40+00:00] [INFO] Max restarts/hour: 10
+[2026-01-01T21:21:40+00:00] [INFO] Watchdog PID: 288654
+[2026-01-01T21:21:40+00:00] [INFO] =========================================
+[2026-01-01T21:21:40+00:00] [INFO] Starting orchestrator agent (restart #5 this hour)...
+[2026-01-01T21:21:40+00:00] [OK] Orchestrator started with PID: 288687
+[2026-01-01T21:21:44+00:00] [INFO] Starting watchdog in background...
+[2026-01-01T21:21:44+00:00] [WARN] Watchdog already running with PID: 288654
+[2026-01-01T21:21:45+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T21:35:47+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-01T21:35:48+00:00] [INFO] Starting orchestrator agent (restart #6 this hour)...
+[2026-01-01T21:35:48+00:00] [OK] Orchestrator started with PID: 306900
+[2026-01-01T21:35:53+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T21:44:54+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-01T21:44:54+00:00] [INFO] Starting orchestrator agent (restart #7 this hour)...
+[2026-01-01T21:44:54+00:00] [OK] Orchestrator started with PID: 314504
+[2026-01-01T21:44:59+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T21:52:30+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-01T21:52:30+00:00] [INFO] Starting orchestrator agent (restart #8 this hour)...
+[2026-01-01T21:52:30+00:00] [OK] Orchestrator started with PID: 318285
+[2026-01-01T21:52:36+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T21:57:36+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-01T21:57:36+00:00] [INFO] Starting orchestrator agent (restart #9 this hour)...
+[2026-01-01T21:57:36+00:00] [OK] Orchestrator started with PID: 321943
+[2026-01-01T21:57:41+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T22:08:52+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-01T22:08:52+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-01T22:08:52+00:00] [OK] Orchestrator started with PID: 328206
+[2026-01-01T22:08:57+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T22:15:28+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-01T22:15:28+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-01T22:15:28+00:00] [OK] Orchestrator started with PID: 331557
+[2026-01-01T22:15:33+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T22:24:34+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-01T22:24:35+00:00] [INFO] Starting orchestrator agent (restart #3 this hour)...
+[2026-01-01T22:24:35+00:00] [OK] Orchestrator started with PID: 336179
+[2026-01-01T22:24:40+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T22:32:11+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-01T22:32:11+00:00] [INFO] Starting orchestrator agent (restart #4 this hour)...
+[2026-01-01T22:32:11+00:00] [OK] Orchestrator started with PID: 340699
+[2026-01-01T22:32:16+00:00] [OK] Orchestrator confirmed running
+[2026-01-01T23:02:22+00:00] [INFO] Stopping orchestrator...
+[2026-01-01T23:02:23+00:00] [OK] Orchestrator stopped
+[2026-01-01T23:02:34+00:00] [WARN] Received shutdown signal
+[2026-01-01T23:02:34+00:00] [INFO] Stopping watchdog...
+[2026-01-01T23:02:34+00:00] [INFO] Stopping orchestrator...
+[2026-01-01T23:02:34+00:00] [OK] Orchestrator stopped
+[2026-01-01T23:02:34+00:00] [OK] Watchdog stopped
+[2026-01-02T07:23:48+00:00] [INFO] =========================================
+[2026-01-02T07:23:48+00:00] [INFO] Orchestrator Watchdog v2.0 started
+[2026-01-02T07:23:48+00:00] [INFO] Check interval: 30s
+[2026-01-02T07:23:48+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T07:23:48+00:00] [INFO] Watchdog PID: 346127
+[2026-01-02T07:23:48+00:00] [INFO] =========================================
+[2026-01-02T07:23:48+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-02T07:23:48+00:00] [OK] Orchestrator started with PID: 346159
+[2026-01-02T07:23:53+00:00] [OK] Orchestrator confirmed running
+[2026-01-02T07:31:24+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-02T07:31:24+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-02T07:31:24+00:00] [OK] Orchestrator started with PID: 350704
+[2026-01-02T07:31:29+00:00] [OK] Orchestrator confirmed running
+[2026-01-02T08:51:29+00:00] [WARN] Received shutdown signal
+[2026-01-02T08:51:29+00:00] [INFO] Stopping watchdog...
+[2026-01-02T08:51:29+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T08:51:30+00:00] [OK] Orchestrator stopped
+[2026-01-02T08:51:30+00:00] [OK] Watchdog stopped
+[2026-01-02T08:51:45+00:00] [INFO] Starting watchdog in background...
+[2026-01-02T08:51:45+00:00] [INFO] =========================================
+[2026-01-02T08:51:45+00:00] [INFO] Orchestrator Watchdog v2.0 started
+[2026-01-02T08:51:45+00:00] [INFO] Check interval: 30s
+[2026-01-02T08:51:45+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T08:51:45+00:00] [INFO] Watchdog PID: 353291
+[2026-01-02T08:51:45+00:00] [INFO] =========================================
+[2026-01-02T08:51:45+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-02T08:51:45+00:00] [OK] Orchestrator started with PID: 353323
+[2026-01-02T08:51:50+00:00] [OK] Orchestrator confirmed running
+[2026-01-02T09:18:24+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-02T09:18:24+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-02T09:18:24+00:00] [OK] Orchestrator started with PID: 373921
+[2026-01-02T09:18:29+00:00] [OK] Orchestrator confirmed running
+[2026-01-02T09:34:01+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-02T09:34:01+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-02T09:34:01+00:00] [OK] Orchestrator started with PID: 388997
+[2026-01-02T09:34:06+00:00] [OK] Orchestrator confirmed running
+[2026-01-02T10:10:40+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-02T10:10:40+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-02T10:10:40+00:00] [OK] Orchestrator started with PID: 419760
+[2026-01-02T10:10:46+00:00] [OK] Orchestrator confirmed running

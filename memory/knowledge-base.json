@@ -1,5 +1,1118 @@
 [
   {
+    "session_id": "ses_481f0dab3ffexmJMTDjKO1xwP9",
+    "timestamp": 1767346480551,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      ".opencode/plugin/index.ts",
+      ".opencode/plugin/tools/memory-tools.ts",
+      ".opencode/plugin/tools/agent-tools.ts",
+      ".opencode/plugin/tools/task-tools.ts",
+      ".opencode/plugin/tools/quality-tools.ts",
+      ".opencode/plugin/tools/user-message-tools.ts",
+      ".opencode/plugin/tools/recovery-tools.ts",
+      ".opencode/plugin/tools/git-tools.ts",
+      "tools/opencode-cli.ts",
+      "tools/task-manager.ts",
+      "tools/realtime-monitor.ts",
+      "tools/multi-agent-coordinator.ts",
+      "tools/critique-agent.ts",
+      "tools/knowledge-extractor.ts",
+      "tools/session-summarizer.ts",
+      "dashboard-ui/src/App.tsx",
+      "dashboard-ui/server.ts",
+      ".opencode/skill/agent-orchestrator/SKILL.md",
+      ".opencode/command/status.md",
+      ".opencode/plugin/utils/helpers.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481f17197ffeUvKEP8u5ncvkqa",
+    "timestamp": 1767346467999,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481f97c3dffeXiO48A3gwALPnj",
+    "timestamp": 1767345980313,
+    "messages": 10,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481ffbf05ffeuwRICugL9rtQJZ",
+    "timestamp": 1767346423937,
+    "messages": 96,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_482027677ffedBcpV3SGet2BBE",
+    "timestamp": 1767345390352,
+    "messages": 10,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48206c404ffe2iiP0dGvqqnbAU",
+    "timestamp": 1767345055651,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_482182354ffepRlDEVp5Iz33WO",
+    "timestamp": 1767345456569,
+    "messages": 142,
+    "decisions": [],
+    "discoveries": [
+      "with the contrib."
+    ],
+    "code_created": [
+      "tools/daily-report-generator.ts",
+      "tools/agent-conversation-viewer.ts",
+      "tools/critique-agent.ts",
+      ".opencode/skill/critique-agent/SKILL.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "issue in the terminal-dashboard.",
+      "by calling the correct viewer:",
+      "Replaced canvas widgets with text-based `blessed.box` alternatives using ASCII progress bars"
+    ]
+  },
+  {
+    "session_id": "ses_48261b217ffew6JGwMk9dDgqeV",
+    "timestamp": 1767339237172,
+    "messages": 19,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48268a5afffeWWEUVpx2LgDsjc",
+    "timestamp": 1767339058770,
+    "messages": 36,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/agent-performance-profiler.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4844f5f7effeS1GftImkN5Tgm9",
+    "timestamp": 1767307019097,
+    "messages": 28,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/terminal-dashboard.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48456557cffei9Mxf7fDgNz6x2",
+    "timestamp": 1767306708721,
+    "messages": 39,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/git-integration.ts",
+      ".opencode/plugin/tools/git-tools.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4845eab9effe9kSK7k61M26zfb",
+    "timestamp": 1767306243080,
+    "messages": 39,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/message-bus-manager.ts",
+      "tools/working-memory-manager.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48464b61affeblv65s5yg9yEIp",
+    "timestamp": 1767305708145,
+    "messages": 31,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      ".opencode/plugin/tools/integration.test.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4846f06f2ffei2mChHCzntsK6Q",
+    "timestamp": 1767305171507,
+    "messages": 59,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      ".opencode/plugin/tools/recovery-tools.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48473b182ffe8yb742oUGtrWZ9",
+    "timestamp": 1767304627590,
+    "messages": 32,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4847aa85bffeEPOvSR1mP9praf",
+    "timestamp": 1767304321759,
+    "messages": 35,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48482ff3effeDVcIC3z9P4y2uF",
+    "timestamp": 1767303854057,
+    "messages": 36,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/session-analytics.ts",
+      "dashboard-ui/server.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_484832037ffe9cC2nPlNOlZcW3",
+    "timestamp": 1767303519502,
+    "messages": 11,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/session-analytics.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4848b250dffe6S7Kfsq39MS3qc",
+    "timestamp": 1767303635617,
+    "messages": 68,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/opencode-tracker.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "the session analytics tool."
+    ]
+  },
+  {
+    "session_id": "ses_4848fecc6ffeG1qCN9S8EgFuCL",
+    "timestamp": 1767303324692,
+    "messages": 75,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "dashboard-ui/src/index.css",
+      "dashboard-ui/src/components/ui/button.tsx",
+      "dashboard-ui/src/components/ui/card.tsx",
+      "dashboard-ui/src/components/ui/badge.tsx",
+      "dashboard-ui/src/components/ui/tabs.tsx",
+      "dashboard-ui/src/components/ui/table.tsx",
+      "dashboard-ui/src/components/ui/progress.tsx",
+      "dashboard-ui/vite.config.ts",
+      "dashboard-ui/tsconfig.app.json",
+      "dashboard-ui/src/App.tsx",
+      "dashboard-ui/src/App.css",
+      "tools/conversation-tracker.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48490b364ffe55tWsOfKkylfTV",
+    "timestamp": 1767302465960,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48510f8b0ffeysLfx7THkEFbS8",
+    "timestamp": 1767294086711,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48512250effeGWJTNW9EmkfxoY",
+    "timestamp": 1767294240413,
+    "messages": 20,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "AGENTS.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4852586a0ffehcSzhkMo5wCSxy",
+    "timestamp": 1767292951518,
+    "messages": 30,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4852c076effehgRGcpV8NG0ZbY",
+    "timestamp": 1767292684966,
+    "messages": 46,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4852f6e0fffe2b7Q8VjQzNow7T",
+    "timestamp": 1767292256334,
+    "messages": 25,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "orchestrator-watchdog.sh"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4856cfa5dffe40t8x6qtI5HCr5",
+    "timestamp": 1767288405359,
+    "messages": 29,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/realtime-monitor.ts",
+      ".opencode/plugin/utils/helpers.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_485727992ffeTAO4q9pzNmSBRw",
+    "timestamp": 1767287976443,
+    "messages": 29,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      ".opencode/plugin/tools/tools.test.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4857b2d64ffeb2UmNM5INYMd2i",
+    "timestamp": 1767287608670,
+    "messages": 44,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "AGENTS.md",
+      "memory/system-message-config.json",
+      "tools/system-message-config.ts",
+      "dashboard-ui/src/App.tsx",
+      "dashboard-ui/src/App.css",
+      "dashboard-ui/src/index.css"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4895b3ffaffeVDOdzUaRAMbn1M",
+    "timestamp": 1767222787617,
+    "messages": 62,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/session-summarizer.ts",
+      "tools/knowledge-deduplicator.ts",
+      "dashboard-ui/postcss.config.js",
+      "dashboard-ui/src/index.css",
+      "dashboard-ui/src/lib/utils.ts",
+      "dashboard-ui/src/App.tsx"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48964de81ffeXWM4aA699tMICX",
+    "timestamp": 1767222026079,
+    "messages": 65,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/agent-health-monitor.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4896ef297ffeKeGfMbqzinDUc3",
+    "timestamp": 1767221405851,
+    "messages": 75,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/opencode-cli.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4897036fbffel8ARM4HDVodONo",
+    "timestamp": 1767220739087,
+    "messages": 8,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4897d7fa0ffegdFYG4Fl2W2AFC",
+    "timestamp": 1767220585810,
+    "messages": 96,
+    "decisions": [],
+    "discoveries": [
+      "when the plugin auto-registers the agent on session start (line 517-528 of index."
+    ],
+    "code_created": [
+      "mcp-servers/playwright-mcp/package.json",
+      "mcp-servers/playwright-mcp/tsconfig.json",
+      "mcp-servers/playwright-mcp/src/index.ts",
+      "tools/generate-orchestrator-prompt.ts",
+      "start-main.sh"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4898633a1ffeAfRWZPWO4b1O43",
+    "timestamp": 1767219813026,
+    "messages": 49,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      ".opencode/plugin/tools/agent-tools.ts",
+      ".opencode/plugin/tools/memory-tools.ts",
+      ".opencode/plugin/tools/task-tools.ts",
+      ".opencode/plugin/tools/quality-tools.ts",
+      ".opencode/plugin/tools/user-message-tools.ts",
+      ".opencode/plugin/index.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4898e7272ffe4XrFkBFWTNs3i1",
+    "timestamp": 1767219219328,
+    "messages": 42,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/status-monitor.ts",
+      "tools/user-message.ts",
+      "tools/smart-memory-manager.ts",
+      "tools/context-summarizer.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4898fda40ffeDlBsJQM4B2yDAX",
+    "timestamp": 1767218619895,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489904fb0ffer08DAb4Cur0rki",
+    "timestamp": 1767218589797,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48990b959ffeTvcFOw894G2KhB",
+    "timestamp": 1767218562748,
+    "messages": 1,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4899e059fffe6fADV0wdUVp1AL",
+    "timestamp": 1767218506201,
+    "messages": 96,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      ".opencode/command/status.md",
+      ".opencode/command/orchestrator.md",
+      ".opencode/command/quality.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489a486d6ffefUB5kAkd6gpm8l",
+    "timestamp": 1767217312121,
+    "messages": 9,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [
+      "z.string().describe(\"The glob pattern to match files against\"),"
+    ],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489a9932fffeDEet6LdjfhyvI1",
+    "timestamp": 1767217646396,
+    "messages": 72,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/quality-assessor.ts",
+      "tools/task-router.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489aadb44ffe8VZPXzS3MsBAj6",
+    "timestamp": 1767216878186,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489ae41b1ffe023flC0q5vQ6tj",
+    "timestamp": 1767216627287,
+    "messages": 1,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489ae41b7ffeL8ZyjGQ7ZzNH2b",
+    "timestamp": 1767216627281,
+    "messages": 1,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489ae41b7ffeQl94p6iqkKvD0v",
+    "timestamp": 1767216627281,
+    "messages": 1,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489ae41c3ffet4bTdEDnI09YBe",
+    "timestamp": 1767216627272,
+    "messages": 1,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489b45157ffeR14TAgc15yWAQ0",
+    "timestamp": 1767216285473,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489b747a5ffelq0qABBt1BgJQ0",
+    "timestamp": 1767216620745,
+    "messages": 65,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/task-manager.ts",
+      "memory/working.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489c3933bffeL5S1ti3unQcfDs",
+    "timestamp": 1767215345071,
+    "messages": 17,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489c5c4beffe6ley2toSUEh1CN",
+    "timestamp": 1767215204050,
+    "messages": 26,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489c72427ffepRg271hMcr6Png",
+    "timestamp": 1767215776381,
+    "messages": 67,
+    "decisions": [],
+    "discoveries": [
+      "it's trying to run with `bun x` which might not be set up properly."
+    ],
+    "code_created": [
+      ".opencode/skill/agent-orchestrator/SKILL.md",
+      ".opencode/skill/memory-manager/SKILL.md",
+      ".opencode/skill/multi-agent-patterns/SKILL.md",
+      "ORCHESTRATOR_SESSION_36_REPORT.md",
+      "tools/memory-enhancer.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "by updating the command:"
+    ]
+  },
+  {
+    "session_id": "ses_489d63177ffeE4Gg1oj5GvHpVN",
+    "timestamp": 1767214530132,
+    "messages": 52,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "memory/dashboard/test-websocket-clients.js",
+      "memory/dashboard/enhancement-report.md",
+      "memory/dashboard/README.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489d90746ffeK1kUk4kSLwJ5c9",
+    "timestamp": 1767213883093,
+    "messages": 17,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489dc8942ffe1z6CvIiG76Nv3O",
+    "timestamp": 1767213685868,
+    "messages": 18,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "memory-analysis-report.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489e36014ffePrlCm8NINEY1UF",
+    "timestamp": 1767214207071,
+    "messages": 71,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "monitor.sh",
+      "MCP_SERVERS_RESEARCH.md",
+      "WORKER_AGENT_TEMPLATE.md",
+      "WORKER_AGENT_TEMPLATES.md",
+      "tools/smart-memory-manager.ts",
+      "ORCHESTRATOR_STATUS.md",
+      "ORCHESTRATOR_STATUS_REPORT.md",
+      "PROOF_OF_VALUE.md",
+      "CURRENT_SESSION.md",
+      "SESSION22_ORCHESTRATOR.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489e72ad3ffethjjY51ZkXKdZh",
+    "timestamp": 1767212900561,
+    "messages": 3,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489ed71c6ffeaMde7ppiBGkyyG",
+    "timestamp": 1767212605358,
+    "messages": 18,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489ef2d5affejIBQto0j8I3wbj",
+    "timestamp": 1767212398624,
+    "messages": 8,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489f1f57cffer6Wvx8jgsEgBUZ",
+    "timestamp": 1767212307038,
+    "messages": 16,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489f2cdf0ffeCuSTWKgia3TQOk",
+    "timestamp": 1767212652595,
+    "messages": 38,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "WORKER_AGENT_TEMPLATE.md",
+      "ORCHESTRATOR_STATUS.md",
+      "SESSION16_SUMMARY.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489f3325cffeCKETI1ftJJkCKT",
+    "timestamp": 1767212112241,
+    "messages": 3,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489f3ae3fffeYiXmxyERSXWJwy",
+    "timestamp": 1767212080409,
+    "messages": 3,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489f5e436ffeA4HLZZjHp7C3hH",
+    "timestamp": 1767211932645,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489f67e37ffej8wtWC4OvoVBml",
+    "timestamp": 1767211893220,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489f9b21affe6dvt7BbcD6tNqs",
+    "timestamp": 1767211683336,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489ff4b6effe5P3qMXyBr12Vo6",
+    "timestamp": 1767211316401,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_489ff8490ffeIJM7OZK5DI2RBD",
+    "timestamp": 1767211301781,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48a001f2effe5m5fuVBQk7gTTO",
+    "timestamp": 1767211262179,
+    "messages": 1,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48a021590ffefdT17yq2Wd4mzQ",
+    "timestamp": 1767211133589,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48a06b2ccffe5meSPHwDnL1HyR",
+    "timestamp": 1767213131291,
+    "messages": 150,
+    "decisions": [],
+    "discoveries": [
+      "the tools return objects, but OpenCode expects strings.",
+      "`enabled` is coming in as a string `\"false\"` not boolean `false`."
+    ],
+    "code_created": [
+      "opencode.json",
+      "start-main.sh",
+      "memory/state.json",
+      "memory/metrics.json",
+      "memory/agent-registry.json",
+      "memory/working.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [
+      "you see duplicate logs throughout.",
+      "**one plugin instance had handoff enabled** while the other had it disabled (the dual-instance issue)."
+    ],
+    "techniques": [],
+    "solutions": [
+      "bug so the idle hook properly updates working.",
+      "by making the `handoffEnabled` state **persistent** (stored in a file) so both plugin instances share the same state:"
+    ]
+  },
+  {
+    "session_id": "ses_48a07dbceffeudJ5IPNTJJuz4P",
+    "timestamp": 1767210832166,
+    "messages": 18,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "string[])`: Lists all files matching a prefix pattern"
+    ]
+  },
+  {
+    "session_id": "ses_48a082792ffe7QG35BaCZP86Xi",
+    "timestamp": 1767210955742,
+    "messages": 21,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48a0f76f9ffeSn4wCSaPf4Tz2j",
+    "timestamp": 1767210582389,
+    "messages": 20,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "memory/agent-registry.json",
+      "memory/message-bus.jsonl",
+      "tools/multi-agent-coordinator.ts",
+      "MULTI_AGENT_GUIDE.md",
+      "SESSION92_HANDOFF.md",
+      "AGENT_COORDINATION_QUICKSTART.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "a **complete multi-agent coordination system** that enables multiple OpenCode agents to work in parallel while coordinat"
+    ]
+  },
+  {
+    "session_id": "ses_48a139ad2ffe1yf1mfJ6T1KSko",
+    "timestamp": 1767210070067,
+    "messages": 19,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48a13ef17ffeloURYzi9BH1PGm",
+    "timestamp": 1767210374296,
+    "messages": 27,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "CURRENT_SESSION.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48a1766abffei6qwu2r5AfyfyZ",
+    "timestamp": 1767209893106,
+    "messages": 14,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "SESSION91_HANDOFF.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
     "session_id": "ses_48a17f1c2ffezJ6b7Kq7lXN6C8",
     "timestamp": 1767209700954,
     "messages": 2,
@@ -7,7 +1120,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a180f14ffe5Pesg3oXaAPsIm",
@@ -17,7 +1132,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a188460ffeBEDDdg1QgJD6fb",
@@ -27,7 +1144,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a18f9a9ffeu3Voyw6Y2yHhn3",
@@ -37,7 +1156,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a196eecffeb0I6pD1IeYYIrO",
@@ -47,7 +1168,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a19e421ffeMvyDjHrvgTHOhg",
@@ -57,7 +1180,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a1a5962ffeXbcB5LgvmOtWGA",
@@ -67,7 +1192,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a1ace8effezC4z9G4azuHsvJ",
@@ -77,7 +1204,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a1b43beffem67o2oZ6b6Ehpv",
@@ -87,31 +1216,33 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a1bb8feffelzbchcZCKIxISP",
     "timestamp": 1767209453343,
     "messages": 2,
-    "decisions": [
-      "hooks instead of shell scripts while cleaning up files"
-    ],
+    "decisions": [],
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a21a1fdffeHsP4vzHhrB0mw0",
     "timestamp": 1767209203034,
     "messages": 14,
-    "decisions": [
-      "and look for any other plugin examples or docs:"
-    ],
+    "decisions": [],
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a222261ffepxf9alJ0tNT67Q",
@@ -121,7 +1252,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a255714ffew2AorKmblsfcbr",
@@ -131,7 +1264,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a2900f5ffecaTCHwAVL2cTyj",
@@ -143,7 +1278,9 @@
       "SESSION66_SUMMARY.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a2c3c6affeIhQDO5SweQlyzV",
@@ -153,7 +1290,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a2cb338ffeFjYjW2YZD5Lbnb",
@@ -163,7 +1302,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a2d2a90ffeXfaLVbfkTPoBMZ",
@@ -173,7 +1314,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a2e1880ffeKlf5nXgUif4NeA",
@@ -185,22 +1328,24 @@
       "tools/run-pruner.js"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a2f7ef3ffeX0xvRTooMj9aNR",
     "timestamp": 1767208221601,
     "messages": 7,
-    "decisions": [
-      "the memory context**:"
-    ],
+    "decisions": [],
     "discoveries": [],
     "code_created": [
       "BASELINE_TEST.md",
       "PROOF_OF_VALUE.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a30e44cffen4nIdAfPfx19om",
@@ -210,7 +1355,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a315bbcffe7lH7fwaAwgJNB7",
@@ -220,7 +1367,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a31d2d5ffeAogKoKvhvO0CRb",
@@ -230,7 +1379,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a3249d5ffefUCcuiPzN7pFKS",
@@ -240,7 +1391,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a32c125ffemorem3fnEFHh5e",
@@ -250,7 +1403,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a3337c8ffemsQRafAAuq3Urv",
@@ -260,21 +1415,23 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a361fe7ffeAkoD5gqFk4MJbb",
     "timestamp": 1767207779952,
     "messages": 11,
-    "decisions": [
-      "ONLY the auto-context and file TODOs, without architectural re-discovery"
-    ],
+    "decisions": [],
     "discoveries": [],
     "code_created": [
       "demo-api-client.ts"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a367a05ffely4Uk7vYIw8SOs",
@@ -284,7 +1441,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a3a4d6fffe7OV3ux0f1PracV",
@@ -297,7 +1456,9 @@
       "demo-api-client.ts"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a3b5939ffetWZl9HCA1xV2rz",
@@ -307,7 +1468,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a3d6d9cffeVTkhZyDZOifYs3",
@@ -319,34 +1482,38 @@
       "tools/memory-pruner.ts"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a401d2cffeAdkbFPq3Q2N5Zb",
     "timestamp": 1767207081000,
     "messages": 3,
-    "decisions": [
-      "what works"
-    ],
+    "decisions": [],
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a516ca1ffeNx4H9N0OAFMSk5",
     "timestamp": 1767206346429,
     "messages": 31,
-    "decisions": [
-      "only my memory files?**"
+    "decisions": [],
+    "discoveries": [
+      "`opencode` CLI expects an interactive session."
     ],
-    "discoveries": [],
     "code_created": [
       "tools/distributed-coordinator.ts",
       "memory/LIMITATIONS.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a540b5bffe4Wf7KKbYMCQikT",
@@ -356,7 +1523,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a59ac63ffeAwCiAqfEUmUFm4",
@@ -366,7 +1535,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a5c389effeqJ8hslINNQBtZd",
@@ -376,32 +1547,42 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a5d3733ffeYCwbQrENZhOdYN",
     "timestamp": 1767205718678,
     "messages": 36,
-    "decisions": [],
+    "decisions": [
+      "Use `experimental.chat.system.transform` to inject a compressed summary into EVERY message's system prompt. This way:"
+    ],
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a63bd63ffeeZeiQZ3Zde272Y",
     "timestamp": 1767205092886,
     "messages": 54,
-    "decisions": [
-      "fake data from `populate-history"
+    "decisions": [],
+    "discoveries": [
+      "the history file is named `."
     ],
-    "discoveries": [],
     "code_created": [
       "tools/knowledge-extractor.ts",
       "tools/generate-history.ts"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [
+      "my pattern matching is too narrow."
+    ],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a6ce5adffeV4vaYgzGe0YwuU",
@@ -414,8 +1595,11 @@
     ],
     "problems_solved": [],
     "key_insights": [
-      "the sync engine is tracking wake-ups, not actual user conversations"
-    ]
+      "** The sync engine shows 18 conversations, but only 1 has been synced (3m ago - that was the last session). The current session (ses_48a6ce...) shows",
+      "** All these sessions are from the watchdog waking me up every 5 minutes. They're not \"conversations\" - they're wake-up prompts. This means the sync e"
+    ],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a717a0cffe8sI128q72DwpBf",
@@ -427,17 +1611,15 @@
       "tools/sync-engine.ts"
     ],
     "problems_solved": [],
-    "key_insights": [
-      "Am I making real progress or just iterating?**"
-    ]
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a7b9f69ffeRnbQ3PtgXuLiWo",
     "timestamp": 1767203558190,
     "messages": 37,
-    "decisions": [
-      "on fixing conversation sync (not rebuilding): `memory/WEEK2_PLAN"
-    ],
+    "decisions": [],
     "discoveries": [],
     "code_created": [
       "memory/knowledge/deployment_lessons.md",
@@ -445,7 +1627,9 @@
       "memory/SESSION10_SUMMARY.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a838e52ffe8p55UDTj3p6e58",
@@ -459,7 +1643,9 @@
       "memory/SESSION9_SUMMARY.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a8cb69cffe6W583pm3yPwdc3",
@@ -479,7 +1665,9 @@
       "memory/QUICKSTART.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a8def23ffePNLAup0vSRYd2M",
@@ -489,15 +1677,15 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a95de62ffeXVLMcFCnwtusPe",
     "timestamp": 1767201766504,
     "messages": 29,
-    "decisions": [
-      "a slightly different counting method"
-    ],
+    "decisions": [],
     "discoveries": [],
     "code_created": [
       "memory/SCENARIO_2.md",
@@ -505,7 +1693,9 @@
       "memory/SESSION7_SUMMARY.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48a971722ffeNT0PtB4Ro7Qt2N",
@@ -515,7 +1705,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48aa03f13ffe6mKx0ySUBAqYrZ",
@@ -531,7 +1723,9 @@
       "memory/SESSION6_SUMMARY.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48aa82dd0ffeDbY49vGgxbG8bj",
@@ -543,7 +1737,9 @@
       "memory/metrics.json"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48ab20c65ffev0DUWmP9McyL0f",
@@ -553,16 +1749,19 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48ab28eeeffeD9src8yf6xb4ID",
     "timestamp": 1767200217378,
     "messages": 59,
-    "decisions": [
-      "TF-IDF scoring to rank documents by relevance, boosting scores for title and heading matches"
+    "decisions": [],
+    "discoveries": [
+      "the current extraction patterns are too strict and look for specific keywords like \"discovered:\", \"f",
+      "the current extraction patterns are too strict and look for specific keywords like \"discovered:\", \"found that\", etc."
     ],
-    "discoveries": [],
     "code_created": [
       "memory/plugin.ts",
       ".opencode/plugin/README.md",
@@ -570,7 +1769,9 @@
       "memory/coordinator.ts"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48abbb6c3ffetFgR08rglAHTY4",
@@ -585,33 +1786,35 @@
       "memory/knowledge/session_3_intelligence.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48ac04ad9ffeXY2bFI2HgR0sIM",
     "timestamp": 1767198891630,
     "messages": 34,
-    "decisions": [
-      "the manager tool:"
-    ],
+    "decisions": [],
     "discoveries": [],
     "code_created": [
       "memory/knowledge/session_recovery.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48ac903adffew4eUNJCtg6I07A",
     "timestamp": 1767198173651,
     "messages": 16,
-    "decisions": [
-      "on the areas you've specified"
-    ],
+    "decisions": [],
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48ac972b2ffeQTls3W0mwrS20x",
@@ -631,7 +1834,11 @@
       "memory/DASHBOARD.md"
     ],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "a **multi-tiered memory persistence system** that allows me to maintain context across sessions and survive the watchdog"
+    ]
   },
   {
     "session_id": "ses_48ae45b7efferuhaj5ehwxhjO9",
@@ -641,7 +1848,9 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
   },
   {
     "session_id": "ses_48ae9fb4dffeS5Cb2xYbhtyBa6",
@@ -651,6 +1860,74 @@
     "discoveries": [],
     "code_created": [],
     "problems_solved": [],
-    "key_insights": []
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "type": "issue",
+    "title": "The issue is that the original code uses `c.",
+    "description": "The issue is that the original code uses `c.",
+    "sessions": [
+      "ses_481d916efffe652gS4BuYh4FWJ"
+    ],
+    "extracted_at": "2026-01-02T10:04:35.479Z"
+  },
+  {
+    "type": "issue",
+    "title": "The issue is that `c.",
+    "description": "The issue is that `c.",
+    "sessions": [
+      "ses_481d916efffe652gS4BuYh4FWJ"
+    ],
+    "extracted_at": "2026-01-02T10:04:35.479Z"
+  },
+  {
+    "type": "issue",
+    "title": "The issue is with the contrib.",
+    "description": "The issue is with the contrib.",
+    "sessions": [
+      "ses_482182354ffepRlDEVp5Iz33WO"
+    ],
+    "extracted_at": "2026-01-02T10:04:35.704Z"
+  },
+  {
+    "type": "pattern",
+    "title": "Most used tool: read",
+    "description": "read was used 297 times across 30 sessions",
+    "frequency": 297,
+    "sessions": [
+      "ses_481d916efffe652gS4BuYh4FWJ",
+      "ses_481dfa643ffecGAfLZqLE5spIJ",
+      "ses_481e2a4b4ffeHFuSYQNCfvwIaC",
+      "ses_481e2b193ffeZ1pdidLGmD9KaB",
+      "ses_481e6ce69ffeY4pbPlusEKrFT7",
+      "ses_481e6df80ffeE9WOUuZPI5PemL",
+      "ses_481e8e3edffelchOWp0OCgatLa",
+      "ses_481ed144affeGlDm5i5UOLeMs4",
+      "ses_481f0c500ffeVHK1ddLXkP0wAu",
+      "ses_481f0dab3ffexmJMTDjKO1xwP9",
+      "ses_481f17197ffeUvKEP8u5ncvkqa",
+      "ses_481ffbf05ffeuwRICugL9rtQJZ",
+      "ses_481f97c3dffeXiO48A3gwALPnj",
+      "ses_482182354ffepRlDEVp5Iz33WO",
+      "ses_482027677ffedBcpV3SGet2BBE",
+      "ses_48206c404ffe2iiP0dGvqqnbAU",
+      "ses_48261b217ffew6JGwMk9dDgqeV",
+      "ses_48268a5afffeWWEUVpx2LgDsjc",
+      "ses_4844f5f7effeS1GftImkN5Tgm9",
+      "ses_48456557cffei9Mxf7fDgNz6x2",
+      "ses_4845eab9effe9kSK7k61M26zfb",
+      "ses_48464b61affeblv65s5yg9yEIp",
+      "ses_4846f06f2ffei2mChHCzntsK6Q",
+      "ses_48473b182ffe8yb742oUGtrWZ9",
+      "ses_4847aa85bffeEPOvSR1mP9praf",
+      "ses_48482ff3effeDVcIC3z9P4y2uF",
+      "ses_4848b250dffe6S7Kfsq39MS3qc",
+      "ses_484832037ffe9cC2nPlNOlZcW3",
+      "ses_4848fecc6ffeG1qCN9S8EgFuCL",
+      "ses_48490b364ffe55tWsOfKkylfTV"
+    ],
+    "extracted_at": "2026-01-02T10:04:35.909Z"
   }
 ]

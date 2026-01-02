@@ -1,0 +1,218 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-01-02T10:09:31.832Z",
+  "agents": {
+    "agent-1767302507934-2c671j": {
+      "agent_id": "agent-1767302507934-2c671j",
+      "tasks_completed": 3,
+      "tasks_claimed": 2,
+      "total_duration_ms": 807486,
+      "avg_duration_ms": 269162,
+      "quality_scores": [
+        8.1,
+        8.3
+      ],
+      "avg_quality": 8.2,
+      "last_activity": "2026-01-01T21:33:56.549Z",
+      "first_seen": "2026-01-01T21:22:38.603Z"
+    },
+    "agent-1767302814469-5fj5o": {
+      "agent_id": "agent-1767302814469-5fj5o",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-01T21:35:44.994Z",
+      "first_seen": "2026-01-01T21:35:44.994Z"
+    },
+    "agent-1767303353127-qvwgix": {
+      "agent_id": "agent-1767303353127-qvwgix",
+      "tasks_completed": 4,
+      "tasks_claimed": 1,
+      "total_duration_ms": 826978,
+      "avg_duration_ms": 206745,
+      "quality_scores": [
+        8.1,
+        8
+      ],
+      "avg_quality": 8.05,
+      "last_activity": "2026-01-01T21:43:09.007Z",
+      "first_seen": "2026-01-01T21:38:30.069Z"
+    },
+    "agent-1767303901076-03ng1c": {
+      "agent_id": "agent-1767303901076-03ng1c",
+      "tasks_completed": 2,
+      "tasks_claimed": 2,
+      "total_duration_ms": 251016,
+      "avg_duration_ms": 125508,
+      "quality_scores": [
+        8.5,
+        8
+      ],
+      "avg_quality": 8.25,
+      "last_activity": "2026-01-01T21:51:18.765Z",
+      "first_seen": "2026-01-01T21:46:33.914Z"
+    },
+    "agent-1767304356058-2e872k": {
+      "agent_id": "agent-1767304356058-2e872k",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 162143,
+      "avg_duration_ms": 162143,
+      "quality_scores": [
+        8
+      ],
+      "avg_quality": 8,
+      "last_activity": "2026-01-01T21:55:40.195Z",
+      "first_seen": "2026-01-01T21:52:55.226Z"
+    },
+    "agent-1767304663655-pjqew": {
+      "agent_id": "agent-1767304663655-pjqew",
+      "tasks_completed": 2,
+      "tasks_claimed": 2,
+      "total_duration_ms": 395934,
+      "avg_duration_ms": 197967,
+      "quality_scores": [
+        8.3,
+        8
+      ],
+      "avg_quality": 8.15,
+      "last_activity": "2026-01-01T22:05:05.174Z",
+      "first_seen": "2026-01-01T21:58:04.082Z"
+    },
+    "agent-1767305333241-tgbvfe": {
+      "agent_id": "agent-1767305333241-tgbvfe",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 277229,
+      "avg_duration_ms": 277229,
+      "quality_scores": [
+        8.3
+      ],
+      "avg_quality": 8.3,
+      "last_activity": "2026-01-01T22:14:17.128Z",
+      "first_seen": "2026-01-01T22:09:32.628Z"
+    },
+    "agent-1767305734327-qycae": {
+      "agent_id": "agent-1767305734327-qycae",
+      "tasks_completed": 2,
+      "tasks_claimed": 2,
+      "total_duration_ms": 303814,
+      "avg_duration_ms": 151907,
+      "quality_scores": [
+        8.5,
+        8.6
+      ],
+      "avg_quality": 8.55,
+      "last_activity": "2026-01-01T22:23:05.500Z",
+      "first_seen": "2026-01-01T22:16:39.151Z"
+    },
+    "agent-1767306281139-ctlwbv": {
+      "agent_id": "agent-1767306281139-ctlwbv",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 363988,
+      "avg_duration_ms": 363988,
+      "quality_scores": [
+        8.5
+      ],
+      "avg_quality": 8.5,
+      "last_activity": "2026-01-01T22:31:18.542Z",
+      "first_seen": "2026-01-01T22:25:11.724Z"
+    },
+    "agent-1767306736882-940ibn": {
+      "agent_id": "agent-1767306736882-940ibn",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-01T22:32:44.822Z",
+      "first_seen": "2026-01-01T22:32:44.822Z"
+    },
+    "agent-1767338629783-sbeq6": {
+      "agent_id": "agent-1767338629783-sbeq6",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 321806,
+      "avg_duration_ms": 321806,
+      "quality_scores": [
+        8.3
+      ],
+      "avg_quality": 8.3,
+      "last_activity": "2026-01-02T07:29:51.817Z",
+      "first_seen": "2026-01-02T07:24:26.324Z"
+    },
+    "agent-1767339092341-cj8zy2": {
+      "agent_id": "agent-1767339092341-cj8zy2",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-02T07:32:21.326Z",
+      "first_seen": "2026-01-02T07:32:21.326Z"
+    },
+    "agent-1767343905998-p10btt": {
+      "agent_id": "agent-1767343905998-p10btt",
+      "tasks_completed": 6,
+      "tasks_claimed": 6,
+      "total_duration_ms": 1652378,
+      "avg_duration_ms": 275396,
+      "quality_scores": [
+        8.3,
+        8.5,
+        8.6,
+        8.2,
+        8.5
+      ],
+      "avg_quality": 8.42,
+      "last_activity": "2026-01-02T09:19:32.963Z",
+      "first_seen": "2026-01-02T08:52:27.118Z"
+    },
+    "agent-1767345511461-pw5hd": {
+      "agent_id": "agent-1767345511461-pw5hd",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 197264,
+      "avg_duration_ms": 197264,
+      "quality_scores": [
+        8.3
+      ],
+      "avg_quality": 8.3,
+      "last_activity": "2026-01-02T09:23:00.926Z",
+      "first_seen": "2026-01-02T09:19:40.713Z"
+    },
+    "agent-1767345914840-613n7n": {
+      "agent_id": "agent-1767345914840-613n7n",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 165217,
+      "avg_duration_ms": 165217,
+      "quality_scores": [
+        8.2
+      ],
+      "avg_quality": 8.2,
+      "last_activity": "2026-01-02T09:32:43.028Z",
+      "first_seen": "2026-01-02T09:29:53.943Z"
+    },
+    "agent-1767346480506-r842f": {
+      "agent_id": "agent-1767346480506-r842f",
+      "tasks_completed": 2,
+      "tasks_claimed": 2,
+      "total_duration_ms": 492269,
+      "avg_duration_ms": 246135,
+      "quality_scores": [
+        8.5,
+        8.6
+      ],
+      "avg_quality": 8.55,
+      "last_activity": "2026-01-02T10:09:31.832Z",
+      "first_seen": "2026-01-02T10:00:27.518Z"
+    }
+  }
+}

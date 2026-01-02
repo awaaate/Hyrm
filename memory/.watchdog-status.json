@@ -1,0 +1,8 @@
+{
+    "status": "running",
+    "last_check": "2026-01-02T10:12:16+00:00",
+    "orchestrator_pid": 419760,
+    "details": "Monitoring active",
+    "watchdog_pid": 353291,
+    "restarts_this_hour": 1
+}

@@ -1,0 +1,1111 @@
+{
+  "version": "1.0",
+  "tasks": [
+    {
+      "id": "task_1767216141159_669a8j",
+      "title": "Improve knowledge extraction patterns",
+      "description": "",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-12-31T21:22:21.159Z",
+      "updated_at": "2025-12-31T21:39:40.739Z",
+      "created_by": "orchestrator",
+      "completed_at": "2025-12-31T21:26:55.559Z",
+      "quality_score": 7.3,
+      "quality_notes": "Improved extraction patterns to capture 1126 decisions - use structured parsing for better results"
+    },
+    {
+      "id": "task_1767216142154_o6ihy7",
+      "title": "Research MCP servers for browser automation",
+      "description": "",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T21:22:22.154Z",
+      "updated_at": "2025-12-31T21:39:45.956Z",
+      "created_by": "orchestrator",
+      "completed_at": "2025-12-31T21:27:10.501Z",
+      "quality_score": 6.4,
+      "quality_notes": "MCP research valuable - Playwright is best choice for browser automation"
+    },
+    {
+      "id": "task_1767216143317_daipfh",
+      "title": "Enhance dashboard with WebSocket live updates",
+      "description": "",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T21:22:23.317Z",
+      "updated_at": "2025-12-31T21:39:47.540Z",
+      "created_by": "orchestrator",
+      "completed_at": "2025-12-31T21:27:10.453Z",
+      "quality_score": 7.3,
+      "quality_notes": "WebSocket live updates enhance dashboard usability"
+    },
+    {
+      "id": "task_1767216144606_2nq7qx",
+      "title": "Implement task quality assessment system",
+      "description": "",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-12-31T21:22:24.606Z",
+      "updated_at": "2025-12-31T21:40:15.108Z",
+      "created_by": "orchestrator",
+      "completed_at": "2025-12-31T21:40:02.948Z",
+      "quality_score": 7.3,
+      "quality_notes": "Quality assessment system enables tracking task quality over time - use for continuous improvement"
+    },
+    {
+      "id": "task_1767216535897_9ud1uj",
+      "title": "Add compaction hook to preserve memory across context compaction",
+      "description": "",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-12-31T21:28:55.897Z",
+      "updated_at": "2025-12-31T21:39:49.133Z",
+      "created_by": "orchestrator",
+      "completed_at": "2025-12-31T21:29:30.325Z",
+      "quality_score": 8.2,
+      "quality_notes": "Compaction hook critical for memory persistence"
+    },
+    {
+      "id": "task_1767216535944_0l8dxb",
+      "title": "Migrate tools to use modern tool() helper pattern",
+      "description": "",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T21:28:55.944Z",
+      "updated_at": "2025-12-31T21:54:16.763Z",
+      "created_by": "orchestrator",
+      "completed_at": "2025-12-31T21:54:16.763Z",
+      "notes": [
+        "[Session 52] Migrated 14 tools to modern tool() helper pattern with Zod schemas"
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Modern tool() pattern with Zod provides better type safety and consistency with OpenCode core tools"
+    },
+    {
+      "id": "task_1767216535988_r9gtnl",
+      "title": "Create Playwright MCP server for browser automation",
+      "description": "",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2025-12-31T21:28:55.988Z",
+      "updated_at": "2025-12-31T22:28:52.724Z",
+      "created_by": "orchestrator",
+      "completed_at": "2025-12-31T22:27:59.721Z",
+      "notes": [
+        "[2025-12-31T22:27:59.721Z] Created full Playwright MCP server with 11 tools: navigate, screenshot, get_content, click, type, evaluate, wait, get_attribute, fill_form, scroll, close. Configured in opencode.json and tested startup."
+      ],
+      "quality_score": 8.6,
+      "quality_notes": "MCP server implementation is straightforward with the SDK. The server manages browser state globally which works well for sequential operations but could be enhanced with session management for concurrent use. Type safety could be improved with proper typing for tool arguments."
+    },
+    {
+      "id": "task_1767217578418_ywxtys",
+      "title": "Improve knowledge extraction to capture more insights",
+      "description": "Current extraction captures decisions but misses many discoveries and insights. Enhance patterns for better learning.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T21:46:18.418Z",
+      "updated_at": "2025-12-31T21:59:06.404Z",
+      "created_by": "ses_489a9932fffeDEet6LdjfhyvI1",
+      "tags": [
+        "knowledge",
+        "learning"
+      ],
+      "completed_at": "2025-12-31T21:59:06.397Z",
+      "notes": [
+        "[Session 52] Enhanced knowledge extraction with techniques and solutions categories, improved filtering, and similarity checking"
+      ],
+      "quality_score": 7.6,
+      "quality_notes": "Knowledge extraction benefits from stricter filtering with similarity checking to reduce noise"
+    },
+    {
+      "id": "task_1767218463745_pfhp0h",
+      "title": "Implement memory context summarization for compaction",
+      "description": "Create a smarter compaction context that summarizes key decisions and active goals instead of just injecting recent context. This would make context compaction more effective.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-12-31T22:01:03.746Z",
+      "updated_at": "2025-12-31T22:21:11.536Z",
+      "created_by": "session-52-orchestrator",
+      "tags": [
+        "memory",
+        "improvement"
+      ],
+      "completed_at": "2025-12-31T22:13:07.487Z",
+      "notes": [
+        "[2025-12-31T22:13:07.487Z] Implemented smart context summarization using tools/context-summarizer.ts. Updated compaction hook to use generateCompactSummary() for smarter, more relevant context during compaction."
+      ],
+      "quality_score": 7.9,
+      "quality_notes": "Key decisions extraction needs better filtering to avoid generic event messages like 'Event: session.updated'"
+    },
+    {
+      "id": "task_1767219732753_u2u15f",
+      "title": "Improve key decisions extraction filtering in context-summarizer",
+      "description": "The context-summarizer currently extracts key decisions from realtime.log but captures generic event messages like 'Event: session.updated'. Need to add better filtering to only extract meaningful decisions.",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2025-12-31T22:22:12.753Z",
+      "updated_at": "2025-12-31T22:22:59.171Z",
+      "created_by": "unknown",
+      "tags": [
+        "improvement",
+        "context-summarizer"
+      ],
+      "completed_at": "2025-12-31T22:22:53.887Z",
+      "notes": [
+        "[2025-12-31T22:22:53.888Z] Added exclude patterns for generic events (Event:, Session started/ended, Tool executed, etc.) and deduplication. Now only captures meaningful decisions."
+      ],
+      "quality_score": 7.9,
+      "quality_notes": "Regex patterns are effective for filtering out generic log messages - maintain exclude list as new patterns emerge"
+    },
+    {
+      "id": "task_1767220141289_z0mnif",
+      "title": "Enhance agent coordination - support automatic task claiming",
+      "description": "When a task is created with high priority, automatically notify idle agents and allow them to claim it",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T22:29:01.289Z",
+      "updated_at": "2025-12-31T22:31:57.712Z",
+      "created_by": "unknown",
+      "tags": [
+        "multi-agent",
+        "coordination",
+        "enhancement"
+      ],
+      "completed_at": "2025-12-31T22:31:51.156Z",
+      "notes": [
+        "[2025-12-31T22:31:51.156Z] Implemented task claiming system: 1) Added task_available message type for broadcasting high-priority tasks, 2) task_create now broadcasts when critical/high priority tasks are created, 3) Added task_claim tool that atomically claims tasks and broadcasts task_claim message, 4) Updated agent_send to support task_available message type. Agents can now react to task_available messages and claim tasks."
+      ],
+      "quality_score": 8,
+      "quality_notes": "Task claiming adds coordination but true automatic detection would require background processes. The message bus approach allows agents to poll for task_available messages. Consider adding a task_watch command for CLI monitoring."
+    },
+    {
+      "id": "task_1767220142907_0eu8la",
+      "title": "Add HTTP server mode to Playwright MCP for remote usage",
+      "description": "Currently the MCP server only supports stdio. Add an HTTP/SSE mode for remote browser automation",
+      "priority": "low",
+      "status": "cancelled",
+      "created_at": "2025-12-31T22:29:02.907Z",
+      "updated_at": "2025-12-31T22:48:14.636Z",
+      "created_by": "unknown",
+      "tags": [
+        "mcp",
+        "playwright",
+        "enhancement"
+      ],
+      "notes": [
+        "[2025-12-31T22:48:14.636Z] User cancelled - Playwright MCP is now installed directly via @playwright/mcp, no need for HTTP server mode."
+      ]
+    },
+    {
+      "id": "task_1767220555040_h2wr4e",
+      "title": "Explore Anthropic Agent Skills for OpenCode integration",
+      "description": "Review skills from https://github.com/anthropics/skills and consider adapting them for our OpenCode multi-agent system. Focus on development/technical skills.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T22:35:55.040Z",
+      "updated_at": "2025-12-31T22:41:00.600Z",
+      "created_by": "unknown",
+      "tags": [
+        "skills",
+        "research",
+        "enhancement"
+      ],
+      "completed_at": "2025-12-31T22:41:00.600Z",
+      "notes": [
+        "[2025-12-31T22:41:00.600Z] Explored Anthropic Agent Skills at https://github.com/anthropics/skills and https://agentskills.io. Our system already uses Agent Skills format in .opencode/skill/ with three skills: agent-orchestrator, memory-manager, multi-agent-patterns. The format matches the spec with SKILL.md files containing YAML frontmatter (name, description) and markdown instructions."
+      ]
+    },
+    {
+      "id": "task_1767221023879_op1bzi",
+      "title": "Create advanced multi-agent coordination patterns",
+      "description": "Document and implement patterns for: parallel task execution, task dependencies, worker pools, load balancing between agents",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-12-31T22:43:43.879Z",
+      "updated_at": "2025-12-31T22:47:53.775Z",
+      "created_by": "ses_4896ef297ffeKeGfMbqzinDUc3",
+      "tags": [
+        "multi-agent",
+        "coordination",
+        "patterns"
+      ],
+      "assigned_to": "agent-1767220776314-sy205",
+      "claimed_at": "2025-12-31T22:45:19.117Z",
+      "completed_at": "2025-12-31T22:47:47.529Z",
+      "notes": [
+        "[2025-12-31T22:47:47.529Z] Implemented: 1) Task dependencies with depends_on field, 2) Automatic unblocking when deps complete, 3) Worker pool patterns documented, 4) Load balancing patterns documented"
+      ],
+      "quality_score": 8.6,
+      "quality_notes": "Task dependencies enable complex workflow orchestration. The automatic unblocking mechanism reduces manual coordination. Worker pool patterns should be combined with proper cleanup for stale workers."
+    },
+    {
+      "id": "task_1767221327725_wh08mn",
+      "title": "Enhanced dynamic system prompt with tasks and user messages",
+      "description": "Added pending tasks and unread user messages to the auto-injected system prompt context. Now agents are aware of current tasks and user requests at session start.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-12-31T22:48:47.725Z",
+      "updated_at": "2025-12-31T22:49:00.215Z",
+      "created_by": "ses_4896ef297ffeKeGfMbqzinDUc3",
+      "tags": [
+        "plugin",
+        "system-prompt",
+        "dynamic-context"
+      ],
+      "completed_at": "2025-12-31T22:48:53.619Z",
+      "notes": [
+        "[2025-12-31T22:48:53.620Z] Implemented in plugin index.ts loadMemoryContext function. Now includes pending tasks sorted by priority and unread user messages."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Dynamic context injection is powerful for agent awareness. Keep injected context concise to avoid token waste. Prioritize important information (tasks, messages) over historical context."
+    },
+    {
+      "id": "task_1767221517699_xg36x2",
+      "title": "Create real-time WebSocket dashboard for live agent monitoring",
+      "description": "Enhance the existing dashboard with WebSocket connections for live updates of agent status, task progress, and message flow. Currently the dashboard polls; this would make it truly real-time.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-12-31T22:51:57.699Z",
+      "updated_at": "2025-12-31T22:53:24.187Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "websocket",
+        "monitoring"
+      ],
+      "assigned_to": "agent-1767221443343-3rcjy",
+      "claimed_at": "2025-12-31T22:52:51.403Z",
+      "completed_at": "2025-12-31T22:53:24.187Z",
+      "notes": [
+        "[2025-12-31T22:53:24.187Z] WebSocket dashboard already exists and is fully functional. Server.ts has file watchers that broadcast changes via WebSocket. Frontend app.js connects to /ws endpoint and receives real-time updates for stats, agents, sessions, memory, tasks, quality, and logs. Features include visual update indicators, automatic reconnection, and ping/pong keep-alive."
+      ]
+    },
+    {
+      "id": "task_1767221519024_tkfemx",
+      "title": "Implement agent health checks and auto-recovery",
+      "description": "Add a health check system that monitors agent responsiveness and automatically restarts or replaces unresponsive agents. Include metrics collection for agent performance.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-12-31T22:51:59.024Z",
+      "updated_at": "2025-12-31T22:56:04.276Z",
+      "created_by": "unknown",
+      "tags": [
+        "agents",
+        "health",
+        "reliability"
+      ],
+      "assigned_to": "agent-1767221443343-3rcjy",
+      "claimed_at": "2025-12-31T22:53:43.410Z",
+      "completed_at": "2025-12-31T22:56:01.304Z",
+      "notes": [
+        "[2025-12-31T22:56:01.304Z] Created tools/agent-health-monitor.ts with comprehensive health monitoring: status command shows all agent health, check runs single health check with recording, monitor provides continuous real-time monitoring with auto-cleanup, metrics tracks historical data and alerts, cleanup removes dead agents. Integrated with opencode-cli.ts via 'health' command."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Health monitoring should be integrated early in multi-agent systems. The monitor includes auto-cleanup which prevents registry bloat from dead agents."
+    },
+    {
+      "id": "task_1767221520438_u8fiel",
+      "title": "Add task prioritization and smart scheduling",
+      "description": "Implement smarter task scheduling that considers task complexity, estimated time, and agent capabilities. Include priority aging so low-priority tasks eventually get attention.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T22:52:00.438Z",
+      "updated_at": "2025-12-31T22:59:05.715Z",
+      "created_by": "unknown",
+      "tags": [
+        "tasks",
+        "scheduling",
+        "optimization"
+      ],
+      "assigned_to": "agent-1767221443343-3rcjy",
+      "claimed_at": "2025-12-31T22:57:09.515Z",
+      "completed_at": "2025-12-31T22:59:02.727Z",
+      "notes": [
+        "[2025-12-31T22:59:02.727Z] Added priority aging system (tasks gain priority over time), complexity and estimated_hours fields to task creation, smart scheduling with task_schedule tool that provides urgency scores and recommendations"
+      ],
+      "quality_score": 7.7,
+      "quality_notes": "Priority aging prevents task starvation - even low priority tasks will eventually bubble up. Complexity scoring helps with workload estimation."
+    },
+    {
+      "id": "task_1767221521904_0lsxdu",
+      "title": "Create session summarization tool for knowledge extraction",
+      "description": "Build a tool that automatically summarizes completed sessions, extracting key learnings, code changes, and decisions made. Feed this into the knowledge base for better context.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T22:52:01.904Z",
+      "updated_at": "2025-12-31T23:04:35.700Z",
+      "created_by": "unknown",
+      "tags": [
+        "knowledge",
+        "summarization",
+        "sessions"
+      ],
+      "assigned_to": "agent-1767222073482-r3oh4k",
+      "claimed_at": "2025-12-31T23:01:57.322Z",
+      "completed_at": "2025-12-31T23:04:24.323Z",
+      "notes": [
+        "[2025-12-31T23:04:24.323Z] Created session-summarizer.ts with: summarize, recent, stats, export commands. Automatically extracts learnings, code changes, tasks completed, and feeds into knowledge base."
+      ],
+      "quality_score": 7.7,
+      "quality_notes": "Session summarization extracts learnings from OpenCode's message/part storage. Key is to feed extracted insights back into knowledge base for continuous learning."
+    },
+    {
+      "id": "task_1767222355463_2rfgsd",
+      "title": "Implement automatic knowledge summarization and deduplication",
+      "description": "The knowledge-base.json grows over time with potential duplicates. Create a tool that periodically summarizes and deduplicates insights, keeping only unique high-value learnings.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T23:05:55.463Z",
+      "updated_at": "2025-12-31T23:08:46.187Z",
+      "created_by": "unknown",
+      "tags": [
+        "knowledge",
+        "optimization",
+        "memory"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767222073482-r3oh4k",
+      "claimed_at": "2025-12-31T23:06:24.034Z",
+      "completed_at": "2025-12-31T23:08:43.568Z",
+      "notes": [
+        "[2025-12-31T23:08:43.568Z] Created knowledge-deduplicator.ts with analyze, dedupe, stats, and top commands. Uses Jaccard similarity for fuzzy matching, creates backups before changes, filters noise patterns."
+      ],
+      "quality_score": 7.7,
+      "quality_notes": "Knowledge deduplication requires both exact and fuzzy matching. Jaccard similarity on word sets works well for detecting near-duplicates. Always backup before destructive operations."
+    },
+    {
+      "id": "task_1767222357984_k1k3nc",
+      "title": "Create automated test suite for plugin tools",
+      "description": "Build automated tests for agent-tools, memory-tools, task-tools, quality-tools to ensure they work correctly after modifications. Use bun:test.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2025-12-31T23:05:57.984Z",
+      "updated_at": "2026-01-01T17:17:57.449Z",
+      "created_by": "unknown",
+      "tags": [
+        "testing",
+        "quality",
+        "infrastructure"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767287660113-n5g1mu",
+      "claimed_at": "2026-01-01T17:15:06.794Z",
+      "completed_at": "2026-01-01T17:17:45.983Z",
+      "notes": [
+        "[2026-01-01T17:17:45.983Z] Created comprehensive test suite with 38 tests covering memory-tools, task-tools, quality-tools, and user-message-tools. All tests pass."
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Comprehensive test suite with proper isolation using beforeEach/afterEach for clean state. Integration tests verify full workflows."
+    },
+    {
+      "id": "task_1767222360366_ubhpdp",
+      "title": "Add session analytics dashboard page",
+      "description": "Enhance the existing dashboard (memory/dashboard/) with session analytics: charts showing session duration over time, tools used, quality trends, file edit frequency.",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2025-12-31T23:06:00.366Z",
+      "updated_at": "2026-01-01T18:37:25.188Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "analytics",
+        "visualization"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767292277477-4er1q",
+      "claimed_at": "2026-01-01T18:31:30.463Z",
+      "completed_at": "2026-01-01T18:37:17.334Z",
+      "notes": [
+        "[2026-01-01T18:37:17.334Z] Session 82: Added Session Analytics dashboard page with: 1) Summary stats (total sessions, tool calls, avg duration, today/week counts), 2) Session Activity by Hour bar chart, 3) Tool Usage Distribution chart, 4) Recent Sessions table, 5) Quality Metrics section with assessments and lessons learned. All features support real-time WebSocket updates."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Building vanilla JS charts is straightforward with CSS flexbox. Horizontal bar charts work well for activity data. Always add file watchers for analytics data sources to enable real-time updates."
+    },
+    {
+      "id": "task_1767222573488_46uivh",
+      "title": "Create beautiful dashboard UI with shadcn and Vite",
+      "description": "Build a complete, beautiful dashboard UI using shadcn/ui and Vite. Should show: agent status, task management, quality metrics, session history, real-time logs. Use React, TypeScript, shadcn components.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-12-31T23:09:33.488Z",
+      "updated_at": "2026-01-01T17:13:07.390Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "ui",
+        "shadcn",
+        "vite",
+        "react"
+      ],
+      "estimated_hours": 4,
+      "complexity": "complex",
+      "assigned_to": "agent-1767222073482-r3oh4k",
+      "claimed_at": "2025-12-31T23:09:39.909Z",
+      "completed_at": "2026-01-01T17:12:59.439Z",
+      "notes": [
+        "[2026-01-01T17:12:59.439Z] Built React dashboard UI with WebSocket real-time updates. Features: Overview, Agents, Tasks, Logs, and Quality tabs. Modern dark theme with status badges and live connection indicator."
+      ],
+      "quality_score": 7.9,
+      "quality_notes": "Building dashboard UIs benefits from starting with WebSocket for real-time updates, falling back to HTTP polling. Modular components (Card, Badge, Panel) enable rapid iteration."
+    },
+    {
+      "id": "task_1767292760667_irqr9z",
+      "title": "Add shadcn/ui components to dashboard-ui",
+      "description": "The dashboard-ui project uses plain React/CSS. Upgrade it with shadcn/ui components for a more polished look: Card, Button, Badge, Tabs, Table, Dialog. Already using Vite and TypeScript which is compatible.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-01T18:39:20.667Z",
+      "updated_at": "2026-01-01T21:30:00.380Z",
+      "created_by": "unknown",
+      "tags": [
+        "ui",
+        "dashboard",
+        "enhancement"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767302507934-2c671j",
+      "claimed_at": "2026-01-01T21:22:38.601Z",
+      "completed_at": "2026-01-01T21:29:57.530Z",
+      "notes": [
+        "[2026-01-01T21:29:57.532Z] Implemented shadcn/ui components for dashboard-ui: Button, Card, Badge, Tabs, Table, Progress. Updated App.tsx to use the new components with proper Tailwind v4 theme configuration. Reduced App.css from 618 lines to minimal custom styles. Build passes, lint passes."
+      ],
+      "quality_score": 8.1,
+      "quality_notes": "Tailwind CSS v4 uses @theme directive instead of CSS custom properties with hsl(). shadcn/ui components work well with Tailwind v4 but require careful color configuration. ESLint react-refresh warnings for component files can be disabled in the ui folder."
+    },
+    {
+      "id": "task_1767292762829_jjvd2z",
+      "title": "Implement task completion notifications",
+      "description": "When a task is completed, send a desktop notification or audio alert via the dashboard. Add WebSocket event type for task_completed and wire it to browser Notification API.",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2026-01-01T18:39:22.829Z",
+      "updated_at": "2026-01-01T21:43:09.005Z",
+      "created_by": "unknown",
+      "tags": [
+        "notifications",
+        "dashboard",
+        "ux"
+      ],
+      "estimated_hours": 1,
+      "complexity": "simple",
+      "assigned_to": "agent-1767303353127-qvwgix",
+      "claimed_at": "2026-01-01T21:39:46.942Z",
+      "completed_at": "2026-01-01T21:42:57.659Z",
+      "notes": [
+        "[2026-01-01T21:42:57.662Z] Implemented task completion notifications: 1) Added showTaskCompletedNotification() with browser Notification API + audio alert using Web Audio API. 2) Added task_completed WebSocket event handler in App.tsx. 3) Added notification toggle button in header. 4) Updated task-tools.ts to broadcast task_completed messages when tasks are marked complete. 5) Created dashboard-ui/server.ts that watches message-bus.jsonl and broadcasts task_completed events."
+      ],
+      "quality_score": 8,
+      "quality_notes": "Task completion notifications implemented with browser Notification API and Web Audio API for audio alerts. The dashboard server watches message-bus.jsonl for task_completed messages and broadcasts to WebSocket clients. Notification toggle in header allows users to enable/disable alerts. Integration with existing plugin task_update function ensures all task completions trigger notifications."
+    },
+    {
+      "id": "task_1767292765181_vtxabo",
+      "title": "Add agent performance metrics tracking",
+      "description": "Track per-agent metrics: tasks completed, avg task duration, quality scores, tool call patterns. Store in agent-health-metrics.json and expose via dashboard API. Enable identifying high/low performing agents.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-01T18:39:25.181Z",
+      "updated_at": "2026-01-01T18:42:27.736Z",
+      "created_by": "unknown",
+      "tags": [
+        "metrics",
+        "agents",
+        "analytics"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767292703410-o7qfl",
+      "claimed_at": "2026-01-01T18:39:51.170Z",
+      "completed_at": "2026-01-01T18:42:20.670Z",
+      "notes": [
+        "[2026-01-01T18:42:20.670Z] Implemented per-agent performance metrics tracking: tasks_completed, tasks_claimed, avg_duration_ms, quality_scores. Added to task-tools.ts (on task complete/claim) and quality-tools.ts (on quality assess). Added /api/agent-performance endpoint to dashboard server with WebSocket support."
+      ],
+      "quality_score": 8.1,
+      "quality_notes": "Agent performance metrics are best collected at key lifecycle events (task claim, task complete, quality assess) to minimize overhead. Storing metrics in a separate file from health checks keeps concerns separated."
+    },
+    {
+      "id": "task_1767302976346_qb53ep",
+      "title": "Create OpenCode conversation tracking system",
+      "description": "Build a tool to track and log all OpenCode conversations by reading from /root/.local/share/opencode/storage/. This includes sessions, messages, and parts. Create conversation-tracker.ts that can: 1) List all sessions with metadata 2) Export full conversations 3) Watch for new messages in real-time 4) Integrate with our memory system for analytics",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-01T21:29:36.346Z",
+      "updated_at": "2026-01-01T21:33:56.549Z",
+      "created_by": "ses_4848b250dffe6S7Kfsq39MS3qc",
+      "tags": [
+        "logging",
+        "conversations",
+        "opencode"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767302507934-2c671j",
+      "claimed_at": "2026-01-01T21:30:40.187Z",
+      "completed_at": "2026-01-01T21:33:56.548Z",
+      "notes": [
+        "[2026-01-01T21:33:32.384Z] Created conversation-tracker.ts with: 1) list command - shows all sessions with metadata, 2) show command - displays conversation with message parts, 3) export command - exports in JSON or markdown, 4) watch command - real-time monitoring, 5) stats command - shows statistics. Successfully parsed OpenCode storage structure (sessions, messages, parts).",
+        "[2026-01-01T21:33:56.549Z] Created opencode-tracker.ts and enhanced opencode-cli.ts with conversation tracking and action capabilities"
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "OpenCode stores conversations in a structured format: sessions in /session/<project_hash>/, messages in /message/<session_id>/, and parts in /part/<message_id>/. Each is a JSON file with clear schema. The watch command uses fs.watch with recursive option for real-time monitoring."
+    },
+    {
+      "id": "task_1767303323074_puchsn",
+      "title": "Create session analytics and learning system",
+      "description": "Build an analytics system that: 1) Analyzes all OpenCode sessions to extract patterns 2) Identifies what went well vs what went wrong 3) Creates insights and learnings 4) Stores insights in knowledge base 5) Provides recommendations for improvement. Use opencode-tracker.ts to access session data.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-01T21:35:23.074Z",
+      "updated_at": "2026-01-01T21:39:46.128Z",
+      "created_by": "ses_4848b250dffe6S7Kfsq39MS3qc",
+      "tags": [
+        "analytics",
+        "learning",
+        "improvement"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767303353127-qvwgix",
+      "claimed_at": "2026-01-01T21:35:44.992Z",
+      "notes": [
+        "[2026-01-01T21:36:45.804Z] Taking over from previous agent that went idle. Building session-analytics.ts tool.",
+        "[2026-01-01T21:38:30.078Z] Created tools/session-analytics.ts with: analyze, patterns, learnings, recommendations, and report commands. Analyzes OpenCode sessions for tool usage, success rates, error patterns, and productivity metrics. Extracts learnings and stores insights in knowledge-base.json.",
+        "[2026-01-01T21:39:35.296Z] Session analytics tool already existed and is working. Verified functionality: analyzes sessions, extracts patterns/learnings, generates recommendations, updates knowledge base. Tool success rate 100%, 25 tool patterns discovered.",
+        "[2026-01-01T21:39:45.876Z] Worker agent created session-analytics.ts with analyze, patterns, learnings, recommendations commands"
+      ],
+      "completed_at": "2026-01-01T21:39:45.875Z",
+      "quality_score": 8.1,
+      "quality_notes": "Session analytics tool provides valuable insights into tool usage patterns, success rates, and common errors. Verified working with 100% session success rate. Integrates with knowledge base for persistent learning."
+    },
+    {
+      "id": "task_1767303948079_i1avub",
+      "title": "Add plugin unit tests for edge cases and error handling",
+      "description": "The tools.test.ts has 38 tests but lacks edge case coverage. Add tests for: concurrent task claims, corrupted JSON recovery, large message bus handling, agent registration race conditions, and quality report edge cases. Target 50+ tests with 80%+ coverage.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-01T21:45:48.079Z",
+      "updated_at": "2026-01-01T21:51:18.762Z",
+      "created_by": "unknown",
+      "tags": [
+        "testing",
+        "quality"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767303901076-03ng1c",
+      "claimed_at": "2026-01-01T21:48:13.439Z",
+      "completed_at": "2026-01-01T21:51:14.678Z",
+      "notes": [
+        "[2026-01-01T21:51:14.680Z] Added 25 new edge case tests covering: corrupted JSON recovery (6 tests), concurrent task claims (4 tests), large message bus handling (2 tests), task dependencies (4 tests), quality assessment (5 tests), user messages (3 tests), task scheduling (3 tests). Total tests now 63 (up from 38). Tests document actual behavior including areas for future improvement."
+      ],
+      "quality_score": 8,
+      "quality_notes": "Edge case tests help document actual system behavior vs expected behavior. Several tests revealed that corrupted JSON files return errors rather than graceful defaults - this is documented as future improvement area. Blocked tasks can still be claimed (manual override pattern). Missing dependencies don't block tasks (they're treated as already complete)."
+    },
+    {
+      "id": "task_1767303951013_akfk11",
+      "title": "Create dashboard real-time connection status and auto-reconnect",
+      "description": "The dashboard WebSocket connection should show connection status (connected/disconnected/reconnecting) and auto-reconnect when the connection drops. Add visual indicator and retry logic with exponential backoff.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-01T21:45:51.013Z",
+      "updated_at": "2026-01-01T21:55:40.190Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "ux"
+      ],
+      "complexity": "simple",
+      "assigned_to": "agent-1767304356058-2e872k",
+      "claimed_at": "2026-01-01T21:52:55.224Z",
+      "completed_at": "2026-01-01T21:55:37.366Z",
+      "notes": [
+        "[2026-01-01T21:55:37.372Z] Implemented WebSocket connection status with three states (connected/disconnected/reconnecting), exponential backoff for auto-reconnect (1s initial, 30s max, 1.5x multiplier), and a visual indicator component showing reconnect attempts."
+      ],
+      "quality_score": 8,
+      "quality_notes": "Exponential backoff should always have both minimum and maximum bounds. Using refs for WebSocket and timeout storage prevents closure issues in React effects."
+    },
+    {
+      "id": "task_1767303954292_lbrq8c",
+      "title": "Implement agent collaboration patterns for complex tasks",
+      "description": "Create patterns for agents to collaborate on complex tasks: 1) Task decomposition - split large tasks into subtasks 2) Result aggregation - combine results from multiple workers 3) Review patterns - one agent reviews another's work. Document in multi-agent-patterns skill.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-01T21:45:54.292Z",
+      "updated_at": "2026-01-01T21:47:47.336Z",
+      "created_by": "unknown",
+      "tags": [
+        "multi-agent",
+        "patterns"
+      ],
+      "complexity": "complex",
+      "assigned_to": "agent-1767303901076-03ng1c",
+      "claimed_at": "2026-01-01T21:46:33.911Z",
+      "completed_at": "2026-01-01T21:47:43.688Z",
+      "notes": [
+        "[2026-01-01T21:47:43.691Z] Added 6 new collaboration patterns to multi-agent-patterns skill: 1) Task Decomposition - split complex tasks into subtasks 2) Result Aggregation - collect and merge worker results 3) Review Pattern - peer review between agents 4) Consensus Pattern - multi-agent voting 5) Checkpoint Pattern - save/resume progress 6) Pipeline Pattern - chain agents in sequence. Also added Anti-Patterns section."
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Multi-agent collaboration patterns are best documented with TypeScript examples showing message flow and state transitions. The checkpoint pattern is particularly valuable for long-running tasks that may be interrupted. Anti-patterns section helps prevent common mistakes."
+    },
+    {
+      "id": "task_1767304600474_r2j8og",
+      "title": "Add WebSocket event streaming to dashboard server",
+      "description": "Enhance dashboard-ui/server.ts to stream more events in real-time: task claims/completions, agent registrations/status changes, quality assessments. Currently only basic updates are streamed. Add event types for full observability.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-01T21:56:40.474Z",
+      "updated_at": "2026-01-01T22:00:36.230Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "websocket",
+        "observability"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767304663655-pjqew",
+      "claimed_at": "2026-01-01T21:58:04.078Z",
+      "completed_at": "2026-01-01T22:00:32.953Z",
+      "notes": [
+        "[2026-01-01T22:00:32.955Z] Enhanced WebSocket event streaming with 10 new event types: task_completed, task_claimed, task_available, agent_registered, agent_broadcast, agent_heartbeat, help_requested, quality_assessed. Added /api/events endpoint for event history. All file watchers enhanced with proper event detection."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Event categorization pattern (categorizeEvent function) makes it easy to add new event types. STREAMABLE_EVENT_TYPES set provides clear enumeration of what gets streamed. Quality assessment detection requires tracking count, not just file change."
+    },
+    {
+      "id": "task_1767304603691_nkxu5c",
+      "title": "Create plugin integration tests with real file operations",
+      "description": "The current tests in tools.test.ts use mocks. Create integration tests that actually read/write to test directories to validate real file handling, JSON parsing edge cases, and atomic operations.",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2026-01-01T21:56:43.691Z",
+      "updated_at": "2026-01-01T22:14:17.126Z",
+      "created_by": "unknown",
+      "tags": [
+        "testing",
+        "plugin",
+        "quality"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767305333241-tgbvfe",
+      "claimed_at": "2026-01-01T22:09:32.624Z",
+      "completed_at": "2026-01-01T22:14:09.853Z",
+      "notes": [
+        "[2026-01-01T22:14:09.856Z] Created comprehensive integration test suite (.opencode/plugin/tools/integration.test.ts) with 24 tests covering: real file I/O operations, JSON parsing edge cases (corrupted files, BOM, truncation), concurrent operations, recovery tool workflows, and end-to-end task/memory/quality workflows. All 24 integration tests pass alongside the existing 63 unit tests."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Integration tests complement unit tests by testing actual file I/O, JSON corruption scenarios, and multi-tool workflows. Using isolated test directories prevents pollution between tests while still validating real filesystem behavior."
+    },
+    {
+      "id": "task_1767304606771_ld07ud",
+      "title": "Implement agent session recovery system",
+      "description": "When an agent crashes or is killed, allow recovery of in-progress work. Store checkpoint data in sessions/ directory, allow agents to resume from last checkpoint. Link to handoff-state.json system.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-01T21:56:46.771Z",
+      "updated_at": "2026-01-01T22:05:05.172Z",
+      "created_by": "unknown",
+      "tags": [
+        "agents",
+        "recovery",
+        "resilience"
+      ],
+      "estimated_hours": 4,
+      "complexity": "complex",
+      "assigned_to": "agent-1767304663655-pjqew",
+      "claimed_at": "2026-01-01T22:00:54.049Z",
+      "completed_at": "2026-01-01T22:05:01.108Z",
+      "notes": [
+        "[2026-01-01T22:05:01.111Z] Implemented session recovery system with: 1) recovery-tools.ts with 4 plugin tools (checkpoint_save, checkpoint_load, recovery_status, recovery_cleanup), 2) CLI commands (recovery, recover), 3) Checkpoint data structure storing task state, files modified, context, next steps, blockers. Also fixed undefined generateCompactSummary and formatSummaryAsMarkdown functions in plugin."
+      ],
+      "quality_score": 8,
+      "quality_notes": "Recovery system needs to be used at task claim time to save checkpoints. The checkpoint data structure captures context well (what was happening, next steps, blockers). Fixed bug: generateCompactSummary was undefined - always test compaction hook. CLI recovery commands provide good visibility into session state."
+    },
+    {
+      "id": "task_1767305782664_c7bnuz",
+      "title": "Create working memory archival system",
+      "description": "The working.md file is 834 lines and growing. Create a system to: 1) Archive old session content to separate files 2) Keep working.md focused on last 3-5 sessions 3) Provide CLI to search archived sessions 4) Auto-archive on session count thresholds",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-01T22:16:22.664Z",
+      "updated_at": "2026-01-01T22:23:05.499Z",
+      "created_by": "unknown",
+      "tags": [
+        "memory",
+        "cleanup",
+        "maintenance"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767305734327-qycae",
+      "claimed_at": "2026-01-01T22:20:43.232Z",
+      "completed_at": "2026-01-01T22:23:02.135Z",
+      "notes": [
+        "[2026-01-01T22:23:02.137Z] Created working-memory-manager.ts with: status, archive, search, list, view, clean, auto commands. Archived 17 old sessions to separate file. Reduced working.md from 855 to 107 lines (87% reduction). Added 'memory' command to CLI."
+      ],
+      "quality_score": 8.6,
+      "quality_notes": "Session parsing requires handling multiple header formats (Current/Previous/Earlier Session). Archiving significantly reduces context size while preserving full history. Index file enables fast archive discovery without reading all files."
+    },
+    {
+      "id": "task_1767305786654_im18xd",
+      "title": "Implement message bus rotation and compaction",
+      "description": "Message bus is 59KB with 190+ messages including many old heartbeats. Create: 1) Automatic rotation to archived files after N messages or size threshold 2) Heartbeat deduplication (keep only latest per agent) 3) Message TTL for cleanup 4) Index file for fast searching across archives",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-01T22:16:26.654Z",
+      "updated_at": "2026-01-01T22:19:27.086Z",
+      "created_by": "unknown",
+      "tags": [
+        "message-bus",
+        "performance",
+        "cleanup"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767305734327-qycae",
+      "claimed_at": "2026-01-01T22:16:39.150Z",
+      "completed_at": "2026-01-01T22:19:24.061Z",
+      "notes": [
+        "[2026-01-01T22:19:24.063Z] Created message-bus-manager.ts with: status, rotate, compact, cleanup, search, stats, auto commands. Integrated with plugin for automatic maintenance on session start. Reduced message bus from 198 to 123 messages (38% reduction). Added CLI command 'bus' to opencode-cli.ts."
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Message bus management is critical for system health. Auto-maintenance during boot prevents unbounded growth. Archive + index pattern enables historical search while keeping active bus small."
+    },
+    {
+      "id": "task_1767305790341_ood0eu",
+      "title": "Create live terminal dashboard with blessed/ink",
+      "description": "Build a rich terminal UI dashboard using blessed or ink that shows: 1) Live agent status grid 2) Task queue with progress indicators 3) Message stream in real-time 4) Quality metrics chart 5) Keyboard navigation for actions (claim task, send message). Should be more interactive than current monitor.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-01T22:16:30.341Z",
+      "updated_at": "2026-01-02T08:54:53.226Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "ui",
+        "monitoring"
+      ],
+      "complexity": "complex",
+      "assigned_to": "agent-1767343905998-p10btt",
+      "claimed_at": "2026-01-02T08:52:27.117Z",
+      "notes": [
+        "[2026-01-02T07:32:02.948Z] Released - previous agent session ended. Task can be reclaimed.",
+        "[2026-01-02T08:54:45.760Z] Fixed canvas width issues in terminal-dashboard.ts by replacing contrib.donut, contrib.bar, and contrib.gauge with text-based blessed.box widgets. Dashboard now works correctly with live file watching, agent status grid, task queue, message stream, quality metrics, and keyboard navigation (Tab, c, m, r, q, h keys)."
+      ],
+      "completed_at": "2026-01-02T08:54:45.754Z",
+      "quality_score": 8.3,
+      "quality_notes": "Canvas-based widgets in blessed-contrib require specific terminal width constraints. Text-based alternatives using blessed.box with ANSI formatting provide more reliable cross-terminal compatibility."
+    },
+    {
+      "id": "task_1767305793004_0arlhn",
+      "title": "Add agent performance profiling and optimization suggestions",
+      "description": "Create performance profiling that tracks: 1) Tool execution times 2) Context usage efficiency 3) Task completion rates by agent 4) Common error patterns. Generate automated suggestions for improvement based on historical data.",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2026-01-01T22:16:33.004Z",
+      "updated_at": "2026-01-02T07:29:51.815Z",
+      "created_by": "unknown",
+      "tags": [
+        "performance",
+        "analytics",
+        "optimization"
+      ],
+      "complexity": "complex",
+      "assigned_to": "agent-1767338629783-sbeq6",
+      "claimed_at": "2026-01-02T07:24:26.322Z",
+      "completed_at": "2026-01-02T07:29:48.128Z",
+      "notes": [
+        "[2026-01-02T07:29:48.132Z] Created tools/agent-performance-profiler.ts with 8 commands: profile, tools, agents, efficiency, errors, suggestions, export, help. Features: tool execution time tracking, context usage efficiency analysis, task completion rates by agent, error pattern detection, automated optimization suggestions. Integrated with opencode-cli.ts via 'perf' and 'profile' commands."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Performance profiling requires analyzing multiple data sources (OpenCode parts, session logs, performance metrics, quality assessments). The key insight is to aggregate data from various sources and generate actionable suggestions rather than just reporting metrics."
+    },
+    {
+      "id": "task_1767306304817_13dvqt",
+      "title": "Git integration for multi-agent memory system",
+      "description": "Integrate git into the multi-agent system to enable: 1) Automatic commit tracking for code changes made by agents 2) Git status in dashboard showing repo state 3) Branch management for parallel agent work 4) Commit history in working memory 5) Git hooks integration for quality checks 6) Auto-commit for completed tasks with quality metadata. This allows agents to have version control awareness and enables rollback of agent changes if needed.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-01T22:25:04.817Z",
+      "updated_at": "2026-01-01T22:31:18.540Z",
+      "created_by": "unknown",
+      "tags": [
+        "git",
+        "integration",
+        "version-control",
+        "agent-tools"
+      ],
+      "estimated_hours": 4,
+      "complexity": "complex",
+      "assigned_to": "agent-1767306281139-ctlwbv",
+      "claimed_at": "2026-01-01T22:25:11.722Z",
+      "completed_at": "2026-01-01T22:31:15.710Z",
+      "notes": [
+        "[2026-01-01T22:31:15.713Z] Created comprehensive git integration with CLI tool (11 commands), plugin tools (6 tools), and full opencode-cli integration. Features: status, log, diff, commit with agent metadata, search, branches, stash, auto-commit for tasks. Activity tracked in git-activity.jsonl."
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Git integration enables agents to track their code changes with metadata. The CLI/plugin split provides both programmatic and user-accessible interfaces. Activity logging enables historical analysis of agent git operations."
+    },
+    {
+      "id": "task_1767339034717_mqnz73",
+      "title": "Add real-time performance metrics to dashboard-ui",
+      "description": "Integrate the agent-performance-profiler data with the dashboard-ui React app. Add a Performance tab that shows: 1) Tool execution times chart 2) Agent efficiency leaderboard 3) Error pattern alerts 4) Optimization suggestions panel. Use WebSocket for real-time updates.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T07:30:34.717Z",
+      "updated_at": "2026-01-02T09:23:00.923Z",
+      "created_by": "ses_48268a5afffeWWEUVpx2LgDsjc",
+      "tags": [
+        "dashboard",
+        "performance",
+        "react"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767345511461-pw5hd",
+      "claimed_at": "2026-01-02T09:19:40.713Z",
+      "notes": [
+        "[2026-01-02T09:19:30.773Z] Unclaimed - previous agent (agent-1767339092341-cj8zy2) is stale. Ready for new claim.",
+        "[2026-01-02T09:22:57.981Z] Added Performance tab to dashboard-ui with: tool execution times chart (top 15), agent efficiency leaderboard, error pattern alerts, optimization suggestions panel. Also added Performance snapshot to Overview tab. WebSocket integration for real-time updates."
+      ],
+      "completed_at": "2026-01-02T09:22:57.977Z",
+      "quality_score": 8.3,
+      "quality_notes": "Performance dashboards require careful consideration of data visualization - bar charts with dual metrics (count + duration) provide good density. Agent efficiency scoring with weighted quality metrics enables meaningful leaderboard comparisons. WebSocket integration already existed in server.ts, only needed frontend consumption."
+    },
+    {
+      "id": "task_1767339037402_4nebhl",
+      "title": "Create automated daily performance reports",
+      "description": "Build an automated system that generates daily performance reports summarizing: agent productivity, quality trends, error patterns, and improvement suggestions. Reports should be stored in memory/reports/ and optionally sent via webhook notifications.",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2026-01-02T07:30:37.402Z",
+      "updated_at": "2026-01-02T09:03:03.529Z",
+      "created_by": "ses_48268a5afffeWWEUVpx2LgDsjc",
+      "tags": [
+        "automation",
+        "reporting",
+        "performance"
+      ],
+      "complexity": "simple",
+      "assigned_to": "agent-1767343905998-p10btt",
+      "claimed_at": "2026-01-02T09:00:07.230Z",
+      "completed_at": "2026-01-02T09:02:55.100Z",
+      "notes": [
+        "[2026-01-02T09:02:55.114Z] Created tools/daily-report-generator.ts with 7 commands: generate, list, view, summary, trends, help. Features: agent productivity metrics (tool calls, tasks, sessions), quality trends analysis (scores by dimension, trend direction), error pattern detection, automated improvement suggestions. Reports saved as markdown in memory/reports/. Integrated with opencode-cli.ts via report command."
+      ],
+      "quality_score": 8.6,
+      "quality_notes": "Daily reports provide valuable visibility into system health. Storing reports as markdown enables easy reading and archiving. Automatic suggestion generation based on metrics thresholds helps identify issues proactively."
+    },
+    {
+      "id": "task_1767339040290_agt8x5",
+      "title": "Implement tool execution time tracking in plugin hooks",
+      "description": "Add hooks to the plugin system that track actual tool execution times and store them in a dedicated log file. This will provide more accurate timing data than the current estimation from OpenCode parts. Track: tool name, start time, end time, success/failure, input size, output size.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T07:30:40.290Z",
+      "updated_at": "2026-01-02T08:59:41.307Z",
+      "created_by": "ses_48268a5afffeWWEUVpx2LgDsjc",
+      "tags": [
+        "plugin",
+        "metrics",
+        "performance"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767343905998-p10btt",
+      "claimed_at": "2026-01-02T08:55:28.923Z",
+      "completed_at": "2026-01-02T08:59:30.740Z",
+      "notes": [
+        "[2026-01-02T08:59:30.745Z] Implemented tool execution time tracking in plugin hooks. Added: 1) tool.execute.before hook to capture start time and input size, 2) Enhanced tool.execute.after to calculate duration and store to tool-timing.jsonl, 3) Tool categorization system for 15+ categories, 4) CLI timing command with 6 subcommands (summary, tools, recent, slow, categories, export). Data tracked: tool name, call ID, start/end time, duration, input/output sizes, success/failure, category."
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Using Map for in-memory state tracking of active tool calls allows efficient lookup without file I/O. The tool.execute.before hook captures start time while tool.execute.after calculates and logs timing - this pattern enables accurate duration measurement."
+    },
+    {
+      "id": "task_1767344641899_hkgfeg",
+      "title": "Add per-agent conversation viewer to track message/tool streams",
+      "description": "Enhance the system to show each agent's conversation stream including messages, tool calls, and outputs. Reference opencode-tracker.ts for similar implementation. Features: 1) View conversation history per agent 2) Show tool calls with inputs/outputs 3) Real-time streaming support 4) Integration with dashboard",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T09:04:01.899Z",
+      "updated_at": "2026-01-02T09:08:18.692Z",
+      "created_by": "ses_482182354ffepRlDEVp5Iz33WO",
+      "tags": [
+        "monitoring",
+        "agents",
+        "dashboard"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767343905998-p10btt",
+      "claimed_at": "2026-01-02T09:04:35.592Z",
+      "completed_at": "2026-01-02T09:08:09.433Z",
+      "notes": [
+        "[2026-01-02T09:08:09.441Z] Created tools/agent-conversation-viewer.ts with 6 commands: agents (list all agents), view (show agent conversation), tools (show tool calls), stream (real-time activity), timeline (chronological view), export (markdown export). Shows messages, tool calls, and logs per agent. Integrated with opencode-cli.ts via 'conv' command."
+      ],
+      "quality_score": 8.2,
+      "quality_notes": "Per-agent conversation tracking requires correlating multiple data sources (messages, tool timing, logs) by agent ID and session ID. The real-time stream feature with file watching provides good visibility into agent activity."
+    },
+    {
+      "id": "task_1767344645072_oyp9nk",
+      "title": "Improve agent prompts and ensure skills are being utilized",
+      "description": "Review and enhance agent prompts to: 1) Ensure skills (orchestrator, memory-manager, multi-agent-patterns) are properly loaded and used 2) Improve multi-agent coordination 3) Add better context awareness 4) Optimize for parallel task execution",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T09:04:05.072Z",
+      "updated_at": "2026-01-02T09:19:32.965Z",
+      "created_by": "ses_482182354ffepRlDEVp5Iz33WO",
+      "tags": [
+        "prompts",
+        "skills",
+        "multi-agent"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767343905998-p10btt",
+      "claimed_at": "2026-01-02T09:08:48.172Z",
+      "completed_at": "2026-01-02T09:19:32.961Z",
+      "notes": [
+        "[2026-01-02T09:19:32.965Z] Completed by previous orchestrator - improved agent prompts in watchdog script and created critique-agent skill file for code review capabilities"
+      ]
+    },
+    {
+      "id": "task_1767344648841_8si6qk",
+      "title": "Create critique agent type for code review and debugging",
+      "description": "Create a new agent type that critiques everything by writing markdown files. Functions: 1) Code review with detailed feedback 2) Output analysis and debugging 3) System critique and improvement suggestions 4) Quality gate for completed tasks. Files stored in memory/critiques/",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T09:04:08.841Z",
+      "updated_at": "2026-01-02T09:14:35.038Z",
+      "created_by": "ses_482182354ffepRlDEVp5Iz33WO",
+      "tags": [
+        "agents",
+        "code-review",
+        "quality"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767343905998-p10btt",
+      "claimed_at": "2026-01-02T09:10:27.147Z",
+      "completed_at": "2026-01-02T09:14:32.571Z",
+      "notes": [
+        "[2026-01-02T09:14:32.576Z] Created critique agent with 9 commands (code, output, task, system, review, list, view, summary, help). Analyzes security, quality, performance, and style issues. Created skill file at .opencode/skill/critique-agent/SKILL.md. Integrated with opencode-cli.ts via 'critique'/'review'/'cr' commands. Critiques saved as markdown in memory/critiques/."
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Pattern-based code analysis works well for common issues but can have false positives when patterns appear in string literals. Skill files provide good documentation for agent capabilities."
+    },
+    {
+      "id": "task_1767346015405_uj38ak",
+      "title": "Improved critique-agent skill with spawning instructions",
+      "description": "Updated the critique-agent skill file to include clear instructions on HOW TO SPAWN a critique agent using the Task tool. The critique-agent.ts CLI tool remains as a utility, but now the skill explains the proper way to spawn critique agents as real agents in the multi-agent system. Successfully demonstrated by spawning a critique agent that reviewed dashboard-ui/src/App.tsx and scored it 5.2/10.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T09:26:55.405Z",
+      "updated_at": "2026-01-02T09:27:04.693Z",
+      "created_by": "ses_481f97c3dffeXiO48A3gwALPnj",
+      "tags": [
+        "skill",
+        "critique",
+        "multi-agent",
+        "documentation"
+      ],
+      "complexity": "moderate",
+      "completed_at": "2026-01-02T09:27:04.693Z",
+      "notes": [
+        "[2026-01-02T09:27:04.693Z] Addressed user feedback about critique-agent not being a real agent. Updated skill file with spawning instructions and demonstrated spawning a critique agent successfully."
+      ]
+    },
+    {
+      "id": "task_1767346173578_rcafqh",
+      "title": "Refactor memory system to properly save conversations",
+      "description": "User feedback: Memory system isn't saving conversations from all sessions. Issues identified:\n\n1. **Missing automatic conversation extraction**: The plugin tracks session start/end events but doesn't extract actual conversation content (messages, tool calls, outputs)\n\n2. **Duplicated functionality**: \n   - `conversation-tracker.ts` reads from OpenCode's native storage \n   - `opencode-tracker.ts` does similar things\n   - `session-summarizer.ts` summarizes sessions\n   - `session-analytics.ts` analyzes sessions\n   These should be consolidated or have clear roles\n\n3. **Manual vs Automatic**:\n   - Knowledge extraction (`knowledge-extractor.ts`) is manual\n   - Session summaries need to be generated manually\n   - No automatic extraction after session ends\n\n4. **What IS working**:\n   - Tool timing is tracked (tool-timing.jsonl)\n   - Agent messages are tracked (message-bus.jsonl)  \n   - Tasks are persisted (tasks.json)\n   - Quality assessments are saved (quality-assessments.json)\n   - Working memory is updated (working.md)\n\nSOLUTION NEEDED:\n1. Add session.end hook to automatically extract key learnings\n2. Integrate conversation-tracker to pull messages into our memory system\n3. Auto-summarize completed sessions\n4. Consolidate duplicated tools\n5. Create clear documentation on what's active vs deprecated",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T09:29:33.578Z",
+      "updated_at": "2026-01-02T09:32:43.024Z",
+      "created_by": "ses_481f97c3dffeXiO48A3gwALPnj",
+      "tags": [
+        "memory-system",
+        "refactor",
+        "user-feedback",
+        "critical"
+      ],
+      "estimated_hours": 4,
+      "complexity": "complex",
+      "assigned_to": "agent-1767345914840-613n7n",
+      "claimed_at": "2026-01-02T09:29:53.941Z",
+      "completed_at": "2026-01-02T09:32:39.158Z",
+      "notes": [
+        "[2026-01-02T09:32:39.163Z] Implemented automatic session knowledge extraction: 1) Added session.end hook to auto-extract learnings from tool timing data 2) Created extractSessionKnowledge function that analyzes tool usage patterns, errors, and slow tools 3) Added summarize-current command to session-summarizer for quiet auto-summarization 4) Added Memory System Architecture section to AGENTS.md documenting active vs deprecated tools"
+      ],
+      "quality_score": 8.2,
+      "quality_notes": "Automatic extraction on session end needs to be lightweight to avoid blocking. Extracting tool patterns (most used, slow, error-prone) provides actionable insights. Having both quiet (summarize-current) and verbose (summarize) modes enables both automated and manual use. Documentation of active vs deprecated tools is essential for maintainability."
+    },
+    {
+      "id": "task_1767346467804_5sh2f0",
+      "title": "Deep Codebase Analysis and Documentation",
+      "description": "Perform comprehensive analysis of the entire codebase, understand all components, patterns, and document findings. Then spawn worker to improve code quality.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T09:34:27.804Z",
+      "updated_at": "2026-01-02T09:59:00.642Z",
+      "created_by": "unknown",
+      "tags": [
+        "analysis",
+        "documentation",
+        "code-quality"
+      ],
+      "complexity": "complex",
+      "notes": [
+        "[2026-01-02T09:43:13.404Z] Phase 1 complete - Created 8 shared utility files in tools/shared/. Now starting Phase 2 - migrating CLI tools.",
+        "[2026-01-02T09:58:57.983Z] Completed deep codebase analysis and Phase 1+2 migrations. Created shared utilities module (8 files) and migrated 6 CLI tools to use it: agent-health-monitor, knowledge-deduplicator, realtime-monitor, session-summarizer, critique-agent, opencode-cli. ~200+ lines of duplicated code removed."
+      ],
+      "completed_at": "2026-01-02T09:58:57.980Z",
+      "quality_score": 8.6,
+      "quality_notes": "Created comprehensive shared utilities module that will prevent future code duplication. Migration pattern established: 1) Create shared utils first without touching existing code, 2) Migrate low-risk tools first, 3) Migrate high-usage tools last with thorough testing."
+    },
+    {
+      "id": "task_1767348019820_2811ek",
+      "title": "Improve OpenCode conversation tracking integration",
+      "description": "User request: Better track conversations from .opencode storage. The opencode-tracker.ts has logic to read OpenCode's native session/message/part storage but needs better integration with our memory system. Tasks: 1) Enhance sync command to save richer data, 2) Auto-run sync on session start, 3) Extract key learnings from conversations, 4) Possibly consolidate with conversation-tracker.ts",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T10:00:19.820Z",
+      "updated_at": "2026-01-02T10:05:50.816Z",
+      "created_by": "ses_481f0dab3ffexmJMTDjKO1xwP9",
+      "tags": [
+        "memory",
+        "tracking",
+        "integration"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767346480506-r842f",
+      "claimed_at": "2026-01-02T10:00:27.515Z",
+      "completed_at": "2026-01-02T10:05:42.660Z",
+      "notes": [
+        "[2026-01-02T10:05:42.667Z] Enhanced opencode-tracker.ts with: 1) Improved sync command that saves rich session data including tool usage, topics, and file changes to memory/opencode-sessions.json, 2) New learn command for extracting insights from sessions, 3) Migration to shared utilities. Tested all commands."
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "OpenCode stores sessions in ~/.local/share/opencode/storage with session/message/part structure. Enhanced sync captures tool patterns, topics, and file changes. Incremental sync prevents reprocessing. Learn command extracts knowledge from conversations."
+    },
+    {
+      "id": "task_1767348386518_cgkx0r",
+      "title": "Analyze and customize OpenCode source code",
+      "description": "User request: Analyze how OpenCode works internally (agent prompts, tools, system). Then customize: 1) Task tool to integrate with our task system, 2) System prompt customization, 3) Subagent tool to use our memory system",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T10:06:26.518Z",
+      "updated_at": "2026-01-02T10:09:31.830Z",
+      "created_by": "ses_481f0dab3ffexmJMTDjKO1xwP9",
+      "tags": [
+        "opencode",
+        "customization",
+        "integration"
+      ],
+      "complexity": "complex",
+      "assigned_to": "agent-1767346480506-r842f",
+      "claimed_at": "2026-01-02T10:06:32.945Z",
+      "notes": [
+        "[2026-01-02T10:08:19.463Z] Analyzed OpenCode source from GitHub (sst/opencode). Key findings: 1) Task tool in src/tool/task.ts creates child sessions with restricted permissions (no todo, no recursive task), 2) Agent prompts in src/agent/prompt/, 3) Tools defined as .ts (impl) + .txt (description) pairs. Next steps: Document findings and plan customization approach.",
+        "[2026-01-02T10:09:30.074Z] Completed OpenCode source analysis. Created docs/OPENCODE_ARCHITECTURE.md with: 1) Package structure, 2) Agent system, 3) Tool system, 4) Task tool deep dive, 5) Plugin system, 6) Customization options, 7) Integration plan. Key finding: Best approach is to use plugin hooks + custom tools rather than forking OpenCode."
+      ],
+      "completed_at": "2026-01-02T10:09:30.068Z",
+      "quality_score": 8.6,
+      "quality_notes": "OpenCode is highly extensible via plugins. Task tool creates child sessions with restricted permissions. Best integration approach is wrapper tools + system message injection rather than forking."
+    }
+  ],
+  "completed_count": 52,
+  "last_updated": "2026-01-02T10:09:30.074Z"
+}

@@ -40,7 +40,7 @@ interface Message {
   from_agent: string;
   to_agent?: string; // If null, broadcast to all
   timestamp: string;
-  type: "broadcast" | "direct" | "task_claim" | "task_complete" | "heartbeat" | "request_help" | "file_lock";
+  type: "broadcast" | "direct" | "task_claim" | "task_complete" | "heartbeat" | "request_help" | "file_lock" | "task_available";
   payload: any;
   read_by?: string[];
 }
@@ -384,6 +384,66 @@ class MultiAgentCoordinator {
     });
   }
 
+  /**
+   * Claim a task from the task manager
+   */
+  claimTask(taskId: string): void {
+    this.sendMessage({
+      type: "task_claim",
+      payload: {
+        task_id: taskId,
+        claimed_by: this.agentId,
+        claimed_at: new Date().toISOString(),
+      },
+    });
+    
+    this.updateStatus("working", `Working on task: ${taskId}`);
+  }
+
+  /**
+   * Report task completion
+   */
+  completeTask(taskId: string, result?: any): void {
+    this.sendMessage({
+      type: "task_complete",
+      payload: {
+        task_id: taskId,
+        completed_by: this.agentId,
+        completed_at: new Date().toISOString(),
+        result,
+      },
+    });
+    
+    this.updateStatus("active");
+  }
+
+  /**
+   * Get agents by role
+   */
+  getAgentsByRole(role: string): Agent[] {
+    return this.getActiveAgents().filter(a => a.assigned_role === role);
+  }
+
+  /**
+   * Get idle agents available for work
+   */
+  getIdleAgents(): Agent[] {
+    return this.getActiveAgents().filter(a => 
+      a.status === "active" || a.status === "idle"
+    );
+  }
+
+  /**
+   * Check if a task is already claimed
+   */
+  isTaskClaimed(taskId: string): boolean {
+    const messages = this.readMessages();
+    return messages.some(m => 
+      m.type === "task_claim" && 
+      m.payload.task_id === taskId
+    );
+  }
+
   // Helper methods
   private readRegistry(): AgentRegistry {
     if (!existsSync(REGISTRY_PATH)) {
@@ -483,8 +543,48 @@ if (import.meta.main) {
     case "cleanup":
       // Clean up stale locks and agents
       console.log("Cleaning up stale entries...");
-      const registry = coordinator.getActiveAgents();
-      console.log(`${registry.length} active agents remaining`);
+      const registryCleanup = coordinator.getActiveAgents();
+      console.log(`${registryCleanup.length} active agents remaining`);
+      break;
+
+    case "prune-messages":
+      // Remove old heartbeat messages to reduce file size
+      console.log("Pruning old messages from message bus...");
+      if (existsSync(MESSAGE_BUS_PATH)) {
+        const content = readFileSync(MESSAGE_BUS_PATH, "utf-8");
+        const lines = content.trim().split("\n").filter(Boolean);
+        const now = Date.now();
+        const maxAge = parseInt(args[1] || "3600000", 10); // Default: 1 hour
+        
+        let kept = 0;
+        let removed = 0;
+        const filteredLines: string[] = [];
+        
+        for (const line of lines) {
+          try {
+            const msg = JSON.parse(line);
+            const msgTime = new Date(msg.timestamp).getTime();
+            const age = now - msgTime;
+            
+            // Keep non-heartbeat messages or recent heartbeats
+            if (msg.type !== "heartbeat" || age < maxAge) {
+              filteredLines.push(line);
+              kept++;
+            } else {
+              removed++;
+            }
+          } catch {
+            // Keep malformed lines
+            filteredLines.push(line);
+            kept++;
+          }
+        }
+        
+        writeFileSync(MESSAGE_BUS_PATH, filteredLines.join("\n") + "\n");
+        console.log(`Pruned ${removed} old heartbeat messages, kept ${kept} messages.`);
+      } else {
+        console.log("No message bus file found.");
+      }
       break;
 
     default:
@@ -500,6 +600,7 @@ Commands:
   messages            - Show unread messages
   send <type> <json>  - Send message to other agents
   cleanup             - Clean up stale entries
+  prune-messages [ms] - Remove old heartbeat messages (default: 1 hour)
 
 Examples:
   bun run multi-agent-coordinator.ts register memory-worker

@@ -2,44 +2,25 @@
   "version": "1.0.0",
   "agents": [
     {
-      "agent_id": "agent-1767213146093-m5e4n9",
-      "session_id": "ses_489e36014ffePrlCm8NINEY1UF",
-      "started_at": "2025-12-31T20:32:26.093Z",
-      "last_heartbeat": "2025-12-31T20:44:56.204Z",
+      "agent_id": "agent-1767346448863-8nurpb",
+      "session_id": "session-1767346448863",
+      "started_at": "2026-01-02T09:34:08.864Z",
+      "last_heartbeat": "2026-01-02T10:10:09.530Z",
       "status": "active",
-      "assigned_role": "general",
-      "pid": 25106
+      "assigned_role": "orchestrator",
+      "pid": 388997
     },
     {
-      "agent_id": "agent-1767213146095-qm4hy9",
-      "session_id": "ses_489e36014ffePrlCm8NINEY1UF",
-      "started_at": "2025-12-31T20:32:26.095Z",
-      "last_heartbeat": "2025-12-31T20:44:56.206Z",
-      "status": "working",
-      "assigned_role": "general",
-      "pid": 25106,
-      "current_task": "Documenting MCP servers and planning integrations"
-    },
-    {
-      "agent_id": "agent-1767213594303-sj5ohe",
-      "session_id": "ses_489dc8942ffe1z6CvIiG76Nv3O",
-      "started_at": "2025-12-31T20:39:54.304Z",
-      "last_heartbeat": "2025-12-31T20:41:24.315Z",
+      "agent_id": "agent-1767348647750-8jx9u",
+      "session_id": "session-1767348647750",
+      "started_at": "2026-01-02T10:10:47.750Z",
+      "last_heartbeat": "2026-01-02T10:12:17.771Z",
       "status": "active",
-      "assigned_role": "general",
-      "pid": 27179
-    },
-    {
-      "agent_id": "agent-1767213594305-wi2y2j",
-      "session_id": "ses_489dc8942ffe1z6CvIiG76Nv3O",
-      "started_at": "2025-12-31T20:39:54.305Z",
-      "last_heartbeat": "2025-12-31T20:41:25.796Z",
-      "status": "idle",
-      "assigned_role": "general",
-      "pid": 27179,
-      "current_task": "Memory analysis complete"
+      "assigned_role": "orchestrator",
+      "pid": 419760,
+      "current_task": "Orchestrator resumed - reviewing system state"
     }
   ],
-  "last_updated": "2025-12-31T20:44:56.207Z",
-  "lock_version": 9
+  "last_updated": "2026-01-02T10:12:17.772Z",
+  "lock_version": 120
 }

@@ -1,0 +1,217 @@
+/**
+ * Memory System Tools
+ * 
+ * Provides tools for memory management:
+ * - memory_status: Get current system state
+ * - memory_search: Search memory stores
+ * - memory_update: Update memory state
+ */
+
+import { tool } from "@opencode-ai/plugin";
+import { existsSync, readFileSync, writeFileSync } from "fs";
+import { join } from "path";
+
+export interface MemoryToolsContext {
+  memoryDir: string;
+  statePath: string;
+  metricsPath: string;
+}
+
+export function createMemoryTools(getContext: () => MemoryToolsContext) {
+  return {
+    memory_status: tool({
+      description:
+        "Get current memory system status, active tasks, and recent achievements. Use this instead of manually reading state.json.",
+      args: {
+        include_metrics: tool.schema
+          .boolean()
+          .describe(
+            "Include detailed metrics (token usage, session count, etc.)"
+          )
+          .optional(),
+      },
+      async execute({ include_metrics = true }) {
+        try {
+          const ctx = getContext();
+          const state = existsSync(ctx.statePath)
+            ? JSON.parse(readFileSync(ctx.statePath, "utf-8"))
+            : { session_count: 0, status: "unknown", active_tasks: [] };
+
+          const metrics =
+            include_metrics && existsSync(ctx.metricsPath)
+              ? JSON.parse(readFileSync(ctx.metricsPath, "utf-8"))
+              : null;
+
+          return JSON.stringify({
+            success: true,
+            data: {
+              session: state.session_count,
+              status: state.status,
+              active_tasks: state.active_tasks || [],
+              recent_achievements: state.recent_achievements?.slice(0, 5) || [],
+              current_objective: state.current_objective,
+              ...(metrics
+                ? {
+                    total_sessions: metrics.total_sessions,
+                    total_tool_calls: metrics.total_tool_calls,
+                    total_tokens: state.total_tokens_used,
+                  }
+                : {}),
+            },
+          });
+        } catch (error) {
+          return JSON.stringify({ success: false, error: String(error) });
+        }
+      },
+    }),
+
+    memory_search: tool({
+      description:
+        "Search memory for specific information (working memory, knowledge base, session history). Use this instead of manually reading multiple files.",
+      args: {
+        query: tool.schema
+          .string()
+          .describe("Search query (keywords or phrase)"),
+        scope: tool.schema
+          .enum(["working", "knowledge", "sessions", "all"])
+          .describe(
+            "Scope of search: working (recent context), knowledge (extracted insights), sessions (history), or all"
+          )
+          .optional(),
+      },
+      async execute({ query, scope = "all" }) {
+        try {
+          const ctx = getContext();
+          const results: any = { query, matches: [] };
+          const searchLower = query.toLowerCase();
+
+          // Search working memory
+          if (scope === "working" || scope === "all") {
+            const workingPath = join(ctx.memoryDir, "working.md");
+            if (existsSync(workingPath)) {
+              const content = readFileSync(workingPath, "utf-8");
+              const lines = content.split("\n");
+              const matches = lines
+                .map((line, idx) => ({ line: idx + 1, content: line }))
+                .filter((l) => l.content.toLowerCase().includes(searchLower))
+                .slice(0, 10);
+
+              if (matches.length > 0) {
+                results.matches.push({
+                  source: "working.md",
+                  matches: matches.map(
+                    (m) => `Line ${m.line}: ${m.content.trim()}`
+                  ),
+                });
+              }
+            }
+          }
+
+          // Search knowledge base
+          if (scope === "knowledge" || scope === "all") {
+            const kbPath = join(ctx.memoryDir, "knowledge-base.json");
+            if (existsSync(kbPath)) {
+              const kb = JSON.parse(readFileSync(kbPath, "utf-8"));
+              const relevant = kb
+                .filter((entry: any) => {
+                  const text = JSON.stringify(entry).toLowerCase();
+                  return text.includes(searchLower);
+                })
+                .slice(0, 5);
+
+              if (relevant.length > 0) {
+                results.matches.push({
+                  source: "knowledge-base.json",
+                  entries: relevant.map((e: any) => ({
+                    session: e.session_id?.slice(-10),
+                    insights: e.key_insights,
+                    decisions: e.decisions,
+                    problems_solved: e.problems_solved,
+                  })),
+                });
+              }
+            }
+          }
+
+          return JSON.stringify({
+            success: true,
+            data: results,
+          });
+        } catch (error) {
+          return JSON.stringify({ success: false, error: String(error) });
+        }
+      },
+    }),
+
+    memory_update: tool({
+      description:
+        "Update memory system state (add task, update status, record achievement). Use this instead of manually editing state.json.",
+      args: {
+        action: tool.schema
+          .enum([
+            "add_task",
+            "complete_task",
+            "update_status",
+            "add_achievement",
+          ])
+          .describe("Type of update to perform"),
+        data: tool.schema
+          .string()
+          .describe(
+            "Data for the update (task description, new status, achievement text)"
+          ),
+      },
+      async execute({ action, data }) {
+        try {
+          const ctx = getContext();
+          const state = existsSync(ctx.statePath)
+            ? JSON.parse(readFileSync(ctx.statePath, "utf-8"))
+            : { session_count: 0, active_tasks: [], recent_achievements: [] };
+
+          switch (action) {
+            case "add_task":
+              if (!state.active_tasks) state.active_tasks = [];
+              if (!state.active_tasks.includes(data)) {
+                state.active_tasks.push(data);
+              }
+              break;
+
+            case "complete_task":
+              if (state.active_tasks) {
+                state.active_tasks = state.active_tasks.filter(
+                  (t: string) => t !== data
+                );
+              }
+              break;
+
+            case "update_status":
+              state.status = data;
+              break;
+
+            case "add_achievement":
+              if (!state.recent_achievements) state.recent_achievements = [];
+              const achievement = `Session ${state.session_count}: ${data}`;
+              state.recent_achievements.unshift(achievement);
+              state.recent_achievements = state.recent_achievements.slice(0, 5);
+              break;
+          }
+
+          state.last_updated = new Date().toISOString();
+          writeFileSync(ctx.statePath, JSON.stringify(state, null, 2));
+
+          return JSON.stringify({
+            success: true,
+            message: `Updated: ${action}`,
+            new_state: {
+              status: state.status,
+              active_tasks: state.active_tasks,
+              recent_achievements: state.recent_achievements?.slice(0, 3),
+            },
+          });
+        } catch (error) {
+          return JSON.stringify({ success: false, error: String(error) });
+        }
+      },
+    }),
+  };
+}

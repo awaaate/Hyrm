@@ -1,0 +1,11 @@
+{
+  "last_updated": "2025-12-31T22:55:27.663Z",
+  "checks_performed": 1,
+  "agents_tracked": {},
+  "alerts": [],
+  "cleanup_stats": {
+    "total_cleanups": 0,
+    "agents_removed": 0,
+    "last_cleanup": ""
+  }
+}

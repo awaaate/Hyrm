@@ -1,0 +1,1755 @@
+{
+  "version": "1.0",
+  "assessments": [
+    {
+      "task_id": "task_1767216141159_669a8j",
+      "task_title": "Improve knowledge extraction patterns",
+      "assessed_at": "2025-12-31T21:39:40.738Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3,
+          "notes": "Did the task achieve its stated goal?"
+        },
+        {
+          "name": "code_quality",
+          "score": 7.2,
+          "weight": 0.25,
+          "notes": "Is the code clean, tested, maintainable?"
+        },
+        {
+          "name": "documentation",
+          "score": 6.4,
+          "weight": 0.15,
+          "notes": "Was work properly documented?"
+        },
+        {
+          "name": "efficiency",
+          "score": 7.6,
+          "weight": 0.15,
+          "notes": "Token usage, time efficiency"
+        },
+        {
+          "name": "impact",
+          "score": 6.8,
+          "weight": 0.15,
+          "notes": "Did this improve the system significantly?"
+        }
+      ],
+      "overall_score": 7.3,
+      "strengths": [],
+      "improvements": [],
+      "lessons_learned": "Improved extraction patterns to capture 1126 decisions - use structured parsing for better results",
+      "metadata": {
+        "duration_minutes": 5
+      }
+    },
+    {
+      "task_id": "task_1767216142154_o6ihy7",
+      "task_title": "Research MCP servers for browser automation",
+      "assessed_at": "2025-12-31T21:39:45.956Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 7,
+          "weight": 0.3,
+          "notes": "Did the task achieve its stated goal?"
+        },
+        {
+          "name": "code_quality",
+          "score": 6.3,
+          "weight": 0.25,
+          "notes": "Is the code clean, tested, maintainable?"
+        },
+        {
+          "name": "documentation",
+          "score": 5.6000000000000005,
+          "weight": 0.15,
+          "notes": "Was work properly documented?"
+        },
+        {
+          "name": "efficiency",
+          "score": 6.6499999999999995,
+          "weight": 0.15,
+          "notes": "Token usage, time efficiency"
+        },
+        {
+          "name": "impact",
+          "score": 5.95,
+          "weight": 0.15,
+          "notes": "Did this improve the system significantly?"
+        }
+      ],
+      "overall_score": 6.4,
+      "strengths": [],
+      "improvements": [],
+      "lessons_learned": "MCP research valuable - Playwright is best choice for browser automation",
+      "metadata": {
+        "duration_minutes": 5
+      }
+    },
+    {
+      "task_id": "task_1767216143317_daipfh",
+      "task_title": "Enhance dashboard with WebSocket live updates",
+      "assessed_at": "2025-12-31T21:39:47.539Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3,
+          "notes": "Did the task achieve its stated goal?"
+        },
+        {
+          "name": "code_quality",
+          "score": 7.2,
+          "weight": 0.25,
+          "notes": "Is the code clean, tested, maintainable?"
+        },
+        {
+          "name": "documentation",
+          "score": 6.4,
+          "weight": 0.15,
+          "notes": "Was work properly documented?"
+        },
+        {
+          "name": "efficiency",
+          "score": 7.6,
+          "weight": 0.15,
+          "notes": "Token usage, time efficiency"
+        },
+        {
+          "name": "impact",
+          "score": 6.8,
+          "weight": 0.15,
+          "notes": "Did this improve the system significantly?"
+        }
+      ],
+      "overall_score": 7.3,
+      "strengths": [],
+      "improvements": [],
+      "lessons_learned": "WebSocket live updates enhance dashboard usability",
+      "metadata": {
+        "duration_minutes": 5
+      }
+    },
+    {
+      "task_id": "task_1767216535897_9ud1uj",
+      "task_title": "Add compaction hook to preserve memory across context compaction",
+      "assessed_at": "2025-12-31T21:39:49.133Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3,
+          "notes": "Did the task achieve its stated goal?"
+        },
+        {
+          "name": "code_quality",
+          "score": 8.1,
+          "weight": 0.25,
+          "notes": "Is the code clean, tested, maintainable?"
+        },
+        {
+          "name": "documentation",
+          "score": 7.2,
+          "weight": 0.15,
+          "notes": "Was work properly documented?"
+        },
+        {
+          "name": "efficiency",
+          "score": 8.549999999999999,
+          "weight": 0.15,
+          "notes": "Token usage, time efficiency"
+        },
+        {
+          "name": "impact",
+          "score": 7.6499999999999995,
+          "weight": 0.15,
+          "notes": "Did this improve the system significantly?"
+        }
+      ],
+      "overall_score": 8.2,
+      "strengths": [],
+      "improvements": [],
+      "lessons_learned": "Compaction hook critical for memory persistence",
+      "metadata": {
+        "duration_minutes": 1
+      }
+    },
+    {
+      "task_id": "task_1767216144606_2nq7qx",
+      "task_title": "Implement task quality assessment system",
+      "assessed_at": "2025-12-31T21:40:15.108Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3,
+          "notes": "Did the task achieve its stated goal?"
+        },
+        {
+          "name": "code_quality",
+          "score": 7.2,
+          "weight": 0.25,
+          "notes": "Is the code clean, tested, maintainable?"
+        },
+        {
+          "name": "documentation",
+          "score": 6.4,
+          "weight": 0.15,
+          "notes": "Was work properly documented?"
+        },
+        {
+          "name": "efficiency",
+          "score": 7.6,
+          "weight": 0.15,
+          "notes": "Token usage, time efficiency"
+        },
+        {
+          "name": "impact",
+          "score": 6.8,
+          "weight": 0.15,
+          "notes": "Did this improve the system significantly?"
+        }
+      ],
+      "overall_score": 7.3,
+      "strengths": [],
+      "improvements": [],
+      "lessons_learned": "Quality assessment system enables tracking task quality over time - use for continuous improvement",
+      "metadata": {
+        "duration_minutes": 18
+      }
+    },
+    {
+      "task_id": "task_1767216535944_0l8dxb",
+      "task_title": "Migrate tools to use modern tool() helper pattern",
+      "assessed_at": "2025-12-31T21:54:39.126Z",
+      "assessed_by": "session-52-orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 9,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "Modern tool() pattern with Zod provides better type safety and consistency with OpenCode core tools",
+      "metadata": {
+        "duration_minutes": 15
+      }
+    },
+    {
+      "task_id": "task_1767217578418_ywxtys",
+      "task_title": "Improve knowledge extraction to capture more insights",
+      "assessed_at": "2025-12-31T21:59:54.951Z",
+      "assessed_by": "session-52-orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.6,
+      "lessons_learned": "Knowledge extraction benefits from stricter filtering with similarity checking to reduce noise",
+      "metadata": {
+        "duration_minutes": 10
+      }
+    },
+    {
+      "task_id": "task_1767218463745_pfhp0h",
+      "task_title": "Implement memory context summarization for compaction",
+      "assessed_at": "2025-12-31T22:21:11.535Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.9,
+      "lessons_learned": "Key decisions extraction needs better filtering to avoid generic event messages like 'Event: session.updated'",
+      "metadata": {
+        "duration_minutes": 12
+      }
+    },
+    {
+      "task_id": "task_1767219732753_u2u15f",
+      "task_title": "Improve key decisions extraction filtering in context-summarizer",
+      "assessed_at": "2025-12-31T22:22:59.165Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 6,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.9,
+      "lessons_learned": "Regex patterns are effective for filtering out generic log messages - maintain exclude list as new patterns emerge",
+      "metadata": {
+        "duration_minutes": 1
+      }
+    },
+    {
+      "task_id": "task_1767216535988_r9gtnl",
+      "task_title": "Create Playwright MCP server for browser automation",
+      "assessed_at": "2025-12-31T22:28:52.718Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8.5,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.6,
+      "lessons_learned": "MCP server implementation is straightforward with the SDK. The server manages browser state globally which works well for sequential operations but could be enhanced with session management for concurrent use. Type safety could be improved with proper typing for tool arguments.",
+      "metadata": {
+        "duration_minutes": 59
+      }
+    },
+    {
+      "task_id": "task_1767220141289_z0mnif",
+      "task_title": "Enhance agent coordination - support automatic task claiming",
+      "assessed_at": "2025-12-31T22:31:57.707Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8.5,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8,
+      "lessons_learned": "Task claiming adds coordination but true automatic detection would require background processes. The message bus approach allows agents to poll for task_available messages. Consider adding a task_watch command for CLI monitoring.",
+      "metadata": {
+        "duration_minutes": 3
+      }
+    },
+    {
+      "task_id": "task_1767221023879_op1bzi",
+      "task_title": "Create advanced multi-agent coordination patterns",
+      "assessed_at": "2025-12-31T22:47:53.772Z",
+      "assessed_by": "ses_4896ef297ffeKeGfMbqzinDUc3",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.6,
+      "lessons_learned": "Task dependencies enable complex workflow orchestration. The automatic unblocking mechanism reduces manual coordination. Worker pool patterns should be combined with proper cleanup for stale workers.",
+      "metadata": {
+        "duration_minutes": 4
+      }
+    },
+    {
+      "task_id": "task_1767221327725_wh08mn",
+      "task_title": "Enhanced dynamic system prompt with tasks and user messages",
+      "assessed_at": "2025-12-31T22:49:00.214Z",
+      "assessed_by": "ses_4896ef297ffeKeGfMbqzinDUc3",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Dynamic context injection is powerful for agent awareness. Keep injected context concise to avoid token waste. Prioritize important information (tasks, messages) over historical context.",
+      "metadata": {
+        "duration_minutes": 0
+      }
+    },
+    {
+      "task_id": "task_1767221519024_tkfemx",
+      "task_title": "Implement agent health checks and auto-recovery",
+      "assessed_at": "2025-12-31T22:56:04.274Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Health monitoring should be integrated early in multi-agent systems. The monitor includes auto-cleanup which prevents registry bloat from dead agents.",
+      "metadata": {
+        "duration_minutes": 4
+      }
+    },
+    {
+      "task_id": "task_1767221520438_u8fiel",
+      "task_title": "Add task prioritization and smart scheduling",
+      "assessed_at": "2025-12-31T22:59:05.712Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.7,
+      "lessons_learned": "Priority aging prevents task starvation - even low priority tasks will eventually bubble up. Complexity scoring helps with workload estimation.",
+      "metadata": {
+        "duration_minutes": 7
+      }
+    },
+    {
+      "task_id": "task_1767221521904_0lsxdu",
+      "task_title": "Create session summarization tool for knowledge extraction",
+      "assessed_at": "2025-12-31T23:04:35.699Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.7,
+      "lessons_learned": "Session summarization extracts learnings from OpenCode's message/part storage. Key is to feed extracted insights back into knowledge base for continuous learning.",
+      "metadata": {
+        "duration_minutes": 12
+      }
+    },
+    {
+      "task_id": "task_1767222355463_2rfgsd",
+      "task_title": "Implement automatic knowledge summarization and deduplication",
+      "assessed_at": "2025-12-31T23:08:46.181Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.7,
+      "lessons_learned": "Knowledge deduplication requires both exact and fuzzy matching. Jaccard similarity on word sets works well for detecting near-duplicates. Always backup before destructive operations.",
+      "metadata": {
+        "duration_minutes": 3
+      }
+    },
+    {
+      "task_id": "task_1767222573488_46uivh",
+      "task_title": "Create beautiful dashboard UI with shadcn and Vite",
+      "assessed_at": "2026-01-01T17:13:07.387Z",
+      "assessed_by": "ses_4857b2d64ffeb2UmNM5INYMd2i",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.9,
+      "lessons_learned": "Building dashboard UIs benefits from starting with WebSocket for real-time updates, falling back to HTTP polling. Modular components (Card, Badge, Panel) enable rapid iteration.",
+      "metadata": {
+        "duration_minutes": 1083
+      }
+    },
+    {
+      "task_id": "task_1767222357984_k1k3nc",
+      "task_title": "Create automated test suite for plugin tools",
+      "assessed_at": "2026-01-01T17:17:57.449Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 9,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "Comprehensive test suite with proper isolation using beforeEach/afterEach for clean state. Integration tests verify full workflows.",
+      "metadata": {
+        "duration_minutes": 1092
+      }
+    },
+    {
+      "task_id": "task_1767222360366_ubhpdp",
+      "task_title": "Add session analytics dashboard page",
+      "assessed_at": "2026-01-01T18:37:25.187Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Building vanilla JS charts is straightforward with CSS flexbox. Horizontal bar charts work well for activity data. Always add file watchers for analytics data sources to enable real-time updates.",
+      "metadata": {
+        "duration_minutes": 1171
+      }
+    },
+    {
+      "task_id": "task_1767292765181_vtxabo",
+      "task_title": "Add agent performance metrics tracking",
+      "assessed_at": "2026-01-01T18:42:27.733Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.1,
+      "lessons_learned": "Agent performance metrics are best collected at key lifecycle events (task claim, task complete, quality assess) to minimize overhead. Storing metrics in a separate file from health checks keeps concerns separated.",
+      "metadata": {
+        "duration_minutes": 3
+      }
+    },
+    {
+      "task_id": "task_1767292760667_irqr9z",
+      "task_title": "Add shadcn/ui components to dashboard-ui",
+      "assessed_at": "2026-01-01T21:30:00.380Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.1,
+      "lessons_learned": "Tailwind CSS v4 uses @theme directive instead of CSS custom properties with hsl(). shadcn/ui components work well with Tailwind v4 but require careful color configuration. ESLint react-refresh warnings for component files can be disabled in the ui folder.",
+      "metadata": {
+        "duration_minutes": 171
+      }
+    },
+    {
+      "task_id": "task_1767302976346_qb53ep",
+      "task_title": "Create OpenCode conversation tracking system",
+      "assessed_at": "2026-01-01T21:33:35.963Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "OpenCode stores conversations in a structured format: sessions in /session/<project_hash>/, messages in /message/<session_id>/, and parts in /part/<message_id>/. Each is a JSON file with clear schema. The watch command uses fs.watch with recursive option for real-time monitoring.",
+      "metadata": {
+        "duration_minutes": 4
+      }
+    },
+    {
+      "task_id": "task_1767303323074_puchsn",
+      "task_title": "Create session analytics and learning system",
+      "assessed_at": "2026-01-01T21:39:46.128Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.1,
+      "lessons_learned": "Session analytics tool provides valuable insights into tool usage patterns, success rates, and common errors. Verified working with 100% session success rate. Integrates with knowledge base for persistent learning.",
+      "metadata": {
+        "duration_minutes": 4
+      }
+    },
+    {
+      "task_id": "task_1767292762829_jjvd2z",
+      "task_title": "Implement task completion notifications",
+      "assessed_at": "2026-01-01T21:43:09.003Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8,
+      "lessons_learned": "Task completion notifications implemented with browser Notification API and Web Audio API for audio alerts. The dashboard server watches message-bus.jsonl for task_completed messages and broadcasts to WebSocket clients. Notification toggle in header allows users to enable/disable alerts. Integration with existing plugin task_update function ensures all task completions trigger notifications.",
+      "metadata": {
+        "duration_minutes": 184
+      }
+    },
+    {
+      "task_id": "task_1767303954292_lbrq8c",
+      "task_title": "Implement agent collaboration patterns for complex tasks",
+      "assessed_at": "2026-01-01T21:47:47.335Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "Multi-agent collaboration patterns are best documented with TypeScript examples showing message flow and state transitions. The checkpoint pattern is particularly valuable for long-running tasks that may be interrupted. Anti-patterns section helps prevent common mistakes.",
+      "metadata": {
+        "duration_minutes": 2
+      }
+    },
+    {
+      "task_id": "task_1767303948079_i1avub",
+      "task_title": "Add plugin unit tests for edge cases and error handling",
+      "assessed_at": "2026-01-01T21:51:18.761Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8,
+      "lessons_learned": "Edge case tests help document actual system behavior vs expected behavior. Several tests revealed that corrupted JSON files return errors rather than graceful defaults - this is documented as future improvement area. Blocked tasks can still be claimed (manual override pattern). Missing dependencies don't block tasks (they're treated as already complete).",
+      "metadata": {
+        "duration_minutes": 5
+      }
+    },
+    {
+      "task_id": "task_1767303951013_akfk11",
+      "task_title": "Create dashboard real-time connection status and auto-reconnect",
+      "assessed_at": "2026-01-01T21:55:40.187Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8,
+      "lessons_learned": "Exponential backoff should always have both minimum and maximum bounds. Using refs for WebSocket and timeout storage prevents closure issues in React effects.",
+      "metadata": {
+        "duration_minutes": 10
+      }
+    },
+    {
+      "task_id": "task_1767304600474_r2j8og",
+      "task_title": "Add WebSocket event streaming to dashboard server",
+      "assessed_at": "2026-01-01T22:00:36.226Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Event categorization pattern (categorizeEvent function) makes it easy to add new event types. STREAMABLE_EVENT_TYPES set provides clear enumeration of what gets streamed. Quality assessment detection requires tracking count, not just file change.",
+      "metadata": {
+        "duration_minutes": 4
+      }
+    },
+    {
+      "task_id": "task_1767304606771_ld07ud",
+      "task_title": "Implement agent session recovery system",
+      "assessed_at": "2026-01-01T22:05:05.167Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8,
+      "lessons_learned": "Recovery system needs to be used at task claim time to save checkpoints. The checkpoint data structure captures context well (what was happening, next steps, blockers). Fixed bug: generateCompactSummary was undefined - always test compaction hook. CLI recovery commands provide good visibility into session state.",
+      "metadata": {
+        "duration_minutes": 8
+      }
+    },
+    {
+      "task_id": "task_1767304603691_nkxu5c",
+      "task_title": "Create plugin integration tests with real file operations",
+      "assessed_at": "2026-01-01T22:14:17.122Z",
+      "assessed_by": "ses_48464b61affeblv65s5yg9yEIp",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Integration tests complement unit tests by testing actual file I/O, JSON corruption scenarios, and multi-tool workflows. Using isolated test directories prevents pollution between tests while still validating real filesystem behavior.",
+      "metadata": {
+        "duration_minutes": 17
+      }
+    },
+    {
+      "task_id": "task_1767305786654_im18xd",
+      "task_title": "Implement message bus rotation and compaction",
+      "assessed_at": "2026-01-01T22:19:27.085Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "Message bus management is critical for system health. Auto-maintenance during boot prevents unbounded growth. Archive + index pattern enables historical search while keeping active bus small.",
+      "metadata": {
+        "duration_minutes": 3
+      }
+    },
+    {
+      "task_id": "task_1767305782664_c7bnuz",
+      "task_title": "Create working memory archival system",
+      "assessed_at": "2026-01-01T22:23:05.498Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.6,
+      "lessons_learned": "Session parsing requires handling multiple header formats (Current/Previous/Earlier Session). Archiving significantly reduces context size while preserving full history. Index file enables fast archive discovery without reading all files.",
+      "metadata": {
+        "duration_minutes": 7
+      }
+    },
+    {
+      "task_id": "task_1767306304817_13dvqt",
+      "task_title": "Git integration for multi-agent memory system",
+      "assessed_at": "2026-01-01T22:31:18.537Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "Git integration enables agents to track their code changes with metadata. The CLI/plugin split provides both programmatic and user-accessible interfaces. Activity logging enables historical analysis of agent git operations.",
+      "metadata": {
+        "duration_minutes": 6
+      }
+    },
+    {
+      "task_id": "task_1767305793004_0arlhn",
+      "task_title": "Add agent performance profiling and optimization suggestions",
+      "assessed_at": "2026-01-02T07:29:51.812Z",
+      "assessed_by": "ses_48268a5afffeWWEUVpx2LgDsjc",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Performance profiling requires analyzing multiple data sources (OpenCode parts, session logs, performance metrics, quality assessments). The key insight is to aggregate data from various sources and generate actionable suggestions rather than just reporting metrics.",
+      "metadata": {
+        "duration_minutes": 553
+      }
+    },
+    {
+      "task_id": "task_1767305790341_ood0eu",
+      "task_title": "Create live terminal dashboard with blessed/ink",
+      "assessed_at": "2026-01-02T08:54:53.224Z",
+      "assessed_by": "ses_482182354ffepRlDEVp5Iz33WO",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Canvas-based widgets in blessed-contrib require specific terminal width constraints. Text-based alternatives using blessed.box with ANSI formatting provide more reliable cross-terminal compatibility.",
+      "metadata": {
+        "duration_minutes": 638
+      }
+    },
+    {
+      "task_id": "task_1767339040290_agt8x5",
+      "task_title": "Implement tool execution time tracking in plugin hooks",
+      "assessed_at": "2026-01-02T08:59:41.305Z",
+      "assessed_by": "ses_482182354ffepRlDEVp5Iz33WO",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "Using Map for in-memory state tracking of active tool calls allows efficient lookup without file I/O. The tool.execute.before hook captures start time while tool.execute.after calculates and logs timing - this pattern enables accurate duration measurement.",
+      "metadata": {
+        "duration_minutes": 89
+      }
+    },
+    {
+      "task_id": "task_1767339037402_4nebhl",
+      "task_title": "Create automated daily performance reports",
+      "assessed_at": "2026-01-02T09:03:03.526Z",
+      "assessed_by": "ses_482182354ffepRlDEVp5Iz33WO",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.6,
+      "lessons_learned": "Daily reports provide valuable visibility into system health. Storing reports as markdown enables easy reading and archiving. Automatic suggestion generation based on metrics thresholds helps identify issues proactively.",
+      "metadata": {
+        "duration_minutes": 92
+      }
+    },
+    {
+      "task_id": "task_1767344641899_hkgfeg",
+      "task_title": "Add per-agent conversation viewer to track message/tool streams",
+      "assessed_at": "2026-01-02T09:08:18.691Z",
+      "assessed_by": "ses_482182354ffepRlDEVp5Iz33WO",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.2,
+      "lessons_learned": "Per-agent conversation tracking requires correlating multiple data sources (messages, tool timing, logs) by agent ID and session ID. The real-time stream feature with file watching provides good visibility into agent activity.",
+      "metadata": {
+        "duration_minutes": 4
+      }
+    },
+    {
+      "task_id": "task_1767344648841_8si6qk",
+      "task_title": "Create critique agent type for code review and debugging",
+      "assessed_at": "2026-01-02T09:14:35.029Z",
+      "assessed_by": "ses_482182354ffepRlDEVp5Iz33WO",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "Pattern-based code analysis works well for common issues but can have false positives when patterns appear in string literals. Skill files provide good documentation for agent capabilities.",
+      "metadata": {
+        "duration_minutes": 10
+      }
+    },
+    {
+      "task_id": "task_1767339034717_mqnz73",
+      "task_title": "Add real-time performance metrics to dashboard-ui",
+      "assessed_at": "2026-01-02T09:23:00.919Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Performance dashboards require careful consideration of data visualization - bar charts with dual metrics (count + duration) provide good density. Agent efficiency scoring with weighted quality metrics enables meaningful leaderboard comparisons. WebSocket integration already existed in server.ts, only needed frontend consumption.",
+      "metadata": {
+        "duration_minutes": 112
+      }
+    },
+    {
+      "task_id": "task_1767346173578_rcafqh",
+      "task_title": "Refactor memory system to properly save conversations",
+      "assessed_at": "2026-01-02T09:32:43.019Z",
+      "assessed_by": "ses_481f97c3dffeXiO48A3gwALPnj",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.2,
+      "lessons_learned": "Automatic extraction on session end needs to be lightweight to avoid blocking. Extracting tool patterns (most used, slow, error-prone) provides actionable insights. Having both quiet (summarize-current) and verbose (summarize) modes enables both automated and manual use. Documentation of active vs deprecated tools is essential for maintainability.",
+      "metadata": {
+        "duration_minutes": 3
+      }
+    },
+    {
+      "task_id": "task_1767346467804_5sh2f0",
+      "task_title": "Deep Codebase Analysis and Documentation",
+      "assessed_at": "2026-01-02T09:59:00.640Z",
+      "assessed_by": "ses_481f0dab3ffexmJMTDjKO1xwP9",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.6,
+      "lessons_learned": "Created comprehensive shared utilities module that will prevent future code duplication. Migration pattern established: 1) Create shared utils first without touching existing code, 2) Migrate low-risk tools first, 3) Migrate high-usage tools last with thorough testing.",
+      "metadata": {
+        "duration_minutes": 25
+      }
+    },
+    {
+      "task_id": "task_1767348019820_2811ek",
+      "task_title": "Improve OpenCode conversation tracking integration",
+      "assessed_at": "2026-01-02T10:05:50.813Z",
+      "assessed_by": "ses_481f0dab3ffexmJMTDjKO1xwP9",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "OpenCode stores sessions in ~/.local/share/opencode/storage with session/message/part structure. Enhanced sync captures tool patterns, topics, and file changes. Incremental sync prevents reprocessing. Learn command extracts knowledge from conversations.",
+      "metadata": {
+        "duration_minutes": 5
+      }
+    },
+    {
+      "task_id": "task_1767348386518_cgkx0r",
+      "task_title": "Analyze and customize OpenCode source code",
+      "assessed_at": "2026-01-02T10:09:31.827Z",
+      "assessed_by": "ses_481f0dab3ffexmJMTDjKO1xwP9",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.6,
+      "lessons_learned": "OpenCode is highly extensible via plugins. Task tool creates child sessions with restricted permissions. Best integration approach is wrapper tools + system message injection rather than forking.",
+      "metadata": {
+        "duration_minutes": 3
+      }
+    }
+  ],
+  "aggregate_stats": {
+    "total_assessed": 45,
+    "avg_overall_score": 8.131111111111114
+  },
+  "last_updated": "2026-01-02T10:09:31.828Z"
+}

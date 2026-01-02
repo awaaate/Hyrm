@@ -1,0 +1,165 @@
+{
+  "lastUpdated": "2026-01-02T07:28:22.963Z",
+  "toolExecutions": {},
+  "agentProfiles": {
+    "agent-1767302507934-2c671j": {
+      "agentId": "agent-1767302507934-2c671j",
+      "tasksCompleted": 3,
+      "tasksClaimed": 2,
+      "avgTaskDurationMs": 269162,
+      "avgQuality": 8.2,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 123,
+      "firstSeen": "2026-01-01T21:22:38.603Z",
+      "lastSeen": "2026-01-01T21:33:56.549Z"
+    },
+    "agent-1767302814469-5fj5o": {
+      "agentId": "agent-1767302814469-5fj5o",
+      "tasksCompleted": 0,
+      "tasksClaimed": 1,
+      "avgTaskDurationMs": 0,
+      "avgQuality": 0,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 0,
+      "firstSeen": "2026-01-01T21:35:44.994Z",
+      "lastSeen": "2026-01-01T21:35:44.994Z"
+    },
+    "agent-1767303353127-qvwgix": {
+      "agentId": "agent-1767303353127-qvwgix",
+      "tasksCompleted": 4,
+      "tasksClaimed": 1,
+      "avgTaskDurationMs": 206745,
+      "avgQuality": 8.05,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 322,
+      "firstSeen": "2026-01-01T21:38:30.069Z",
+      "lastSeen": "2026-01-01T21:43:09.007Z"
+    },
+    "agent-1767303901076-03ng1c": {
+      "agentId": "agent-1767303901076-03ng1c",
+      "tasksCompleted": 2,
+      "tasksClaimed": 2,
+      "avgTaskDurationMs": 125508,
+      "avgQuality": 8.25,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 83,
+      "firstSeen": "2026-01-01T21:46:33.914Z",
+      "lastSeen": "2026-01-01T21:51:18.765Z"
+    },
+    "agent-1767304356058-2e872k": {
+      "agentId": "agent-1767304356058-2e872k",
+      "tasksCompleted": 1,
+      "tasksClaimed": 1,
+      "avgTaskDurationMs": 162143,
+      "avgQuality": 8,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 80,
+      "firstSeen": "2026-01-01T21:52:55.226Z",
+      "lastSeen": "2026-01-01T21:55:40.195Z"
+    },
+    "agent-1767304663655-pjqew": {
+      "agentId": "agent-1767304663655-pjqew",
+      "tasksCompleted": 2,
+      "tasksClaimed": 2,
+      "avgTaskDurationMs": 197967,
+      "avgQuality": 8.15,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 82,
+      "firstSeen": "2026-01-01T21:58:04.082Z",
+      "lastSeen": "2026-01-01T22:05:05.174Z"
+    },
+    "agent-1767305333241-tgbvfe": {
+      "agentId": "agent-1767305333241-tgbvfe",
+      "tasksCompleted": 1,
+      "tasksClaimed": 1,
+      "avgTaskDurationMs": 277229,
+      "avgQuality": 8.3,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 83,
+      "firstSeen": "2026-01-01T22:09:32.628Z",
+      "lastSeen": "2026-01-01T22:14:17.128Z"
+    },
+    "agent-1767305734327-qycae": {
+      "agentId": "agent-1767305734327-qycae",
+      "tasksCompleted": 2,
+      "tasksClaimed": 2,
+      "avgTaskDurationMs": 151907,
+      "avgQuality": 8.55,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 86,
+      "firstSeen": "2026-01-01T22:16:39.151Z",
+      "lastSeen": "2026-01-01T22:23:05.500Z"
+    },
+    "agent-1767306281139-ctlwbv": {
+      "agentId": "agent-1767306281139-ctlwbv",
+      "tasksCompleted": 1,
+      "tasksClaimed": 1,
+      "avgTaskDurationMs": 363988,
+      "avgQuality": 8.5,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 85,
+      "firstSeen": "2026-01-01T22:25:11.724Z",
+      "lastSeen": "2026-01-01T22:31:18.542Z"
+    },
+    "agent-1767306736882-940ibn": {
+      "agentId": "agent-1767306736882-940ibn",
+      "tasksCompleted": 0,
+      "tasksClaimed": 1,
+      "avgTaskDurationMs": 0,
+      "avgQuality": 0,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 0,
+      "firstSeen": "2026-01-01T22:32:44.822Z",
+      "lastSeen": "2026-01-01T22:32:44.822Z"
+    },
+    "agent-1767338629783-sbeq6": {
+      "agentId": "agent-1767338629783-sbeq6",
+      "tasksCompleted": 0,
+      "tasksClaimed": 1,
+      "avgTaskDurationMs": 0,
+      "avgQuality": 0,
+      "toolUsage": {},
+      "errorCount": 0,
+      "efficiency": 0,
+      "firstSeen": "2026-01-02T07:24:26.324Z",
+      "lastSeen": "2026-01-02T07:24:26.324Z"
+    }
+  },
+  "errorPatterns": [
+    {
+      "pattern": "Type validation error",
+      "count": 4,
+      "agents": [],
+      "tools": [],
+      "lastOccurred": "2025-12-31T20:12:15.929Z",
+      "severity": "medium"
+    }
+  ],
+  "suggestions": [
+    {
+      "category": "error_reduction",
+      "priority": "low",
+      "title": "Recurring error pattern: Type validation error",
+      "description": "Error \"Type validation error\" occurred 4 times",
+      "metric": "errorCount",
+      "currentValue": "4",
+      "targetValue": "0",
+      "actions": [
+        "Investigate root cause of this error pattern",
+        "Add defensive coding for this case",
+        "Update error handling to gracefully recover"
+      ]
+    }
+  ],
+  "trends": []
+}

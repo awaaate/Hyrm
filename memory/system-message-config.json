@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "description": "Dynamic system message configuration for OpenCode agents",
+  "enabled": true,
+  "sections": {
+    "memory_context": {
+      "enabled": true,
+      "priority": 1,
+      "description": "Auto-generated memory system context"
+    },
+    "pending_tasks": {
+      "enabled": true,
+      "priority": 2,
+      "max_items": 5,
+      "description": "Pending tasks sorted by priority"
+    },
+    "user_messages": {
+      "enabled": true,
+      "priority": 3,
+      "max_items": 5,
+      "description": "Unread user messages"
+    },
+    "agent_status": {
+      "enabled": true,
+      "priority": 4,
+      "description": "Active agents in the coordination system"
+    },
+    "custom_instructions": {
+      "enabled": true,
+      "priority": 5,
+      "content": []
+    }
+  },
+  "custom_sections": [],
+  "last_updated": "2026-01-01T17:05:00.000Z"
+}

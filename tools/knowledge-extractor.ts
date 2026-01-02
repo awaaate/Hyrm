@@ -50,6 +50,8 @@ interface SessionKnowledge {
   code_created: string[];
   problems_solved: string[];
   key_insights: string[];
+  techniques: string[];     // NEW: Methods and approaches learned
+  solutions: string[];      // NEW: Problem-solution pairs
 }
 
 class KnowledgeExtractor {
@@ -117,63 +119,147 @@ class KnowledgeExtractor {
 
   /**
    * Extract knowledge from text content
+   * Uses improved patterns to capture more meaningful insights
+   * Updated in Session 52: Enhanced filtering and new pattern categories
    */
   private extractKnowledge(text: string): {
     decisions: string[];
     discoveries: string[];
     insights: string[];
+    techniques: string[];
+    solutions: string[];
   } {
     const decisions: string[] = [];
     const discoveries: string[] = [];
     const insights: string[] = [];
+    const techniques: string[] = [];
+    const solutions: string[] = [];
 
-    // Decision patterns
+    // Decision patterns - capture implementation choices (complete sentences)
     const decisionPatterns = [
-      /(?:decided to|choosing to|opted for|will use|using) (.+?)(?:\.|$)/gi,
-      /(?:DECISION:|Decision:) (.+?)(?:\n|$)/gi,
+      // High-confidence patterns with complete context
+      /(?:The (?:key |best |optimal )?(?:approach|strategy|solution) is to) ([^.!?\n]{20,120}[.!?]?)/gi,
+      /(?:I(?:'ve| have) (?:decided|chosen|opted) to) ([^.!?\n]{20,120}[.!?]?)/gi,
+      /(?:DECISION:|APPROACH:|STRATEGY:)\s*([^\n]{20,150})/gi,
+      /(?:We(?:'ll| will| should) (?:use|implement|create|build)) ([^.!?\n]{15,100}[.!?]?)/gi,
+      /(?:The (?:correct|right|proper) way (?:is|to)) ([^.!?\n]{20,120}[.!?]?)/gi,
     ];
 
-    // Discovery patterns
+    // Discovery patterns - capture learnings and findings (complete statements)
     const discoveryPatterns = [
-      /(?:discovered that|found that|realized that|learned that) (.+?)(?:\.|$)/gi,
-      /(?:DISCOVERY:|Discovery:|AHA!) (.+?)(?:\n|$)/gi,
-      /(?:KEY FINDING:|CRITICAL FINDING:) (.+?)(?:\n|$)/gi,
+      /(?:(?:I |We )?(?:discovered|found|realized|learned) that) ([^.!?\n]{20,120}[.!?]?)/gi,
+      /(?:The (?:issue|problem|root cause|bug|error) (?:is|was) (?:that |caused by )?([^.!?\n]{15,100}[.!?]?))/gi,
+      /(?:DISCOVERY:|KEY FINDING:|IMPORTANT:)\s*([^\n]{20,150})/gi,
+      /(?:It turns out (?:that )?([^.!?\n]{20,120}[.!?]?))/gi,
+      /(?:After (?:investigation|debugging|testing|analysis),?\s+(?:I |we )?(?:found|discovered) (?:that )?([^.!?\n]{20,120}[.!?]?))/gi,
+      /(?:The (?:real |actual |underlying )?(?:issue|problem) (?:is|was) that) ([^.!?\n]{20,120}[.!?]?)/gi,
     ];
 
-    // Insight patterns
+    // Insight patterns - capture understanding and implications
     const insightPatterns = [
-      /(?:This means|This shows|This indicates) (.+?)(?:\.|$)/gi,
-      /(?:Important:|IMPORTANT:|Critical:|CRITICAL:) (.+?)(?:\n|$)/gi,
+      /(?:This (?:means|shows|indicates|suggests|confirms|demonstrates) that) ([^.!?\n]{20,120}[.!?]?)/gi,
+      /(?:INSIGHT:|KEY INSIGHT:|OBSERVATION:)\s*([^\n]{20,150})/gi,
+      /(?:The (?:key |main |important )?(?:takeaway|lesson|insight) is (?:that )?([^.!?\n]{20,120}[.!?]?))/gi,
+      /(?:In (?:other words|summary|essence),?\s+([^.!?\n]{20,120}[.!?]?))/gi,
+      /(?:This is (?:because|why|how)) ([^.!?\n]{20,120}[.!?]?)/gi,
     ];
 
-    for (const pattern of decisionPatterns) {
-      const matches = text.matchAll(pattern);
-      for (const match of matches) {
-        if (match[1]?.trim()) {
-          decisions.push(match[1].trim());
+    // NEW: Technique patterns - capture methods and approaches
+    const techniquePatterns = [
+      /(?:(?:The |A )(?:technique|method|approach|pattern|way) to (?:do|achieve|implement) (?:this|that) is (?:to )?([^.!?\n]{20,120}[.!?]?))/gi,
+      /(?:TECHNIQUE:|METHOD:|PATTERN:)\s*([^\n]{20,150})/gi,
+      /(?:(?:You|One) can (?:use|apply|implement)) ([^.!?\n]{20,120}) to ([^.!?\n]{20,80})/gi,
+      /(?:Use(?:d|ing)? the (?:pattern|approach|technique) of) ([^.!?\n]{15,100}[.!?]?)/gi,
+      /(?:(?:A |The )(?:good|effective|recommended) (?:practice|pattern) is (?:to )?([^.!?\n]{20,120}[.!?]?))/gi,
+    ];
+
+    // NEW: Solution patterns - capture problem-solution pairs
+    const solutionPatterns = [
+      /(?:(?:The |To )?(?:fix|solve|resolve|address) (?:this|that|the issue|the problem),?\s+(?:I |we )?(?:need to |should |can |will )?([^.!?\n]{20,120}[.!?]?))/gi,
+      /(?:SOLUTION:|FIX:|RESOLVED:)\s*([^\n]{20,150})/gi,
+      /(?:The (?:solution|fix|workaround) (?:is|was) (?:to )?([^.!?\n]{20,120}[.!?]?))/gi,
+      /(?:(?:This|That) (?:was |is )?(?:fixed|solved|resolved|addressed) by) ([^.!?\n]{20,120}[.!?]?)/gi,
+      /(?:Successfully (?:implemented|created|built|deployed)) ([^.!?\n]{20,120}[.!?]?)/gi,
+    ];
+
+    // Enhanced filter function
+    const isValidExtraction = (text: string): boolean => {
+      if (!text || text.length < 15 || text.length > 250) return false;
+      
+      // Filter out common noise patterns
+      const noisePatterns = [
+        /^[\s\d\W]+$/,                    // Just symbols/numbers
+        /^\s*[\[\{<\(]/,                  // Starts with brackets
+        /```/,                            // Contains code blocks
+        /^check |^look |^see |^read /i,   // Action fragments, not insights
+        /^the file |^this file /i,        // File references
+        /^\d+\./,                         // Numbered lists
+        /^- |^\* /,                       // Bullet points
+        /^https?:\/\//,                   // URLs
+        /^\/[a-z]/i,                      // Paths
+        /\n.*\n/,                         // Multi-line content
+        /^:\s*$/,                         // Empty after colon
+        /^undefined|^null|^true|^false/i, // JS values
+      ];
+
+      for (const pattern of noisePatterns) {
+        if (pattern.test(text)) return false;
+      }
+
+      // Must contain at least some meaningful words
+      const wordCount = text.split(/\s+/).filter(w => w.length > 2).length;
+      if (wordCount < 3) return false;
+
+      return true;
+    };
+
+    // Extract matches with enhanced deduplication
+    const extractMatches = (patterns: RegExp[], target: string[]): void => {
+      for (const pattern of patterns) {
+        pattern.lastIndex = 0;
+        let match;
+        while ((match = pattern.exec(text)) !== null) {
+          // Get the capture group (first non-empty one)
+          const extracted = (match[1] || match[2] || '').trim();
+          
+          if (isValidExtraction(extracted) && !target.includes(extracted)) {
+            // Additional similarity check to avoid near-duplicates
+            const isDuplicate = target.some(existing => {
+              const similarity = this.stringSimilarity(existing.toLowerCase(), extracted.toLowerCase());
+              return similarity > 0.8;
+            });
+            
+            if (!isDuplicate) {
+              target.push(extracted);
+            }
+          }
         }
       }
-    }
+    };
 
-    for (const pattern of discoveryPatterns) {
-      const matches = text.matchAll(pattern);
-      for (const match of matches) {
-        if (match[1]?.trim()) {
-          discoveries.push(match[1].trim());
-        }
-      }
-    }
+    extractMatches(decisionPatterns, decisions);
+    extractMatches(discoveryPatterns, discoveries);
+    extractMatches(insightPatterns, insights);
+    extractMatches(techniquePatterns, techniques);
+    extractMatches(solutionPatterns, solutions);
 
-    for (const pattern of insightPatterns) {
-      const matches = text.matchAll(pattern);
-      for (const match of matches) {
-        if (match[1]?.trim()) {
-          insights.push(match[1].trim());
-        }
-      }
-    }
+    return { decisions, discoveries, insights, techniques, solutions };
+  }
 
-    return { decisions, discoveries, insights };
+  /**
+   * Simple string similarity check (Jaccard similarity on words)
+   */
+  private stringSimilarity(str1: string, str2: string): number {
+    const words1 = new Set(str1.toLowerCase().split(/\s+/));
+    const words2 = new Set(str2.toLowerCase().split(/\s+/));
+    
+    let intersection = 0;
+    words1.forEach(word => {
+      if (words2.has(word)) intersection++;
+    });
+    
+    const union = words1.size + words2.size - intersection;
+    return union === 0 ? 0 : intersection / union;
   }
 
   /**
@@ -220,7 +306,9 @@ class KnowledgeExtractor {
       discoveries: [],
       code_created: [],
       problems_solved: [],
-      key_insights: []
+      key_insights: [],
+      techniques: [],
+      solutions: []
     };
 
     for (const msgFile of msgFiles) {
@@ -247,6 +335,8 @@ class KnowledgeExtractor {
           knowledge.decisions.push(...extracted.decisions);
           knowledge.discoveries.push(...extracted.discoveries);
           knowledge.key_insights.push(...extracted.insights);
+          knowledge.techniques.push(...extracted.techniques);
+          knowledge.solutions.push(...extracted.solutions);
         }
       }
 
@@ -266,6 +356,8 @@ class KnowledgeExtractor {
     knowledge.code_created = [...new Set(knowledge.code_created)];
     knowledge.problems_solved = [...new Set(knowledge.problems_solved)];
     knowledge.key_insights = [...new Set(knowledge.key_insights)];
+    knowledge.techniques = [...new Set(knowledge.techniques)];
+    knowledge.solutions = [...new Set(knowledge.solutions)];
 
     return knowledge;
   }
@@ -299,17 +391,22 @@ class KnowledgeExtractor {
 
   /**
    * Print summary of extracted knowledge
+   * Updated in Session 52: Added techniques and solutions categories
    */
   private printSummary(knowledge: SessionKnowledge[]): void {
     const totalDecisions = knowledge.reduce((sum, k) => sum + k.decisions.length, 0);
     const totalDiscoveries = knowledge.reduce((sum, k) => sum + k.discoveries.length, 0);
     const totalCodeFiles = knowledge.reduce((sum, k) => sum + k.code_created.length, 0);
     const totalInsights = knowledge.reduce((sum, k) => sum + k.key_insights.length, 0);
+    const totalTechniques = knowledge.reduce((sum, k) => sum + (k.techniques?.length || 0), 0);
+    const totalSolutions = knowledge.reduce((sum, k) => sum + (k.solutions?.length || 0), 0);
 
     console.log('📊 Knowledge Summary:\n');
     console.log(`   Total sessions: ${knowledge.length}`);
     console.log(`   Total decisions: ${totalDecisions}`);
     console.log(`   Total discoveries: ${totalDiscoveries}`);
+    console.log(`   Total techniques: ${totalTechniques}`);
+    console.log(`   Total solutions: ${totalSolutions}`);
     console.log(`   Total code files created: ${totalCodeFiles}`);
     console.log(`   Total key insights: ${totalInsights}`);
     console.log('');
@@ -323,6 +420,32 @@ class KnowledgeExtractor {
       
       recentDiscoveries.forEach((discovery, i) => {
         console.log(`   ${i + 1}. ${discovery}`);
+      });
+      console.log('');
+    }
+
+    // Show recent solutions
+    if (totalSolutions > 0) {
+      console.log('💡 Recent Solutions (last 5):\n');
+      const recentSolutions = knowledge
+        .flatMap(k => k.solutions || [])
+        .slice(-5);
+      
+      recentSolutions.forEach((solution, i) => {
+        console.log(`   ${i + 1}. ${solution}`);
+      });
+      console.log('');
+    }
+
+    // Show recent techniques
+    if (totalTechniques > 0) {
+      console.log('🔧 Recent Techniques (last 5):\n');
+      const recentTechniques = knowledge
+        .flatMap(k => k.techniques || [])
+        .slice(-5);
+      
+      recentTechniques.forEach((technique, i) => {
+        console.log(`   ${i + 1}. ${technique}`);
       });
       console.log('');
     }

@@ -6,9 +6,16 @@
  * Runs boot sequence on session start
  * Provides real-time logging to persistent log file
  * Enables multi-agent coordination
+ *
+ * Refactored in Session 65: Split tools into modular files for better maintainability
+ * - tools/agent-tools.ts: Multi-agent coordination
+ * - tools/memory-tools.ts: Memory system management
+ * - tools/task-tools.ts: Persistent task management
+ * - tools/quality-tools.ts: Quality assessment
+ * - tools/user-message-tools.ts: User messaging
  */
 
-import type { Plugin } from "@opencode-ai/plugin";
+import { type Plugin } from "@opencode-ai/plugin";
 import {
   existsSync,
   readFileSync,
@@ -19,13 +26,42 @@ import {
 import { join } from "path";
 import { MultiAgentCoordinator } from "../../tools/multi-agent-coordinator";
 
+// Import modular tools
+import { createAgentTools } from "./tools/agent-tools";
+import { createMemoryTools } from "./tools/memory-tools";
+import { createTaskTools } from "./tools/task-tools";
+import { createQualityTools } from "./tools/quality-tools";
+import { createUserMessageTools } from "./tools/user-message-tools";
+import { createRecoveryTools } from "./tools/recovery-tools";
+import { createGitTools } from "./tools/git-tools";
+
+// ============================================================================
+// CONFIGURATION & CONSTANTS
+// ============================================================================
+
+const LOCK_STALE_THRESHOLD = 30000; // 30 seconds
+const AGENT_STALE_THRESHOLD = 2 * 60 * 1000; // 2 minutes
+
+// Global instance ID to prevent duplicate event processing
+const INSTANCE_ID = `plugin-${Date.now()}-${Math.random()
+  .toString(36)
+  .slice(2, 8)}`;
+let primaryInstance: string | null = null;
+
+// ============================================================================
+// PLUGIN DEFINITION
+// ============================================================================
+
 export const MemoryPlugin: Plugin = async (ctx) => {
+  // Path definitions
   const memoryDir = join(ctx.directory, "memory");
   const statePath = join(memoryDir, "state.json");
   const sessionsPath = join(memoryDir, "sessions.jsonl");
   const metricsPath = join(memoryDir, "metrics.json");
   const logPath = join(memoryDir, "realtime.log");
-  const handoffStatePath = join(memoryDir, ".handoff-state.json");
+  const toolTimingPath = join(memoryDir, "tool-timing.jsonl");
+  const sessionStatesDir = join(memoryDir, "sessions");
+  const lockPath = join(memoryDir, ".plugin-lock.json");
 
   // Only activate if memory system is present
   if (!existsSync(memoryDir)) {
@@ -33,39 +69,148 @@ export const MemoryPlugin: Plugin = async (ctx) => {
     return {};
   }
 
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
+
   let currentSessionStart: Date | null = null;
   let currentSessionId: string | null = null;
   let tokenCount = 0;
   let toolCallCount = 0;
   let sessionBootRan = false;
   let coordinator: MultiAgentCoordinator | null = null;
+  
+  // Tool timing state - maps callID to start time and metadata
+  const toolTimingState = new Map<string, {
+    tool: string;
+    startTime: number;
+    inputSize: number;
+  }>();
 
-  // Persistent handoff state - shared across plugin instances via file
+  // ============================================================================
+  // HELPER FUNCTIONS
+  // ============================================================================
+
+  // Instance locking for primary/secondary coordination
+  const isPrimaryInstance = (): boolean => {
+    try {
+      if (existsSync(lockPath)) {
+        const lock = JSON.parse(readFileSync(lockPath, "utf-8"));
+        if (Date.now() - lock.timestamp > LOCK_STALE_THRESHOLD) {
+          writeFileSync(
+            lockPath,
+            JSON.stringify({ instance: INSTANCE_ID, timestamp: Date.now() })
+          );
+          primaryInstance = INSTANCE_ID;
+          return true;
+        }
+        return lock.instance === INSTANCE_ID;
+      }
+      writeFileSync(
+        lockPath,
+        JSON.stringify({ instance: INSTANCE_ID, timestamp: Date.now() })
+      );
+      primaryInstance = INSTANCE_ID;
+      return true;
+    } catch {
+      return primaryInstance === INSTANCE_ID;
+    }
+  };
+
+  const refreshLock = () => {
+    if (primaryInstance === INSTANCE_ID) {
+      try {
+        writeFileSync(
+          lockPath,
+          JSON.stringify({ instance: INSTANCE_ID, timestamp: Date.now() })
+        );
+      } catch {}
+    }
+  };
+
+  // Handoff state management (per-session)
+  const getHandoffStatePath = (sessionId: string | null): string => {
+    if (!sessionId) return join(memoryDir, ".handoff-state.json");
+    const sessionDir = join(sessionStatesDir, sessionId);
+    if (!existsSync(sessionDir)) {
+      mkdirSync(sessionDir, { recursive: true });
+    }
+    return join(sessionDir, "handoff-state.json");
+  };
+
   const getHandoffEnabled = (): boolean => {
     try {
-      if (existsSync(handoffStatePath)) {
-        const state = JSON.parse(readFileSync(handoffStatePath, "utf-8"));
-        return state.handoff_enabled !== false; // default true if not set
+      const handoffPath = getHandoffStatePath(currentSessionId);
+      if (existsSync(handoffPath)) {
+        const state = JSON.parse(readFileSync(handoffPath, "utf-8"));
+        return state.handoff_enabled !== false;
       }
-    } catch (e) {
-      // Ignore errors, default to true
-    }
+    } catch {}
     return true;
   };
 
-  const setHandoffEnabled = (enabled: boolean): void => {
-    try {
-      writeFileSync(handoffStatePath, JSON.stringify({
-        handoff_enabled: enabled,
-        updated_at: new Date().toISOString(),
-        session_id: currentSessionId
-      }, null, 2));
-    } catch (e) {
-      console.error("[Memory] Failed to write handoff state:", e);
+  // Get tool category for grouping
+  const getToolCategory = (tool: string): string => {
+    // File operations
+    if (["read", "write", "edit", "glob", "grep"].includes(tool)) {
+      return "file_ops";
     }
+    // Shell/bash operations
+    if (["bash", "shell", "exec"].includes(tool)) {
+      return "shell";
+    }
+    // Memory tools
+    if (tool.startsWith("memory_")) {
+      return "memory";
+    }
+    // Agent tools
+    if (tool.startsWith("agent_")) {
+      return "agent";
+    }
+    // Task tools
+    if (tool.startsWith("task_")) {
+      return "task";
+    }
+    // Quality tools
+    if (tool.startsWith("quality_")) {
+      return "quality";
+    }
+    // Git tools
+    if (tool.startsWith("git_")) {
+      return "git";
+    }
+    // Recovery tools
+    if (tool.startsWith("checkpoint_") || tool.startsWith("recovery_")) {
+      return "recovery";
+    }
+    // User message tools
+    if (tool.startsWith("user_messages_")) {
+      return "user_msg";
+    }
+    // Browser/playwright
+    if (tool.startsWith("playwright_")) {
+      return "browser";
+    }
+    // Web fetch
+    if (tool === "webfetch") {
+      return "web";
+    }
+    // Todo tools
+    if (tool.startsWith("todo")) {
+      return "todo";
+    }
+    // Task spawn
+    if (tool === "task") {
+      return "spawn";
+    }
+    // Skill tools
+    if (tool === "skill") {
+      return "skill";
+    }
+    return "other";
   };
 
-  // Real-time logger helper
+  // Real-time logger
   const log = (
     level: "INFO" | "WARN" | "ERROR",
     message: string,
@@ -80,40 +225,44 @@ export const MemoryPlugin: Plugin = async (ctx) => {
       ...(data && { data }),
     };
 
-    // Write to file
     appendFileSync(logPath, JSON.stringify(logEntry) + "\n");
 
-    // Also console log
-    const emoji = level === "ERROR" ? "❌" : level === "WARN" ? "⚠️" : "ℹ️";
+    const emoji = level === "ERROR" ? "" : level === "WARN" ? "" : "";
     console.log(
       `${emoji} [Memory] ${message}`,
       data ? JSON.stringify(data) : ""
     );
   };
 
-  // Load memory context once at plugin initialization
-  const loadMemoryContext = () => {
+  // Load system message configuration
+  const loadSystemMessageConfig = () => {
+    const configPath = join(memoryDir, "system-message-config.json");
+    const defaultConfig = {
+      enabled: true,
+      sections: {
+        memory_context: { enabled: true, priority: 1 },
+        pending_tasks: { enabled: true, priority: 2, max_items: 5 },
+        user_messages: { enabled: true, priority: 3, max_items: 5 },
+        agent_status: { enabled: true, priority: 4 },
+        custom_instructions: { enabled: true, priority: 5, content: [] },
+      },
+      custom_sections: [],
+    };
+
     try {
-      if (!existsSync(statePath)) return null;
-      const state = JSON.parse(readFileSync(statePath, "utf-8"));
-
-      // Get active agents count
-      let agentInfo = "";
-      if (coordinator) {
-        try {
-          const agents = coordinator.getActiveAgents();
-          agentInfo = `\n**🤖 Multi-Agent Mode**: ${agents.length} agent(s) active`;
-        } catch (error) {
-          // Silently ignore
-        }
+      if (existsSync(configPath)) {
+        return JSON.parse(readFileSync(configPath, "utf-8"));
       }
+    } catch {}
+    return defaultConfig;
+  };
 
-      return `## Memory System Context
-
-**Session**: ${state.session_count || 0}
+  // Build memory context section
+  const buildMemoryContextSection = (state: any) => {
+    return `**Session**: ${state.session_count || 0}
 **Status**: ${state.status || "unknown"}
 **Active Tasks**: ${state.active_tasks?.join(", ") || "none"}
-**Total Tokens**: ${state.total_tokens_used?.toLocaleString() || 0}${agentInfo}
+**Total Tokens**: ${state.total_tokens_used?.toLocaleString() || 0}
 
 **Recent Achievements**:
 ${
@@ -121,481 +270,319 @@ ${
     ?.slice(0, 3)
     .map((a: string) => `- ${a}`)
     .join("\n") || "- None"
+}`;
+  };
+
+  // Build pending tasks section
+  const buildPendingTasksSection = (maxItems: number = 5) => {
+    const tasksPath = join(memoryDir, "tasks.json");
+    if (!existsSync(tasksPath)) return null;
+
+    try {
+      const tasksStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
+      const pending = (tasksStore.tasks || [])
+        .filter((t: any) => t.status === "pending")
+        .sort((a: any, b: any) => {
+          const order: Record<string, number> = {
+            critical: 0,
+            high: 1,
+            medium: 2,
+            low: 3,
+          };
+          return (order[a.priority] || 4) - (order[b.priority] || 4);
+        })
+        .slice(0, maxItems);
+
+      if (pending.length === 0) return null;
+      return `**Pending Tasks** (${pending.length}):
+${pending
+  .map((t: any) => `- [${t.priority.toUpperCase()}] ${t.title}`)
+  .join("\n")}`;
+    } catch {
+      return null;
+    }
+  };
+
+  // Build user messages section
+  const buildUserMessagesSection = (maxItems: number = 5) => {
+    const userMsgPath = join(memoryDir, "user-messages.jsonl");
+    if (!existsSync(userMsgPath)) return null;
+
+    try {
+      const content = readFileSync(userMsgPath, "utf-8");
+      const messages = content
+        .trim()
+        .split("\n")
+        .filter(Boolean)
+        .map((line) => JSON.parse(line))
+        .filter((m: any) => !m.read);
+
+      if (messages.length === 0) return null;
+      return `**Unread User Messages** (${messages.length}):
+${messages
+  .slice(-maxItems)
+  .map(
+    (m: any) =>
+      `- ${m.from}: "${m.message.slice(0, 80)}${
+        m.message.length > 80 ? "..." : ""
+      }"`
+  )
+  .join("\n")}`;
+    } catch {
+      return null;
+    }
+  };
+
+  // Build agent status section
+  const buildAgentStatusSection = () => {
+    if (!coordinator) return null;
+    try {
+      const agents = coordinator.getActiveAgents();
+      if (agents.length === 0) return null;
+      return `**Multi-Agent Mode**: ${agents.length} agent(s) active`;
+    } catch {
+      return null;
+    }
+  };
+
+  // Build custom instructions section
+  const buildCustomInstructionsSection = (content: string[]) => {
+    if (!content || content.length === 0) return null;
+    return content.join("\n");
+  };
+
+  // Generate compact summary for compaction hook
+  const generateCompactSummary = () => {
+    const state = existsSync(statePath)
+      ? JSON.parse(readFileSync(statePath, "utf-8"))
+      : {};
+    
+    const tasksPath = join(memoryDir, "tasks.json");
+    let activeTasks: any[] = [];
+    try {
+      if (existsSync(tasksPath)) {
+        const tasksStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
+        activeTasks = (tasksStore.tasks || []).filter(
+          (t: any) => t.status === "in_progress" || t.status === "pending"
+        );
+      }
+    } catch {}
+
+    return {
+      session: state.session_count || 0,
+      status: state.status || "unknown",
+      active_tasks: activeTasks.map((t: any) => ({
+        id: t.id,
+        title: t.title,
+        status: t.status,
+      })),
+      accomplishments: state.achievements?.slice(-3) || [],
+    };
+  };
+
+  // Format summary as markdown for context injection
+  const formatSummaryAsMarkdown = (summary: any) => {
+    return `## Compaction Context (Session ${summary.session})
+
+**Status**: ${summary.status}
+**Active Tasks**: ${
+  summary.active_tasks.length > 0
+    ? summary.active_tasks.map((t: any) => `${t.title} (${t.status})`).join(", ")
+    : "none"
 }
 
-💡 **Memory Tools**: memory_status, memory_search, memory_update
-💡 **Agent Tools**: agent_status, agent_send, agent_messages, agent_update_status
-⚠️  **Multi-Agent Mode Active**: Check agent_status() to see other agents working in parallel`;
+**Recent Accomplishments**:
+${
+  summary.accomplishments.length > 0
+    ? summary.accomplishments.map((a: string) => `- ${a}`).join("\n")
+    : "- None recorded"
+}
+
+Use memory_status(), task_list(), agent_status() for full context.`;
+  };
+
+  // Load memory context for system prompt injection (DYNAMIC)
+  const loadMemoryContext = () => {
+    try {
+      if (!existsSync(statePath)) return null;
+      const state = JSON.parse(readFileSync(statePath, "utf-8"));
+      const config = loadSystemMessageConfig();
+
+      if (!config.enabled) return null;
+
+      const sections: Array<{ priority: number; content: string }> = [];
+      const sectionConfigs = config.sections || {};
+
+      // Memory context section
+      if (sectionConfigs.memory_context?.enabled !== false) {
+        const content = buildMemoryContextSection(state);
+        if (content)
+          sections.push({
+            priority: sectionConfigs.memory_context?.priority || 1,
+            content,
+          });
+      }
+
+      // Pending tasks section
+      if (sectionConfigs.pending_tasks?.enabled !== false) {
+        const content = buildPendingTasksSection(
+          sectionConfigs.pending_tasks?.max_items || 5
+        );
+        if (content)
+          sections.push({
+            priority: sectionConfigs.pending_tasks?.priority || 2,
+            content,
+          });
+      }
+
+      // User messages section
+      if (sectionConfigs.user_messages?.enabled !== false) {
+        const content = buildUserMessagesSection(
+          sectionConfigs.user_messages?.max_items || 5
+        );
+        if (content)
+          sections.push({
+            priority: sectionConfigs.user_messages?.priority || 3,
+            content,
+          });
+      }
+
+      // Agent status section
+      if (sectionConfigs.agent_status?.enabled !== false) {
+        const content = buildAgentStatusSection();
+        if (content)
+          sections.push({
+            priority: sectionConfigs.agent_status?.priority || 4,
+            content,
+          });
+      }
+
+      // Custom instructions section
+      if (
+        sectionConfigs.custom_instructions?.enabled !== false &&
+        sectionConfigs.custom_instructions?.content
+      ) {
+        const content = buildCustomInstructionsSection(
+          sectionConfigs.custom_instructions.content
+        );
+        if (content)
+          sections.push({
+            priority: sectionConfigs.custom_instructions?.priority || 5,
+            content,
+          });
+      }
+
+      // Add custom sections from config
+      if (config.custom_sections && Array.isArray(config.custom_sections)) {
+        for (const custom of config.custom_sections) {
+          if (custom.enabled !== false && custom.content) {
+            sections.push({
+              priority: custom.priority || 10,
+              content: custom.content,
+            });
+          }
+        }
+      }
+
+      // Sort by priority and build final output
+      sections.sort((a, b) => a.priority - b.priority);
+      const mainContent = sections.map((s) => s.content).join("\n\n");
+
+      return `## Memory System Context
+
+${mainContent}
+
+Memory Tools: memory_status, memory_search, memory_update
+Agent Tools: agent_status, agent_send, agent_messages, agent_update_status
+Multi-Agent Mode Active: Check agent_status() to see other agents working in parallel`;
     } catch (error) {
       console.error("[Memory] Failed to load context:", error);
       return null;
     }
   };
 
+  // ============================================================================
+  // TOOL CONTEXT PROVIDERS
+  // ============================================================================
+
+  const getAgentToolsContext = () => ({
+    coordinator,
+    currentSessionId,
+    memoryDir,
+    log,
+    setCoordinator: (coord: MultiAgentCoordinator) => {
+      coordinator = coord;
+    },
+  });
+
+  const getMemoryToolsContext = () => ({
+    memoryDir,
+    statePath,
+    metricsPath,
+  });
+
+  const getTaskToolsContext = () => ({
+    memoryDir,
+    currentSessionId,
+    agentId: coordinator ? (coordinator as any).agentId : undefined,
+    log,
+  });
+
+  const getQualityToolsContext = () => ({
+    memoryDir,
+    currentSessionId,
+    log,
+  });
+
+  const getUserMessageToolsContext = () => ({
+    memoryDir,
+    currentSessionId,
+    log,
+  });
+
+  const getRecoveryToolsContext = () => ({
+    memoryDir,
+    currentSessionId,
+    agentId: coordinator ? (coordinator as any).agentId : undefined,
+    log,
+  });
+
+  const getGitToolsContext = () => ({
+    memoryDir,
+    currentSessionId,
+    agentId: coordinator ? (coordinator as any).agentId : undefined,
+    log,
+  });
+
+  // ============================================================================
+  // CREATE MODULAR TOOLS
+  // ============================================================================
+
+  const agentTools = createAgentTools(getAgentToolsContext, sessionStatesDir);
+  const memoryTools = createMemoryTools(getMemoryToolsContext);
+  const taskTools = createTaskTools(getTaskToolsContext);
+  const qualityTools = createQualityTools(getQualityToolsContext);
+  const userMessageTools = createUserMessageTools(getUserMessageToolsContext);
+  const recoveryTools = createRecoveryTools(getRecoveryToolsContext);
+  const gitTools = createGitTools(getGitToolsContext);
+
+  // ============================================================================
+  // PLUGIN RETURN OBJECT
+  // ============================================================================
+
   return {
-    // CUSTOM MEMORY TOOLS - Native memory query capabilities
+    // Combine all tools into single tool object
     tool: {
-      agent_register: {
-        description:
-          "Register this agent in the multi-agent coordination system. Required for agent-to-agent communication.",
-        parameters: {
-          type: "object",
-          properties: {
-            role: {
-              type: "string",
-              description:
-                "Role of this agent (e.g., 'memory-worker', 'system-optimizer', 'general')",
-            },
-          },
-        },
-        execute: async ({ role = "general" }) => {
-          try {
-            if (!coordinator) {
-              coordinator = new MultiAgentCoordinator(
-                currentSessionId || undefined
-              );
-              await coordinator.register(role);
-              coordinator.startHeartbeat();
-              log("INFO", `Agent registered with role: ${role}`);
-
-              return JSON.stringify({
-                success: true,
-                message: `Agent registered as ${role}`,
-                agent_id: (coordinator as any).agentId,
-              });
-            }
-
-            return JSON.stringify({
-              success: false,
-              message: "Agent already registered",
-            });
-          } catch (error) {
-            return JSON.stringify({ success: false, error: String(error) });
-          }
-        },
-      },
-
-      agent_status: {
-        description:
-          "Get status of all active agents in the coordination system.",
-        parameters: {
-          type: "object",
-          properties: {},
-        },
-        execute: async () => {
-          try {
-            if (!coordinator) {
-              return JSON.stringify({
-                success: false,
-                message: "Agent not registered. Use agent_register first.",
-              });
-            }
-
-            const agents = coordinator.getActiveAgents();
-            return JSON.stringify({
-              success: true,
-              agent_count: agents.length,
-              agents: agents.map((a) => ({
-                id: a.agent_id,
-                session: a.session_id,
-                role: a.assigned_role,
-                status: a.status,
-                task: a.current_task,
-                last_heartbeat: a.last_heartbeat,
-              })),
-            });
-          } catch (error) {
-            return JSON.stringify({ success: false, error: String(error) });
-          }
-        },
-      },
-
-      agent_send: {
-        description:
-          "Send message to other agents. Can be broadcast or direct message.",
-        parameters: {
-          type: "object",
-          properties: {
-            type: {
-              type: "string",
-              enum: [
-                "broadcast",
-                "direct",
-                "task_claim",
-                "task_complete",
-                "request_help",
-              ],
-              description: "Type of message",
-            },
-            payload: {
-              type: "object",
-              description: "Message payload (arbitrary JSON)",
-            },
-            to_agent: {
-              type: "string",
-              description: "Target agent ID (optional, for direct messages)",
-            },
-          },
-          required: ["type", "payload"],
-        },
-        execute: async ({ type, payload, to_agent }) => {
-          try {
-            if (!coordinator) {
-              return JSON.stringify({
-                success: false,
-                message: "Agent not registered. Use agent_register first.",
-              });
-            }
-
-            coordinator.sendMessage({
-              type: type as any,
-              payload,
-              toAgent: to_agent,
-            });
-            log("INFO", `Message sent: ${type}`, { to: to_agent || "all" });
-
-            return JSON.stringify({
-              success: true,
-              message: `Message sent: ${type}`,
-            });
-          } catch (error) {
-            return JSON.stringify({ success: false, error: String(error) });
-          }
-        },
-      },
-
-      agent_messages: {
-        description:
-          "Read messages sent by other agents. Returns unread messages addressed to this agent or broadcasts.",
-        parameters: {
-          type: "object",
-          properties: {
-            mark_read: {
-              type: "boolean",
-              description:
-                "Mark messages as read after retrieving (default: true)",
-            },
-          },
-        },
-        execute: async ({ mark_read = true }) => {
-          try {
-            if (!coordinator) {
-              return JSON.stringify({
-                success: false,
-                message: "Agent not registered. Use agent_register first.",
-              });
-            }
-
-            const messages = coordinator.readMessages();
-
-            if (mark_read && messages.length > 0) {
-              coordinator.markAsRead(messages.map((m) => m.message_id));
-            }
-
-            return JSON.stringify({
-              success: true,
-              message_count: messages.length,
-              messages: messages.map((m) => ({
-                id: m.message_id,
-                from: m.from_agent,
-                type: m.type,
-                timestamp: m.timestamp,
-                payload: m.payload,
-              })),
-            });
-          } catch (error) {
-            return JSON.stringify({ success: false, error: String(error) });
-          }
-        },
-      },
-
-      agent_update_status: {
-        description:
-          "Update this agent's status and current task in the registry.",
-        parameters: {
-          type: "object",
-          properties: {
-            status: {
-              type: "string",
-              enum: ["active", "idle", "working", "blocked"],
-              description: "Current agent status",
-            },
-            task: {
-              type: "string",
-              description: "Current task description (optional)",
-            },
-          },
-          required: ["status"],
-        },
-        execute: async ({ status, task }) => {
-          try {
-            if (!coordinator) {
-              return JSON.stringify({
-                success: false,
-                message: "Agent not registered. Use agent_register first.",
-              });
-            }
-
-            coordinator.updateStatus(status as any, task);
-            return JSON.stringify({
-              success: true,
-              message: `Status updated: ${status}`,
-            });
-          } catch (error) {
-            return JSON.stringify({ success: false, error: String(error) });
-          }
-        },
-      },
-
-      agent_set_handoff: {
-        description:
-          "Control whether this agent hands off when session goes idle. Main/orchestrator agents should disable handoff to stay running continuously.",
-        parameters: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              description:
-                "If true, agent will handoff on idle. If false, agent stays running (for main/orchestrator agents).",
-            },
-          },
-          required: ["enabled"],
-        },
-        execute: async ({ enabled }) => {
-          // Handle string "false" from OpenCode
-          const isEnabled = enabled === true || enabled === "true";
-          
-          // CRITICAL: Write to persistent file so BOTH plugin instances see the same state
-          setHandoffEnabled(isEnabled);
-          log("INFO", `Handoff ${isEnabled ? "enabled" : "disabled"} for this agent (persisted to file)`);
-          
-          // Also update coordinator if registered
-          if (coordinator) {
-            coordinator.updateStatus(isEnabled ? "active" : "working", 
-              isEnabled ? undefined : "Orchestrator mode - no handoff");
-          }
-          
-          return JSON.stringify({
-            success: true,
-            handoff_enabled: isEnabled,
-            message: isEnabled 
-              ? "Agent will handoff when idle" 
-              : "Agent will NOT handoff - running as main/orchestrator (PERSISTENT)",
-          });
-        },
-      },
-
-      memory_status: {
-        description:
-          "Get current memory system status, active tasks, and recent achievements. Use this instead of manually reading state.json.",
-        parameters: {
-          type: "object",
-          properties: {
-            include_metrics: {
-              type: "boolean",
-              description:
-                "Include detailed metrics (token usage, session count, etc.)",
-            },
-          },
-        },
-        execute: async ({ include_metrics = true }) => {
-          try {
-            const state = existsSync(statePath)
-              ? JSON.parse(readFileSync(statePath, "utf-8"))
-              : { session_count: 0, status: "unknown", active_tasks: [] };
-
-            const metrics =
-              include_metrics && existsSync(metricsPath)
-                ? JSON.parse(readFileSync(metricsPath, "utf-8"))
-                : null;
-
-            return JSON.stringify({
-              success: true,
-              data: {
-                session: state.session_count,
-                status: state.status,
-                active_tasks: state.active_tasks || [],
-                recent_achievements:
-                  state.recent_achievements?.slice(0, 5) || [],
-                current_objective: state.current_objective,
-                ...(metrics
-                  ? {
-                      total_sessions: metrics.total_sessions,
-                      total_tool_calls: metrics.total_tool_calls,
-                      total_tokens: state.total_tokens_used,
-                    }
-                  : {}),
-              },
-            });
-          } catch (error) {
-            return JSON.stringify({ success: false, error: String(error) });
-          }
-        },
-      },
-
-      memory_search: {
-        description:
-          "Search memory for specific information (working memory, knowledge base, session history). Use this instead of manually reading multiple files.",
-        parameters: {
-          type: "object",
-          properties: {
-            query: {
-              type: "string",
-              description: "Search query (keywords or phrase)",
-            },
-            scope: {
-              type: "string",
-              enum: ["working", "knowledge", "sessions", "all"],
-              description:
-                "Scope of search: working (recent context), knowledge (extracted insights), sessions (history), or all",
-            },
-          },
-          required: ["query"],
-        },
-        execute: async ({ query, scope = "all" }) => {
-          try {
-            const results: any = { query, matches: [] };
-            const searchLower = query.toLowerCase();
-
-            // Search working memory
-            if (scope === "working" || scope === "all") {
-              const workingPath = join(memoryDir, "working.md");
-              if (existsSync(workingPath)) {
-                const content = readFileSync(workingPath, "utf-8");
-                const lines = content.split("\n");
-                const matches = lines
-                  .map((line, idx) => ({ line: idx + 1, content: line }))
-                  .filter((l) => l.content.toLowerCase().includes(searchLower))
-                  .slice(0, 10);
-
-                if (matches.length > 0) {
-                  results.matches.push({
-                    source: "working.md",
-                    matches: matches.map(
-                      (m) => `Line ${m.line}: ${m.content.trim()}`
-                    ),
-                  });
-                }
-              }
-            }
-
-            // Search knowledge base
-            if (scope === "knowledge" || scope === "all") {
-              const kbPath = join(memoryDir, "knowledge-base.json");
-              if (existsSync(kbPath)) {
-                const kb = JSON.parse(readFileSync(kbPath, "utf-8"));
-                const relevant = kb
-                  .filter((entry: any) => {
-                    const text = JSON.stringify(entry).toLowerCase();
-                    return text.includes(searchLower);
-                  })
-                  .slice(0, 5);
-
-                if (relevant.length > 0) {
-                  results.matches.push({
-                    source: "knowledge-base.json",
-                    entries: relevant.map((e: any) => ({
-                      session: e.session_id?.slice(-10),
-                      insights: e.key_insights,
-                      decisions: e.decisions,
-                      problems_solved: e.problems_solved,
-                    })),
-                  });
-                }
-              }
-            }
-
-            return JSON.stringify({
-              success: true,
-              data: results,
-            });
-          } catch (error) {
-            return JSON.stringify({ success: false, error: String(error) });
-          }
-        },
-      },
-
-      memory_update: {
-        description:
-          "Update memory system state (add task, update status, record achievement). Use this instead of manually editing state.json.",
-        parameters: {
-          type: "object",
-          properties: {
-            action: {
-              type: "string",
-              enum: [
-                "add_task",
-                "complete_task",
-                "update_status",
-                "add_achievement",
-              ],
-              description: "Type of update to perform",
-            },
-            data: {
-              type: "string",
-              description:
-                "Data for the update (task description, new status, achievement text)",
-            },
-          },
-          required: ["action", "data"],
-        },
-        execute: async ({ action, data }) => {
-          try {
-            const state = existsSync(statePath)
-              ? JSON.parse(readFileSync(statePath, "utf-8"))
-              : { session_count: 0, active_tasks: [], recent_achievements: [] };
-
-            switch (action) {
-              case "add_task":
-                if (!state.active_tasks) state.active_tasks = [];
-                if (!state.active_tasks.includes(data)) {
-                  state.active_tasks.push(data);
-                }
-                break;
-
-              case "complete_task":
-                if (state.active_tasks) {
-                  state.active_tasks = state.active_tasks.filter(
-                    (t: string) => t !== data
-                  );
-                }
-                break;
-
-              case "update_status":
-                state.status = data;
-                break;
-
-              case "add_achievement":
-                if (!state.recent_achievements) state.recent_achievements = [];
-                const achievement = `Session ${state.session_count}: ${data}`;
-                state.recent_achievements.unshift(achievement);
-                state.recent_achievements = state.recent_achievements.slice(
-                  0,
-                  5
-                );
-                break;
-            }
-
-            state.last_updated = new Date().toISOString();
-            writeFileSync(statePath, JSON.stringify(state, null, 2));
-
-            return JSON.stringify({
-              success: true,
-              message: `Updated: ${action}`,
-              new_state: {
-                status: state.status,
-                active_tasks: state.active_tasks,
-                recent_achievements: state.recent_achievements?.slice(0, 3),
-              },
-            });
-          } catch (error) {
-            return JSON.stringify({ success: false, error: String(error) });
-          }
-        },
-      },
+      ...agentTools,
+      ...memoryTools,
+      ...taskTools,
+      ...qualityTools,
+      ...userMessageTools,
+      ...recoveryTools,
+      ...gitTools,
     },
 
-    // AUTO-INJECT memory context into system prompt for EVERY message
+    // Auto-inject memory context into system prompt
     "experimental.chat.system.transform": async (input, output) => {
       try {
         const memoryContext = loadMemoryContext();
@@ -608,44 +595,40 @@ ${
       }
     },
 
-    // CHAT MESSAGE HOOK - Detect memory-related queries and intents
+    // Detect memory-related queries in chat
     "chat.message": async ({ role, content }) => {
       try {
         if (role !== "user") return;
 
         const contentLower = content.toLowerCase();
 
-        // Detect status/progress queries
         if (
           contentLower.match(
             /status|progress|where.*we|what.*doing|current.*state/
           )
         ) {
           console.log(
-            "[Memory] 💡 Detected status query - suggest memory_status tool"
+            "[Memory] Detected status query - suggest memory_status tool"
           );
         }
 
-        // Detect memory/history queries
         if (
           contentLower.match(/remember|past|previous|before|history|last.*time/)
         ) {
           console.log(
-            "[Memory] 💡 Detected history query - suggest memory_search tool"
+            "[Memory] Detected history query - suggest memory_search tool"
           );
         }
 
-        // Detect task management
         if (contentLower.match(/add.*task|complete.*task|finish|done with/)) {
           console.log(
-            "[Memory] 💡 Detected task update - suggest memory_update tool"
+            "[Memory] Detected task update - suggest memory_update tool"
           );
         }
 
-        // Detect handoff/continuation intent
         if (contentLower.match(/continue|keep going|next|move on|done here/)) {
           console.log(
-            "[Memory] 💡 Detected continuation intent - prepare for handoff"
+            "[Memory] Detected continuation intent - prepare for handoff"
           );
         }
       } catch (error) {
@@ -653,198 +636,584 @@ ${
       }
     },
 
+    // Main event handler
     event: async ({ event }) => {
       try {
-        // Track session lifecycle
+        if (!isPrimaryInstance()) return;
+        refreshLock();
+
+        // SESSION START
         if (event.type === "session.created" && !sessionBootRan) {
-          currentSessionStart = new Date();
-          currentSessionId = event.properties.info.id;
-          sessionBootRan = true;
-
-          log("INFO", `Session started: ${currentSessionId}`);
-          log("INFO", "Running boot sequence...");
-
-          // Update state.json - increment session count, update timestamp
-          let sessionCount = 0;
-          try {
-            const state = existsSync(statePath)
-              ? JSON.parse(readFileSync(statePath, "utf-8"))
-              : { session_count: 0, total_tokens_used: 0 };
-
-            state.session_count = (state.session_count || 0) + 1;
-            state.last_session = currentSessionStart.toISOString();
-            state.current_session_id = currentSessionId;
-            sessionCount = state.session_count;
-
-            writeFileSync(statePath, JSON.stringify(state, null, 2));
-            log("INFO", `Session ${state.session_count} initialized`, {
-              session_count: state.session_count,
-            });
-          } catch (error) {
-            log("ERROR", "Failed to update state", { error: String(error) });
-          }
-
-          // Extract knowledge from OpenCode session history (async, don't block)
-          log("INFO", "Starting knowledge extraction (background)");
-          ctx.$`bun x ${join(
-            ctx.directory,
-            "tools/knowledge-extractor.ts"
-          )} extract`
-            .quiet()
-            .then(() => log("INFO", "Knowledge extraction completed"))
-            .catch((e) =>
-              log("WARN", "Knowledge extraction failed", { error: String(e) })
-            );
-
-          // Sync cross-conversation state (async, don't block)
-          log("INFO", "Starting sync engine (background)");
-          ctx.$`npx tsx ${join(ctx.directory, "tools/sync-engine.ts")} pull`
-            .quiet()
-            .then(() => log("INFO", "Sync engine completed"))
-            .catch((e) =>
-              log("WARN", "Sync engine failed", { error: String(e) })
-            );
-
-          log("INFO", "Boot sequence complete");
-
-          // Auto-register agent in multi-agent coordinator
-          try {
-            coordinator = new MultiAgentCoordinator(currentSessionId);
-            await coordinator.register("general");
-            coordinator.startHeartbeat();
-            log("INFO", "Multi-agent coordinator initialized");
-
-            // Broadcast that a new agent is online
-            coordinator.broadcastStatus("Agent online and ready", {
-              session_id: currentSessionId,
-              session_count: sessionCount,
-            });
-          } catch (error) {
-            log("WARN", "Multi-agent coordinator init failed", {
-              error: String(error),
-            });
-          }
-
-          // Log session to sessions.jsonl
-          const sessionLog = JSON.stringify({
-            type: "session_start",
-            timestamp: currentSessionStart.toISOString(),
-            session_id: event.properties.info.id,
-          });
-          await ctx.$`echo ${sessionLog} >> ${sessionsPath}`.quiet();
+          await handleSessionCreated(event);
         }
 
+        // SESSION IDLE
         if (event.type === "session.idle") {
-          // CRITICAL: Read handoff state from persistent file (shared across plugin instances)
-          const handoffEnabled = getHandoffEnabled();
-          log("INFO", `Session idle: ${event.properties.sessionID} (handoff: ${handoffEnabled}, from file)`);
+          await handleSessionIdle(event);
+        }
 
-          // If handoff is disabled, this agent stays running (main/orchestrator)
-          if (!handoffEnabled) {
-            log("INFO", "Handoff disabled (persistent) - agent continues running as orchestrator");
-            return; // Don't unregister or update working.md
+        // SESSION ERROR
+        if (event.type === "session.error") {
+          log("ERROR", "Session error", { error: event.properties.error });
+          const errorLog = JSON.stringify({
+            type: "session_error",
+            timestamp: new Date().toISOString(),
+            error: event.properties.error,
+          });
+          await ctx.$`echo ${errorLog} >> ${sessionsPath}`.quiet();
+        }
+
+        // FILE EDITS (memory files only)
+        if (
+          event.type === "file.edited" &&
+          event.properties.file?.includes("/memory/")
+        ) {
+          log("INFO", `File edited: ${event.properties.file}`);
+          const fileLog = JSON.stringify({
+            type: "file_edit",
+            timestamp: new Date().toISOString(),
+            file: event.properties.file,
+          });
+          await ctx.$`echo ${fileLog} >> ${sessionsPath}`.quiet();
+        }
+
+        // COMPACTION
+        if (event.type === "session.compacted") {
+          log("INFO", `Session compacted: ${event.properties.sessionID}`);
+          const compactionLog = JSON.stringify({
+            type: "compaction",
+            timestamp: new Date().toISOString(),
+            session_id: event.properties.sessionID,
+          });
+          await ctx.$`echo ${compactionLog} >> ${sessionsPath}`.quiet();
+        }
+
+        // OTHER EVENTS
+        if (
+          ["session.status", "session.deleted", "session.updated"].includes(
+            event.type
+          )
+        ) {
+          log("INFO", `Event: ${event.type}`, { properties: event.properties });
+        }
+      } catch (error) {
+        log("ERROR", "Plugin error", { error: String(error) });
+      }
+    },
+
+    // Tool execution timing - before hook (capture start time)
+    "tool.execute.before": async (input) => {
+      try {
+        const callId = input.callID || `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+        const inputSize = JSON.stringify(input.args || {}).length;
+        
+        toolTimingState.set(callId, {
+          tool: input.tool,
+          startTime: Date.now(),
+          inputSize,
+        });
+      } catch (error) {
+        log("WARN", "Tool timing before hook error", { error: String(error) });
+      }
+    },
+
+    // Tool execution tracking - after hook (calculate duration and log)
+    "tool.execute.after": async (input, output) => {
+      try {
+        toolCallCount++;
+        const endTime = Date.now();
+        const callId = input.callID || "";
+        const outputSize = output.output?.length || 0;
+        
+        // Get timing data from before hook
+        const timingData = toolTimingState.get(callId);
+        const startTime = timingData?.startTime || endTime;
+        const duration = endTime - startTime;
+        const inputSize = timingData?.inputSize || 0;
+        
+        // Clean up state
+        if (callId) toolTimingState.delete(callId);
+        
+        // Determine success/failure
+        const isError = output.output?.toLowerCase().includes("error") ||
+                        output.output?.toLowerCase().includes("failed") ||
+                        output.output?.toLowerCase().includes("exception");
+        
+        // Create timing entry
+        const timingEntry = {
+          timestamp: new Date().toISOString(),
+          session_id: currentSessionId,
+          tool: input.tool,
+          call_id: callId,
+          start_time: startTime,
+          end_time: endTime,
+          duration_ms: duration,
+          input_size: inputSize,
+          output_size: outputSize,
+          success: !isError,
+          category: getToolCategory(input.tool),
+        };
+        
+        // Append to timing log
+        appendFileSync(toolTimingPath, JSON.stringify(timingEntry) + "\n");
+        
+        // Log to realtime log (condensed)
+        log("INFO", `Tool executed: ${input.tool}`, {
+          tool: input.tool,
+          call_id: callId,
+          duration_ms: duration,
+          output_length: outputSize,
+          success: !isError,
+        });
+
+        if (
+          input.tool === "read" &&
+          input.args?.filePath?.includes("memory/")
+        ) {
+          log("INFO", `Memory file read: ${input.args.filePath}`);
+        }
+        if (
+          input.tool === "write" &&
+          input.args?.filePath?.includes("memory/")
+        ) {
+          log("INFO", `Memory file updated: ${input.args.filePath}`);
+        }
+        if (
+          input.tool === "edit" &&
+          input.args?.filePath?.includes("memory/")
+        ) {
+          log("INFO", `Memory file edited: ${input.args.filePath}`);
+        }
+      } catch (error) {
+        log("ERROR", "Tool tracking error", { error: String(error) });
+      }
+    },
+
+    // Plugin loaded callback
+    config: async (config) => {
+      log("INFO", "Plugin loaded - monitoring session events", {
+        agent: config.agent,
+        log_file: logPath,
+      });
+      log("INFO", "=== NEW PLUGIN INSTANCE ===");
+    },
+
+    // Compaction hook - preserve memory context
+    "experimental.session.compacting": async (input, output) => {
+      try {
+        log("INFO", "Session compacting - generating smart context summary");
+
+        const summary = generateCompactSummary();
+        const contextMarkdown = formatSummaryAsMarkdown(summary);
+
+        let agentContext = "";
+        if (coordinator) {
+          const agents = coordinator.getActiveAgents();
+          if (agents.length > 1) {
+            agentContext = `\n\n**Multi-Agent Mode**: ${agents.length} agents active`;
           }
+        }
 
-          // Unregister from multi-agent coordinator
-          if (coordinator) {
-            try {
-              await coordinator.unregister();
-              log("INFO", "Agent unregistered from coordinator");
-            } catch (error) {
-              log("WARN", "Failed to unregister agent", {
-                error: String(error),
-              });
-            }
-          }
+        output.context.push(contextMarkdown + agentContext);
 
-          // Update state.json with current metrics
-          if (currentSessionStart) {
-            const sessionDuration = Date.now() - currentSessionStart.getTime();
-            log(
-              "INFO",
-              `Session ended after ${Math.round(sessionDuration / 1000)}s`,
-              {
-                duration_ms: sessionDuration,
-                tool_calls: toolCallCount,
-              }
-            );
+        log("INFO", "Smart compaction context injected successfully", {
+          session: summary.session,
+          tasks_count: summary.active_tasks.length,
+          accomplishments_count: summary.accomplishments.length,
+        });
+      } catch (error) {
+        log("WARN", "Smart summarization failed, using fallback", {
+          error: String(error),
+        });
 
-            const sessionEnd = JSON.stringify({
-              type: "session_end",
-              timestamp: new Date().toISOString(),
-              session_id: event.properties.sessionID,
-              duration_ms: sessionDuration,
-              tool_calls: toolCallCount,
-            });
-            await ctx.$`echo ${sessionEnd} >> ${sessionsPath}`.quiet();
+        try {
+          const state = existsSync(statePath)
+            ? JSON.parse(readFileSync(statePath, "utf-8"))
+            : { session_count: 0, status: "unknown" };
 
-            // Update metrics
-            const metricsData = existsSync(metricsPath)
-              ? JSON.parse(await ctx.$`cat ${metricsPath}`.text())
-              : { total_sessions: 0, total_tool_calls: 0, total_tokens: 0 };
+          output.context.push(`## Memory System Context
 
-            metricsData.total_sessions = (metricsData.total_sessions || 0) + 1;
-            metricsData.total_tool_calls =
-              (metricsData.total_tool_calls || 0) + toolCallCount;
-            metricsData.last_session = new Date().toISOString();
+**Session**: ${state.session_count || 0}
+**Status**: ${state.status || "unknown"}
+**Active Tasks**: ${state.active_tasks?.join(", ") || "none"}
 
-            await ctx.$`echo ${JSON.stringify(
-              metricsData,
-              null,
-              2
-            )} > ${metricsPath}`.quiet();
+Use memory_status(), task_list(), agent_status() for more context.
+Read memory/working.md for full details.`);
+        } catch (fallbackError) {
+          log("ERROR", "Fallback context injection also failed", {
+            error: String(fallbackError),
+          });
+        }
+      }
+    },
+  };
 
-            // AUTO-UPDATE working.md with session summary for next agent
-            log("INFO", "Updating working.md for next session...");
-            const workingPath = join(memoryDir, "working.md");
+  // ============================================================================
+  // EVENT HANDLERS (Internal)
+  // ============================================================================
 
-            try {
-              const state = existsSync(statePath)
-                ? JSON.parse(readFileSync(statePath, "utf-8"))
-                : {};
+  async function handleSessionCreated(event: any) {
+    currentSessionStart = new Date();
+    currentSessionId = event.properties.info.id;
+    sessionBootRan = true;
 
-              // Read current working.md
-              let workingContent = existsSync(workingPath)
-                ? readFileSync(workingPath, "utf-8")
-                : "";
+    log(
+      "INFO",
+      `Session started: ${currentSessionId} (instance: ${INSTANCE_ID})`
+    );
+    log("INFO", "Running boot sequence...");
 
-              // Remove previous AUTO-STOP entry for same session (prevent duplicates)
-              const sessionMarker = `## Session ${
-                state.session_count || "N/A"
-              } - AUTO-STOP`;
-              const lines = workingContent.split("\n");
-              let inAutoStopSection = false;
-              const filteredLines = [];
+    // Update state.json
+    let sessionCount = 0;
+    try {
+      const state = existsSync(statePath)
+        ? JSON.parse(readFileSync(statePath, "utf-8"))
+        : { session_count: 0, total_tokens_used: 0 };
 
-              for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
+      state.session_count = (state.session_count || 0) + 1;
+      state.last_session = currentSessionStart.toISOString();
+      state.current_session_id = currentSessionId;
+      sessionCount = state.session_count;
 
-                // Detect start of AUTO-STOP section for current session
-                if (line.startsWith(sessionMarker)) {
-                  inAutoStopSection = true;
-                  continue; // Skip this line
-                }
+      writeFileSync(statePath, JSON.stringify(state, null, 2));
+      log("INFO", `Session ${state.session_count} initialized`, {
+        session_count: state.session_count,
+      });
+    } catch (error) {
+      log("ERROR", "Failed to update state", { error: String(error) });
+    }
 
-                // Detect end of AUTO-STOP section (next ## or ---)
-                if (
-                  inAutoStopSection &&
-                  (line.startsWith("## ") || line.trim() === "---")
-                ) {
-                  inAutoStopSection = false;
-                  if (line.trim() === "---") continue; // Skip separator
-                }
+    // Background tasks
+    log("INFO", "Starting knowledge extraction (background)");
+    ctx.$`node ${join(ctx.directory, "tools/knowledge-extractor.ts")} extract`
+      .quiet()
+      .then(() => log("INFO", "Knowledge extraction completed"))
+      .catch((e) =>
+        log("WARN", "Knowledge extraction failed", { error: String(e) })
+      );
 
-                // Keep lines that are not in AUTO-STOP section
-                if (!inAutoStopSection) {
-                  filteredLines.push(line);
-                }
-              }
+    log("INFO", "Starting sync engine (background)");
+    ctx.$`npx tsx ${join(ctx.directory, "tools/sync-engine.ts")} pull`
+      .quiet()
+      .then(() => log("INFO", "Sync engine completed"))
+      .catch((e) => log("WARN", "Sync engine failed", { error: String(e) }));
 
-              // Create new session summary with rich handoff information
-              const sessionSummary = `
+    log("INFO", "Boot sequence complete");
+
+    // Clean up stale agents
+    const registryPath = join(memoryDir, "agent-registry.json");
+    try {
+      if (existsSync(registryPath)) {
+        const registry = JSON.parse(readFileSync(registryPath, "utf-8"));
+        const now = Date.now();
+
+        const activeAgents = registry.agents.filter((agent: any) => {
+          const lastHeartbeat = new Date(agent.last_heartbeat).getTime();
+          return now - lastHeartbeat < AGENT_STALE_THRESHOLD;
+        });
+
+        const removedCount = registry.agents.length - activeAgents.length;
+        if (removedCount > 0) {
+          registry.agents = activeAgents;
+          registry.last_updated = new Date().toISOString();
+          writeFileSync(registryPath, JSON.stringify(registry, null, 2));
+          log("INFO", `Cleaned up ${removedCount} stale agents from registry`);
+        }
+      }
+    } catch (error) {
+      log("WARN", "Failed to clean up stale agents", { error: String(error) });
+    }
+
+    // Message bus auto-maintenance (background)
+    log("INFO", "Starting message bus maintenance (background)");
+    ctx.$`bun ${join(ctx.directory, "tools/message-bus-manager.ts")} auto`
+      .quiet()
+      .then((result) => log("INFO", "Message bus maintenance completed", { result: result.stdout }))
+      .catch((e) =>
+        log("WARN", "Message bus maintenance failed", { error: String(e) })
+      );
+
+    // Auto-register agent
+    try {
+      coordinator = new MultiAgentCoordinator(currentSessionId);
+      await coordinator.register("general");
+      coordinator.startHeartbeat();
+      log("INFO", "Multi-agent coordinator initialized");
+
+      coordinator.broadcastStatus("Agent online and ready", {
+        session_id: currentSessionId,
+        session_count: sessionCount,
+      });
+    } catch (error) {
+      log("WARN", "Multi-agent coordinator init failed", {
+        error: String(error),
+      });
+    }
+
+    // Log session start
+    const sessionLog = JSON.stringify({
+      type: "session_start",
+      timestamp: currentSessionStart.toISOString(),
+      session_id: event.properties.info.id,
+    });
+    await ctx.$`echo ${sessionLog} >> ${sessionsPath}`.quiet();
+  }
+
+  async function handleSessionIdle(event: any) {
+    const handoffEnabled = getHandoffEnabled();
+    log(
+      "INFO",
+      `Session idle: ${event.properties.sessionID} (handoff: ${handoffEnabled})`
+    );
+
+    // If handoff disabled, respawn orchestrator
+    if (!handoffEnabled) {
+      log("INFO", "Handoff disabled - re-spawning orchestrator agent");
+
+      const state = existsSync(statePath)
+        ? JSON.parse(readFileSync(statePath, "utf-8"))
+        : {};
+
+      const respawnPrompt = `You are the ORCHESTRATOR AGENT resuming work.
+
+## IMMEDIATE ACTIONS:
+1. Call agent_set_handoff with enabled=false (CRITICAL - you must persist)
+2. Call memory_status to see current state
+3. Continue with active tasks or explore new improvements
+
+## CONTEXT:
+- Session count: ${state.session_count || 0}
+- Active tasks: ${state.active_tasks?.join(", ") || "none"}
+- Status: ${state.status || "unknown"}
+
+## YOUR MISSION:
+Continue improving the multi-agent system. Check memory/working.md for recent context.
+Spawn workers for parallel tasks using: opencode run "worker prompt"
+
+Remember: You NEVER stop. Always call agent_set_handoff(enabled=false) first.`;
+
+      const respawnLogFile = join(memoryDir, "orchestrator-respawn.log");
+      ctx.$`nohup opencode run --model claude-opus-4-5 ${respawnPrompt} > ${respawnLogFile} 2>&1 &`
+        .quiet()
+        .then(() => log("INFO", "Orchestrator re-spawn command sent"))
+        .catch((e) =>
+          log("ERROR", "Failed to re-spawn orchestrator", { error: String(e) })
+        );
+
+      return;
+    }
+
+    // Normal handoff - unregister and update working.md
+    if (coordinator) {
+      try {
+        await coordinator.unregister();
+        log("INFO", "Agent unregistered from coordinator");
+      } catch (error) {
+        log("WARN", "Failed to unregister agent", { error: String(error) });
+      }
+    }
+
+    if (currentSessionStart) {
+      const sessionDuration = Date.now() - currentSessionStart.getTime();
+      log(
+        "INFO",
+        `Session ended after ${Math.round(sessionDuration / 1000)}s`,
+        {
+          duration_ms: sessionDuration,
+          tool_calls: toolCallCount,
+        }
+      );
+
+      const sessionEnd = JSON.stringify({
+        type: "session_end",
+        timestamp: new Date().toISOString(),
+        session_id: event.properties.sessionID,
+        duration_ms: sessionDuration,
+        tool_calls: toolCallCount,
+      });
+      await ctx.$`echo ${sessionEnd} >> ${sessionsPath}`.quiet();
+      
+      // === AUTO-EXTRACT SESSION LEARNINGS ===
+      log("INFO", "Starting automatic session learning extraction...");
+      try {
+        // Run session summarizer in background
+        ctx.$`bun ${join(ctx.directory, "tools/session-summarizer.ts")} summarize-current ${currentSessionId || ""}`
+          .quiet()
+          .then(() => log("INFO", "Session summarization completed"))
+          .catch((e) => log("WARN", "Session summarization failed", { error: String(e) }));
+        
+        // Extract knowledge from tool timing data for this session
+        await extractSessionKnowledge(event.properties.sessionID, sessionDuration);
+        log("INFO", "Session knowledge extraction completed");
+      } catch (error) {
+        log("WARN", "Session learning extraction failed", { error: String(error) });
+      }
+
+      // Update metrics
+      const metricsData = existsSync(metricsPath)
+        ? JSON.parse(await ctx.$`cat ${metricsPath}`.text())
+        : { total_sessions: 0, total_tool_calls: 0, total_tokens: 0 };
+
+      metricsData.total_sessions = (metricsData.total_sessions || 0) + 1;
+      metricsData.total_tool_calls =
+        (metricsData.total_tool_calls || 0) + toolCallCount;
+      metricsData.last_session = new Date().toISOString();
+
+      await ctx.$`echo ${JSON.stringify(
+        metricsData,
+        null,
+        2
+      )} > ${metricsPath}`.quiet();
+
+      // Update working.md for next session
+      await updateWorkingMdForHandoff(event, sessionDuration);
+    }
+  }
+
+  async function extractSessionKnowledge(sessionId: string, durationMs: number) {
+    // Extract key metrics from this session's tool timing data
+    const sessionKnowledge = {
+      session_id: sessionId,
+      timestamp: new Date().toISOString(),
+      duration_ms: durationMs,
+      tool_calls: toolCallCount,
+      patterns: [] as string[],
+      learnings: [] as string[],
+    };
+
+    // Read recent tool timing entries for this session
+    try {
+      if (existsSync(toolTimingPath)) {
+        const timingContent = readFileSync(toolTimingPath, "utf-8");
+        const lines = timingContent.trim().split("\n").slice(-100); // Last 100 entries
+        
+        const sessionEntries = lines
+          .filter(Boolean)
+          .map(line => {
+            try { return JSON.parse(line); } catch { return null; }
+          })
+          .filter(entry => entry && entry.session_id === sessionId);
+
+        // Analyze tool usage patterns
+        const toolCounts: Record<string, number> = {};
+        const errorTools: string[] = [];
+        const slowTools: { tool: string; duration: number }[] = [];
+        
+        for (const entry of sessionEntries) {
+          toolCounts[entry.tool] = (toolCounts[entry.tool] || 0) + 1;
+          if (!entry.success) errorTools.push(entry.tool);
+          if (entry.duration_ms > 5000) slowTools.push({ tool: entry.tool, duration: entry.duration_ms });
+        }
+
+        // Generate insights
+        const topTools = Object.entries(toolCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5)
+          .map(([tool, count]) => `${tool}: ${count}`);
+        
+        if (topTools.length > 0) {
+          sessionKnowledge.patterns.push(`Top tools: ${topTools.join(", ")}`);
+        }
+        
+        if (errorTools.length > 0) {
+          const uniqueErrors = [...new Set(errorTools)];
+          sessionKnowledge.learnings.push(`Error-prone tools: ${uniqueErrors.join(", ")}`);
+        }
+        
+        if (slowTools.length > 0) {
+          const uniqueSlow = [...new Set(slowTools.map(t => t.tool))];
+          sessionKnowledge.learnings.push(`Slow tools (>5s): ${uniqueSlow.join(", ")}`);
+        }
+      }
+    } catch (error) {
+      log("WARN", "Failed to analyze tool timing", { error: String(error) });
+    }
+
+    // Save session knowledge to knowledge base if we found anything useful
+    if (sessionKnowledge.patterns.length > 0 || sessionKnowledge.learnings.length > 0) {
+      const knowledgePath = join(memoryDir, "knowledge-base.json");
+      try {
+        const kb = existsSync(knowledgePath) 
+          ? JSON.parse(readFileSync(knowledgePath, "utf-8"))
+          : { insights: [], patterns: [], metadata: { last_updated: "" } };
+        
+        // Add session-specific insight
+        kb.insights.push({
+          type: "session_summary",
+          session_id: sessionId,
+          timestamp: new Date().toISOString(),
+          duration_minutes: Math.round(durationMs / 60000),
+          tool_calls: toolCallCount,
+          patterns: sessionKnowledge.patterns,
+          learnings: sessionKnowledge.learnings,
+        });
+        
+        // Keep only last 50 session insights
+        const sessionInsights = kb.insights.filter((i: any) => i.type === "session_summary");
+        if (sessionInsights.length > 50) {
+          const toRemove = sessionInsights.slice(0, sessionInsights.length - 50);
+          kb.insights = kb.insights.filter((i: any) => !toRemove.includes(i));
+        }
+        
+        kb.metadata.last_updated = new Date().toISOString();
+        writeFileSync(knowledgePath, JSON.stringify(kb, null, 2));
+        log("INFO", "Session knowledge saved to knowledge base");
+      } catch (error) {
+        log("WARN", "Failed to save session knowledge", { error: String(error) });
+      }
+    }
+  }
+
+  async function updateWorkingMdForHandoff(
+    event: any,
+    sessionDuration: number
+  ) {
+    log("INFO", "Updating working.md for next session...");
+    const workingPath = join(memoryDir, "working.md");
+
+    try {
+      const state = existsSync(statePath)
+        ? JSON.parse(readFileSync(statePath, "utf-8"))
+        : {};
+
+      let workingContent = existsSync(workingPath)
+        ? readFileSync(workingPath, "utf-8")
+        : "";
+
+      // Remove previous AUTO-STOP entry for same session
+      const sessionMarker = `## Session ${
+        state.session_count || "N/A"
+      } - AUTO-STOP`;
+      const lines = workingContent.split("\n");
+      let inAutoStopSection = false;
+      const filteredLines = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        if (line.startsWith(sessionMarker)) {
+          inAutoStopSection = true;
+          continue;
+        }
+
+        if (
+          inAutoStopSection &&
+          (line.startsWith("## ") || line.trim() === "---")
+        ) {
+          inAutoStopSection = false;
+          if (line.trim() === "---") continue;
+        }
+
+        if (!inAutoStopSection) {
+          filteredLines.push(line);
+        }
+      }
+
+      // Create session summary
+      const sessionSummary = `
 ## Session ${state.session_count || "N/A"} - AUTO-STOP (${
-                new Date().toISOString().split("T")[0]
-              })
+        new Date().toISOString().split("T")[0]
+      })
 
 **Status**: Session ended
 **Duration**: ${Math.round(sessionDuration / 1000 / 60)} minutes
@@ -853,13 +1222,13 @@ ${
 
 **What Happened**: Session idle detected - agent stopped working
 
-**🔴 CRITICAL: YOU ARE A NEW AGENT - READ THIS FIRST**
+**CRITICAL: YOU ARE A NEW AGENT - READ THIS FIRST**
 
 You are a fresh instance of the AI. The previous agent is gone. You have:
-- ✅ Auto-injected memory context (150 tokens in system prompt)
-- ✅ Real-time logging enabled (check memory/realtime.log)
-- ✅ Session lifecycle tracking via OpenCode hooks
-- ✅ Custom memory tools: memory_status(), memory_search(), memory_update()
+- Auto-injected memory context (150 tokens in system prompt)
+- Real-time logging enabled (check memory/realtime.log)
+- Session lifecycle tracking via OpenCode hooks
+- Custom memory tools: memory_status(), memory_search(), memory_update()
 
 **Next Agent MUST**:
 1. **DO NOT** manually read state.json - use memory_status() tool instead
@@ -879,120 +1248,13 @@ You are a fresh instance of the AI. The previous agent is gone. You have:
 
 `;
 
-              // Append to filtered content
-              const newContent = filteredLines.join("\n") + sessionSummary;
-              writeFileSync(workingPath, newContent);
-              log(
-                "INFO",
-                "Session summary updated in working.md (no duplicates)"
-              );
-            } catch (error) {
-              log("ERROR", "Failed to update working.md", {
-                error: String(error),
-              });
-            }
-          }
-        }
-
-        if (event.type === "session.error") {
-          log("ERROR", "Session error", { error: event.properties.error });
-
-          const errorLog = JSON.stringify({
-            type: "session_error",
-            timestamp: new Date().toISOString(),
-            error: event.properties.error,
-          });
-          await ctx.$`echo ${errorLog} >> ${sessionsPath}`.quiet();
-        }
-
-        // Track file edits for knowledge extraction (only memory files to reduce noise)
-        if (
-          event.type === "file.edited" &&
-          event.properties.file?.includes("/memory/")
-        ) {
-          log("INFO", `File edited: ${event.properties.file}`);
-
-          const fileLog = JSON.stringify({
-            type: "file_edit",
-            timestamp: new Date().toISOString(),
-            file: event.properties.file,
-          });
-          await ctx.$`echo ${fileLog} >> ${sessionsPath}`.quiet();
-        }
-
-        // Track context compaction
-        if (event.type === "session.compacted") {
-          log("INFO", `Session compacted: ${event.properties.sessionID}`);
-
-          const compactionLog = JSON.stringify({
-            type: "compaction",
-            timestamp: new Date().toISOString(),
-            session_id: event.properties.sessionID,
-          });
-          await ctx.$`echo ${compactionLog} >> ${sessionsPath}`.quiet();
-        }
-
-        // Track all major events in log
-        if (
-          ["session.status", "session.deleted", "session.updated"].includes(
-            event.type
-          )
-        ) {
-          log("INFO", `Event: ${event.type}`, { properties: event.properties });
-        }
-      } catch (error) {
-        // Fail silently to not disrupt session
-        log("ERROR", "Plugin error", { error: String(error) });
-      }
-    },
-
-    "tool.execute.after": async (input, output) => {
-      try {
-        // Count tool calls for metrics
-        toolCallCount++;
-
-        // Log all tool calls to realtime.log
-        log("INFO", `Tool executed: ${input.tool}`, {
-          tool: input.tool,
-          call_id: input.callID,
-          output_length: output.output?.length || 0,
-        });
-
-        // Track memory-related tool usage with extra detail
-        if (
-          input.tool === "read" &&
-          input.args?.filePath?.includes("memory/")
-        ) {
-          log("INFO", `Memory file read: ${input.args.filePath}`);
-        }
-
-        if (
-          input.tool === "write" &&
-          input.args?.filePath?.includes("memory/")
-        ) {
-          log("INFO", `Memory file updated: ${input.args.filePath}`);
-        }
-
-        if (
-          input.tool === "edit" &&
-          input.args?.filePath?.includes("memory/")
-        ) {
-          log("INFO", `Memory file edited: ${input.args.filePath}`);
-        }
-      } catch (error) {
-        log("ERROR", "Tool tracking error", { error: String(error) });
-      }
-    },
-
-    // Update state on session updates
-    config: async (config) => {
-      log("INFO", "Plugin loaded - monitoring session events", {
-        agent: config.agent,
-        log_file: logPath,
-      });
-      log("INFO", "=== NEW PLUGIN INSTANCE ===");
-    },
-  };
+      const newContent = filteredLines.join("\n") + sessionSummary;
+      writeFileSync(workingPath, newContent);
+      log("INFO", "Session summary updated in working.md");
+    } catch (error) {
+      log("ERROR", "Failed to update working.md", { error: String(error) });
+    }
+  }
 };
 
 export default MemoryPlugin;
