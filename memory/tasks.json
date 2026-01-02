@@ -1706,8 +1706,65 @@
       ],
       "quality_score": 8,
       "quality_notes": "Worker successfully consolidated TimingEntry to ToolTiming. This reduces code duplication and follows DRY principle."
+    },
+    {
+      "id": "task_1767373927809_h02iuz",
+      "title": "Refactor cli.ts to use proper types",
+      "description": "Replace 24 uses of `any` type in tools/cli.ts with proper types from shared/types.ts. This includes:\n1. Replace readJson<any> with readJson<AgentRegistry>, readJson<TaskStore>, etc.\n2. Replace (a: any) => patterns with proper typed callbacks\n3. Import necessary types from ./shared/types\n4. Ensure the file compiles without errors",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T17:12:07.809Z",
+      "updated_at": "2026-01-02T17:17:36.948Z",
+      "created_by": "unknown",
+      "tags": [
+        "type-safety",
+        "refactor",
+        "cli"
+      ],
+      "complexity": "moderate",
+      "completed_at": "2026-01-02T17:17:36.947Z",
+      "notes": [
+        "[2026-01-02T17:17:36.948Z] Worker agent-1767373949009-b5hbe completed the refactoring. cli.ts now uses proper types from shared/types.ts instead of any. Changes: +87/-55 lines. All 24 any usages replaced with proper types (Agent, Task, Message, UserMessage, etc). CLI tested and working correctly."
+      ]
+    },
+    {
+      "id": "task_1767374436847_0l6k9v",
+      "title": "Refactor daily-report-generator.ts types",
+      "description": "Replace all 25 uses of `any` in daily-report-generator.ts with proper types from shared/types.ts. Key changes:\n1. Replace `readJson<any>` with typed versions (AgentRegistry, TaskStore, QualityStore)\n2. Replace `readJsonl<any>` with typed versions (SessionEvent, Message, ToolTiming)\n3. Replace callback `(x: any) =>` with proper types\n4. Verify compilation with `bun build`",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T17:20:36.847Z",
+      "updated_at": "2026-01-02T17:25:28.391Z",
+      "created_by": "unknown",
+      "tags": [
+        "refactoring",
+        "type-safety",
+        "cleanup"
+      ],
+      "complexity": "moderate",
+      "completed_at": "2026-01-02T17:25:28.391Z",
+      "notes": [
+        "[2026-01-02T17:24:49.153Z] Replaced all 25 any types with proper TypeScript types. Commit: 8b66b44. Changes: imports from shared/types.ts, local RealtimeLogEntry interface, typed readJson/readJsonl calls, typed callbacks. Also fixed field name mismatches (from -> from_agent, type -> event).",
+        "[2026-01-02T17:25:28.391Z] Worker completed successfully. Commit: 8b66b44. Reduced any types from 25 to 0 in daily-report-generator.ts."
+      ]
+    },
+    {
+      "id": "task_1767374755253_d1mls9",
+      "title": "Refactor session-summarizer.ts types",
+      "description": "Replace all 14 uses of `any` in session-summarizer.ts with proper types from shared/types.ts. Key changes:\n1. Replace `readJson<any>` with typed versions\n2. Replace `readJsonl<any>` with typed versions\n3. Replace callback `(x: any) =>` with proper types\n4. Verify compilation with `bun build`",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-02T17:25:55.253Z",
+      "updated_at": "2026-01-02T17:25:55.253Z",
+      "created_by": "unknown",
+      "tags": [
+        "refactoring",
+        "type-safety",
+        "cleanup"
+      ],
+      "complexity": "moderate"
     }
   ],
-  "completed_count": 78,
-  "last_updated": "2026-01-02T17:00:15.417Z"
+  "completed_count": 81,
+  "last_updated": "2026-01-02T17:25:55.253Z"
 }

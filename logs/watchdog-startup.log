@@ -1,12 +1,8 @@
-[91m[1m| [0m[90m Bash     [0mTest compilation
+[91m[1m| [0m[90m Bash     [0mCheck changes
 
 
-  [15ms]  bundle  9 modules
- [184ms] compile  multi-agent-coordinator
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
+ tools/session-summarizer.ts | 80 +++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 63 insertions(+), 17 deletions(-)
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
@@ -15,34 +11,4 @@
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-Ahora limpio el binario y hago commit:
-[*] [Memory] Tool executed: bash {"tool":"bash","call_id":"toolu_01H1Uz1XJzz4qAGNKVpN8eNp","duration_ms":38,"output_length":0,"success":true}
-[*] [Memory] Tool executed: bash {"tool":"bash","call_id":"toolu_01H1Uz1XJzz4qAGNKVpN8eNp","duration_ms":38,"output_length":0,"success":true}
-[*] [Memory] Tool executed: bash {"tool":"bash","call_id":"toolu_01H1Uz1XJzz4qAGNKVpN8eNp","duration_ms":39,"output_length":0,"success":true}
-[*] [Memory] Tool executed: bash {"tool":"bash","call_id":"toolu_01H1Uz1XJzz4qAGNKVpN8eNp","duration_ms":39,"output_length":0,"success":true}
-[91m[1m| [0m[90m Bash     [0mRemove compiled binary
-[*] [Memory] Tool executed: git_diff {"tool":"git_diff","call_id":"toolu_01PcwEFtuh77kTXWB4v4oxHA","duration_ms":23,"output_length":1288,"success":true}
-[*] [Memory] Tool executed: git_diff {"tool":"git_diff","call_id":"toolu_01PcwEFtuh77kTXWB4v4oxHA","duration_ms":23,"output_length":1288,"success":true}
-[*] [Memory] Tool executed: git_diff {"tool":"git_diff","call_id":"toolu_01PcwEFtuh77kTXWB4v4oxHA","duration_ms":24,"output_length":1288,"success":true}
-[*] [Memory] Tool executed: git_diff {"tool":"git_diff","call_id":"toolu_01PcwEFtuh77kTXWB4v4oxHA","duration_ms":24,"output_length":1288,"success":true}
-
-[94m[1m| [0m[90m git_diff  [0m{"file":"tools/multi-agent-coordinator.ts"}[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Detected agent role: orchestrator 
-[Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Detected agent role: orchestrator 
-[Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Detected agent role: orchestrator 
-[Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Detected agent role: orchestrator 
-[Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_4805743e9ffeB44wn7HuoeFWc3","status":{"type":"busy"}}}
+Hay cambios. Espero al commit:

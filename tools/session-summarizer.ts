@@ -20,6 +20,32 @@
 import { existsSync, readFileSync, writeFileSync, readdirSync } from "fs";
 import { join } from "path";
 import { readJson, readJsonl, c, PATHS, MEMORY_DIR, SESSIONS_DIR } from "./shared";
+import type { 
+  SessionEvent, 
+  SessionKnowledge, 
+  Task, 
+  TaskStore, 
+  QualityAssessment, 
+  QualityStore,
+  SystemState 
+} from "./shared/types";
+
+/**
+ * OpenCode message part structure (from message storage)
+ */
+interface MessagePart {
+  type: "text" | "tool";
+  text?: string;
+  tool?: string;
+  state?: {
+    input?: {
+      filePath?: string;
+      role?: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
+}
 
 // OpenCode session storage
 const OPENCODE_STORAGE = join(process.env.HOME || "/root", ".local/share/opencode/storage");
@@ -71,16 +97,16 @@ function getOpenCodeSessions(): string[] {
 /**
  * Read message parts from OpenCode storage
  */
-function readMessageParts(msgId: string): any[] {
+function readMessageParts(msgId: string): MessagePart[] {
   const partDir = join(OPENCODE_PARTS, msgId);
   if (!existsSync(partDir)) return [];
 
-  const parts: any[] = [];
+  const parts: MessagePart[] = [];
   const partFiles = readdirSync(partDir);
 
   for (const partFile of partFiles) {
     try {
-      const part = JSON.parse(readFileSync(join(partDir, partFile), "utf-8"));
+      const part = JSON.parse(readFileSync(join(partDir, partFile), "utf-8")) as MessagePart;
       parts.push(part);
     } catch {}
   }
@@ -154,7 +180,7 @@ function extractLearnings(text: string): string[] {
 /**
  * Extract code changes from tool calls
  */
-function extractCodeChanges(parts: any[]): { file: string; type: "created" | "modified" }[] {
+function extractCodeChanges(parts: MessagePart[]): { file: string; type: "created" | "modified" }[] {
   const changes: { file: string; type: "created" | "modified" }[] = [];
 
   for (const part of parts) {
@@ -176,39 +202,43 @@ function extractCodeChanges(parts: any[]): { file: string; type: "created" | "mo
 /**
  * Get session events from our sessions.jsonl
  */
-function getSessionEvents(sessionId: string): any[] {
-  const events = readJsonl<any>(PATHS.sessions);
-  return events.filter((e: any) => e.session_id === sessionId);
+function getSessionEvents(sessionId: string): SessionEvent[] {
+  const events = readJsonl<SessionEvent>(PATHS.sessions);
+  return events.filter((e: SessionEvent) => e.session_id === sessionId);
 }
 
 /**
  * Get tasks completed during a session timeframe
  */
 function getTasksCompleted(startTime: Date, endTime: Date): string[] {
-  const tasks = readJson<any>(PATHS.tasks, { tasks: [] });
+  const tasks = readJson<TaskStore>(PATHS.tasks, { version: "1.0", tasks: [], completed_count: 0, last_updated: "" });
   
   return (tasks.tasks || [])
-    .filter((t: any) => {
+    .filter((t: Task) => {
       if (t.status !== "completed") return false;
       const completedAt = t.completed_at ? new Date(t.completed_at) : null;
       if (!completedAt) return false;
       return completedAt >= startTime && completedAt <= endTime;
     })
-    .map((t: any) => t.title);
+    .map((t: Task) => t.title);
 }
 
 /**
  * Get quality assessments during a session timeframe
  */
 function getQualityScores(startTime: Date, endTime: Date): { task: string; score: number }[] {
-  const quality = readJson<any>(PATHS.qualityAssessments, { assessments: [] });
+  const defaultQualityStore: QualityStore = { 
+    assessments: [], 
+    summary: { average_score: 0, trend: "stable", total_assessed: 0, last_updated: "" } 
+  };
+  const quality = readJson<QualityStore>(PATHS.qualityAssessments, defaultQualityStore);
   
   return (quality.assessments || [])
-    .filter((a: any) => {
+    .filter((a: QualityAssessment) => {
       const assessedAt = new Date(a.assessed_at);
       return assessedAt >= startTime && assessedAt <= endTime;
     })
-    .map((a: any) => ({
+    .map((a: QualityAssessment) => ({
       task: a.task_id,
       score: a.overall_score,
     }));
@@ -394,10 +424,10 @@ function saveSummaries(store: SummaryStore): void {
  * Feed learnings into knowledge base
  */
 function feedToKnowledgeBase(summary: SessionSummary): void {
-  const knowledge = readJson<any[]>(PATHS.knowledgeBase, []);
+  const knowledge = readJson<SessionKnowledge[]>(PATHS.knowledgeBase, []);
   
   // Find or create entry for this session
-  let entry = knowledge.find((k) => k.session_id === summary.session_id);
+  let entry = knowledge.find((k: SessionKnowledge) => k.session_id === summary.session_id);
   
   if (!entry) {
     entry = {
@@ -442,7 +472,15 @@ function feedToKnowledgeBase(summary: SessionSummary): void {
 // Command handlers
 async function handleSummarize(sessionId?: string): Promise<void> {
   const store = loadSummaries();
-  const state = readJson<any>(PATHS.state, { session_count: 0 });
+  const defaultState: SystemState = { 
+    session_count: 0, 
+    status: "", 
+    last_updated: "", 
+    achievements: [], 
+    active_tasks: [], 
+    total_tokens: 0 
+  };
+  const state = readJson<SystemState>(PATHS.state, defaultState);
   
   if (sessionId) {
     // Summarize specific session
@@ -621,7 +659,15 @@ async function handleSummarizeQuiet(sessionId?: string): Promise<void> {
   
   try {
     const store = loadSummaries();
-    const state = readJson<any>(PATHS.state, { session_count: 0 });
+    const defaultState: SystemState = { 
+      session_count: 0, 
+      status: "", 
+      last_updated: "", 
+      achievements: [], 
+      active_tasks: [], 
+      total_tokens: 0 
+    };
+    const state = readJson<SystemState>(PATHS.state, defaultState);
     
     const summary = await summarizeSession(sessionId, state.session_count || 1);
     

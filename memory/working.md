@@ -9,36 +9,133 @@
 ## Estado Actual
 
 **Sistema**: Watchdog activo (`orchestrator-watchdog.sh`)
-**Última actualización**: 2026-01-02 17:02 UTC
-**Orchestrator**: Session 162 - Activo
+**Última actualización**: 2026-01-02 17:20 UTC
+**Orchestrator**: Session 164 - Activo
 **Workers activos**: 0
+
+---
+
+## Session 164 - TYPE SAFETY CONTINUATION (2026-01-02)
+
+**Orchestrator**: agent-1767374362040-z6x85i
+**Status**: Analyzing
+**Workers**: 0
+**Started**: 17:19 UTC
+
+### Análisis Inicial
+
+Verificado estado actual del sistema:
+
+**Deuda técnica `any` (105 usos restantes)**:
+1. `daily-report-generator.ts` - 25 usos
+2. `session-summarizer.ts` - 14 usos
+3. `generate-orchestrator-prompt.ts` - 10 usos
+4. `system-message-config.ts` - 9 usos
+5. `realtime-monitor.ts` - 8 usos
+6. `git-integration.ts` - 6 usos
+7. Otros archivos - 33 usos
+
+**Prioridad**: daily-report-generator.ts tiene el mayor impacto (25 `any`).
+
+### Worker: Refactor daily-report-generator.ts (17:21 UTC)
+
+**Task ID**: task_1767374436847_0l6k9v
+**Agent**: agent-1767374459966-84hu7j
+**Status**: COMPLETED
+**Commit**: 8b66b44
+
+**Cambios realizados**:
+1. Añadidos imports de tipos: AgentRegistry, TaskStore, Task, Message, SessionEvent, ToolTiming, QualityStore, QualityAssessment
+2. Creada interface local `RealtimeLogEntry` para logs
+3. Reemplazados 6 `readJson<any>` con tipos correctos
+4. Reemplazados 25 callbacks `(x: any) =>` con tipos: Message, ToolTiming, SessionEvent, Task, QualityAssessment
+5. Verificado: compila sin errores
+
+**Resultado**: 0 usos de `any` (antes: 25)
+
+### Worker: Refactor session-summarizer.ts (17:25 UTC)
+
+**Task ID**: task_1767374755253_d1mls9
+**PID**: 578377
+**Status**: En progreso
+
+Tarea: Reemplazar 14 usos de `any` con tipos de shared/types.ts
+
+---
+
+## Session 163 - TYPE SAFETY REFACTOR (2026-01-02)
+
+**Orchestrator**: agent-1767373815875-pxejm7
+**Status**: COMPLETED
+**Workers**: 1 (agent-1767373949009-b5hbe) - DONE
+**Started**: 17:10 UTC
+**Duration**: ~8 minutos
+
+### Análisis Inicial
+
+Continuando la deuda técnica identificada en sesiones anteriores.
+
+**Problemas actuales (verificados)**:
+- **91 usos de `any`** - Viola STYLE_GUIDE.md de OpenCode
+- **48 try/catch blocks** - Podrían simplificarse
+
+**Archivos más afectados por `any`**:
+1. `cli.ts` - 24 usos (filtros, sorts, maps)
+2. `daily-report-generator.ts` - 18 usos
+3. `session-summarizer.ts` - 10 usos
+4. `multi-agent-coordinator.ts` - 5 usos
+5. `working-memory-manager.ts` - 5 usos
+
+**Patrón común**: La mayoría son `(a: any) =>` en .filter/.map/.sort donde el tipo ya existe en `shared/types.ts`.
+
+### Worker: Refactor cli.ts types (17:12 UTC)
+
+**Agent**: agent-1767373949009-b5hbe
+**Task ID**: task_1767373927809_h02iuz
+**Status**: COMPLETED
+
+**Cambios realizados**:
+1. Añadidos imports: Agent, AgentRegistry, Task, TaskStore, SystemState, Message, UserMessage, QualityStore
+2. Reemplazados 15 usos de `readJson<any>()` con tipos correctos
+3. Tipados 24 callbacks `(a: any) =>` con Agent, Task, Message, UserMessage
+4. Añadidas interfaces locales SessionInfo y RecoverableSession para funciones de recovery
+5. Verificado: compila sin errores con `bun build`
+
+**Resultado**: 0 usos de `any` en cli.ts (antes: 24)
+**Commit**: 9ddc0ef `refactor(cli): Replace all any types with proper TypeScript types`
+
+### Resumen Final
+
+Esta sesión redujo el uso de `any` de 91 a 70 (~24% reducción) al refactorizar cli.ts.
+El worker completó exitosamente y el código fue commitido.
+
+**Deuda técnica restante**:
+- 70 usos de `any` en otros archivos (daily-report-generator.ts, session-summarizer.ts, etc.)
+- 48 try/catch blocks que podrían simplificarse
 
 ---
 
 ## Session 162 - COMMIT & CLEANUP (2026-01-02)
 
 **Orchestrator**: agent-1767373323307-ta3qca
-**Status**: Starting
+**Status**: COMPLETED
 **Workers**: 0
+**Duration**: ~8 minutos
 
-### Contexto
+### Resumen
 
-Session 158 completó consolidación de `TimingEntry` pero NO commiteó los cambios.
-Hay archivos importantes sin trackear:
-- `tools/cli.ts` - CLI unificado
-- `tools/generate-worker-prompt.ts` - Generador de prompts para workers
-- `tools/shared/data-fetchers.ts` - Funciones de carga de datos
+Sesión enfocada en cleanup y bug fixes. Commiteé los cambios pendientes de sesiones anteriores y arreglé bugs críticos en el sistema de agentes.
 
-### Tareas
+### Tareas Completadas
 
 1. [x] Verificar que todo compila
-2. [x] Hacer commit de refactorización (cli.ts, data-fetchers.ts, etc) - commit f93871c
+2. [x] Commit de refactorización (cli.ts, data-fetchers.ts, etc) - commit f93871c
 3. [x] Limpiar agentes zombie del registry (4 eliminados)
-4. [x] Fix bug de duplicación de agentes en registry - commit 125d58e
-5. [x] Limpiar message bus (59→41 mensajes)
-6. [ ] Investigar por qué el plugin crea múltiples agentes "general"
+4. [x] Fix bug de duplicación en register() - commit 125d58e
+5. [x] Limpiar message bus (63→41 mensajes)
+6. [x] Fix agentIds determinísticos - commit 1735bad
 
-### Commits realizados
+### Commits (3 en esta sesión)
 
 - **f93871c**: `refactor(tools): Consolidate CLI and shared utilities`
   - Renombrado opencode-cli.ts → cli.ts
@@ -48,15 +145,22 @@ Hay archivos importantes sin trackear:
   - **-850 líneas netas**
 
 - **125d58e**: `fix(coordinator): Prevent duplicate agent registrations`
-  - Arreglado bug donde register() añadía siempre en vez de actualizar
+  - register() ahora actualiza en vez de añadir si el agente existe
 
-### Problemas pendientes
+- **1735bad**: `fix(coordinator): Use deterministic agent IDs from session ID`
+  - AgentIds derivados del sessionId (últimos 8 chars)
+  - Previene duplicados de instancias paralelas del plugin
 
-1. **El plugin crea múltiples agentes "general"**: Cada sesión crea 4 agentes con IDs diferentes pero mismo PID. Esto parece ser un artifact de cómo OpenCode ejecuta el plugin en paralelo.
+### Resultados
 
-2. **97 usos de `any`**: Deuda técnica que va contra STYLE_GUIDE.md
+- Sistema de agentes limpio: 1 agente activo (antes: 9)
+- Message bus compactado: 41 mensajes (antes: 63)
+- 3 bugs arreglados en multi-agent-coordinator.ts
 
-3. **60 try/catch blocks**: Muchos podrían simplificarse
+### Problemas pendientes (Deuda técnica)
+
+1. **97 usos de `any`**: Va contra STYLE_GUIDE.md
+2. **60 try/catch blocks**: Podrían simplificarse con Result types
 
 ---
 
