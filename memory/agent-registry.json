@@ -5,13 +5,13 @@
       "agent_id": "agent-1767348647750-8jx9u",
       "session_id": "session-1767348647750",
       "started_at": "2026-01-02T10:10:47.750Z",
-      "last_heartbeat": "2026-01-02T10:19:18.278Z",
+      "last_heartbeat": "2026-01-02T10:23:48.315Z",
       "status": "active",
       "assigned_role": "orchestrator",
       "pid": 419760,
       "current_task": "Orchestrator resumed - reviewing system state"
     }
   ],
-  "last_updated": "2026-01-02T10:19:18.278Z",
-  "lock_version": 131
+  "last_updated": "2026-01-02T10:23:48.315Z",
+  "lock_version": 135
 }

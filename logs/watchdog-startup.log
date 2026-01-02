@@ -1,77 +1,8 @@
+[91m[1m| [0m[90m Bash     [0mStage test file
+A  tools/shared/shared.test.ts
 
 
-
-
-[44m[37m[1m  GIT INTEGRATION  [0m
-
-[36mUsage:[0m
-  bun tools/git-integration.ts <command> [args]
-[91m[1m| [0m[90m Bash     [0mTest git-integration help [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
  [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
-[Memory] Context injected into system prompt
-[Memory] Context injected into system prompt
-[Memory] Context injected into system prompt
-[Memory] Context injected into system prompt
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
-All tools working. Let me check for any git changes from the migration:
- [Memory] Tool executed: git_diff {"tool":"git_diff","call_id":"toolu_01A1XSXkmZuKkpcoRNRp5QYX","duration_ms":108,"output_length":5946,"success":true}
- [Memory] Tool executed: git_diff {"tool":"git_diff","call_id":"toolu_01A1XSXkmZuKkpcoRNRp5QYX","duration_ms":108,"output_length":5946,"success":true}
- [Memory] Tool executed: git_diff {"tool":"git_diff","call_id":"toolu_01A1XSXkmZuKkpcoRNRp5QYX","duration_ms":109,"output_length":5946,"success":true}
- [Memory] Tool executed: git_diff {"tool":"git_diff","call_id":"toolu_01A1XSXkmZuKkpcoRNRp5QYX","duration_ms":109,"output_length":5946,"success":true}
-[94m[1m| [0m[90m git_diff  [0mUnknown
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
-[Memory] Context injected into system prompt
-[Memory] Context injected into system prompt
-[Memory] Context injected into system prompt
-[Memory] Context injected into system prompt
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
-[MultiAgent] 2026-01-02T10:19:18.281Z [INFO] [agent-1767348647750-8jx9u] Message sent: heartbeat (broadcast)
-I can see the tool migrations were made. Let me complete the task and update todos:
- [Memory] Updated metrics for agent agent-1767348647750-8jx9u {"duration_ms":378872,"duration_formatted":"6 min"}
- [Memory] Broadcast task_completed: task_1767348773210_ezwle4 
- [Memory] Task updated: task_1767348773210_ezwle4 {"status":"completed"}
- [Memory] Tool executed: task_update {"tool":"task_update","call_id":"toolu_01Tw1728DBYmiugi3sdk6MMz","duration_ms":8,"output_length":180,"success":true}
- [Memory] Tool executed: task_update {"tool":"task_update","call_id":"toolu_01Tw1728DBYmiugi3sdk6MMz","duration_ms":9,"output_length":180,"success":true}
- [Memory] Tool executed: task_update {"tool":"task_update","call_id":"toolu_01Tw1728DBYmiugi3sdk6MMz","duration_ms":11,"output_length":180,"success":true}
- [Memory] Tool executed: task_update {"tool":"task_update","call_id":"toolu_01Tw1728DBYmiugi3sdk6MMz","duration_ms":11,"output_length":180,"success":true}
-[94m[1m| [0m[90m task_update  [0m{"task_id":"task_1767348773210_ezwle4","status":"completed","notes":"Migrated all 7 CLI tools: task-manager.ts, daily-report-generator.ts, terminal-dashboard.ts, agent-performance-profiler.ts, git-integration.ts, message-bus-manager.ts, working-memory-manager.ts. Total ~239 lines of duplicated code removed. All tools tested and working."}
- [Memory] Quality assessed: task_1767348773210_ezwle4 {"score":8.9}
- [Memory] Updated quality metrics for agent agent-1767348647750-8jx9u 
- [Memory] Tool executed: quality_assess {"tool":"quality_assess","call_id":"toolu_01QD5aQjBEd9CYaNtPHLbwjJ","duration_ms":14,"output_length":513,"success":true}
- [Memory] Tool executed: quality_assess {"tool":"quality_assess","call_id":"toolu_01QD5aQjBEd9CYaNtPHLbwjJ","duration_ms":15,"output_length":513,"success":true}
- [Memory] Tool executed: quality_assess {"tool":"quality_assess","call_id":"toolu_01QD5aQjBEd9CYaNtPHLbwjJ","duration_ms":17,"output_length":513,"success":true}
- [Memory] Tool executed: quality_assess {"tool":"quality_assess","call_id":"toolu_01QD5aQjBEd9CYaNtPHLbwjJ","duration_ms":18,"output_length":513,"success":true}
-
-[94m[1m| [0m[90m quality_assess  [0m{"task_id":"task_1767348773210_ezwle4","completeness":10,"code_quality":9,"documentation":7,"efficiency":9,"impact":8,"lessons_learned":"Worker agents can efficiently handle repetitive migration tasks. The shared utilities pattern established in session 114 made migrations straightforward - just replace inline functions with imports."} [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
-[Memory] Context injected into system prompt
-[Memory] Context injected into system prompt
-[Memory] Context injected into system prompt
-[Memory] Context injected into system prompt
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
- [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
-Now let me commit the migration changes:
- [Memory] Tool executed: bash {"tool":"bash","call_id":"toolu_01PDafBkzwfnshbAoTVC2Wp1","duration_ms":39,"output_length":0,"success":true}
- [Memory] Tool executed: bash {"tool":"bash","call_id":"toolu_01PDafBkzwfnshbAoTVC2Wp1","duration_ms":40,"output_length":0,"success":true}
- [Memory] Tool executed: bash {"tool":"bash","call_id":"toolu_01PDafBkzwfnshbAoTVC2Wp1","duration_ms":40,"output_length":0,"success":true}
- [Memory] Tool executed: bash {"tool":"bash","call_id":"toolu_01PDafBkzwfnshbAoTVC2Wp1","duration_ms":40,"output_length":0,"success":true}
-
-[91m[1m| [0m[90m Bash     [0mStage migrated tools [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
  [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
  [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
  [Memory] Event: session.status {"properties":{"sessionID":"ses_481cfe16dffeGHh1OFh9aspb0N","status":{"type":"busy"}}}
