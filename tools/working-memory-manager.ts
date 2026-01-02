@@ -73,6 +73,18 @@ interface MemoryHealth {
   recommendations: string[];
 }
 
+interface SessionValueData {
+  duration?: number;
+  tool_calls?: number;
+  achievements?: string[];
+  timestamp: string;
+}
+
+interface SessionWithScore extends SessionValueData {
+  _score: number;
+  [key: string]: unknown;
+}
+
 // ============================================================================
 // Token & Value Estimation (from smart-memory-manager)
 // ============================================================================
@@ -87,7 +99,7 @@ function estimateTokens(text: string): number {
 /**
  * Calculate value score for a session (0-100)
  */
-function calculateValueScore(session: any): number {
+function calculateValueScore(session: SessionValueData): number {
   let score = 0;
   
   // Base score on duration (longer sessions = more value)
@@ -270,11 +282,11 @@ function compressKnowledgeBase(): { before: number; after: number } {
     // Score and filter sessions by value
     if (kb.sessions && Array.isArray(kb.sessions)) {
       kb.sessions = kb.sessions
-        .map((session: any) => ({ ...session, _score: calculateValueScore(session) }))
-        .filter((s: any) => s._score >= CONFIG.minValueScore)
-        .sort((a: any, b: any) => b._score - a._score)
+        .map((session: SessionValueData) => ({ ...session, _score: calculateValueScore(session) }) as SessionWithScore)
+        .filter((s: SessionWithScore) => s._score >= CONFIG.minValueScore)
+        .sort((a: SessionWithScore, b: SessionWithScore) => b._score - a._score)
         .slice(0, CONFIG.maxActiveKBSessions)
-        .map(({ _score, ...session }: any) => session);
+        .map(({ _score, ...session }: SessionWithScore) => session);
     }
     
     // Deduplicate patterns

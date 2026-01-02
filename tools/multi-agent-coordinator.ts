@@ -35,13 +35,70 @@ interface AgentRegistry {
   lock_version: number;
 }
 
+// Payload types for different message types
+interface BroadcastPayload {
+  status: string;
+  details?: Record<string, unknown>;
+  timestamp: string;
+}
+
+interface HeartbeatPayload {
+  status: Agent["status"];
+}
+
+interface TaskClaimPayload {
+  task_id: string;
+  claimed_by: string;
+  claimed_at: string;
+}
+
+interface TaskCompletePayload {
+  task_id: string;
+  completed_by: string;
+  completed_at: string;
+  result?: Record<string, unknown>;
+}
+
+interface RequestHelpPayload {
+  task: string;
+  details?: Record<string, unknown>;
+  requester: string;
+}
+
+interface TaskAvailablePayload {
+  task_id: string;
+  title: string;
+  priority?: string;
+}
+
+interface FileLockPayload {
+  file_path: string;
+  action: "lock" | "unlock";
+}
+
+interface DirectPayload {
+  message: string;
+  data?: Record<string, unknown>;
+}
+
+type MessagePayload = 
+  | BroadcastPayload 
+  | HeartbeatPayload 
+  | TaskClaimPayload 
+  | TaskCompletePayload 
+  | RequestHelpPayload 
+  | TaskAvailablePayload 
+  | FileLockPayload 
+  | DirectPayload
+  | Record<string, unknown>;
+
 interface Message {
   message_id: string;
   from_agent: string;
   to_agent?: string; // If null, broadcast to all
   timestamp: string;
   type: "broadcast" | "direct" | "task_claim" | "task_complete" | "heartbeat" | "request_help" | "file_lock" | "task_available";
-  payload: any;
+  payload: MessagePayload;
   read_by?: string[];
 }
 
@@ -224,7 +281,7 @@ class MultiAgentCoordinator {
    */
   sendMessage(options: {
     type: Message["type"];
-    payload: any;
+    payload: MessagePayload;
     toAgent?: string;
   }): void {
     const message: Message = {
@@ -388,7 +445,7 @@ class MultiAgentCoordinator {
   /**
    * Broadcast current status to all agents
    */
-  broadcastStatus(status: string, details?: any): void {
+  broadcastStatus(status: string, details?: Record<string, unknown>): void {
     this.sendMessage({
       type: "broadcast",
       payload: {
@@ -402,7 +459,7 @@ class MultiAgentCoordinator {
   /**
    * Request help from other agents
    */
-  requestHelp(task: string, details?: any): void {
+  requestHelp(task: string, details?: Record<string, unknown>): void {
     this.sendMessage({
       type: "request_help",
       payload: {

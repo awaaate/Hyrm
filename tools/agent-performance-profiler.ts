@@ -94,6 +94,44 @@ interface ProfilerCache {
   }[];
 }
 
+// Session event type for JSONL parsing
+interface SessionEvent {
+  type: string;
+  timestamp?: string;
+  tool?: string;
+  duration_ms?: number;
+  error?: {
+    name?: string;
+    message?: string;
+    data?: {
+      message?: string;
+    };
+  };
+}
+
+// Performance metrics stored in agent-performance-metrics.json
+interface PerformanceMetricsFile {
+  agents: Record<string, AgentPerformanceData>;
+}
+
+interface AgentPerformanceData {
+  tasks_completed?: number;
+  tasks_claimed?: number;
+  avg_duration_ms?: number;
+  avg_quality?: number;
+  first_seen?: string;
+  last_activity?: string;
+}
+
+// Message bus entry type
+interface MessageBusEntry {
+  from?: string;
+  type?: string;
+  payload?: {
+    tool?: string;
+  };
+}
+
 // Helper functions
 function formatPercent(value: number): string {
   return `${(value * 100).toFixed(1)}%`;
@@ -161,7 +199,7 @@ function analyzeToolExecutions(): Record<string, ToolExecution> {
   }
   
   // Also analyze our internal session log
-  const sessionEvents = readJsonl<any>(PATHS.sessions);
+  const sessionEvents = readJsonl<SessionEvent>(PATHS.sessions);
   for (const event of sessionEvents) {
     if (event.type === "tool_call" && event.tool) {
       const toolName = event.tool;
@@ -205,10 +243,10 @@ function analyzeAgentProfiles(): Record<string, AgentProfile> {
   const profiles: Record<string, AgentProfile> = {};
   
   // Load existing performance metrics
-  const perfMetrics = readJson<any>(PATHS.agentPerformanceMetrics, { agents: {} });
+  const perfMetrics = readJson<PerformanceMetricsFile>(PATHS.agentPerformanceMetrics, { agents: {} });
   
   for (const [agentId, data] of Object.entries(perfMetrics.agents || {})) {
-    const agent = data as any;
+    const agent = data;
     profiles[agentId] = {
       agentId,
       tasksCompleted: agent.tasks_completed || 0,

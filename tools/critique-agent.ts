@@ -71,6 +71,73 @@ interface TaskData {
   notes?: string;
 }
 
+// Quality assessment types
+interface QualityDimension {
+  name: string;
+  score: number;
+  weight: number;
+  notes?: string;
+}
+
+interface QualityAssessment {
+  task_id: string;
+  task_title: string;
+  assessed_at: string;
+  assessed_by: string;
+  dimensions: QualityDimension[];
+  overall_score: number;
+  strengths?: string[];
+  improvements?: string[];
+  lessons_learned?: string;
+  metadata?: {
+    duration_minutes?: number;
+  };
+}
+
+interface QualityAssessmentsData {
+  version?: string;
+  assessments: QualityAssessment[];
+}
+
+// Knowledge base types
+interface KnowledgeEntry {
+  session_id?: string;
+  timestamp?: number;
+  messages?: number;
+  decisions?: string[];
+  discoveries?: string[];
+  code_created?: string[];
+  problems_solved?: string[];
+  key_insights?: string[];
+  techniques?: string[];
+  solutions?: string[];
+}
+
+interface KnowledgeBaseData {
+  entries?: KnowledgeEntry[];
+}
+
+// State types
+interface StateData {
+  version?: string;
+  session_count?: number;
+  status?: string;
+  active_tasks?: string[];
+  recent_achievements?: string[];
+  last_session?: string;
+  current_session_id?: string;
+  last_updated?: string;
+  sessions_metadata?: Record<string, {
+    tokens?: number;
+    messages?: number;
+    duration_ms?: number;
+    achievements?: string[];
+  }>;
+  total_tokens_used?: number;
+}
+
+type IssueSeverity = "info" | "warning" | "error" | "critical";
+
 // Utility functions
 function generateId(): string {
   return `critique_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
@@ -132,7 +199,7 @@ function analyzeCode(content: string, filePath: string): CritiqueIssue[] {
         const lineNum = content.substring(0, match.index).split("\n").length;
         issues.push({
           category,
-          severity: severity as any,
+          severity: severity as IssueSeverity,
           description: issue,
           location: `Line ${lineNum}`,
           suggestion: getSuggestionForIssue(issue),

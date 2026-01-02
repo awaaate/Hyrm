@@ -1811,32 +1811,40 @@
       "title": "Refactor realtime-monitor.ts types",
       "description": "Replace 8 uses of `any` in realtime-monitor.ts with proper types.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-02T17:33:16.648Z",
-      "updated_at": "2026-01-02T17:33:16.648Z",
+      "updated_at": "2026-01-02T17:36:23.842Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
         "type-safety"
       ],
-      "complexity": "simple"
+      "complexity": "simple",
+      "completed_at": "2026-01-02T17:36:23.840Z",
+      "notes": [
+        "[2026-01-02T17:36:23.842Z] File already had 0 any types - no changes needed"
+      ]
     },
     {
       "id": "task_1767375197450_wmnhv7",
       "title": "Refactor git-integration.ts types",
       "description": "Replace 6 uses of `any` in git-integration.ts with proper types.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-02T17:33:17.450Z",
-      "updated_at": "2026-01-02T17:33:17.450Z",
+      "updated_at": "2026-01-02T17:36:24.683Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
         "type-safety"
       ],
-      "complexity": "simple"
+      "complexity": "simple",
+      "completed_at": "2026-01-02T17:36:24.682Z",
+      "notes": [
+        "[2026-01-02T17:36:24.683Z] Worker completed. Commit: 1c1644c"
+      ]
     }
   ],
-  "completed_count": 84,
-  "last_updated": "2026-01-02T17:33:17.450Z"
+  "completed_count": 86,
+  "last_updated": "2026-01-02T17:36:24.683Z"
 }

@@ -1,12 +1,8 @@
+4 workers spawned in parallel
 
 
 
-Worker spawned
-[91m[1m| [0m[90m Bash     [0mSpawn worker for git-integration[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Detected agent role: orchestrator 
+[91m[1m| [0m[90m Bash     [0mSpawn 4 workers in parallel[*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
@@ -14,19 +10,11 @@ Worker spawned
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01MBLWJaXhAa4zqJiu74s9y6","duration_ms":1,"output_length":789,"success":true}
-[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01MBLWJaXhAa4zqJiu74s9y6","duration_ms":2,"output_length":789,"success":true}
-[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01MBLWJaXhAa4zqJiu74s9y6","duration_ms":3,"output_length":789,"success":true}
-[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01MBLWJaXhAa4zqJiu74s9y6","duration_ms":3,"output_length":789,"success":true}
+[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01VnZnMop5UGVyjmZsaL993D","duration_ms":2,"output_length":641,"success":true}
+[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01VnZnMop5UGVyjmZsaL993D","duration_ms":3,"output_length":641,"success":true}
+[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01VnZnMop5UGVyjmZsaL993D","duration_ms":6,"output_length":641,"success":true}
+[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01VnZnMop5UGVyjmZsaL993D","duration_ms":6,"output_length":641,"success":true}
 [94m[1m| [0m[90m agent_status  [0mUnknown
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
@@ -35,9 +23,4 @@ Worker spawned
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-[*] [Memory] Event: session.status {"properties":{"sessionID":"ses_480477fbeffeu2ql713qncPjrj","status":{"type":"busy"}}}
-5 agentes activos. Algunos de los workers anteriores siguen activos (probablemente terminaron pero no salieron). Voy a monitorear:
-[MultiAgent] 2026-01-02T17:34:22.092Z [INFO] [agent-1767374362040-z6x85i] Message sent: heartbeat (broadcast)
+4 agentes. Los nuevos workers se están iniciando. Voy a esperar:
