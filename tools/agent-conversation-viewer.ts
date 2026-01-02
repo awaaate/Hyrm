@@ -33,7 +33,7 @@ import {
   // Paths
   PATHS,
 } from "./shared";
-import type { ToolTiming } from "./shared/types";
+import type { ToolTiming, JsonRecord } from "./shared/types";
 
 // Types
 interface AgentData {
@@ -52,7 +52,7 @@ interface MessageData {
   to_agent?: string;
   type: string;
   timestamp: string;
-  payload: any;
+  payload: JsonRecord;
 }
 
 // TimingEntry is now imported as ToolTiming from shared/types.ts
@@ -63,7 +63,7 @@ interface LogEntry {
   session?: string;
   level: string;
   message: string;
-  data?: any;
+  data?: JsonRecord;
 }
 
 // Helper functions
@@ -200,7 +200,7 @@ function showAgentConversation(agentId: string): void {
   interface Activity {
     type: "message" | "tool" | "log";
     timestamp: string;
-    data: any;
+    data: MessageData | TimingEntry | LogEntry;
   }
 
   const activities: Activity[] = [
