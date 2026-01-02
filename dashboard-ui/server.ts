@@ -28,6 +28,7 @@ const PATHS = {
   profilerCache: join(MEMORY_DIR, ".profiler-cache.json"),
   performanceMetrics: join(MEMORY_DIR, "agent-performance-metrics.json"),
   sessionsLog: join(MEMORY_DIR, "sessions.jsonl"),
+  userMessages: join(MEMORY_DIR, "user-messages.jsonl"),
 };
 
 const OPENCODE_STORAGE = join(require("os").homedir(), ".local", "share", "opencode", "storage");
@@ -547,6 +548,35 @@ function getOpenCodeSessionMessages(sessionId: string): { messages: any[] } {
   }
 }
 
+// Get user messages
+function getUserMessages(): { messages: any[], unread_count: number } {
+  try {
+    if (!existsSync(PATHS.userMessages)) return { messages: [], unread_count: 0 };
+    const content = readFileSync(PATHS.userMessages, "utf-8");
+    const messages = content.split("\n").filter(Boolean).map(line => {
+      try { return JSON.parse(line); } catch { return null; }
+    }).filter(Boolean);
+    const unread = messages.filter(m => !m.read).length;
+    return { messages: messages.reverse(), unread_count: unread };
+  } catch {
+    return { messages: [], unread_count: 0 };
+  }
+}
+
+// Get message bus messages
+function getMessageBus(): { messages: any[] } {
+  try {
+    if (!existsSync(PATHS.messageBus)) return { messages: [] };
+    const content = readFileSync(PATHS.messageBus, "utf-8");
+    const messages = content.split("\n").filter(Boolean).slice(-100).map(line => {
+      try { return JSON.parse(line); } catch { return null; }
+    }).filter(Boolean);
+    return { messages: messages.reverse() };
+  } catch {
+    return { messages: [] };
+  }
+}
+
 // Get recent events from message bus (last 50)
 function getRecentEvents(): any {
   try {
@@ -783,6 +813,11 @@ function setupWatchers() {
     watch(PATHS.messageBus, debounce(checkForNewMessages, 100));
   }
 
+  // Watch user messages
+  if (existsSync(PATHS.userMessages)) {
+    watch(PATHS.userMessages, debounce(() => broadcast("user_messages", getUserMessages()), 100));
+  }
+
   // Initial message bus line count
   try {
     if (existsSync(PATHS.messageBus)) {
@@ -844,7 +879,7 @@ function checkForNewQualityAssessments() {
 const server = Bun.serve({
   port: PORT,
   
-  fetch(req, server) {
+  async fetch(req, server) {
     const url = new URL(req.url);
     
     // Handle WebSocket upgrade
@@ -859,7 +894,7 @@ const server = Bun.serve({
     // CORS headers
     const headers = {
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
       "Content-Type": "application/json",
     };
@@ -868,6 +903,155 @@ const server = Bun.serve({
       return new Response(null, { headers });
     }
     
+    // POST /api/user-messages - Send message to agents
+    if (req.method === "POST" && url.pathname === "/api/user-messages") {
+      try {
+        const body = await req.json();
+        if (!body.message) {
+          return new Response(JSON.stringify({ error: "Message is required" }), { status: 400, headers });
+        }
+        const msg = {
+          id: `umsg_${Date.now()}_${Math.random().toString(36).slice(2,8)}`,
+          from: "dashboard",
+          message: body.message,
+          timestamp: new Date().toISOString(),
+          read: false,
+          priority: body.priority || "normal",
+          tags: body.tags || []
+        };
+        const { appendFileSync } = await import("fs");
+        appendFileSync(PATHS.userMessages, JSON.stringify(msg) + "\n");
+        broadcast("user_message_sent", { message: msg });
+        return new Response(JSON.stringify({ success: true, message: msg }), { headers });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: "Failed to send message" }), { status: 500, headers });
+      }
+    }
+
+    // POST /api/tasks - Create new task
+    if (req.method === "POST" && url.pathname === "/api/tasks") {
+      try {
+        const body = await req.json();
+        if (!body.title) {
+          return new Response(JSON.stringify({ error: "Title is required" }), { status: 400, headers });
+        }
+        const store = readJsonFile(PATHS.tasks) || { tasks: [], completed_count: 0 };
+        const task = {
+          id: `task_${Date.now()}_${Math.random().toString(36).slice(2,8)}`,
+          title: body.title,
+          description: body.description || "",
+          priority: body.priority || "medium",
+          status: "pending",
+          tags: body.tags || [],
+          complexity: body.complexity,
+          estimated_hours: body.estimated_hours,
+          created_at: new Date().toISOString(),
+          created_by: "dashboard",
+          notes: []
+        };
+        store.tasks.push(task);
+        const { writeFileSync } = await import("fs");
+        writeFileSync(PATHS.tasks, JSON.stringify(store, null, 2));
+        broadcast("tasks", getTasks());
+        if (task.priority === "critical" || task.priority === "high") {
+          broadcast("task_available", { task_id: task.id, title: task.title, priority: task.priority });
+        }
+        return new Response(JSON.stringify({ success: true, task }), { headers });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: "Failed to create task" }), { status: 500, headers });
+      }
+    }
+
+    // PATCH /api/tasks/:id - Update task
+    if (req.method === "PATCH" && url.pathname.startsWith("/api/tasks/")) {
+      try {
+        const taskId = url.pathname.replace("/api/tasks/", "");
+        const body = await req.json();
+        const store = readJsonFile(PATHS.tasks) || { tasks: [], completed_count: 0 };
+        const taskIndex = store.tasks.findIndex((t: any) => t.id === taskId);
+        if (taskIndex === -1) {
+          return new Response(JSON.stringify({ error: "Task not found" }), { status: 404, headers });
+        }
+        const task = store.tasks[taskIndex];
+        if (body.status) {
+          const oldStatus = task.status;
+          task.status = body.status;
+          if (body.status === "completed" && oldStatus !== "completed") {
+            store.completed_count = (store.completed_count || 0) + 1;
+            task.completed_at = new Date().toISOString();
+            broadcast("task_completed", { task_id: task.id, title: task.title });
+          }
+        }
+        if (body.notes) {
+          task.notes = task.notes || [];
+          task.notes.push({ text: body.notes, timestamp: new Date().toISOString() });
+        }
+        if (body.assigned_to !== undefined) {
+          task.assigned_to = body.assigned_to;
+        }
+        task.updated_at = new Date().toISOString();
+        const { writeFileSync } = await import("fs");
+        writeFileSync(PATHS.tasks, JSON.stringify(store, null, 2));
+        broadcast("tasks", getTasks());
+        return new Response(JSON.stringify({ success: true, task }), { headers });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: "Failed to update task" }), { status: 500, headers });
+      }
+    }
+
+    // DELETE /api/tasks/:id - Cancel task
+    if (req.method === "DELETE" && url.pathname.startsWith("/api/tasks/")) {
+      try {
+        const taskId = url.pathname.replace("/api/tasks/", "");
+        const store = readJsonFile(PATHS.tasks) || { tasks: [], completed_count: 0 };
+        const taskIndex = store.tasks.findIndex((t: any) => t.id === taskId);
+        if (taskIndex === -1) {
+          return new Response(JSON.stringify({ error: "Task not found" }), { status: 404, headers });
+        }
+        store.tasks[taskIndex].status = "cancelled";
+        store.tasks[taskIndex].cancelled_at = new Date().toISOString();
+        store.tasks[taskIndex].notes = store.tasks[taskIndex].notes || [];
+        store.tasks[taskIndex].notes.push({ text: "Cancelled from dashboard", timestamp: new Date().toISOString() });
+        const { writeFileSync } = await import("fs");
+        writeFileSync(PATHS.tasks, JSON.stringify(store, null, 2));
+        broadcast("tasks", getTasks());
+        return new Response(JSON.stringify({ success: true, task_id: taskId }), { headers });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: "Failed to cancel task" }), { status: 500, headers });
+      }
+    }
+
+    // POST /api/user-messages/:id/mark-read
+    if (req.method === "POST" && url.pathname.match(/^\/api\/user-messages\/[^/]+\/mark-read$/)) {
+      try {
+        const messageId = url.pathname.replace("/api/user-messages/", "").replace("/mark-read", "");
+        if (!existsSync(PATHS.userMessages)) {
+          return new Response(JSON.stringify({ error: "No messages found" }), { status: 404, headers });
+        }
+        const content = readFileSync(PATHS.userMessages, "utf-8");
+        const lines = content.split("\n").filter(Boolean);
+        const updatedLines = lines.map(line => {
+          try {
+            const msg = JSON.parse(line);
+            if (msg.id === messageId) {
+              msg.read = true;
+              msg.read_at = new Date().toISOString();
+              msg.read_by = "dashboard";
+            }
+            return JSON.stringify(msg);
+          } catch {
+            return line;
+          }
+        });
+        const { writeFileSync } = await import("fs");
+        writeFileSync(PATHS.userMessages, updatedLines.join("\n") + "\n");
+        broadcast("user_messages", getUserMessages());
+        return new Response(JSON.stringify({ success: true }), { headers });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: "Failed to mark as read" }), { status: 500, headers });
+      }
+    }
+
     // API routes
     switch (url.pathname) {
       case "/api/stats":
@@ -888,6 +1072,10 @@ const server = Bun.serve({
         return new Response(JSON.stringify(getPerformance()), { headers });
       case "/api/opencode/sessions":
         return new Response(JSON.stringify(getOpenCodeSessions()), { headers });
+      case "/api/user-messages":
+        return new Response(JSON.stringify(getUserMessages()), { headers });
+      case "/api/messages":
+        return new Response(JSON.stringify(getMessageBus()), { headers });
       default:
         // Handle dynamic routes for session messages
         if (url.pathname.startsWith("/api/opencode/sessions/") && url.pathname.endsWith("/messages")) {
@@ -914,6 +1102,8 @@ const server = Bun.serve({
       ws.send(JSON.stringify({ type: "quality", data: getQuality() }));
       ws.send(JSON.stringify({ type: "analytics", data: getAnalytics() }));
       ws.send(JSON.stringify({ type: "performance", data: getPerformance() }));
+      ws.send(JSON.stringify({ type: "user_messages", data: getUserMessages() }));
+      ws.send(JSON.stringify({ type: "agent_messages", data: getMessageBus() }));
     },
     
     message(ws, message) {

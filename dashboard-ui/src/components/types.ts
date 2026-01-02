@@ -165,3 +165,51 @@ export interface OpenCodeMessage {
   } | null;
   finish: string | null;
 }
+
+// User message from dashboard to agents
+export interface UserMessage {
+  id: string;
+  from: string;
+  message: string;
+  timestamp: string;
+  read: boolean;
+  read_at?: string;
+  read_by?: string;
+  priority: 'normal' | 'urgent';
+  tags?: string[];
+}
+
+// Message from agent message bus
+export interface MessageBusMessage {
+  message_id: string;
+  from_agent: string;
+  timestamp: string;
+  type: 'broadcast' | 'direct' | 'task_claim' | 'task_complete' | 'task_available' | 'request_help' | 'heartbeat';
+  payload: Record<string, unknown>;
+  to_agent?: string;
+  read_by?: string[];
+}
+
+// Request to send a message
+export interface SendMessageRequest {
+  message: string;
+  priority?: 'normal' | 'urgent';
+  tags?: string[];
+}
+
+// Request to create a task
+export interface CreateTaskRequest {
+  title: string;
+  description?: string;
+  priority?: 'critical' | 'high' | 'medium' | 'low';
+  tags?: string[];
+  complexity?: 'trivial' | 'simple' | 'moderate' | 'complex' | 'epic';
+  estimated_hours?: number;
+}
+
+// Request to update a task
+export interface UpdateTaskRequest {
+  status?: 'pending' | 'in_progress' | 'completed' | 'blocked' | 'cancelled';
+  notes?: string;
+  assigned_to?: string;
+}
