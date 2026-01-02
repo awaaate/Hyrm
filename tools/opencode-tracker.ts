@@ -80,7 +80,7 @@ function truncate(str: string, len: number): string {
   return sharedTruncate(str, len);
 }
 
-function formatJsonCompact(obj: any, maxLen: number = 200): string {
+function formatJsonCompact(obj: unknown, maxLen: number = 200): string {
   if (obj === null || obj === undefined) return c.dim + "null" + c.reset;
   if (typeof obj === "string") return truncate(obj.replace(/\n/g, "\\n"), maxLen);
   try {
