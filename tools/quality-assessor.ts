@@ -270,7 +270,7 @@ class QualityAssessor {
     
     try {
       const tasksData = JSON.parse(fs.readFileSync(this.tasksPath, 'utf-8'));
-      const task = tasksData.tasks?.find((t: any) => t.id === taskId);
+      const task = tasksData.tasks?.find((t: Task) => t.id === taskId);
       
       if (task) {
         task.quality_score = Math.round(score * 10) / 10;
