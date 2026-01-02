@@ -23,6 +23,7 @@
 
 import { appendFileSync } from "fs";
 import { readJson, writeJson, c, formatDuration, PATHS, CONFIG, getMemoryPath } from "./shared";
+import type { AgentRegistry } from "./shared/types";
 
 // File paths using shared PATHS
 const REGISTRY_PATH = PATHS.agentRegistry;
@@ -89,7 +90,7 @@ interface HealthMetricsStore {
 }
 
 // Helper functions
-function log(level: "INFO" | "WARN" | "ERROR" | "ALERT", message: string, data?: any): void {
+function log(level: "INFO" | "WARN" | "ERROR" | "ALERT", message: string, data?: Record<string, unknown>): void {
   const timestamp = new Date().toISOString();
   const logEntry = { timestamp, level, message, ...(data && { data }) };
   
@@ -188,7 +189,7 @@ function cleanupStaleAgents(dryRun = false): { removed: Agent[]; remaining: Agen
   
   if (!dryRun && removed.length > 0) {
     // Update registry
-    const registry = readJson<any>(REGISTRY_PATH, { version: "1.0.0", agents: [] });
+    const registry = readJson<AgentRegistry & { lock_version?: number }>(REGISTRY_PATH, { agents: [], last_updated: new Date().toISOString() });
     registry.agents = remaining;
     registry.last_updated = new Date().toISOString();
     registry.lock_version = (registry.lock_version || 0) + 1;
