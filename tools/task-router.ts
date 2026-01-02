@@ -11,13 +11,13 @@
  */
 
 import * as fs from 'fs';
-import * as path from 'path';
 import { execSync } from 'child_process';
+import { PATHS, MEMORY_DIR, getMemoryPath } from './shared';
 
-const MEMORY_DIR = '/app/workspace/memory';
-const TASKS_PATH = path.join(MEMORY_DIR, 'tasks.json');
-const REGISTRY_PATH = path.join(MEMORY_DIR, 'agent-registry.json');
-const ROUTER_LOG = path.join(MEMORY_DIR, 'task-router.log');
+// Use centralized paths from shared/paths.ts
+const TASKS_PATH = PATHS.tasks;
+const REGISTRY_PATH = PATHS.agentRegistry;
+const ROUTER_LOG = getMemoryPath('task-router.log');
 
 interface Task {
   id: string;

@@ -122,7 +122,9 @@ export type MessageType =
   | "task_claim"
   | "task_complete"
   | "task_available"
-  | "request_help";
+  | "request_help"
+  | "heartbeat"
+  | "file_lock";
 
 /**
  * Message in the message bus.
@@ -230,6 +232,7 @@ export interface SessionKnowledge {
 
 /**
  * Tool execution timing entry.
+ * Matches the actual structure in tool-timing.jsonl
  */
 export interface ToolTiming {
   timestamp: string;
@@ -240,6 +243,12 @@ export interface ToolTiming {
   session_id?: string;
   agent_id?: string;
   category?: string;
+  // Extended fields from tool-timing.jsonl
+  call_id?: string;
+  start_time?: number;
+  end_time?: number;
+  input_size?: number;
+  output_size?: number;
 }
 
 /**

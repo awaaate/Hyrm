@@ -236,6 +236,7 @@ class TaskManager {
     console.log(`  In Progress: ${stats.in_progress}`);
     console.log(`  Completed: ${stats.completed}`);
     console.log(`  Blocked: ${stats.blocked}`);
+    console.log(`  Cancelled: ${stats.cancelled}`);
     console.log(`  Average Quality: ${stats.avg_quality.toFixed(1)}/10\n`);
 
     const pending = this.getPending();
@@ -373,20 +374,52 @@ switch (command) {
     break;
 
   case 'list':
-    const listStatus = process.argv[3] as Task['status'];
-    const tasks = listStatus ? tm.getByStatus(listStatus) : tm.getPending();
-    tasks.forEach(t => {
-      console.log(`[${t.id.slice(-8)}] ${t.priority} - ${t.title} (${t.status})`);
-    });
+    const listStatus = process.argv[3] as Task['status'] | 'all';
+    let tasks: Task[];
+    if (listStatus === 'all') {
+      tasks = tm.search(''); // Get all tasks
+    } else if (listStatus) {
+      tasks = tm.getByStatus(listStatus);
+    } else {
+      tasks = tm.getPending();
+    }
+    if (tasks.length === 0) {
+      console.log(listStatus ? `No tasks with status: ${listStatus}` : 'No pending tasks');
+    } else {
+      tasks.forEach(t => {
+        console.log(`[${t.id.slice(-8)}] ${t.priority} - ${t.title} (${t.status})`);
+      });
+    }
     break;
 
+  case 'search':
+    const query = process.argv[3];
+    if (!query) {
+      console.log('Usage: task-manager search <query>');
+      process.exit(1);
+    }
+    const results = tm.search(query);
+    if (results.length === 0) {
+      console.log(`No tasks matching: ${query}`);
+    } else {
+      console.log(`Found ${results.length} task(s):\n`);
+      results.forEach(t => {
+        console.log(`[${t.id.slice(-8)}] ${t.priority} - ${t.title} (${t.status})`);
+      });
+    }
+    break;
+
+  case '--help':
+  case '-h':
+  case 'help':
   default:
     console.log('Usage: task-manager <command>');
     console.log('Commands:');
-    console.log('  create <title> [priority]  - Create a new task');
-    console.log('  status <id> <status>       - Update task status');
+    console.log('  create <title> [priority]  - Create a new task (priority: critical|high|medium|low)');
+    console.log('  status <id> <status>       - Update task status (pending|in_progress|completed|blocked|cancelled)');
     console.log('  next                       - Get next available task');
     console.log('  summary                    - Show task summary');
     console.log('  export                     - Export to markdown');
-    console.log('  list [status]              - List tasks');
+    console.log('  list [status|all]          - List tasks by status (default: pending)');
+    console.log('  search <query>             - Search tasks by title, description, or tags');
 }

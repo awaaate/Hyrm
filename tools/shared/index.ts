@@ -87,6 +87,66 @@ export {
   getConfigValue,
 } from "./config";
 
+// Data fetchers - centralized data access
+export {
+  // Agent functions
+  getAllAgents,
+  getActiveAgents,
+  getAgentsByStatus,
+  getAgentsByRole,
+  getAgentById,
+  isAgentAlive,
+  // Task functions
+  getAllTasks,
+  getTasksByStatus,
+  getPendingTasks,
+  getTaskById,
+  getTasksByAgent,
+  getTaskStats,
+  // Message functions
+  getMessages,
+  getMessagesByAgent,
+  getMessagesByType,
+  getUserMessages,
+  // Quality functions
+  getQualityStore,
+  getAverageQualityScore,
+  getQualityForTask,
+  // State functions
+  getSystemState,
+  getSessionCount,
+  getSystemStatus,
+  // Session functions
+  getSessionEvents,
+  getEventsForSession,
+  // Aggregated
+  getSystemOverview,
+  // Constants
+  STALENESS,
+  // OpenCode native storage
+  OPENCODE_STORAGE,
+  OPENCODE_PATHS,
+  isOpenCodeStorageAvailable,
+  getOpenCodeProjects,
+  getOpenCodeSessionsForProject,
+  getAllOpenCodeSessions,
+  getOpenCodeSessionById,
+  getOpenCodeMessagesForSession,
+  getOpenCodePartsForMessage,
+  getOpenCodeToolCalls,
+  getOpenCodeSessionStats,
+  getOpenCodeToolUsageStats,
+  searchOpenCodeSessions,
+} from "./data-fetchers";
+
+// OpenCode types from data-fetchers
+export type {
+  OpenCodeSession,
+  OpenCodeMessage,
+  OpenCodePart,
+  ToolCallInfo,
+} from "./data-fetchers";
+
 // Type exports
 export type {
   // Task types

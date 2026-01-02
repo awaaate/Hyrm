@@ -13,40 +13,27 @@
  *   timeline        - Show chronological activity across all agents
  *   export <agent_id> - Export agent conversation as markdown
  *   help            - Show help
- * 
- * Usage:
- *   bun tools/agent-conversation-viewer.ts agents
- *   bun tools/agent-conversation-viewer.ts view agent-123
- *   bun tools/agent-conversation-viewer.ts stream
  */
 
-import { existsSync, readFileSync, watch } from "fs";
-import { join } from "path";
-
-// Configuration
-const MEMORY_DIR = join(process.cwd(), "memory");
-const PATHS = {
-  registry: join(MEMORY_DIR, "agent-registry.json"),
-  messages: join(MEMORY_DIR, "message-bus.jsonl"),
-  timing: join(MEMORY_DIR, "tool-timing.jsonl"),
-  realtimeLog: join(MEMORY_DIR, "realtime.log"),
-  sessions: join(MEMORY_DIR, "sessions.jsonl"),
-  state: join(MEMORY_DIR, "state.json"),
-};
-
-// ANSI colors
-const c = {
-  reset: "\x1b[0m",
-  bold: "\x1b[1m",
-  dim: "\x1b[2m",
-  red: "\x1b[31m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  blue: "\x1b[34m",
-  magenta: "\x1b[35m",
-  cyan: "\x1b[36m",
-  white: "\x1b[37m",
-};
+import { existsSync, watch } from "fs";
+import {
+  // Data fetchers
+  getAllAgents,
+  getActiveAgents,
+  getMessages,
+  // JSON utilities
+  readJsonl,
+  // Colors
+  c,
+  // String utilities
+  truncate,
+  // Time utilities
+  formatTimeAgo,
+  formatTime,
+  // Paths
+  PATHS,
+} from "./shared";
+import type { ToolTiming } from "./shared/types";
 
 // Types
 interface AgentData {
@@ -61,23 +48,15 @@ interface AgentData {
 interface MessageData {
   id?: string;
   from?: string;
+  from_agent?: string;
   to_agent?: string;
   type: string;
   timestamp: string;
   payload: any;
 }
 
-interface TimingEntry {
-  timestamp: string;
-  session_id: string;
-  tool: string;
-  call_id: string;
-  duration_ms: number;
-  input_size: number;
-  output_size: number;
-  success: boolean;
-  category: string;
-}
+// TimingEntry is now imported as ToolTiming from shared/types.ts
+type TimingEntry = ToolTiming;
 
 interface LogEntry {
   timestamp: string;
@@ -87,52 +66,7 @@ interface LogEntry {
   data?: any;
 }
 
-// Utility functions
-function readJson<T>(path: string, defaultValue: T): T {
-  try {
-    if (existsSync(path)) {
-      return JSON.parse(readFileSync(path, "utf-8"));
-    }
-  } catch {}
-  return defaultValue;
-}
-
-function readJsonl<T>(path: string): T[] {
-  try {
-    if (existsSync(path)) {
-      return readFileSync(path, "utf-8")
-        .trim()
-        .split("\n")
-        .filter(Boolean)
-        .map((line) => JSON.parse(line));
-    }
-  } catch {}
-  return [];
-}
-
-function formatTimeAgo(timestamp: string): string {
-  const now = Date.now();
-  const then = new Date(timestamp).getTime();
-  const diff = Math.floor((now - then) / 1000);
-
-  if (diff < 0) return "future";
-  if (diff < 5) return "now";
-  if (diff < 60) return `${diff}s`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
-  return `${Math.floor(diff / 86400)}d`;
-}
-
-function formatTime(timestamp: string): string {
-  return new Date(timestamp).toLocaleTimeString();
-}
-
-function truncate(str: string, len: number): string {
-  if (!str) return "";
-  if (str.length <= len) return str;
-  return str.slice(0, len - 1) + "...";
-}
-
+// Helper functions
 function shortId(agentId: string): string {
   const parts = agentId.split("-");
   return parts.length > 2 ? parts.slice(-2).join("-") : agentId;
@@ -140,52 +74,30 @@ function shortId(agentId: string): string {
 
 function getMessageTypeColor(type: string): string {
   switch (type) {
-    case "broadcast":
-      return c.magenta;
-    case "task_claim":
-      return c.yellow;
+    case "broadcast": return c.magenta;
+    case "task_claim": return c.yellow;
     case "task_complete":
-    case "task_completed":
-      return c.green;
-    case "task_available":
-      return c.cyan;
-    case "direct":
-      return c.blue;
-    case "heartbeat":
-      return c.dim;
-    case "request_help":
-      return c.red;
-    default:
-      return c.white;
+    case "task_completed": return c.green;
+    case "task_available": return c.cyan;
+    case "direct": return c.blue;
+    case "heartbeat": return c.dim;
+    case "request_help": return c.red;
+    default: return c.reset;
   }
-}
-
-// Get all agents
-function getAgents(): AgentData[] {
-  const registry = readJson<{ agents: AgentData[] }>(PATHS.registry, { agents: [] });
-  return registry.agents || [];
-}
-
-// Get active agents (within 2 minutes)
-function getActiveAgents(): AgentData[] {
-  const agents = getAgents();
-  const twoMinutesAgo = Date.now() - 2 * 60 * 1000;
-  return agents.filter((a) => new Date(a.last_heartbeat).getTime() > twoMinutesAgo);
 }
 
 // Get messages for an agent
 function getAgentMessages(agentId: string, limit: number = 50): MessageData[] {
-  const messages = readJsonl<MessageData>(PATHS.messages);
+  const messages = readJsonl<MessageData>(PATHS.messageBus);
   return messages
-    .filter((m) => m.from === agentId || m.to_agent === agentId)
+    .filter((m) => m.from === agentId || m.from_agent === agentId || m.to_agent === agentId)
     .slice(-limit);
 }
 
 // Get tool calls for an agent (by session)
 function getAgentToolCalls(agentId: string, limit: number = 50): TimingEntry[] {
-  const timing = readJsonl<TimingEntry>(PATHS.timing);
-  // Find agent's session
-  const agents = getAgents();
+  const timing = readJsonl<TimingEntry>(PATHS.toolTiming);
+  const agents = getAllAgents();
   const agent = agents.find((a) => a.agent_id === agentId);
   const sessionId = agent?.session_id;
   
@@ -199,8 +111,7 @@ function getAgentToolCalls(agentId: string, limit: number = 50): TimingEntry[] {
 // Get log entries for an agent
 function getAgentLogs(agentId: string, limit: number = 30): LogEntry[] {
   const logs = readJsonl<LogEntry>(PATHS.realtimeLog);
-  // Match by session ID from agent
-  const agents = getAgents();
+  const agents = getAllAgents();
   const agent = agents.find((a) => a.agent_id === agentId);
   const sessionId = agent?.session_id;
   
@@ -211,45 +122,44 @@ function getAgentLogs(agentId: string, limit: number = 30): LogEntry[] {
 
 // Commands
 function showAgents(): void {
-  console.log(`\n${c.bold}${c.cyan}REGISTERED AGENTS${c.reset}\n`);
+  console.log(`\n${c.bright}${c.cyan}REGISTERED AGENTS${c.reset}\n`);
 
-  const agents = getAgents();
-  const activeAgents = getActiveAgents();
+  const agents = getAllAgents();
+  const active = getActiveAgents();
 
   if (agents.length === 0) {
     console.log(`${c.dim}No agents registered${c.reset}\n`);
     return;
   }
 
-  console.log(`${c.dim}Total: ${agents.length} | Active: ${activeAgents.length}${c.reset}\n`);
+  console.log(`${c.dim}Total: ${agents.length} | Active: ${active.length}${c.reset}\n`);
 
   // Group by role
   const byRole: Record<string, AgentData[]> = {};
   for (const agent of agents) {
     const role = agent.assigned_role || "general";
     if (!byRole[role]) byRole[role] = [];
-    byRole[role].push(agent);
+    byRole[role].push(agent as AgentData);
   }
 
   for (const [role, roleAgents] of Object.entries(byRole)) {
     const roleColor = role === "orchestrator" ? c.magenta : c.cyan;
-    console.log(`${roleColor}${c.bold}${role.toUpperCase()}${c.reset}`);
+    console.log(`${roleColor}${c.bright}${role.toUpperCase()}${c.reset}`);
 
     for (const agent of roleAgents) {
-      const isActive = activeAgents.some((a) => a.agent_id === agent.agent_id);
+      const isActive = active.some((a) => a.agent_id === agent.agent_id);
       const statusColor = isActive
         ? agent.status === "working" ? c.yellow : c.green
         : c.dim;
       const statusIcon = isActive ? "●" : "○";
       const timeAgo = formatTimeAgo(agent.last_heartbeat);
       
-      // Get message count
       const messages = getAgentMessages(agent.agent_id, 100);
       const msgCount = messages.length;
       
       console.log(
         `  ${statusColor}${statusIcon}${c.reset} ` +
-        `${c.bold}${shortId(agent.agent_id)}${c.reset} ` +
+        `${c.bright}${shortId(agent.agent_id)}${c.reset} ` +
         `${statusColor}${agent.status}${c.reset} ` +
         `${c.dim}(${timeAgo})${c.reset} ` +
         `${c.cyan}${msgCount} msgs${c.reset}`
@@ -264,8 +174,7 @@ function showAgents(): void {
 }
 
 function showAgentConversation(agentId: string): void {
-  // Find agent by partial ID match
-  const agents = getAgents();
+  const agents = getAllAgents();
   const agent = agents.find(
     (a) => a.agent_id === agentId || 
            a.agent_id.includes(agentId) ||
@@ -279,17 +188,15 @@ function showAgentConversation(agentId: string): void {
   }
 
   const fullId = agent.agent_id;
-  console.log(`\n${c.bold}${c.cyan}AGENT CONVERSATION: ${shortId(fullId)}${c.reset}\n`);
+  console.log(`\n${c.bright}${c.cyan}AGENT CONVERSATION: ${shortId(fullId)}${c.reset}\n`);
   console.log(`${c.dim}Full ID: ${fullId}${c.reset}`);
   console.log(`${c.dim}Role: ${agent.assigned_role || "general"} | Status: ${agent.status}${c.reset}`);
   console.log(`${c.dim}Session: ${agent.session_id || "unknown"}${c.reset}\n`);
 
-  // Get messages
   const messages = getAgentMessages(fullId, 30);
   const tools = getAgentToolCalls(fullId, 20);
   const logs = getAgentLogs(fullId, 10);
 
-  // Combine and sort by timestamp
   interface Activity {
     type: "message" | "tool" | "log";
     timestamp: string;
@@ -315,7 +222,8 @@ function showAgentConversation(agentId: string): void {
     if (activity.type === "message") {
       const msg = activity.data as MessageData;
       const typeColor = getMessageTypeColor(msg.type);
-      const direction = msg.from === fullId ? "→" : "←";
+      const from = msg.from || msg.from_agent || "unknown";
+      const direction = from === fullId ? "→" : "←";
       
       console.log(
         `${c.dim}${time}${c.reset} ` +
@@ -323,7 +231,6 @@ function showAgentConversation(agentId: string): void {
         `${direction} `
       );
       
-      // Show payload summary
       if (msg.payload) {
         let summary = "";
         if (msg.payload.status) summary = msg.payload.status;
@@ -360,7 +267,7 @@ function showAgentConversation(agentId: string): void {
 }
 
 function showAgentTools(agentId: string): void {
-  const agents = getAgents();
+  const agents = getAllAgents();
   const agent = agents.find(
     (a) => a.agent_id === agentId || 
            a.agent_id.includes(agentId) ||
@@ -373,7 +280,7 @@ function showAgentTools(agentId: string): void {
   }
 
   const fullId = agent.agent_id;
-  console.log(`\n${c.bold}${c.cyan}TOOL CALLS FOR: ${shortId(fullId)}${c.reset}\n`);
+  console.log(`\n${c.bright}${c.cyan}TOOL CALLS FOR: ${shortId(fullId)}${c.reset}\n`);
 
   const tools = getAgentToolCalls(fullId, 50);
 
@@ -410,30 +317,27 @@ function showAgentTools(agentId: string): void {
 }
 
 function streamAllAgents(): void {
-  console.log(`\n${c.bold}${c.cyan}REAL-TIME AGENT ACTIVITY STREAM${c.reset}`);
+  console.log(`\n${c.bright}${c.cyan}REAL-TIME AGENT ACTIVITY STREAM${c.reset}`);
   console.log(`${c.dim}Press Ctrl+C to stop${c.reset}\n`);
 
-  // Track seen messages
   const seenMessages = new Set<string>();
-  const messages = readJsonl<MessageData>(PATHS.messages);
-  messages.forEach((m) => seenMessages.add(m.id || `${m.from}-${m.timestamp}`));
+  const messages = readJsonl<MessageData>(PATHS.messageBus);
+  messages.forEach((m) => seenMessages.add(m.id || `${m.from || m.from_agent}-${m.timestamp}`));
 
   console.log(`${c.dim}Loaded ${seenMessages.size} existing messages, watching for new...${c.reset}\n`);
 
-  // Watch message bus file
   const checkForNew = () => {
-    const newMessages = readJsonl<MessageData>(PATHS.messages);
+    const newMessages = readJsonl<MessageData>(PATHS.messageBus);
     
     for (const msg of newMessages) {
-      const msgId = msg.id || `${msg.from}-${msg.timestamp}`;
+      const msgId = msg.id || `${msg.from || msg.from_agent}-${msg.timestamp}`;
       if (!seenMessages.has(msgId)) {
         seenMessages.add(msgId);
         
-        // Skip heartbeats unless verbose
         if (msg.type === "heartbeat") continue;
         
         const time = formatTime(msg.timestamp);
-        const from = shortId(msg.from || "unknown");
+        const from = shortId(msg.from || msg.from_agent || "unknown");
         const typeColor = getMessageTypeColor(msg.type);
         
         console.log(
@@ -442,7 +346,6 @@ function streamAllAgents(): void {
           `${typeColor}[${msg.type}]${c.reset}`
         );
         
-        // Show payload
         if (msg.payload) {
           let summary = "";
           if (msg.payload.status) summary = msg.payload.status;
@@ -457,20 +360,14 @@ function streamAllAgents(): void {
     }
   };
 
-  // Initial check
   checkForNew();
 
-  // Watch file for changes
-  if (existsSync(PATHS.messages)) {
-    watch(PATHS.messages, () => {
-      checkForNew();
-    });
+  if (existsSync(PATHS.messageBus)) {
+    watch(PATHS.messageBus, () => checkForNew());
   }
 
-  // Also poll every 2 seconds as backup
   setInterval(checkForNew, 2000);
 
-  // Keep running
   process.on("SIGINT", () => {
     console.log(`\n${c.dim}Stream stopped${c.reset}`);
     process.exit(0);
@@ -478,11 +375,9 @@ function streamAllAgents(): void {
 }
 
 function showTimeline(): void {
-  console.log(`\n${c.bold}${c.cyan}AGENT ACTIVITY TIMELINE${c.reset}\n`);
+  console.log(`\n${c.bright}${c.cyan}AGENT ACTIVITY TIMELINE${c.reset}\n`);
 
-  const messages = readJsonl<MessageData>(PATHS.messages)
-    .filter((m) => m.type !== "heartbeat")
-    .slice(-50);
+  const messages = getMessages(50, true) as MessageData[];
 
   if (messages.length === 0) {
     console.log(`${c.dim}No activity found${c.reset}\n`);
@@ -491,10 +386,11 @@ function showTimeline(): void {
 
   console.log(`${c.dim}Last ${messages.length} activities:${c.reset}\n`);
 
-  for (const msg of messages) {
+  // Reverse to show oldest first
+  for (const msg of [...messages].reverse()) {
     const time = formatTime(msg.timestamp);
     const timeAgo = formatTimeAgo(msg.timestamp);
-    const from = shortId(msg.from || "unknown");
+    const from = shortId(msg.from || msg.from_agent || "unknown");
     const typeColor = getMessageTypeColor(msg.type);
 
     console.log(
@@ -503,7 +399,6 @@ function showTimeline(): void {
       `${typeColor}${msg.type.padEnd(15)}${c.reset}`
     );
 
-    // Show payload summary
     if (msg.payload) {
       let summary = "";
       if (msg.payload.status) summary = msg.payload.status;
@@ -519,7 +414,7 @@ function showTimeline(): void {
 }
 
 function exportAgentConversation(agentId: string): void {
-  const agents = getAgents();
+  const agents = getAllAgents();
   const agent = agents.find(
     (a) => a.agent_id === agentId || 
            a.agent_id.includes(agentId) ||
@@ -535,7 +430,6 @@ function exportAgentConversation(agentId: string): void {
   const messages = getAgentMessages(fullId, 100);
   const tools = getAgentToolCalls(fullId, 100);
 
-  // Generate markdown
   let md = `# Agent Conversation Export
 
 ## Agent Info
@@ -554,7 +448,7 @@ function exportAgentConversation(agentId: string): void {
 
   for (const msg of messages) {
     md += `### ${msg.type} - ${msg.timestamp}\n\n`;
-    md += `**From**: ${msg.from || "unknown"}\n\n`;
+    md += `**From**: ${msg.from || msg.from_agent || "unknown"}\n\n`;
     if (msg.payload) {
       md += "```json\n" + JSON.stringify(msg.payload, null, 2) + "\n```\n\n";
     }
@@ -576,18 +470,18 @@ function exportAgentConversation(agentId: string): void {
 
 function showHelp(): void {
   console.log(`
-${c.bold}Agent Conversation Viewer${c.reset}
+${c.bright}Agent Conversation Viewer${c.reset}
 
 View per-agent conversations and activity in the multi-agent system.
 
 ${c.cyan}Commands:${c.reset}
-  ${c.bold}agents${c.reset}              List all agents with activity summary
-  ${c.bold}view${c.reset} <agent_id>     View full conversation for an agent
-  ${c.bold}tools${c.reset} <agent_id>    Show tool calls for a specific agent
-  ${c.bold}stream${c.reset}              Real-time stream of all agent activity
-  ${c.bold}timeline${c.reset}            Chronological activity across all agents
-  ${c.bold}export${c.reset} <agent_id>   Export agent conversation as markdown
-  ${c.bold}help${c.reset}                Show this help
+  ${c.bright}agents${c.reset}              List all agents with activity summary
+  ${c.bright}view${c.reset} <agent_id>     View full conversation for an agent
+  ${c.bright}tools${c.reset} <agent_id>    Show tool calls for a specific agent
+  ${c.bright}stream${c.reset}              Real-time stream of all agent activity
+  ${c.bright}timeline${c.reset}            Chronological activity across all agents
+  ${c.bright}export${c.reset} <agent_id>   Export agent conversation as markdown
+  ${c.bright}help${c.reset}                Show this help
 
 ${c.cyan}Examples:${c.reset}
   bun tools/agent-conversation-viewer.ts agents

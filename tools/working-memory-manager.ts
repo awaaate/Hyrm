@@ -2,11 +2,13 @@
 /**
  * Working Memory Manager
  * 
- * Manages the working.md file with:
+ * Manages the working.md file and overall memory system with:
  * - Archival of old session content to separate files
  * - Keep working.md focused on last 3-5 sessions
  * - CLI to search archived sessions
  * - Auto-archive on session count thresholds
+ * - Memory health analysis and token estimation
+ * - Message bus pruning and knowledge base compression
  * 
  * Usage:
  *   bun tools/working-memory-manager.ts status        # Show current status
@@ -15,12 +17,14 @@
  *   bun tools/working-memory-manager.ts list          # List all archived sessions
  *   bun tools/working-memory-manager.ts view <n>      # View specific archived session
  *   bun tools/working-memory-manager.ts clean         # Clean up and optimize
+ *   bun tools/working-memory-manager.ts health        # Analyze memory system health
+ *   bun tools/working-memory-manager.ts prune         # Prune message bus and compress KB
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from "fs";
 import { join } from "path";
-import { readJson, writeJson } from './shared/json-utils';
-import { PATHS, MEMORY_DIR } from './shared/paths';
+import { readJson, writeJson, readJsonl } from './shared/json-utils';
+import { PATHS, MEMORY_DIR, getMemoryPath } from './shared/paths';
 
 const WORKING_PATH = PATHS.working;
 const ARCHIVE_DIR = join(MEMORY_DIR, "working-archives");
@@ -31,6 +35,10 @@ const CONFIG = {
   keepSessions: 5,        // Keep last N sessions in working.md
   maxLines: 300,          // Archive if working.md exceeds this
   archiveThreshold: 10,   // Archive when this many sessions accumulate
+  tokenWarningThreshold: 150000,  // Warn at 75% of 200k limit
+  tokenCriticalThreshold: 180000, // Critical at 90% of 200k limit
+  maxActiveKBSessions: 20,        // Keep detailed info for last 20 sessions in KB
+  minValueScore: 30,              // Minimum value score to keep in active memory
 };
 
 interface SessionInfo {
@@ -52,6 +60,242 @@ interface ArchiveIndex {
   }>;
   lastUpdated: string;
   totalArchived: number;
+}
+
+interface MemoryHealth {
+  totalSize: number;
+  tokenEstimate: number;
+  sessionCount: number;
+  archiveCount: number;
+  messageCount: number;
+  agentCount: number;
+  healthScore: number; // 0-100
+  recommendations: string[];
+}
+
+// ============================================================================
+// Token & Value Estimation (from smart-memory-manager)
+// ============================================================================
+
+/**
+ * Estimate token count for a string (rough approximation: 1 token ≈ 4 chars)
+ */
+function estimateTokens(text: string): number {
+  return Math.ceil(text.length / 4);
+}
+
+/**
+ * Calculate value score for a session (0-100)
+ */
+function calculateValueScore(session: any): number {
+  let score = 0;
+  
+  // Base score on duration (longer sessions = more value)
+  if (session.duration) {
+    score += Math.min(session.duration / 3600, 30); // Max 30 points
+  }
+  
+  // Tool calls indicate productive work
+  if (session.tool_calls) {
+    score += Math.min(session.tool_calls / 10, 20); // Max 20 points
+  }
+  
+  // Achievements are high value
+  if (session.achievements && session.achievements.length > 0) {
+    score += session.achievements.length * 10; // 10 points each
+  }
+  
+  // Recent sessions get a boost
+  const age = Date.now() - new Date(session.timestamp).getTime();
+  const daysOld = age / (1000 * 60 * 60 * 24);
+  if (daysOld < 1) score += 20;
+  else if (daysOld < 3) score += 10;
+  else if (daysOld < 7) score += 5;
+  
+  return Math.min(score, 100);
+}
+
+// ============================================================================
+// Memory Health Analysis (from smart-memory-manager)
+// ============================================================================
+
+/**
+ * Analyze memory health and provide recommendations
+ */
+function analyzeMemoryHealth(): MemoryHealth {
+  const health: MemoryHealth = {
+    totalSize: 0,
+    tokenEstimate: 0,
+    sessionCount: 0,
+    archiveCount: 0,
+    messageCount: 0,
+    agentCount: 0,
+    healthScore: 100,
+    recommendations: []
+  };
+  
+  // Files to check for size/tokens
+  const files = [
+    PATHS.state,
+    PATHS.knowledgeBase,
+    PATHS.sessions,
+    PATHS.messageBus,
+    PATHS.agentRegistry,
+    PATHS.coordinationLog,
+    PATHS.working
+  ];
+  
+  for (const file of files) {
+    if (existsSync(file)) {
+      try {
+        const stat = statSync(file);
+        health.totalSize += stat.size;
+        const content = readFileSync(file, "utf-8");
+        health.tokenEstimate += estimateTokens(content);
+      } catch {}
+    }
+  }
+  
+  // Count archives
+  if (existsSync(ARCHIVE_DIR)) {
+    try {
+      health.archiveCount = readdirSync(ARCHIVE_DIR).filter(f => f.endsWith('.md')).length;
+    } catch {}
+  }
+  
+  // Count sessions in sessions.jsonl
+  if (existsSync(PATHS.sessions)) {
+    try {
+      const content = readFileSync(PATHS.sessions, "utf-8");
+      health.sessionCount = content.trim().split("\n").filter(l => l).length;
+    } catch {}
+  }
+  
+  // Count messages
+  if (existsSync(PATHS.messageBus)) {
+    try {
+      const content = readFileSync(PATHS.messageBus, "utf-8");
+      health.messageCount = content.trim().split("\n").filter(l => l).length;
+    } catch {}
+  }
+  
+  // Count agents
+  if (existsSync(PATHS.agentRegistry)) {
+    try {
+      const registry = JSON.parse(readFileSync(PATHS.agentRegistry, "utf-8"));
+      health.agentCount = registry.agents?.length || 0;
+    } catch {}
+  }
+  
+  // Calculate health score and recommendations
+  if (health.tokenEstimate > CONFIG.tokenCriticalThreshold) {
+    health.healthScore -= 40;
+    health.recommendations.push("CRITICAL: Token usage exceeds 90% of limit. Immediate pruning needed!");
+  } else if (health.tokenEstimate > CONFIG.tokenWarningThreshold) {
+    health.healthScore -= 20;
+    health.recommendations.push("WARNING: Token usage exceeds 75% of limit. Consider pruning.");
+  }
+  
+  if (health.messageCount > 10000) {
+    health.healthScore -= 10;
+    health.recommendations.push("Message bus has >10k messages. Run 'prune' to clean old heartbeats.");
+  }
+  
+  if (health.sessionCount > 100) {
+    health.healthScore -= 10;
+    health.recommendations.push("Over 100 sessions in sessions.jsonl. Consider archiving.");
+  }
+  
+  if (health.totalSize > 10 * 1024 * 1024) { // 10MB
+    health.healthScore -= 10;
+    health.recommendations.push("Total memory size exceeds 10MB. Run comprehensive pruning.");
+  }
+  
+  if (health.recommendations.length === 0) {
+    health.recommendations.push("Memory system is healthy!");
+  }
+  
+  return health;
+}
+
+// ============================================================================
+// Pruning Functions (from smart-memory-manager)
+// ============================================================================
+
+/**
+ * Prune message bus - remove old heartbeats and keep recent messages
+ */
+function pruneMessageBus(): { before: number; after: number } {
+  if (!existsSync(PATHS.messageBus)) return { before: 0, after: 0 };
+  
+  try {
+    const content = readFileSync(PATHS.messageBus, "utf-8");
+    const messages = content.trim().split("\n").filter(l => l).map(l => JSON.parse(l));
+    const before = messages.length;
+    
+    const now = Date.now();
+    const oneDayAgo = now - 24 * 60 * 60 * 1000;
+    const oneWeekAgo = now - 7 * 24 * 60 * 60 * 1000;
+    
+    const filtered = messages.filter(msg => {
+      const msgTime = new Date(msg.timestamp).getTime();
+      
+      // Keep non-heartbeat messages from last 7 days
+      if (msg.type !== "heartbeat") {
+        return msgTime > oneWeekAgo;
+      }
+      
+      // Keep heartbeats only from last 24 hours
+      return msgTime > oneDayAgo;
+    });
+    
+    writeFileSync(PATHS.messageBus, filtered.map(m => JSON.stringify(m)).join("\n") + "\n");
+    
+    return { before, after: filtered.length };
+  } catch {
+    return { before: 0, after: 0 };
+  }
+}
+
+/**
+ * Compress knowledge base - dedupe and keep high-value sessions
+ */
+function compressKnowledgeBase(): { before: number; after: number } {
+  if (!existsSync(PATHS.knowledgeBase)) return { before: 0, after: 0 };
+  
+  try {
+    const kb = JSON.parse(readFileSync(PATHS.knowledgeBase, "utf-8"));
+    const before = JSON.stringify(kb).length;
+    
+    // Score and filter sessions by value
+    if (kb.sessions && Array.isArray(kb.sessions)) {
+      kb.sessions = kb.sessions
+        .map((session: any) => ({ ...session, _score: calculateValueScore(session) }))
+        .filter((s: any) => s._score >= CONFIG.minValueScore)
+        .sort((a: any, b: any) => b._score - a._score)
+        .slice(0, CONFIG.maxActiveKBSessions)
+        .map(({ _score, ...session }: any) => session);
+    }
+    
+    // Deduplicate patterns
+    if (kb.patterns && Array.isArray(kb.patterns)) {
+      const uniquePatterns = new Map();
+      for (const p of kb.patterns) {
+        const key = JSON.stringify({ name: p.name, category: p.category });
+        if (!uniquePatterns.has(key) || (p.usage_count || 0) > (uniquePatterns.get(key).usage_count || 0)) {
+          uniquePatterns.set(key, p);
+        }
+      }
+      kb.patterns = Array.from(uniquePatterns.values());
+    }
+    
+    const after = JSON.stringify(kb).length;
+    writeFileSync(PATHS.knowledgeBase, JSON.stringify(kb, null, 2));
+    
+    return { before, after };
+  } catch {
+    return { before: 0, after: 0 };
+  }
 }
 
 // Parse working.md to extract sessions
@@ -436,6 +680,72 @@ function clean(): void {
   }
 }
 
+function health(): void {
+  console.log("\n\x1b[1m\x1b[44m MEMORY SYSTEM HEALTH \x1b[0m\n");
+  
+  const h = analyzeMemoryHealth();
+  
+  // Health score color
+  const scoreColor = h.healthScore >= 80 ? "\x1b[32m" : h.healthScore >= 50 ? "\x1b[33m" : "\x1b[31m";
+  
+  console.log(`${scoreColor}Health Score: ${h.healthScore}/100\x1b[0m\n`);
+  
+  console.log("\x1b[36mSystem Status:\x1b[0m");
+  console.log(`  Total Size:     ${(h.totalSize / 1024 / 1024).toFixed(2)} MB`);
+  console.log(`  Token Estimate: ${h.tokenEstimate.toLocaleString()} / 200,000`);
+  console.log(`  Sessions:       ${h.sessionCount}`);
+  console.log(`  Archives:       ${h.archiveCount}`);
+  console.log(`  Messages:       ${h.messageCount}`);
+  console.log(`  Active Agents:  ${h.agentCount}`);
+  
+  console.log("\n\x1b[36mRecommendations:\x1b[0m");
+  for (const rec of h.recommendations) {
+    const icon = rec.includes("CRITICAL") ? "\x1b[31m!" : 
+                 rec.includes("WARNING") ? "\x1b[33m!" : "\x1b[32m✓";
+    console.log(`  ${icon}\x1b[0m ${rec}`);
+  }
+  
+  if (h.healthScore < 70) {
+    console.log("\n\x1b[33mRun 'prune' to clean up the memory system.\x1b[0m");
+  }
+}
+
+function prune(): void {
+  console.log("\n\x1b[1m\x1b[44m MEMORY PRUNING \x1b[0m\n");
+  
+  const healthBefore = analyzeMemoryHealth();
+  
+  // Prune message bus
+  console.log("\x1b[36mPruning message bus...\x1b[0m");
+  const msgResult = pruneMessageBus();
+  const msgPruned = msgResult.before - msgResult.after;
+  console.log(`  Removed ${msgPruned} old messages (${msgResult.before} -> ${msgResult.after})`);
+  
+  // Compress knowledge base
+  console.log("\n\x1b[36mCompressing knowledge base...\x1b[0m");
+  const kbResult = compressKnowledgeBase();
+  const kbReduction = kbResult.before > 0 
+    ? Math.round((1 - kbResult.after / kbResult.before) * 100) 
+    : 0;
+  console.log(`  Size reduction: ${kbReduction}% (${kbResult.before} -> ${kbResult.after} bytes)`);
+  
+  // Clean working.md
+  console.log("\n\x1b[36mCleaning working.md...\x1b[0m");
+  clean();
+  
+  // Results
+  const healthAfter = analyzeMemoryHealth();
+  const tokensSaved = healthBefore.tokenEstimate - healthAfter.tokenEstimate;
+  const sizeSaved = healthBefore.totalSize - healthAfter.totalSize;
+  
+  console.log("\n\x1b[32m═══════════════════════════════════════\x1b[0m");
+  console.log("\x1b[32m PRUNING COMPLETE\x1b[0m");
+  console.log("\x1b[32m═══════════════════════════════════════\x1b[0m");
+  console.log(`Health Score: ${healthBefore.healthScore} -> ${healthAfter.healthScore}`);
+  console.log(`Tokens Saved: ${tokensSaved.toLocaleString()}`);
+  console.log(`Space Saved:  ${(sizeSaved / 1024).toFixed(2)} KB`);
+}
+
 // Auto-maintenance function (for plugin integration)
 export function autoMaintenance(): { archived: number; cleaned: boolean } {
   let archived = 0;
@@ -535,6 +845,12 @@ switch (command) {
   case "clean":
     clean();
     break;
+  case "health":
+    health();
+    break;
+  case "prune":
+    prune();
+    break;
   case "auto":
     const result = autoMaintenance();
     console.log("Auto-maintenance result:", result);
@@ -547,12 +863,24 @@ Usage:
   bun tools/working-memory-manager.ts <command>
 
 Commands:
-  status          Show current status
+  status          Show current working.md status
   archive         Archive old sessions to files
   search <query>  Search across all sessions
   list            List all archived sessions
   view <n>        View specific session number
-  clean           Clean up and optimize
+  clean           Clean up working.md whitespace
+  health          Analyze memory system health
+  prune           Prune message bus and compress KB
   auto            Run automatic maintenance
 `);
 }
+
+// Export additional functions for use by other tools
+export { 
+  analyzeMemoryHealth, 
+  pruneMessageBus, 
+  compressKnowledgeBase,
+  estimateTokens,
+  calculateValueScore,
+  type MemoryHealth 
+};

@@ -10,12 +10,12 @@
  */
 
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { PATHS, MEMORY_DIR, getMemoryPath } from "./shared";
 
-const MEMORY_DIR = join(process.cwd(), "memory");
-const REGISTRY_PATH = join(MEMORY_DIR, "agent-registry.json");
-const MESSAGE_BUS_PATH = join(MEMORY_DIR, "message-bus.jsonl");
-const COORDINATION_LOG = join(MEMORY_DIR, "coordination.log");
+// Use centralized paths from shared/paths.ts
+const REGISTRY_PATH = PATHS.agentRegistry;
+const MESSAGE_BUS_PATH = PATHS.messageBus;
+const COORDINATION_LOG = PATHS.coordinationLog;
 
 interface Agent {
   agent_id: string;

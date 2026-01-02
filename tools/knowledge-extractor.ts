@@ -14,6 +14,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { PATHS, OPENCODE_STORAGE, OPENCODE_PATHS } from './shared';
 
 interface MessagePart {
   type: string;
@@ -55,10 +56,11 @@ interface SessionKnowledge {
 }
 
 class KnowledgeExtractor {
-  private storagePath = path.join(process.env.HOME || '/root', '.local/share/opencode/storage');
-  private messagePath = path.join(this.storagePath, 'message');
-  private partPath = path.join(this.storagePath, 'part');
-  private outputPath = '/app/workspace/memory/knowledge-base.json';
+  // Use centralized paths from shared/
+  private storagePath = OPENCODE_STORAGE;
+  private messagePath = OPENCODE_PATHS.messages;
+  private partPath = OPENCODE_PATHS.parts;
+  private outputPath = PATHS.knowledgeBase;
 
   /**
    * Get all session directories

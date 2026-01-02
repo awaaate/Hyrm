@@ -27,11 +27,9 @@
  *   bun tools/opencode-tracker.ts sync && bun tools/opencode-tracker.ts learn
  */
 
-import { existsSync, readdirSync, readFileSync, watch } from "fs";
-import { join, basename } from "path";
-import { homedir } from "os";
+import { existsSync } from "fs";
 
-// Import shared utilities
+// Import shared utilities - use centralized data fetchers
 import {
   c,
   readJson as sharedReadJson,
@@ -39,105 +37,33 @@ import {
   truncate as sharedTruncate,
   PATHS as MEMORY_PATHS,
   getMemoryPath,
+  // OpenCode data fetchers from shared/data-fetchers.ts
+  OPENCODE_STORAGE,
+  OPENCODE_PATHS,
+  isOpenCodeStorageAvailable,
+  getAllOpenCodeSessions,
+  getOpenCodeSessionById,
+  getOpenCodeMessagesForSession,
+  getOpenCodePartsForMessage,
+  getOpenCodeToolCalls,
+  getOpenCodeSessionStats,
+  getOpenCodeToolUsageStats,
+  searchOpenCodeSessions,
+  // Re-export types
+  type OpenCodeSession,
+  type OpenCodeMessage,
+  type OpenCodePart,
+  type ToolCallInfo,
 } from "./shared";
 
-// OpenCode storage paths
-const OPENCODE_STORAGE = join(homedir(), ".local", "share", "opencode", "storage");
-const OC_PATHS = {
-  sessions: join(OPENCODE_STORAGE, "session"),
-  messages: join(OPENCODE_STORAGE, "message"),
-  parts: join(OPENCODE_STORAGE, "part"),
-  projects: join(OPENCODE_STORAGE, "project"),
-};
-
-// Types
-interface OpenCodeSession {
-  id: string;
-  version: string;
-  projectID: string;
-  directory: string;
-  title: string;
-  parentID?: string;
-  time: {
-    created: number;
-    updated: number;
-    compacting?: number;
-    archived?: number;
-  };
-  summary?: {
-    additions?: number;
-    deletions?: number;
-    files?: number;
-  };
-  share?: {
-    url: string;
-  };
-}
-
-interface OpenCodeMessage {
-  id: string;
-  sessionID: string;
-  role: "user" | "assistant";
-  time: {
-    created: number;
-  };
-  summary?: {
-    title?: string;
-    diffs?: any[];
-  };
-}
-
-interface OpenCodePart {
-  id: string;
-  messageID: string;
-  sessionID: string;
-  type: string; // "text" | "tool" | "tool-invocation" | "tool-result" | "reasoning" | "step-start" etc
-  text?: string;
-  tool?: string; // Tool name for type="tool"
-  toolName?: string;
-  callID?: string;
-  state?: {
-    status: string;
-    input?: any;
-    output?: any;
-  };
-  args?: any;
-  result?: any;
-  time?: {
-    created?: number;
-    completed?: number;
-  };
-}
-
-// Tool call info for the tools command
-interface ToolCallInfo {
-  tool: string;
-  messageId: string;
-  callId?: string;
-  input: any;
-  output: any;
-  status: string;
-  duration?: number;
-  timestamp?: number;
-}
-
-// Local JSON reader (for OpenCode storage which returns null on missing)
-function readJson<T>(path: string): T | null {
-  try {
-    if (existsSync(path)) {
-      return JSON.parse(readFileSync(path, "utf-8"));
-    }
-  } catch (e) {
-    // Silent failure for non-critical reads
-  }
-  return null;
-}
+// ============================================================================
+// Local Helper Functions (formatting only - data fetching is in shared/)
+// ============================================================================
 
 function formatTime(timestamp: number): string {
   return new Date(timestamp).toLocaleString();
 }
 
-// Local formatTimeAgo for numeric timestamps (OpenCode uses milliseconds)
 function formatTimeAgo(timestamp: number): string {
   const now = Date.now();
   const diff = Math.floor((now - timestamp) / 1000);
@@ -154,7 +80,6 @@ function truncate(str: string, len: number): string {
   return sharedTruncate(str, len);
 }
 
-// Format JSON for display with truncation
 function formatJsonCompact(obj: any, maxLen: number = 200): string {
   if (obj === null || obj === undefined) return c.dim + "null" + c.reset;
   if (typeof obj === "string") return truncate(obj.replace(/\n/g, "\\n"), maxLen);
@@ -169,167 +94,10 @@ function formatJsonCompact(obj: any, maxLen: number = 200): string {
   }
 }
 
-// Format duration in human readable form
 function formatDuration(ms: number): string {
   if (ms < 1000) return `${ms}ms`;
   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
   return `${(ms / 60000).toFixed(1)}m`;
-}
-
-// Get session statistics (tool count, duration, topics)
-function getSessionStats(sessionId: string): { toolCount: number; duration: number; topics: string[] } {
-  const messages = getMessagesForSession(sessionId);
-  let toolCount = 0;
-  const topics: string[] = [];
-  let firstTime = Infinity;
-  let lastTime = 0;
-
-  for (const msg of messages) {
-    if (msg.time.created < firstTime) firstTime = msg.time.created;
-    if (msg.time.created > lastTime) lastTime = msg.time.created;
-    
-    if (msg.summary?.title) {
-      topics.push(msg.summary.title);
-    }
-    
-    const parts = getPartsForMessage(msg.id);
-    for (const part of parts) {
-      const toolName = part.tool || part.toolName;
-      if ((part.type === "tool-invocation" || part.type === "tool") && toolName) {
-        toolCount++;
-      }
-    }
-  }
-
-  return {
-    toolCount,
-    duration: lastTime > firstTime ? lastTime - firstTime : 0,
-    topics: [...new Set(topics)].slice(0, 3),
-  };
-}
-
-// Get all tool calls from a session
-function getToolCallsForSession(sessionId: string): ToolCallInfo[] {
-  const messages = getMessagesForSession(sessionId);
-  const toolCalls: ToolCallInfo[] = [];
-  const pendingCalls: Map<string, ToolCallInfo> = new Map();
-
-  for (const msg of messages) {
-    const parts = getPartsForMessage(msg.id);
-    
-    for (const part of parts) {
-      const toolName = part.tool || part.toolName;
-      const callId = part.callID || part.id;
-      
-      // Handle tool invocations
-      if ((part.type === "tool-invocation" || part.type === "tool") && toolName) {
-        const toolCall: ToolCallInfo = {
-          tool: toolName,
-          messageId: msg.id,
-          callId,
-          input: part.args || part.state?.input || {},
-          output: null,
-          status: part.state?.status || "running",
-          timestamp: part.time?.created || msg.time.created,
-        };
-        
-        if (callId) {
-          pendingCalls.set(callId, toolCall);
-        }
-        toolCalls.push(toolCall);
-      }
-      
-      // Handle tool results
-      if (part.type === "tool-result" && callId) {
-        const pending = pendingCalls.get(callId);
-        if (pending) {
-          pending.output = part.result || part.state?.output;
-          pending.status = "completed";
-          if (part.time?.created && pending.timestamp) {
-            pending.duration = part.time.created - pending.timestamp;
-          }
-        }
-      }
-    }
-  }
-
-  return toolCalls;
-}
-
-// Get all projects
-function getProjects(): string[] {
-  if (!existsSync(OC_PATHS.projects)) return [];
-  return readdirSync(OC_PATHS.projects)
-    .filter((f) => f.endsWith(".json"))
-    .map((f) => f.replace(".json", ""));
-}
-
-// Get all sessions for a project
-function getSessionsForProject(projectId: string): OpenCodeSession[] {
-  const projectDir = join(OC_PATHS.sessions, projectId);
-  if (!existsSync(projectDir)) return [];
-
-  return readdirSync(projectDir)
-    .filter((f) => f.endsWith(".json"))
-    .map((f) => readJson<OpenCodeSession>(join(projectDir, f)))
-    .filter((s): s is OpenCodeSession => s !== null)
-    .sort((a, b) => b.time.updated - a.time.updated);
-}
-
-// Get all sessions across all projects
-function getAllSessions(): OpenCodeSession[] {
-  const projects = getProjects();
-  const allSessions: OpenCodeSession[] = [];
-
-  for (const projectId of projects) {
-    allSessions.push(...getSessionsForProject(projectId));
-  }
-
-  // Also check for sessions in direct directories
-  if (existsSync(OC_PATHS.sessions)) {
-    const dirs = readdirSync(OC_PATHS.sessions);
-    for (const dir of dirs) {
-      const dirPath = join(OC_PATHS.sessions, dir);
-      try {
-        const stat = require("fs").statSync(dirPath);
-        if (stat.isDirectory()) {
-          const sessions = getSessionsForProject(dir);
-          // Avoid duplicates
-          for (const session of sessions) {
-            if (!allSessions.find((s) => s.id === session.id)) {
-              allSessions.push(session);
-            }
-          }
-        }
-      } catch {}
-    }
-  }
-
-  return allSessions.sort((a, b) => b.time.updated - a.time.updated);
-}
-
-// Get messages for a session
-function getMessagesForSession(sessionId: string): OpenCodeMessage[] {
-  const messageDir = join(OC_PATHS.messages, sessionId);
-  if (!existsSync(messageDir)) return [];
-
-  return readdirSync(messageDir)
-    .filter((f) => f.endsWith(".json"))
-    .map((f) => readJson<OpenCodeMessage>(join(messageDir, f)))
-    .filter((m): m is OpenCodeMessage => m !== null)
-    .sort((a, b) => a.time.created - b.time.created);
-}
-
-// Get parts for a message
-function getPartsForMessage(messageId: string): OpenCodePart[] {
-  const partDir = join(OC_PATHS.parts, messageId);
-  if (!existsSync(partDir)) return [];
-
-  return readdirSync(partDir)
-    .filter((f) => f.endsWith(".json"))
-    .map((f) => readJson<OpenCodePart>(join(partDir, f)))
-    .filter((p): p is OpenCodePart => p !== null)
-    .sort((a, b) => (a.id || "").localeCompare(b.id || ""));
 }
 
 // Interface for synced session data
@@ -364,7 +132,7 @@ interface SessionsData {
 
 // Get detailed session data for sync
 function getDetailedSessionData(session: OpenCodeSession, maxMessages: number = 10): SyncedSession {
-  const messages = getMessagesForSession(session.id);
+  const messages = getOpenCodeMessagesForSession(session.id);
   const toolUsage: Record<string, number> = {};
   const keyTopics: string[] = [];
   const userQueries: string[] = [];
@@ -372,7 +140,7 @@ function getDetailedSessionData(session: OpenCodeSession, maxMessages: number = 
   for (const msg of messages) {
     // Collect user queries (first part of user messages)
     if (msg.role === "user") {
-      const parts = getPartsForMessage(msg.id);
+      const parts = getOpenCodePartsForMessage(msg.id);
       const textPart = parts.find(p => p.type === "text" && p.text);
       if (textPart?.text) {
         const query = truncate(textPart.text.replace(/\n/g, " ").trim(), 100);
@@ -388,7 +156,7 @@ function getDetailedSessionData(session: OpenCodeSession, maxMessages: number = 
         keyTopics.push(msg.summary.title);
       }
       
-      const parts = getPartsForMessage(msg.id);
+      const parts = getOpenCodePartsForMessage(msg.id);
       for (const part of parts) {
         const toolName = part.tool || part.toolName;
         if ((part.type === "tool-invocation" || part.type === "tool") && toolName) {
@@ -420,10 +188,10 @@ function getDetailedSessionData(session: OpenCodeSession, maxMessages: number = 
 async function cmdSessions(limit: number = 20, verbose: boolean = false) {
   console.log(`${c.bold}${c.cyan}OpenCode Sessions${c.reset}\n`);
 
-  const sessions = getAllSessions().slice(0, limit);
+  const sessions = getAllOpenCodeSessions(limit);
 
   if (sessions.length === 0) {
-    console.log(`${c.dim}No sessions found in ${OC_PATHS.sessions}${c.reset}`);
+    console.log(`${c.dim}No sessions found in ${OPENCODE_PATHS.sessions}${c.reset}`);
     return;
   }
 
@@ -433,8 +201,8 @@ async function cmdSessions(limit: number = 20, verbose: boolean = false) {
     const timeAgo = formatTimeAgo(session.time.updated);
     const isRecent = Date.now() - session.time.updated < 3600000; // Last hour
     
-    // Get enhanced stats
-    const stats = getSessionStats(session.id);
+    // Get enhanced stats using shared data fetchers
+    const stats = getOpenCodeSessionStats(session.id);
 
     console.log(
       `${isRecent ? c.green : c.dim}●${c.reset} ` +
@@ -483,7 +251,7 @@ async function cmdSessions(limit: number = 20, verbose: boolean = false) {
 async function cmdMessages(sessionId: string) {
   console.log(`${c.bold}${c.cyan}Messages for Session: ${sessionId}${c.reset}\n`);
 
-  const messages = getMessagesForSession(sessionId);
+  const messages = getOpenCodeMessagesForSession(sessionId);
 
   if (messages.length === 0) {
     console.log(`${c.dim}No messages found for session ${sessionId}${c.reset}`);
@@ -506,7 +274,7 @@ async function cmdMessages(sessionId: string) {
     }
 
     // Get parts for this message
-    const parts = getPartsForMessage(msg.id);
+    const parts = getOpenCodePartsForMessage(msg.id);
     for (const part of parts.slice(0, 3)) { // Show first 3 parts
       if (part.type === "text" && part.text) {
         const text = truncate(part.text.replace(/\n/g, " "), 80);
@@ -529,7 +297,7 @@ async function cmdView(sessionId: string) {
   console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}\n`);
 
   // Find session info
-  const allSessions = getAllSessions();
+  const allSessions = getAllOpenCodeSessions();
   const session = allSessions.find(s => s.id === sessionId);
   
   if (session) {
@@ -544,7 +312,7 @@ async function cmdView(sessionId: string) {
     console.log();
   }
 
-  const messages = getMessagesForSession(sessionId);
+  const messages = getOpenCodeMessagesForSession(sessionId);
 
   if (messages.length === 0) {
     console.log(`${c.dim}No messages found for session ${sessionId}${c.reset}`);
@@ -569,7 +337,7 @@ async function cmdView(sessionId: string) {
     console.log();
 
     // Get all parts for this message
-    const parts = getPartsForMessage(msg.id);
+    const parts = getOpenCodePartsForMessage(msg.id);
     
     for (const part of parts) {
       const toolName = part.tool || part.toolName;
@@ -652,7 +420,7 @@ async function cmdView(sessionId: string) {
   }
   
   // Summary at the end
-  const stats = getSessionStats(sessionId);
+  const stats = getOpenCodeSessionStats(sessionId);
   console.log(`${c.bold}Summary:${c.reset}`);
   console.log(`  ${c.cyan}Messages:${c.reset} ${messages.length}`);
   console.log(`  ${c.cyan}Tool Calls:${c.reset} ${stats.toolCount}`);
@@ -668,7 +436,7 @@ async function cmdTools(sessionId: string) {
   console.log(`${c.bold}${c.cyan}  TOOL CALLS: ${sessionId}${c.reset}`);
   console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}\n`);
 
-  const toolCalls = getToolCallsForSession(sessionId);
+  const toolCalls = getOpenCodeToolCalls(sessionId);
 
   if (toolCalls.length === 0) {
     console.log(`${c.dim}No tool calls found for session ${sessionId}${c.reset}`);
@@ -748,7 +516,7 @@ async function cmdSearch(query: string, limit: number = 20) {
   console.log(`${c.bold}${c.cyan}  SEARCH: "${query}"${c.reset}`);
   console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}\n`);
 
-  const sessions = getAllSessions();
+  const sessions = getAllOpenCodeSessions();
   const queryLower = query.toLowerCase();
   
   interface SearchResult {
@@ -774,10 +542,10 @@ async function cmdSearch(query: string, limit: number = 20) {
       });
     }
     
-    const messages = getMessagesForSession(session.id);
+    const messages = getOpenCodeMessagesForSession(session.id);
     
     for (const msg of messages) {
-      const parts = getPartsForMessage(msg.id);
+      const parts = getOpenCodePartsForMessage(msg.id);
       
       for (const part of parts) {
         const toolName = part.tool || part.toolName;
@@ -893,7 +661,7 @@ async function cmdExport(sessionId: string) {
   console.log(`${c.bold}${c.cyan}Exporting Session: ${sessionId}${c.reset}\n`);
 
   // Find the session
-  const allSessions = getAllSessions();
+  const allSessions = getAllOpenCodeSessions();
   const session = allSessions.find((s) => s.id === sessionId);
 
   if (!session) {
@@ -901,12 +669,12 @@ async function cmdExport(sessionId: string) {
     return;
   }
 
-  const messages = getMessagesForSession(sessionId);
+  const messages = getOpenCodeMessagesForSession(sessionId);
   const conversation = {
     session,
     messages: messages.map((msg) => ({
       ...msg,
-      parts: getPartsForMessage(msg.id),
+      parts: getOpenCodePartsForMessage(msg.id),
     })),
     exported_at: new Date().toISOString(),
   };
@@ -928,9 +696,9 @@ async function cmdWatch() {
   const seenMessages = new Set<string>();
 
   // Initial scan
-  const sessions = getAllSessions();
+  const sessions = getAllOpenCodeSessions();
   for (const session of sessions) {
-    const messages = getMessagesForSession(session.id);
+    const messages = getOpenCodeMessagesForSession(session.id);
     for (const msg of messages) {
       seenMessages.add(msg.id);
     }
@@ -939,16 +707,16 @@ async function cmdWatch() {
   console.log(`${c.dim}Loaded ${seenMessages.size} existing messages${c.reset}\n`);
 
   // Watch the messages directory
-  if (!existsSync(OC_PATHS.messages)) {
-    console.log(`${c.red}Messages directory not found: ${OC_PATHS.messages}${c.reset}`);
+  if (!existsSync(OPENCODE_PATHS.messages)) {
+    console.log(`${c.red}Messages directory not found: ${OPENCODE_PATHS.messages}${c.reset}`);
     return;
   }
 
   // Poll for changes (file watching is unreliable across filesystems)
   const checkForNew = () => {
-    const sessions = getAllSessions();
+    const sessions = getAllOpenCodeSessions();
     for (const session of sessions) {
-      const messages = getMessagesForSession(session.id);
+      const messages = getOpenCodeMessagesForSession(session.id);
       for (const msg of messages) {
         if (!seenMessages.has(msg.id)) {
           seenMessages.add(msg.id);
@@ -968,7 +736,7 @@ async function cmdWatch() {
           }
 
           // Get first text part
-          const parts = getPartsForMessage(msg.id);
+          const parts = getOpenCodePartsForMessage(msg.id);
           const textPart = parts.find((p) => p.type === "text" && p.text);
           if (textPart?.text) {
             console.log(`    ${c.dim}${truncate(textPart.text.replace(/\n/g, " "), 70)}${c.reset}`);
@@ -995,7 +763,7 @@ async function cmdWatch() {
 async function cmdStats() {
   console.log(`${c.bold}${c.cyan}OpenCode Statistics${c.reset}\n`);
 
-  const sessions = getAllSessions();
+  const sessions = getAllOpenCodeSessions();
   
   let totalMessages = 0;
   let totalParts = 0;
@@ -1004,11 +772,11 @@ async function cmdStats() {
   const sessionsByDay: Record<string, number> = {};
 
   for (const session of sessions) {
-    const messages = getMessagesForSession(session.id);
+    const messages = getOpenCodeMessagesForSession(session.id);
     totalMessages += messages.length;
 
     for (const msg of messages) {
-      const parts = getPartsForMessage(msg.id);
+      const parts = getOpenCodePartsForMessage(msg.id);
       totalParts += parts.length;
 
       for (const part of parts) {
@@ -1055,7 +823,7 @@ async function cmdStats() {
 async function cmdSync() {
   console.log(`${c.bold}${c.cyan}Syncing OpenCode sessions to memory system...${c.reset}\n`);
 
-  const sessions = getAllSessions();
+  const sessions = getAllOpenCodeSessions();
   const outputPath = getMemoryPath("opencode-sessions.json");
   const cachePath = getMemoryPath(".sync-cache.json");
   
@@ -1178,7 +946,7 @@ interface LearningInsight {
 async function cmdLearn(days: number = 7) {
   console.log(`${c.bold}${c.cyan}Extracting learnings from recent sessions...${c.reset}\n`);
   
-  const sessions = getAllSessions();
+  const sessions = getAllOpenCodeSessions();
   const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
   const recentSessions = sessions.filter(s => s.time.updated > cutoff);
   
@@ -1192,10 +960,10 @@ async function cmdLearn(days: number = 7) {
   const discoveries: LearningInsight[] = [];
   
   for (const session of recentSessions.slice(0, 30)) {
-    const messages = getMessagesForSession(session.id);
+    const messages = getOpenCodeMessagesForSession(session.id);
     
     for (const msg of messages) {
-      const parts = getPartsForMessage(msg.id);
+      const parts = getOpenCodePartsForMessage(msg.id);
       
       for (const part of parts) {
         // Track tool usage
@@ -1352,7 +1120,7 @@ async function cmdLearn(days: number = 7) {
 async function cmdTree(limit: number = 50) {
   console.log(`\n${c.bold}${c.blue}SESSION TREE${c.reset}\n`);
   
-  const sessions = getAllSessions().slice(0, limit);
+  const sessions = getAllOpenCodeSessions().slice(0, limit);
   
   // Build parent-child map
   const children: Record<string, string[]> = {};
@@ -1375,7 +1143,7 @@ async function cmdTree(limit: number = 50) {
   // Helper to format session line
   const formatSession = (session: OpenCodeSession, indent: string, isLast: boolean): string => {
     const connector = isLast ? "└── " : "├── ";
-    const stats = getSessionStats(session.id);
+    const stats = getOpenCodeSessionStats(session.id);
     const duration = stats.duration > 0 ? `${Math.round(stats.duration / 60)}m` : "?";
     const toolCount = stats.toolCount > 0 ? `${stats.toolCount} tools` : "";
     
@@ -1442,7 +1210,7 @@ async function cmdTree(limit: number = 50) {
   if (orphans.length > 0) {
     console.log(`\n${c.yellow}Orphan Sessions${c.reset} (parent not in recent list):`);
     for (const orphan of orphans.slice(0, 10)) {
-      const stats = getSessionStats(orphan.id);
+      const stats = getOpenCodeSessionStats(orphan.id);
       console.log(`  ${c.dim}↳${c.reset} ${c.cyan}${orphan.id.slice(-12)}${c.reset} ${truncate(orphan.title || "(no title)", 35)} (parent: ${orphan.parentID?.slice(-12)})`);
     }
   }
@@ -1452,7 +1220,7 @@ async function cmdTree(limit: number = 50) {
   if (standalones.length > 0 && standalones.length < 20) {
     console.log(`\n${c.dim}Standalone Sessions (no parent/children):${c.reset}`);
     for (const s of standalones.slice(0, 10)) {
-      const stats = getSessionStats(s.id);
+      const stats = getOpenCodeSessionStats(s.id);
       const time = new Date(s.time.created);
       const timeStr = `${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}`;
       console.log(`  📄 ${c.cyan}${s.id.slice(-12)}${c.reset} ${truncate(s.title || "(no title)", 40)} ${c.dim}(${timeStr}, ${stats.toolCount} tools)${c.reset}`);
@@ -1487,7 +1255,7 @@ async function main() {
         console.log(`${c.red}Usage: bun tools/opencode-tracker.ts messages <sessionId>${c.reset}`);
         // Show recent sessions to help
         console.log(`\n${c.dim}Recent sessions:${c.reset}`);
-        const recent = getAllSessions().slice(0, 5);
+        const recent = getAllOpenCodeSessions().slice(0, 5);
         for (const s of recent) {
           console.log(`  ${s.id} - ${truncate(s.title, 40)}`);
         }
@@ -1500,7 +1268,7 @@ async function main() {
       if (!args[1]) {
         console.log(`${c.red}Usage: bun tools/opencode-tracker.ts view <sessionId>${c.reset}`);
         console.log(`\n${c.dim}Recent sessions:${c.reset}`);
-        const recentView = getAllSessions().slice(0, 5);
+        const recentView = getAllOpenCodeSessions().slice(0, 5);
         for (const s of recentView) {
           console.log(`  ${s.id} - ${truncate(s.title, 40)}`);
         }
@@ -1513,9 +1281,9 @@ async function main() {
       if (!args[1]) {
         console.log(`${c.red}Usage: bun tools/opencode-tracker.ts tools <sessionId>${c.reset}`);
         console.log(`\n${c.dim}Recent sessions:${c.reset}`);
-        const recentTools = getAllSessions().slice(0, 5);
+        const recentTools = getAllOpenCodeSessions().slice(0, 5);
         for (const s of recentTools) {
-          const stats = getSessionStats(s.id);
+          const stats = getOpenCodeSessionStats(s.id);
           console.log(`  ${s.id} - ${truncate(s.title, 30)} (${stats.toolCount} tools)`);
         }
         process.exit(1);

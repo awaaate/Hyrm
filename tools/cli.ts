@@ -1,28 +1,22 @@
 #!/usr/bin/env bun
 /**
- * OpenCode CLI - Unified Command-Line Interface
+ * Unified CLI - Single Entry Point for All Tools
  * 
- * A comprehensive CLI tool for interacting with the OpenCode multi-agent system.
- * Combines monitoring, messaging, task management, and system control.
+ * The main CLI for interacting with the multi-agent system.
+ * Delegates to specialized tools for complex operations.
  * 
  * Usage:
- *   bun tools/opencode-cli.ts [command] [args]
+ *   bun tools/cli.ts [command] [args]
  * 
- * Commands:
- *   status              Show system status overview
- *   agents              List active agents
- *   tasks               List and manage tasks
- *   task-create <title> Create a new task
- *   task-claim <id>     Claim a task
- *   task-complete <id>  Complete a task
- *   messages            View agent messages
- *   send <message>      Send message to agents
- *   monitor             Start live dashboard
- *   interactive         Interactive mode with actions
- *   quality             Show quality metrics
- *   conversations       Show OpenCode conversations (from opencode-tracker)
- *   prune               Prune old messages
- *   help                Show help
+ * Quick Commands:
+ *   status              System overview
+ *   agents              List agents
+ *   tasks               List tasks
+ *   messages            Agent messages
+ *   monitor             Live dashboard
+ *   interactive         Interactive mode
+ * 
+ * See 'bun tools/cli.ts help' for all commands
  */
 
 import { existsSync, readFileSync, writeFileSync, appendFileSync } from "fs";
@@ -39,6 +33,7 @@ import {
   PRIORITY_ORDER,
   STATUS_ORDER,
 } from "./shared";
+import type { ToolTiming } from "./shared/types";
 
 function box(title: string, content: string): string {
   const lines = content.split("\n");
@@ -642,23 +637,10 @@ ${c.bright}Interactive Commands:${c.reset}
   });
 }
 
-// Tool Timing functions
-interface TimingEntry {
-  timestamp: string;
-  session_id: string;
-  tool: string;
-  call_id: string;
-  start_time: number;
-  end_time: number;
-  duration_ms: number;
-  input_size: number;
-  output_size: number;
-  success: boolean;
-  category: string;
-}
+// Tool Timing functions - uses ToolTiming from shared/types.ts
 
-function readTimingData(): TimingEntry[] {
-  return readJsonl<TimingEntry>(PATHS.toolTiming);
+function readTimingData(): ToolTiming[] {
+  return readJsonl<ToolTiming>(PATHS.toolTiming);
 }
 
 function showToolTiming(subCmd: string): void {
@@ -707,6 +689,9 @@ ${c.bright}Tool Timing Commands:${c.reset}
       console.log(`Use: timing help`);
   }
 }
+
+// Type alias for backward compatibility within this file
+type TimingEntry = ToolTiming;
 
 function showTimingSummary(entries: TimingEntry[]): void {
   console.log(`\n${c.bright}${c.cyan}TOOL TIMING SUMMARY${c.reset}\n`);
@@ -1065,59 +1050,58 @@ function recoverSession(sessionId?: string): void {
 
 function showHelp(): void {
   console.log(`
-${c.bgBlue}${c.white}${c.bright}  OPENCODE CLI  ${c.reset}
+${c.bgBlue}${c.white}${c.bright}  UNIFIED CLI  ${c.reset}
 
 ${c.cyan}Usage:${c.reset}
-  bun tools/opencode-cli.ts <command> [args]
+  bun tools/cli.ts <command> [args]
 
 ${c.cyan}View Commands:${c.reset}
-  ${c.bright}status${c.reset}              Show system status overview
-  ${c.bright}agents${c.reset}              List all registered agents
-  ${c.bright}tasks${c.reset} [filter]      List tasks (filter: pending, completed, all)
-  ${c.bright}messages${c.reset} [count]    Show agent messages (default: 20)
-  ${c.bright}user-messages${c.reset}       Show user messages
-  ${c.bright}quality${c.reset}             Show quality metrics
-  ${c.bright}health${c.reset}              Show agent health status
-  ${c.bright}conversations${c.reset}       Show OpenCode conversations
+  ${c.bright}status${c.reset}              System status overview
+  ${c.bright}agents${c.reset}              List registered agents
+  ${c.bright}tasks${c.reset} [filter]      List tasks (pending, completed, all)
+  ${c.bright}messages${c.reset} [n]        Agent messages (default: 20)
+  ${c.bright}user-messages${c.reset}       User messages
+  ${c.bright}quality${c.reset}             Quality metrics
+  ${c.bright}health${c.reset}              Agent health status
 
-${c.cyan}Action Commands:${c.reset}
-  ${c.bright}send${c.reset} <message>      Send message to agents
+${c.cyan}OpenCode Sessions:${c.reset}
+  ${c.bright}oc${c.reset} sessions [n]     List OpenCode sessions
+  ${c.bright}oc${c.reset} view <id>        View full conversation
+  ${c.bright}oc${c.reset} tools <id>       Show tool calls for session
+  ${c.bright}oc${c.reset} search <query>   Search across sessions
+  ${c.bright}oc${c.reset} stats            Session statistics
+  ${c.bright}oc${c.reset} tree             Session parent-child tree
+
+${c.cyan}Task Management:${c.reset}
   ${c.bright}task-create${c.reset} <title> Create a new task
-  ${c.bright}task-claim${c.reset} <id>     Claim a task for work
-  ${c.bright}task-complete${c.reset} <id>  Mark a task as completed
-  ${c.bright}prune${c.reset} [hours]       Prune old heartbeat messages (default: 24h)
+  ${c.bright}task-claim${c.reset} <id>     Claim a task
+  ${c.bright}task-complete${c.reset} <id>  Complete a task
+  ${c.bright}send${c.reset} <message>      Send message to agents
 
-${c.cyan}Recovery Commands:${c.reset}
+${c.cyan}Live Monitoring:${c.reset}
+  ${c.bright}watch${c.reset} [mode]        Real-time monitor with file watching
+                      Modes: dashboard, agents, messages, tasks, logs
+  ${c.bright}monitor${c.reset} [ms]        Polling dashboard (interval in ms)
+  ${c.bright}interactive${c.reset}         Interactive command mode
+
+${c.cyan}Memory & Analysis:${c.reset}
+  ${c.bright}memory${c.reset} [cmd]        Working memory (status, archive, search, health, prune)
+  ${c.bright}timing${c.reset} [cmd]        Tool timing (summary, tools, recent, slow)
+  ${c.bright}perf${c.reset} [cmd]          Performance profiler
+  ${c.bright}report${c.reset} [cmd]        Daily reports
+
+${c.cyan}Other:${c.reset}
+  ${c.bright}git${c.reset} [cmd]           Git integration
+  ${c.bright}critique${c.reset} [cmd]      Code critique agent
   ${c.bright}recovery${c.reset}            Show recoverable sessions
-  ${c.bright}recover${c.reset} [session]   Load checkpoint from session
-
-${c.cyan}Performance Commands:${c.reset}
-  ${c.bright}profile${c.reset}             Full agent performance profile
-  ${c.bright}perf${c.reset} [cmd]          Performance profiler (tools, agents, efficiency, errors, suggestions)
-  ${c.bright}perf suggestions${c.reset}    Get optimization suggestions
-  ${c.bright}timing${c.reset} [cmd]        Tool timing (summary, tools, recent, slow, categories, export)
-  ${c.bright}report${c.reset} [cmd]        Daily reports (generate, list, view, summary, trends)
-  ${c.bright}conv${c.reset} [cmd]          Agent conversations (agents, view, tools, stream, timeline)
-
-${c.cyan}Git Commands:${c.reset}
-  ${c.bright}git${c.reset} [cmd]           Git integration (status, log, diff, commit, etc.)
-  ${c.bright}git status${c.reset}          Show git status
-  ${c.bright}git log${c.reset} [n]         Show recent commits
-  ${c.bright}git commit${c.reset} <msg>    Create commit with agent metadata
-  ${c.bright}git agent-commits${c.reset}   Show commits made by agents
-
-${c.cyan}Interactive Commands:${c.reset}
-  ${c.bright}monitor${c.reset} [interval]  Start live dashboard (interval in ms)
-  ${c.bright}dashboard${c.reset}           Rich terminal UI dashboard (blessed)
-  ${c.bright}interactive${c.reset}         Interactive mode with all actions
+  ${c.bright}prune${c.reset} [hours]       Prune old messages
 
 ${c.cyan}Examples:${c.reset}
-  bun tools/opencode-cli.ts status
-  bun tools/opencode-cli.ts tasks pending
-  bun tools/opencode-cli.ts send "Focus on task X" --urgent
-  bun tools/opencode-cli.ts task-create "Implement feature Y" --priority high
-  bun tools/opencode-cli.ts task-claim task_123
-  bun tools/opencode-cli.ts interactive
+  bun tools/cli.ts status
+  bun tools/cli.ts oc sessions 20
+  bun tools/cli.ts oc view ses_abc123
+  bun tools/cli.ts watch messages
+  bun tools/cli.ts memory health
 
 ${c.dim}System files: ${MEMORY_DIR}${c.reset}
 `);
@@ -1210,14 +1194,8 @@ switch (command) {
     
   case "dashboard":
   case "dash":
-    // Launch rich terminal UI dashboard
-    import("child_process").then(({ spawn }) => {
-      const child = spawn("bun", ["tools/terminal-dashboard.ts"], {
-        stdio: "inherit",
-        cwd: process.cwd(),
-      });
-      child.on("exit", (code) => process.exit(code || 0));
-    });
+    // Dashboard uses the integrated monitor
+    startMonitor(parseInt(args[1]) || 2000);
     break;
     
   case "interactive":
@@ -1352,6 +1330,34 @@ switch (command) {
     import("child_process").then(({ spawn }) => {
       const critiqueArgs = args.slice(1).length > 0 ? args.slice(1) : ["help"];
       const child = spawn("bun", ["tools/critique-agent.ts", ...critiqueArgs], {
+        stdio: "inherit",
+        cwd: process.cwd(),
+      });
+      child.on("exit", (code) => process.exit(code || 0));
+    });
+    break;
+    
+  case "opencode":
+  case "oc":
+  case "tracker":
+    // Delegate to opencode-tracker for OpenCode session management
+    import("child_process").then(({ spawn }) => {
+      const ocArgs = args.slice(1).length > 0 ? args.slice(1) : ["sessions"];
+      const child = spawn("bun", ["tools/opencode-tracker.ts", ...ocArgs], {
+        stdio: "inherit",
+        cwd: process.cwd(),
+      });
+      child.on("exit", (code) => process.exit(code || 0));
+    });
+    break;
+    
+  case "watch":
+  case "realtime":
+  case "live":
+    // Delegate to realtime-monitor for live file watching dashboard
+    import("child_process").then(({ spawn }) => {
+      const watchArgs = args.slice(1).length > 0 ? args.slice(1) : ["dashboard"];
+      const child = spawn("bun", ["tools/realtime-monitor.ts", ...watchArgs], {
         stdio: "inherit",
         cwd: process.cwd(),
       });
