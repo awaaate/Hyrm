@@ -231,6 +231,7 @@ function dedupe(): void {
   const seenInsights = new Set<string>();
   const seenTechniques = new Set<string>();
   const seenSolutions = new Set<string>();
+  const seenCodeFiles = new Set<string>(); // Global set for code files
   
   let totalRemoved = 0;
   
@@ -260,8 +261,17 @@ function dedupe(): void {
     session.solutions = deduplicateWithGlobal(session.solutions || [], seenSolutions);
     totalRemoved += origSolutions - session.solutions.length;
     
-    // Dedupe code files (exact match)
-    session.code_created = [...new Set(session.code_created || [])];
+    // Dedupe code files (exact match, GLOBAL across sessions)
+    const origCodeFiles = session.code_created?.length || 0;
+    const uniqueCodeFiles: string[] = [];
+    for (const file of session.code_created || []) {
+      if (!seenCodeFiles.has(file)) {
+        seenCodeFiles.add(file);
+        uniqueCodeFiles.push(file);
+      }
+    }
+    session.code_created = uniqueCodeFiles;
+    totalRemoved += origCodeFiles - uniqueCodeFiles.length;
   }
   
   writeKnowledge(knowledge);
