@@ -5,12 +5,12 @@
       "agent_id": "agent-1767375992315-ut313e",
       "session_id": "session-1767375992315",
       "started_at": "2026-01-02T17:46:32.316Z",
-      "last_heartbeat": "2026-01-02T17:55:32.367Z",
+      "last_heartbeat": "2026-01-02T18:01:32.425Z",
       "status": "active",
       "assigned_role": "orchestrator",
       "pid": 608521
     }
   ],
-  "last_updated": "2026-01-02T17:55:32.367Z",
-  "lock_version": 301
+  "last_updated": "2026-01-02T18:01:32.425Z",
+  "lock_version": 305
 }

@@ -1525,3 +1525,10 @@
 2026-01-02T17:50:28.275Z [INFO] [agent-2l2KozoP] Agent unregistered: agent-2l2KozoP
 2026-01-02T17:50:28.275Z [INFO] [agent-2l2KozoP] Agent unregistered: agent-2l2KozoP
 2026-01-02T17:51:32.348Z [INFO] [agent-1767375992315-ut313e] Message sent: heartbeat (broadcast)
+2026-01-02T17:56:30.103Z [INFO] [agent-2l2KozoP] Message sent: task_complete (broadcast)
+2026-01-02T17:56:32.373Z [INFO] [agent-1767375992315-ut313e] Message sent: heartbeat (broadcast)
+2026-01-02T17:56:42.523Z [INFO] [agent-2l2KozoP] Agent unregistered: agent-2l2KozoP
+2026-01-02T17:56:42.523Z [INFO] [agent-2l2KozoP] Agent unregistered: agent-2l2KozoP
+2026-01-02T17:56:42.523Z [INFO] [agent-2l2KozoP] Agent unregistered: agent-2l2KozoP
+2026-01-02T17:56:42.524Z [INFO] [agent-2l2KozoP] Agent unregistered: agent-2l2KozoP
+2026-01-02T18:01:32.428Z [INFO] [agent-1767375992315-ut313e] Message sent: heartbeat (broadcast)

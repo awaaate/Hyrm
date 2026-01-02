@@ -12,3 +12,8 @@ export { QualityPanel } from "./QualityPanel";
 export { PerformanceTab } from "./PerformanceTab";
 export { SessionAnalyticsPanel } from "./SessionAnalyticsPanel";
 export { OpenCodeSessionsPanel } from "./OpenCodeSessionsPanel";
+
+// Phase 2 Components
+export { UserMessagesPanel } from "./UserMessagesPanel";
+export { MessageBusPanel } from "./MessageBusPanel";
+export { CreateTaskDialog } from "./CreateTaskDialog";

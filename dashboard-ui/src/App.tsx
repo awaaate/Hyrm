@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import {
   Activity,
   Bot,
@@ -12,6 +13,7 @@ import {
   ScrollText,
   TrendingUp,
   MessageSquare,
+  Plus,
 } from "lucide-react";
 
 // Import custom components
@@ -26,6 +28,9 @@ import {
   PerformanceTab,
   SessionAnalyticsPanel,
   OpenCodeSessionsPanel,
+  UserMessagesPanel,
+  MessageBusPanel,
+  CreateTaskDialog,
 } from "./components";
 
 // Import types
@@ -38,6 +43,8 @@ import type {
   QualityStats,
   SessionAnalytics,
   PerformanceData,
+  UserMessage,
+  MessageBusMessage,
 } from "./components/types";
 
 // API base URL
@@ -119,6 +126,9 @@ function App() {
   } | null>(null);
   const [analytics, setAnalytics] = useState<SessionAnalytics | null>(null);
   const [performance, setPerformance] = useState<PerformanceData | null>(null);
+  const [userMessages, setUserMessages] = useState<UserMessage[]>([]);
+  const [agentMessages, setAgentMessages] = useState<MessageBusMessage[]>([]);
+  const [showCreateTaskDialog, setShowCreateTaskDialog] = useState(false);
   const [connectionStatus, setConnectionStatus] =
     useState<ConnectionStatus>("disconnected");
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
@@ -215,6 +225,15 @@ function App() {
               data.data.title || "A task was completed"
             );
             break;
+          case "user_messages":
+            setUserMessages(data.data.messages || []);
+            break;
+          case "agent_messages":
+            setAgentMessages(data.data.messages || []);
+            break;
+          case "user_message_sent":
+            setUserMessages((prev) => [data.data.message, ...prev]);
+            break;
         }
       } catch (e) {
         console.error("Error parsing WebSocket message:", e);
@@ -281,6 +300,8 @@ function App() {
           qualityRes,
           analyticsRes,
           performanceRes,
+          userMsgRes,
+          agentMsgRes,
         ] = await Promise.all([
           fetch(`${API_BASE}/api/stats`),
           fetch(`${API_BASE}/api/agents`),
@@ -289,6 +310,8 @@ function App() {
           fetch(`${API_BASE}/api/quality`),
           fetch(`${API_BASE}/api/analytics`),
           fetch(`${API_BASE}/api/performance`),
+          fetch(`${API_BASE}/api/user-messages`),
+          fetch(`${API_BASE}/api/messages`),
         ]);
 
         if (statsRes.ok) setStats(await statsRes.json());
@@ -313,6 +336,14 @@ function App() {
         }
         if (performanceRes.ok) {
           setPerformance(await performanceRes.json());
+        }
+        if (userMsgRes.ok) {
+          const data = await userMsgRes.json();
+          setUserMessages(data.messages || []);
+        }
+        if (agentMsgRes.ok) {
+          const data = await agentMsgRes.json();
+          setAgentMessages(data.messages || []);
         }
         setError(null);
       } catch (e) {
@@ -350,6 +381,7 @@ function App() {
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="agents">Agents</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
+            <TabsTrigger value="messages">Messages</TabsTrigger>
             <TabsTrigger value="performance">Performance</TabsTrigger>
             <TabsTrigger value="logs">Logs</TabsTrigger>
             <TabsTrigger value="quality">Quality</TabsTrigger>
@@ -559,15 +591,35 @@ function App() {
           <TabsContent value="tasks">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ListTodo className="h-5 w-5" />
-                  Tasks ({tasks.length})
+                <CardTitle className="flex items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    <ListTodo className="h-5 w-5" />
+                    Tasks ({tasks.length})
+                  </span>
+                  <Button onClick={() => setShowCreateTaskDialog(true)} size="sm">
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Task
+                  </Button>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <TasksTable tasks={tasks} />
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="messages">
+            <div className="grid md:grid-cols-2 gap-6">
+              <UserMessagesPanel
+                messages={userMessages}
+                onRefresh={() => {
+                  fetch(`${API_BASE}/api/user-messages`)
+                    .then((r) => r.json())
+                    .then((d) => setUserMessages(d.messages || []));
+                }}
+              />
+              <MessageBusPanel messages={agentMessages} />
+            </div>
           </TabsContent>
 
           <TabsContent value="performance">
@@ -638,6 +690,17 @@ function App() {
           <span>Last update: {new Date().toLocaleTimeString()}</span>
         </div>
       </footer>
+
+      {/* Create Task Dialog */}
+      <CreateTaskDialog
+        open={showCreateTaskDialog}
+        onClose={() => setShowCreateTaskDialog(false)}
+        onCreated={() => {
+          fetch(`${API_BASE}/api/tasks`)
+            .then((r) => r.json())
+            .then((d) => setTasks(d.tasks || []));
+        }}
+      />
     </div>
   );
 }
