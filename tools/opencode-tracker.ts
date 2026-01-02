@@ -1336,6 +1336,126 @@ async function cmdLearn(days: number = 7) {
   console.log(`\n${c.dim}Analysis complete. Run 'sync' to save detailed session data.${c.reset}`);
 }
 
+/**
+ * Show session tree - parent-child relationships
+ * Visualizes which orchestrator spawned which workers
+ */
+async function cmdTree(limit: number = 50) {
+  console.log(`\n${c.bold}${c.blue}SESSION TREE${c.reset}\n`);
+  
+  const sessions = getAllSessions().slice(0, limit);
+  
+  // Build parent-child map
+  const children: Record<string, string[]> = {};
+  const sessionMap: Record<string, OpenCodeSession> = {};
+  const rootSessions: OpenCodeSession[] = [];
+  
+  for (const session of sessions) {
+    sessionMap[session.id] = session;
+    
+    if (session.parentID) {
+      if (!children[session.parentID]) {
+        children[session.parentID] = [];
+      }
+      children[session.parentID].push(session.id);
+    } else {
+      rootSessions.push(session);
+    }
+  }
+  
+  // Helper to format session line
+  const formatSession = (session: OpenCodeSession, indent: string, isLast: boolean): string => {
+    const connector = isLast ? "└── " : "├── ";
+    const stats = getSessionStats(session.id);
+    const duration = stats.duration > 0 ? `${Math.round(stats.duration / 60)}m` : "?";
+    const toolCount = stats.toolCount > 0 ? `${stats.toolCount} tools` : "";
+    
+    const time = new Date(session.time.created);
+    const timeStr = `${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}`;
+    
+    // Determine session type based on title
+    let icon = "📄";
+    const titleLower = (session.title || "").toLowerCase();
+    if (titleLower.includes("orchestrator") || titleLower.includes("main")) {
+      icon = "🎯";
+    } else if (titleLower.includes("worker") || titleLower.includes("subagent")) {
+      icon = "⚙️";
+    } else if (titleLower.includes("explore")) {
+      icon = "🔍";
+    } else if (titleLower.includes("code") || titleLower.includes("build")) {
+      icon = "💻";
+    } else if (titleLower.includes("memory")) {
+      icon = "🧠";
+    }
+    
+    const title = truncate(session.title || "(no title)", 40);
+    const meta = [timeStr, duration, toolCount].filter(Boolean).join(", ");
+    
+    return `${indent}${connector}${icon} ${c.cyan}${session.id.slice(-12)}${c.reset} ${title} ${c.dim}(${meta})${c.reset}`;
+  };
+  
+  // Recursive tree printer
+  const printTree = (sessionId: string, indent: string = "", isLast: boolean = true) => {
+    const session = sessionMap[sessionId];
+    if (!session) return;
+    
+    console.log(formatSession(session, indent, isLast));
+    
+    const childIds = children[sessionId] || [];
+    const nextIndent = indent + (isLast ? "    " : "│   ");
+    
+    childIds.forEach((childId, i) => {
+      printTree(childId, nextIndent, i === childIds.length - 1);
+    });
+  };
+  
+  // Count relationships
+  const sessionsWithParent = sessions.filter(s => s.parentID).length;
+  const sessionsWithChildren = Object.keys(children).length;
+  
+  console.log(`${c.dim}Found ${sessions.length} sessions, ${sessionsWithParent} with parents, ${sessionsWithChildren} with children${c.reset}\n`);
+  
+  // Print root sessions and their trees
+  let treeCount = 0;
+  for (const root of rootSessions) {
+    // Only show trees that have children, or standalone sessions
+    const hasChildren = children[root.id] && children[root.id].length > 0;
+    
+    if (hasChildren) {
+      console.log(`${c.bold}Session Tree #${++treeCount}${c.reset}`);
+      printTree(root.id);
+      console.log("");
+    }
+  }
+  
+  // Show orphan sessions (have parentID but parent not in our list)
+  const orphans = sessions.filter(s => s.parentID && !sessionMap[s.parentID]);
+  if (orphans.length > 0) {
+    console.log(`\n${c.yellow}Orphan Sessions${c.reset} (parent not in recent list):`);
+    for (const orphan of orphans.slice(0, 10)) {
+      const stats = getSessionStats(orphan.id);
+      console.log(`  ${c.dim}↳${c.reset} ${c.cyan}${orphan.id.slice(-12)}${c.reset} ${truncate(orphan.title || "(no title)", 35)} (parent: ${orphan.parentID?.slice(-12)})`);
+    }
+  }
+  
+  // Show standalone sessions without children
+  const standalones = rootSessions.filter(s => !children[s.id] || children[s.id].length === 0);
+  if (standalones.length > 0 && standalones.length < 20) {
+    console.log(`\n${c.dim}Standalone Sessions (no parent/children):${c.reset}`);
+    for (const s of standalones.slice(0, 10)) {
+      const stats = getSessionStats(s.id);
+      const time = new Date(s.time.created);
+      const timeStr = `${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}`;
+      console.log(`  📄 ${c.cyan}${s.id.slice(-12)}${c.reset} ${truncate(s.title || "(no title)", 40)} ${c.dim}(${timeStr}, ${stats.toolCount} tools)${c.reset}`);
+    }
+    if (standalones.length > 10) {
+      console.log(`  ${c.dim}... and ${standalones.length - 10} more${c.reset}`);
+    }
+  }
+  
+  console.log(`\n${c.dim}Tip: Use 'view <sessionId>' to see full conversation${c.reset}`);
+}
+
 // Main
 async function main() {
   const args = process.argv.slice(2);
@@ -1431,6 +1551,10 @@ async function main() {
       await cmdLearn(learningDays);
       break;
 
+    case "tree":
+      await cmdTree(parseInt(args[1]) || 50);
+      break;
+
     case "help":
     case "--help":
     case "-h":
@@ -1454,6 +1578,7 @@ ${c.cyan}Commands:${c.reset}
   ${c.bold}Analysis:${c.reset}
   stats                Show statistics across all sessions
   learn [days]         Extract learnings from recent sessions (default: 7 days)
+  tree [limit]         Show parent-child session relationships (default: 50)
 
   ${c.bold}Real-time:${c.reset}
   watch                Watch for new messages in real-time
