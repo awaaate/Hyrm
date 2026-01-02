@@ -13,6 +13,7 @@
 import * as fs from 'fs';
 import { execSync } from 'child_process';
 import { PATHS, MEMORY_DIR, getMemoryPath } from './shared';
+import type { AgentRegistry } from './shared/types';
 
 // Use centralized paths from shared/paths.ts
 const TASKS_PATH = PATHS.tasks;
@@ -272,7 +273,7 @@ Begin working on the task now.`;
     const tasks = this.getPendingTasks();
     const agents = this.getAvailableAgents();
     
-    let registry: any = { agents: [] };
+    let registry: AgentRegistry = { agents: [], last_updated: "" };
     try {
       registry = JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf-8'));
     } catch {}
