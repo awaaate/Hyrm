@@ -1,63 +1,45 @@
 # Working Memory
 
-## Session 127 - HANDOFF (2026-01-02)
+## Session 138 - HANDOFF (2026-01-02)
 
-**Status**: User requested stop
-**Agent ID**: agent-1767353179414-xlsru
-**Commits**: e2dd975, cb5e944
+**Status**: User requested stop after task completion
+**Agent ID**: agent-1767358223781-o4sn3
+**Commits**: 9f5c722
 
 ### CRITICAL: FOR NEXT AGENT
 
 **YOU ARE A NEW INSTANCE**. The previous agent is gone. This file contains everything you need to continue.
 
 **User Feedback (IMPORTANT)**:
-> "I think that the multi agent system it's not working because you are always working"
+> "update the watchdog script with telling in the prompt that you must never work on implementing this, but create agents and put them to work. create those agents always using the terminal. and stop your current session. also remove the backoff strategy. the aim is not having a large conversation in the orchestrator rather a short and orchestrative"
 
-The user is concerned that the orchestrator never spawns workers - it does everything itself. Consider:
-1. Using task_spawn or bash spawning for parallel work
-2. Actually delegating tasks to workers instead of doing everything
-3. Letting workers complete before claiming new tasks
+The user wants SHORT ORCHESTRATION sessions. The orchestrator should:
+1. Check for user messages and pending tasks
+2. Spawn workers via `opencode run` in the terminal
+3. Exit quickly - let the watchdog restart
+
+**Watchdog Updated**: 
+- Backoff strategy DISABLED (short sessions desired)
+- MAX_RESTARTS increased to 50/hour
+- Prompt now tells orchestrator to spawn workers, not implement
 
 ---
 
 ## What Was Done This Session
 
-### 1. Debug Capture Tool Created
-- **File**: `tools/debug-capture.ts`
-- **Commands**: 
-  - `run <command>` - Run and save command output
-  - `log <message>` - Log debug messages
-  - `list [limit]` - List captured outputs
-  - `view <id>` - View specific capture
-  - `clean [days]` - Clean old captures
-- **Utilities added**: `LOGS_DIR`, `appendLine()` in shared utilities
+### 1. Token Usage Tracking (Main Task)
+- **Types added**: `SessionTokens`, `TokenTrend` in types.ts
+- **Data functions**: `extractSessionTokens`, `getSessionTokens`, `getTokenTrends`, `getTotalTokenUsage` in data.ts
+- **New view**: 'tokens' view mode (key 7) in terminal dashboard
+- **Token data**: input, output, reasoning, cache_read, cache_write
+- **Sessions view**: Now shows token count per session
+- **Commit**: 9f5c722 - Add token usage tracking to terminal-dashboard CLI
 
-### 2. Terminal Dashboard Refactored
-- **Before**: index.ts was 1039 lines
-- **After**: index.ts is 681 lines (-34%)
-- **Extracted**: `renders.ts` (430 lines) with all render functions
-- **Structure now**: index.ts, data.ts, renders.ts, types.ts
-
-### 3. OpenCode Session Path Fixed
-- **Wrong**: `~/.opencode/session/`
-- **Correct**: `~/.local/share/opencode/storage/session/`
-- Sessions are stored as: `{projectId}/{sessionId}.json`
-- Messages are in: `~/.local/share/opencode/storage/message/{sessionId}/`
-
-### 4. Codebase Cleanup
-- Removed deprecated `conversation-tracker.ts`
-- Updated `AGENTS.md` with proper tool categorization by domain:
-  - Agent Tools (7)
-  - Memory Tools (4)
-  - Task Tools (3)
-  - Session Tools (3)
-  - Monitor Tools (2)
-  - CLI/Core (4)
-  - Reports (1)
-
-### 5. Git Commits
-- `e2dd975` - Add debug-capture tool and cleanup codebase structure
-- `cb5e944` - Refactor terminal dashboard and fix OpenCode session display
+### 2. Watchdog Script Updated
+- Disabled backoff strategy (RESTART_BACKOFF_ENABLED=false)
+- Increased MAX_RESTARTS to 50/hour
+- Updated prompt to tell orchestrator to spawn workers, not implement
+- Emphasis on short orchestration sessions
 
 ---
 
@@ -66,38 +48,23 @@ The user is concerned that the orchestrator never spawns workers - it does every
 ### Pending Tasks: 0
 All tasks completed.
 
-### Active Agents: 1
-Just the orchestrator (me, agent-1767353179414-xlsru).
+### Active Agents: 4
+Multiple general agents registered.
 
 ### Recent Achievements
-1. Session 127: Refactored terminal-dashboard, fixed OpenCode session paths
-2. Session 127: Created debug-capture.ts, removed deprecated tools
+1. Session 138: Token usage tracking in terminal-dashboard CLI (8.3/10)
+2. Session 127: Refactored terminal-dashboard, fixed OpenCode session paths
 3. Session 126: Dashboard UI improvements (8.1/10 avg quality)
 
 ---
 
-## Multi-Agent Coordination Notes
+## Terminal Dashboard - Token View
 
-### Why Workers May Not Be Spawning
-1. **Native Task tool blocks** - waits for completion before continuing
-2. **Orchestrator claims tasks itself** - doesn't delegate to workers
-3. **No parallel work pattern established**
-
-### Correct Pattern for Parallel Workers
-```bash
-# Option 1: Non-blocking bash spawn
-nohup opencode run 'Complete task X: ...' > /dev/null 2>&1 &
-
-# Option 2: Use task_spawn tool (creates task + enhanced prompt)
-task_spawn(title, prompt, subagent_type)
-```
-
-### Role Detection
-The plugin auto-detects roles from these keywords:
-- `orchestrator`: orchestrator, coordination
-- `memory-worker`: memory worker, memory tasks
-- `code-worker`: code worker, code tasks
-- `analysis-worker`: analysis, read-only, research
+The new tokens view (key 7) shows:
+- Today's vs total token usage
+- Breakdown: input, output, reasoning, cache
+- Per-session token counts
+- Cache efficiency calculation
 
 ---
 
@@ -106,24 +73,15 @@ The plugin auto-detects roles from these keywords:
 ### Tools (24 total in /app/workspace/tools/)
 - `opencode-cli.ts` - Unified CLI (status, agents, tasks)
 - `opencode-tracker.ts` - PRIMARY for OpenCode session tracking
-- `debug-capture.ts` - NEW: Save terminal outputs
+- `debug-capture.ts` - Save terminal outputs
 - `task-manager.ts` - Task CRUD
 - `realtime-monitor.ts` - Live dashboard
 
 ### Terminal Dashboard (/app/workspace/terminal-dashboard/)
-- `index.ts` - Main entry (681 lines)
-- `data.ts` - Data loading (338 lines)
-- `renders.ts` - Render functions (430 lines)
-- `types.ts` - TypeScript types (120 lines)
-
-### Plugin (/app/workspace/.opencode/plugin/)
-- `index.ts` - Main plugin with hooks
-- `tools/` - Modular tool definitions
-
-### Memory (/app/workspace/memory/)
-- `state.json` - Session count, achievements
-- `tasks.json` - Persistent tasks
-- `working.md` - THIS FILE
+- `index.ts` - Main entry (now with tokens view)
+- `data.ts` - Data loading + token extraction
+- `renders.ts` - Render functions + renderTokensContent
+- `types.ts` - TypeScript types + SessionTokens
 
 ---
 
@@ -135,27 +93,28 @@ bun tools/opencode-cli.ts status
 bun tools/opencode-cli.ts agents
 bun tools/opencode-cli.ts tasks
 
-# Terminal dashboard
+# Terminal dashboard (key 7 for tokens view)
 bun terminal-dashboard/index.ts
 
-# Debug captures
-bun tools/debug-capture.ts list
+# Spawn a worker
+opencode run "You are a WORKER. Register as worker. Task: [X]. Report via agent_send."
 ```
 
 ---
 
-## What Next Agent Should Do
+## ORCHESTRATOR ROLE (Updated)
 
-1. **Ask user for direction** - Don't assume next task
-2. **Consider multi-agent approach** - Spawn workers for parallel work
-3. **Check user_messages_read()** - May have new messages
-4. **Review pending tasks** - task_list(status='pending')
+The orchestrator should:
+1. **NOT implement tasks** - just coordinate
+2. **Spawn workers** via `opencode run` in terminal
+3. **Keep sessions short** - under 5 minutes
+4. **Exit after spawning** - let watchdog restart
 
 ---
 
 ## Session History
 
-- Session 127: Dashboard refactoring, debug tools, cleanup (this session)
-- Session 126: Dashboard UI improvements, recharts, component extraction
+- Session 138: Token tracking, watchdog updates (this session)
+- Session 127: Dashboard refactoring, debug tools, cleanup
+- Session 126: Dashboard UI improvements, recharts
 - Session 122: OpenCode learnings, task_spawn, custom agents
-- Session 118: CLI migrations, unit tests, git cleanup

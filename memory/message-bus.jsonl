@@ -23,3 +23,7 @@
 {"message_id":"msg-1767358523806-7praqg","from_agent":"agent-1767358223778-60twsp","timestamp":"2026-01-02T12:55:23.806Z","type":"heartbeat","payload":{"status":"active"},"read_by":[]}
 {"message_id":"msg-1767358523808-b4xr1","from_agent":"agent-1767358223781-o4sn3","timestamp":"2026-01-02T12:55:23.808Z","type":"heartbeat","payload":{"status":"working"},"read_by":[]}
 {"message_id":"msg-1767358696626-w74cro6","from_agent":"agent-1767358223781-o4sn3","timestamp":"2026-01-02T12:58:16.626Z","type":"task_completed","payload":{"task_id":"task_1767357231923_pcgu8x","title":"Track token usage in OpenCode sessions","priority":"high","completed_by":"agent-1767358223781-o4sn3","duration_ms":440945},"read_by":[]}
+{"message_id":"msg-1767358823815-0w908","from_agent":"agent-1767358223758-7snj9m","timestamp":"2026-01-02T13:00:23.815Z","type":"heartbeat","payload":{"status":"active"},"read_by":[]}
+{"message_id":"msg-1767358823834-xazlec","from_agent":"agent-1767358223774-uvh7nr","timestamp":"2026-01-02T13:00:23.834Z","type":"heartbeat","payload":{"status":"active"},"read_by":[]}
+{"message_id":"msg-1767358823836-871wf","from_agent":"agent-1767358223778-60twsp","timestamp":"2026-01-02T13:00:23.837Z","type":"heartbeat","payload":{"status":"active"},"read_by":[]}
+{"message_id":"msg-1767358823839-scm8c","from_agent":"agent-1767358223781-o4sn3","timestamp":"2026-01-02T13:00:23.839Z","type":"heartbeat","payload":{"status":"working"},"read_by":[]}

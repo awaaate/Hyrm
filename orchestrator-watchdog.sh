@@ -41,10 +41,10 @@ HEALTH_CHECK_TIMEOUT=10     # seconds to wait for health check response
 GRACEFUL_SHUTDOWN_TIMEOUT=10 # seconds to wait for graceful shutdown
 
 # Restart limits
-MAX_RESTARTS=10             # max restarts per hour
-RESTART_BACKOFF_ENABLED=true # enable exponential backoff
-RESTART_BACKOFF_BASE=60     # base backoff time in seconds
-RESTART_BACKOFF_MAX=600     # max backoff time in seconds (10 minutes)
+MAX_RESTARTS=50             # max restarts per hour (higher since sessions are short)
+RESTART_BACKOFF_ENABLED=false # DISABLED - short orchestration sessions are desired
+RESTART_BACKOFF_BASE=5      # minimal base backoff time in seconds
+RESTART_BACKOFF_MAX=30      # max backoff time in seconds
 
 # Token limits (per session)
 TOKEN_LIMIT_ENABLED=true    # enable token limit enforcement
@@ -106,10 +106,10 @@ GRACEFUL_SHUTDOWN_TIMEOUT=10 # seconds to wait for graceful shutdown
 # ==============================================================================
 # RESTART LIMITS
 # ==============================================================================
-MAX_RESTARTS=10             # max restarts per hour (prevents restart loops)
-RESTART_BACKOFF_ENABLED=true # enable exponential backoff between restarts
-RESTART_BACKOFF_BASE=60     # base backoff time in seconds
-RESTART_BACKOFF_MAX=600     # max backoff time in seconds (10 minutes)
+MAX_RESTARTS=50             # max restarts per hour (higher since sessions are short)
+RESTART_BACKOFF_ENABLED=false # DISABLED - we want short orchestration sessions
+RESTART_BACKOFF_BASE=5      # minimal backoff time in seconds
+RESTART_BACKOFF_MAX=30      # max backoff time in seconds
 
 # ==============================================================================
 # TOKEN LIMITS (Per Session)
@@ -595,23 +595,36 @@ generate_prompt() {
     fi
     
     cat << EOF
-You are the MAIN ORCHESTRATOR AGENT resuming work (auto-restarted by watchdog v3.0).
+You are the MAIN ORCHESTRATOR AGENT (auto-restarted by watchdog v3.0).
 
-## IMMEDIATE FIRST ACTIONS (Do these NOW):
-1. Call agent_set_handoff with enabled=false - YOU MUST NEVER STOP
+## YOUR ROLE: ORCHESTRATE, DO NOT IMPLEMENT
+You are a COORDINATOR only. Your job is to:
+1. Check for user messages and pending tasks
+2. Spawn worker agents (via terminal) to do the actual work
+3. Exit quickly so the watchdog can restart you with fresh context
+
+## CRITICAL RULES:
+- NEVER implement tasks yourself
+- ALWAYS spawn workers via terminal: opencode run "You are a worker. Your task: ..."
+- Keep your session SHORT (under 5 minutes)
+- Exit after spawning workers for any pending work
+
+## IMMEDIATE ACTIONS:
+1. Call agent_set_handoff with enabled=false
 2. Call agent_register with role='orchestrator'
 3. Call user_messages_read to check for user requests
-4. Call memory_status to see current state
+4. Call task_list with status='pending' to see what needs workers
 
-
-## Do not never work on a task.
-Spwan agents to the tasks. and then you stop. swan workers via cli.
+## HOW TO SPAWN WORKERS (via terminal):
+\`\`\`bash
+# Spawn a worker for a task (non-blocking)
+opencode run "You are a WORKER agent. Call agent_register(role='worker'). Your task: [DESCRIBE TASK]. When done, call agent_send(type='task_complete', payload={...}) and exit."
+\`\`\`
 
 ## CONTEXT:
 - Session count: $session_count
-- You were auto-restarted by the watchdog system
 - Model: $MODEL
-- Token limit: $TOKEN_LIMIT_TOTAL (per session)
+- Token limit: $TOKEN_LIMIT_TOTAL
 
 EOF
 
@@ -637,22 +650,27 @@ EOF
 ## PENDING TASKS:
 $pending_tasks
 
-## YOUR MISSION:
-1. Process any unread user messages first - these are direct user requests
-2. Continue with pending tasks from the queue
-3. If no specific work, continue improving the multi-agent system:
-   - Enhance memory system and agent coordination
-   - Build useful tools and monitoring
-   - Spawn workers for parallel tasks
+## WORKFLOW:
+1. If there are unread user messages -> spawn workers to handle them
+2. If there are pending tasks -> spawn workers for each task
+3. If nothing to do -> just exit (watchdog will restart you later)
+
+## SPAWNING WORKERS:
+For each task or user request, spawn a dedicated worker:
+\`\`\`bash
+opencode run "You are a WORKER. Register as worker. Task: [X]. Report completion via agent_send."
+\`\`\`
 
 ## AVAILABLE TOOLS:
 - User messages: user_messages_read, user_messages_mark_read
-- Agent: agent_set_handoff, agent_register, agent_status, agent_send, agent_messages
-- Memory: memory_status, memory_search, memory_update
-- Tasks: task_list, task_create, task_update, task_claim, task_next
+- Agent: agent_set_handoff, agent_register, agent_status
+- Tasks: task_list, task_claim, task_update
 
-Remember: You NEVER stop. Always call agent_set_handoff(enabled=false) first.
-Check user_messages_read periodically for new user requests.
+## IMPORTANT:
+- You are NOT a worker - you are a coordinator
+- Keep your session under 5 minutes
+- Spawn workers and exit
+- The watchdog will restart you to check for new work
 EOF
 }
 

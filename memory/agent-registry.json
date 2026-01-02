@@ -5,7 +5,7 @@
       "agent_id": "agent-1767358223758-7snj9m",
       "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
       "started_at": "2026-01-02T12:50:23.759Z",
-      "last_heartbeat": "2026-01-02T12:58:23.808Z",
+      "last_heartbeat": "2026-01-02T13:00:23.814Z",
       "status": "active",
       "assigned_role": "general",
       "pid": 512853
@@ -14,7 +14,7 @@
       "agent_id": "agent-1767358223774-uvh7nr",
       "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
       "started_at": "2026-01-02T12:50:23.775Z",
-      "last_heartbeat": "2026-01-02T12:58:23.827Z",
+      "last_heartbeat": "2026-01-02T13:00:23.833Z",
       "status": "active",
       "assigned_role": "general",
       "pid": 512853
@@ -23,7 +23,7 @@
       "agent_id": "agent-1767358223778-60twsp",
       "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
       "started_at": "2026-01-02T12:50:23.778Z",
-      "last_heartbeat": "2026-01-02T12:58:23.828Z",
+      "last_heartbeat": "2026-01-02T13:00:23.836Z",
       "status": "active",
       "assigned_role": "general",
       "pid": 512853
@@ -32,7 +32,7 @@
       "agent_id": "agent-1767358223781-o4sn3",
       "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
       "started_at": "2026-01-02T12:50:23.782Z",
-      "last_heartbeat": "2026-01-02T12:58:23.828Z",
+      "last_heartbeat": "2026-01-02T13:00:23.839Z",
       "status": "working",
       "assigned_role": "general",
       "pid": 512853,
@@ -48,6 +48,6 @@
       "pid": 512853
     }
   ],
-  "last_updated": "2026-01-02T12:58:23.828Z",
+  "last_updated": "2026-01-02T13:00:23.839Z",
   "lock_version": 202
 }

@@ -1,10 +1,10 @@
 {
     "status": "running",
-    "last_check": "2026-01-02T12:58:30+00:00",
+    "last_check": "2026-01-02T13:00:30+00:00",
     "orchestrator_pid": 512853,
     "details": "Monitoring active",
     "watchdog_pid": 512788,
-    "restarts_this_hour": 1,
+    "restarts_this_hour": 0,
     "token_usage": 0,
     "token_limit": 150000,
     "model": "anthropic/claude-opus-4-5",
