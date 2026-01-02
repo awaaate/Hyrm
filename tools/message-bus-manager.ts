@@ -29,11 +29,12 @@ const INDEX_PATH = join(ARCHIVE_DIR, "index.json");
 
 // Configuration
 const CONFIG = {
-  maxMessages: 500,           // Rotate after this many messages
-  maxSizeBytes: 100 * 1024,   // Rotate after 100KB
-  heartbeatTTLHours: 1,       // Keep heartbeats for 1 hour
+  maxMessages: 300,           // Rotate after this many messages (reduced from 500)
+  maxSizeBytes: 50 * 1024,    // Rotate after 50KB (reduced from 100KB)
+  heartbeatTTLHours: 0.5,     // Keep heartbeats for 30 mins (reduced from 1 hour)
   messageTTLHours: 24 * 7,    // Keep other messages for 7 days
-  keepLatestHeartbeatsPerAgent: 3, // Keep last 3 heartbeats per agent
+  keepLatestHeartbeatsPerAgent: 1, // Keep only latest heartbeat per agent (reduced from 3)
+  compactThreshold: 10,       // Run compact if more than 10 heartbeats
 };
 
 interface Message {
@@ -415,12 +416,12 @@ export function autoMaintenance(): { rotated: boolean; compacted: boolean; remov
     removed = messages.length;
   }
   
-  // Always compact heartbeats
+  // Always compact heartbeats (more aggressive threshold)
   const currentMessages = readMessages();
   if (currentMessages.length > 0) {
     const heartbeatCount = currentMessages.filter(m => m.type === "heartbeat").length;
     
-    if (heartbeatCount > 20) {
+    if (heartbeatCount > CONFIG.compactThreshold) {
       const now = Date.now();
       const heartbeatTTL = CONFIG.heartbeatTTLHours * 60 * 60 * 1000;
       

@@ -49,6 +49,7 @@ class MultiAgentCoordinator {
   private agentId: string;
   private sessionId: string;
   private heartbeatInterval?: NodeJS.Timeout;
+  private heartbeatCount: number = 0;
 
   constructor(sessionId?: string) {
     this.agentId = `agent-${Date.now()}-${Math.random().toString(36).substring(7)}`;
@@ -128,8 +129,9 @@ class MultiAgentCoordinator {
 
   /**
    * Start heartbeat to keep agent alive in registry
+   * Reduced frequency to avoid message bus spam
    */
-  startHeartbeat(intervalMs: number = 30000): void {
+  startHeartbeat(intervalMs: number = 60000): void {
     this.heartbeatInterval = setInterval(() => {
       this.sendHeartbeat();
     }, intervalMs);
@@ -140,8 +142,10 @@ class MultiAgentCoordinator {
 
   /**
    * Send heartbeat to update agent status
+   * Only updates registry - message bus heartbeats are reduced to every 5th call
    */
   private sendHeartbeat(): void {
+    this.heartbeatCount++;
     const registry = this.readRegistry();
     const agent = registry.agents.find((a) => a.agent_id === this.agentId);
     
@@ -151,11 +155,14 @@ class MultiAgentCoordinator {
       writeFileSync(REGISTRY_PATH, JSON.stringify(registry, null, 2));
     }
 
-    // Also send heartbeat message
-    this.sendMessage({
-      type: "heartbeat",
-      payload: { status: agent?.status || "active" },
-    });
+    // Only send message bus heartbeat every 5th call (every 5 minutes with 60s interval)
+    // This reduces message bus spam while still allowing coordination visibility
+    if (this.heartbeatCount % 5 === 1) {
+      this.sendMessage({
+        type: "heartbeat",
+        payload: { status: agent?.status || "active" },
+      });
+    }
   }
 
   /**
