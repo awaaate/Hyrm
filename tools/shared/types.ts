@@ -47,6 +47,10 @@ export interface Task {
   quality_score?: number;
   quality_notes?: string;
   estimated_hours?: number;
+  // GitHub integration fields
+  github_issue_number?: number;
+  github_issue_url?: string;
+  github_branch?: string;
 }
 
 /**
