@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "session_count": 138,
-  "status": "orchestrator_active",
+  "status": "Session 139: Orchestrator resumed. Cleaned up stale agents, reassigned dashboard messages task (task_1767357229945_z6mnqe), spawned worker via terminal.",
   "active_tasks": [],
   "recent_achievements": [
     "Session 138: Session 138: Implemented token usage tracking in terminal-dashboard CLI. Added SessionTokens type, token extraction from OpenCode messages, new 'tokens' view mode (key 7), token display in sessions view, cache efficiency calculation. Quality: 8.3/10. Commit: 9f5c722.",
@@ -12,7 +12,7 @@
   ],
   "last_session": "2026-01-02T12:50:23.779Z",
   "current_session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
-  "last_updated": "2026-01-02T12:58:52.523Z",
+  "last_updated": "2026-01-02T13:02:33.126Z",
   "sessions_metadata": {
     "ses_489c3933bffeL5S1ti3unQcfDs": {
       "tokens": 50000,

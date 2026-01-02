@@ -120,3 +120,41 @@ export interface PerformanceData {
     suggestionCount: number;
   };
 }
+
+// OpenCode session types
+export interface OpenCodeSession {
+  id: string;
+  messageCount: number;
+  userMessages: number;
+  assistantMessages: number;
+  startTime: number;
+  endTime: number;
+  durationMs: number;
+  tokens: {
+    input: number;
+    output: number;
+    cache: {
+      read: number;
+      write: number;
+    };
+  };
+}
+
+export interface OpenCodeMessage {
+  id: string;
+  role: "user" | "assistant" | "system";
+  createdAt: number;
+  completedAt?: number;
+  summary: string | null;
+  model: string | null;
+  tokens: {
+    input: number;
+    output: number;
+    reasoning: number;
+    cache?: {
+      read: number;
+      write: number;
+    };
+  } | null;
+  finish: string | null;
+}

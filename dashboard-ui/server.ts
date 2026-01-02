@@ -34,6 +34,40 @@ const OPENCODE_STORAGE = join(require("os").homedir(), ".local", "share", "openc
 const OPENCODE_SESSIONS_DIR = join(OPENCODE_STORAGE, "session");
 const OPENCODE_MESSAGES_DIR = join(OPENCODE_STORAGE, "message");
 
+// OpenCode session and message types
+interface OpenCodeMessage {
+  id: string;
+  sessionID: string;
+  role: "user" | "assistant" | "system";
+  time: {
+    created: number;
+    completed?: number;
+  };
+  summary?: {
+    title?: string;
+  };
+  modelID?: string;
+  tokens?: {
+    input: number;
+    output: number;
+    reasoning: number;
+    cache?: {
+      read: number;
+      write: number;
+    };
+  };
+  finish?: string;
+}
+
+interface OpenCodeSession {
+  id: string;
+  projectID?: string;
+  time?: {
+    created: number;
+    updated?: number;
+  };
+}
+
 // Store connected WebSocket clients
 const clients = new Set<any>();
 
@@ -337,6 +371,134 @@ function generateBasicPerformanceMetrics(): any {
       suggestionCount: 0,
     }
   };
+}
+
+// Get list of OpenCode sessions
+function getOpenCodeSessions(): { sessions: any[] } {
+  try {
+    if (!existsSync(OPENCODE_MESSAGES_DIR)) {
+      return { sessions: [] };
+    }
+    
+    const sessionDirs = require("fs").readdirSync(OPENCODE_MESSAGES_DIR)
+      .filter((dir: string) => dir.startsWith("ses_"));
+    
+    const sessions = [];
+    
+    for (const sessionId of sessionDirs) {
+      const sessionMsgDir = join(OPENCODE_MESSAGES_DIR, sessionId);
+      const msgFiles = require("fs").readdirSync(sessionMsgDir)
+        .filter((f: string) => f.endsWith(".json"));
+      
+      if (msgFiles.length === 0) continue;
+      
+      // Get first and last message for time range
+      const sortedFiles = msgFiles.sort();
+      let firstMsgTime = 0;
+      let lastMsgTime = 0;
+      let totalTokens = { input: 0, output: 0, cache: { read: 0, write: 0 } };
+      let messageCount = msgFiles.length;
+      let userMessages = 0;
+      let assistantMessages = 0;
+      
+      // Read first message for start time
+      try {
+        const firstMsg = JSON.parse(readFileSync(join(sessionMsgDir, sortedFiles[0]), "utf-8"));
+        firstMsgTime = firstMsg.time?.created || 0;
+      } catch {}
+      
+      // Read last message for end time
+      try {
+        const lastMsg = JSON.parse(readFileSync(join(sessionMsgDir, sortedFiles[sortedFiles.length - 1]), "utf-8"));
+        lastMsgTime = lastMsg.time?.created || 0;
+      } catch {}
+      
+      // Sample messages to get role counts and tokens (read every Nth message for performance)
+      const sampleRate = Math.max(1, Math.floor(msgFiles.length / 10));
+      for (let i = 0; i < msgFiles.length; i += sampleRate) {
+        try {
+          const msg = JSON.parse(readFileSync(join(sessionMsgDir, msgFiles[i]), "utf-8"));
+          if (msg.role === "user") userMessages++;
+          if (msg.role === "assistant") assistantMessages++;
+          if (msg.tokens) {
+            totalTokens.input += msg.tokens.input || 0;
+            totalTokens.output += msg.tokens.output || 0;
+            if (msg.tokens.cache) {
+              totalTokens.cache.read += msg.tokens.cache.read || 0;
+              totalTokens.cache.write += msg.tokens.cache.write || 0;
+            }
+          }
+        } catch {}
+      }
+      
+      // Scale up sampled counts
+      if (sampleRate > 1) {
+        userMessages = Math.round(userMessages * sampleRate);
+        assistantMessages = Math.round(assistantMessages * sampleRate);
+        totalTokens.input = Math.round(totalTokens.input * sampleRate);
+        totalTokens.output = Math.round(totalTokens.output * sampleRate);
+        totalTokens.cache.read = Math.round(totalTokens.cache.read * sampleRate);
+        totalTokens.cache.write = Math.round(totalTokens.cache.write * sampleRate);
+      }
+      
+      sessions.push({
+        id: sessionId,
+        messageCount,
+        userMessages,
+        assistantMessages,
+        startTime: firstMsgTime,
+        endTime: lastMsgTime,
+        durationMs: lastMsgTime - firstMsgTime,
+        tokens: totalTokens,
+      });
+    }
+    
+    // Sort by most recent first
+    sessions.sort((a, b) => b.startTime - a.startTime);
+    
+    return { sessions: sessions.slice(0, 50) }; // Return last 50 sessions
+  } catch (e) {
+    console.error("Error getting OpenCode sessions:", e);
+    return { sessions: [] };
+  }
+}
+
+// Get messages for a specific OpenCode session
+function getOpenCodeSessionMessages(sessionId: string): { messages: any[] } {
+  try {
+    const sessionMsgDir = join(OPENCODE_MESSAGES_DIR, sessionId);
+    
+    if (!existsSync(sessionMsgDir)) {
+      return { messages: [] };
+    }
+    
+    const msgFiles = require("fs").readdirSync(sessionMsgDir)
+      .filter((f: string) => f.endsWith(".json"))
+      .sort();
+    
+    const messages = [];
+    
+    for (const file of msgFiles) {
+      try {
+        const msg = JSON.parse(readFileSync(join(sessionMsgDir, file), "utf-8"));
+        messages.push({
+          id: msg.id,
+          role: msg.role,
+          createdAt: msg.time?.created,
+          completedAt: msg.time?.completed,
+          summary: msg.summary?.title || null,
+          model: msg.modelID || null,
+          tokens: msg.tokens || null,
+          finish: msg.finish || null,
+        });
+      } catch {}
+    }
+    
+    return { messages };
+  } catch (e) {
+    console.error("Error getting session messages:", e);
+    return { messages: [] };
+  }
 }
 
 // Get recent events from message bus (last 50)
@@ -678,7 +840,14 @@ const server = Bun.serve({
         return new Response(JSON.stringify(getRecentEvents()), { headers });
       case "/api/performance":
         return new Response(JSON.stringify(getPerformance()), { headers });
+      case "/api/opencode/sessions":
+        return new Response(JSON.stringify(getOpenCodeSessions()), { headers });
       default:
+        // Handle dynamic routes for session messages
+        if (url.pathname.startsWith("/api/opencode/sessions/") && url.pathname.endsWith("/messages")) {
+          const sessionId = url.pathname.replace("/api/opencode/sessions/", "").replace("/messages", "");
+          return new Response(JSON.stringify(getOpenCodeSessionMessages(sessionId)), { headers });
+        }
         return new Response(JSON.stringify({ error: "Not found" }), { 
           status: 404, 
           headers 
@@ -726,6 +895,8 @@ REST Endpoints:
   GET /api/quality     - Quality assessments
   GET /api/analytics   - Session analytics
   GET /api/performance - Performance metrics (tool times, agent efficiency, errors)
+  GET /api/opencode/sessions               - List OpenCode sessions
+  GET /api/opencode/sessions/:id/messages  - Get messages for a session
 
 WebSocket Events (WS /ws):
   File-based updates:

@@ -11,6 +11,7 @@ import {
   ListTodo,
   ScrollText,
   TrendingUp,
+  MessageSquare,
 } from "lucide-react";
 
 // Import custom components
@@ -24,6 +25,7 @@ import {
   QualityPanel,
   PerformanceTab,
   SessionAnalyticsPanel,
+  OpenCodeSessionsPanel,
 } from "./components";
 
 // Import types
@@ -352,6 +354,7 @@ function App() {
             <TabsTrigger value="logs">Logs</TabsTrigger>
             <TabsTrigger value="quality">Quality</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="opencode">OpenCode</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
@@ -610,6 +613,20 @@ function App() {
 
           <TabsContent value="analytics">
             <SessionAnalyticsPanel analytics={analytics} />
+          </TabsContent>
+
+          <TabsContent value="opencode">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5" />
+                  OpenCode Sessions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <OpenCodeSessionsPanel />
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </main>

@@ -1580,7 +1580,7 @@
       "priority": "high",
       "status": "in_progress",
       "created_at": "2026-01-02T12:33:49.945Z",
-      "updated_at": "2026-01-02T12:35:11.532Z",
+      "updated_at": "2026-01-02T13:02:33.602Z",
       "created_by": "ses_4814d47d8ffeIIDVFJITkTQRq5",
       "tags": [
         "dashboard",
@@ -1589,8 +1589,11 @@
       ],
       "estimated_hours": 2,
       "complexity": "moderate",
-      "assigned_to": "agent-1767357200449-mdvyb",
-      "claimed_at": "2026-01-02T12:35:11.532Z"
+      "assigned_to": "agent-1767358953150-y6s0s9",
+      "claimed_at": "2026-01-02T13:02:33.602Z",
+      "notes": [
+        "[2026-01-02T13:02:11.099Z] Reassigned - previous agent (agent-1767357200449-mdvyb) no longer active. Needs worker assignment."
+      ]
     },
     {
       "id": "task_1767357231923_pcgu8x",
@@ -1620,5 +1623,5 @@
     }
   ],
   "completed_count": 72,
-  "last_updated": "2026-01-02T12:58:16.627Z"
+  "last_updated": "2026-01-02T13:02:33.602Z"
 }

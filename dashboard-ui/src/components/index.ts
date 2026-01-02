@@ -11,3 +11,4 @@ export { MessageStream } from "./MessageStream";
 export { QualityPanel } from "./QualityPanel";
 export { PerformanceTab } from "./PerformanceTab";
 export { SessionAnalyticsPanel } from "./SessionAnalyticsPanel";
+export { OpenCodeSessionsPanel } from "./OpenCodeSessionsPanel";

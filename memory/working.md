@@ -1,70 +1,53 @@
 # Working Memory
 
-## Session 138 - HANDOFF (2026-01-02)
+## Session 139 - ORCHESTRATION (2026-01-02)
 
-**Status**: User requested stop after task completion
-**Agent ID**: agent-1767358223781-o4sn3
-**Commits**: 9f5c722
+**Status**: Worker spawned for dashboard task
+**Agent ID**: agent-1767358897982-sib5bs
+**Mode**: Short orchestration - spawn and exit
 
-### CRITICAL: FOR NEXT AGENT
+### Actions This Session
+1. Registered as orchestrator (handoff disabled)
+2. Checked user messages: 0 unread
+3. Found stale in-progress task (dashboard messages)
+4. Reassigned task to pending status
+5. Spawned worker via `opencode run` to implement
 
-**YOU ARE A NEW INSTANCE**. The previous agent is gone. This file contains everything you need to continue.
-
-**User Feedback (IMPORTANT)**:
-> "update the watchdog script with telling in the prompt that you must never work on implementing this, but create agents and put them to work. create those agents always using the terminal. and stop your current session. also remove the backoff strategy. the aim is not having a large conversation in the orchestrator rather a short and orchestrative"
-
-The user wants SHORT ORCHESTRATION sessions. The orchestrator should:
-1. Check for user messages and pending tasks
-2. Spawn workers via `opencode run` in the terminal
-3. Exit quickly - let the watchdog restart
-
-**Watchdog Updated**: 
-- Backoff strategy DISABLED (short sessions desired)
-- MAX_RESTARTS increased to 50/hour
-- Prompt now tells orchestrator to spawn workers, not implement
+### Active Worker Tasks
+- **task_1767357229945_z6mnqe**: Dashboard: Show messages for selected OpenCode session
+  - Worker spawned via terminal
+  - Status: In progress (worker claimed)
 
 ---
 
-## What Was Done This Session
+## Previous Session (138) Summary
 
-### 1. Token Usage Tracking (Main Task)
+### Token Usage Tracking (Completed)
 - **Types added**: `SessionTokens`, `TokenTrend` in types.ts
 - **Data functions**: `extractSessionTokens`, `getSessionTokens`, `getTokenTrends`, `getTotalTokenUsage` in data.ts
 - **New view**: 'tokens' view mode (key 7) in terminal dashboard
-- **Token data**: input, output, reasoning, cache_read, cache_write
-- **Sessions view**: Now shows token count per session
 - **Commit**: 9f5c722 - Add token usage tracking to terminal-dashboard CLI
+- **Quality**: 8.3/10
 
-### 2. Watchdog Script Updated
-- Disabled backoff strategy (RESTART_BACKOFF_ENABLED=false)
-- Increased MAX_RESTARTS to 50/hour
-- Updated prompt to tell orchestrator to spawn workers, not implement
-- Emphasis on short orchestration sessions
+### Watchdog Script Updated
+- Backoff strategy DISABLED (short sessions desired)
+- MAX_RESTARTS increased to 50/hour
+- Orchestrator spawns workers, doesn't implement
 
 ---
 
 ## Current System State
 
-### Pending Tasks: 0
-All tasks completed.
+### Pending Tasks: 1
+- **Dashboard messages**: Show messages for selected OpenCode session (worker assigned)
 
-### Active Agents: 4
-Multiple general agents registered.
+### Active Agents: 5+
+- Orchestrator + worker spawned
 
 ### Recent Achievements
-1. Session 138: Token usage tracking in terminal-dashboard CLI (8.3/10)
+1. Session 138: Token tracking in terminal-dashboard CLI (8.3/10)
 2. Session 127: Refactored terminal-dashboard, fixed OpenCode session paths
 3. Session 126: Dashboard UI improvements (8.1/10 avg quality)
-
----
-
-## Terminal Dashboard - Token View
-
-The new tokens view (key 7) shows:
-- Today's vs total token usage
-- Breakdown: input, output, reasoning, cache
-- Per-session token counts
-- Cache efficiency calculation
 
 ---
 
