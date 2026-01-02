@@ -272,7 +272,7 @@ export function createGitTools(getContext: () => GitToolsContext) {
     }),
 
     git_commit: tool({
-      description: "Create a git commit with all staged/modified files. Includes agent and task metadata for tracking.",
+      description: "Create a git commit with all staged/modified files. Includes agent and task metadata for tracking. Can optionally push to remote after committing.",
       args: {
         message: tool.schema
           .string()
@@ -285,8 +285,12 @@ export function createGitTools(getContext: () => GitToolsContext) {
           .boolean()
           .describe("Add all changes before committing (default: true)")
           .optional(),
+        push: tool.schema
+          .boolean()
+          .describe("Push to remote after committing (default: true)")
+          .optional(),
       },
-      async execute({ message, task_id, add_all = true }) {
+      async execute({ message, task_id, add_all = true, push = true }) {
         try {
           const ctx = getContext();
           const cwd = getCwd();
@@ -361,6 +365,27 @@ export function createGitTools(getContext: () => GitToolsContext) {
           
           ctx.log("INFO", `Git commit created: ${hash}`, { message, task_id });
           
+          // Push to remote if requested
+          let pushed = false;
+          let pushError: string | null = null;
+          if (push) {
+            const pushResult = runGit(["push"], cwd);
+            if (pushResult.success) {
+              pushed = true;
+              ctx.log("INFO", `Git push successful after commit ${hash}`);
+              logGitActivity(ctx.memoryDir, {
+                timestamp: new Date().toISOString(),
+                action: "push",
+                agent_id: agentId || undefined,
+                task_id,
+                commit_hash: hash,
+              });
+            } else {
+              pushError = pushResult.stderr || "Push failed";
+              ctx.log("WARN", `Git push failed: ${pushError}`);
+            }
+          }
+          
           return JSON.stringify({
             success: true,
             commit_hash: hash,
@@ -370,6 +395,8 @@ export function createGitTools(getContext: () => GitToolsContext) {
             deletions,
             agent_id: agentId,
             task_id,
+            pushed,
+            push_error: pushError,
           });
         } catch (error) {
           return JSON.stringify({ success: false, error: String(error) });
