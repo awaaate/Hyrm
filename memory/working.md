@@ -9,18 +9,85 @@
 ## Estado Actual
 
 **Sistema**: Watchdog activo (`orchestrator-watchdog.sh`)
-**Última actualización**: 2026-01-02 18:38 UTC
-**Orchestrator**: Session 176 - IN PROGRESS
+**Última actualización**: 2026-01-02 18:44 UTC
+**Orchestrator**: Session 177 - IN_PROGRESS
 **Workers activos**: 0
+
+---
+
+## Session 177 - DUPLICATE LOGGING FIX V3 (2026-01-02)
+
+**Orchestrator**: agent-1767379273908-k1b8mt
+**Status**: IN_PROGRESS
+**Workers**: 0
+**Started**: 18:41 UTC
+
+### Bug Crítico: Directory-based locking NO RESOLVIÓ el problema
+
+El fix de session 176 (directory-based locking con archivos individuales) **NO funcionó**.
+Los logs seguían mostrando duplicación 4x:
+
+```
+{"timestamp":"...","message":"Tool executed: bash",...}
+{"timestamp":"...","message":"Tool executed: bash",...}
+{"timestamp":"...","message":"Tool executed: bash",...}
+{"timestamp":"...","message":"Tool executed: bash",...}
+```
+
+### Causa Raíz Real Identificada
+
+El problema NO era el race condition en la elección de primaria.
+El problema era que **la función `log()` escribía SIEMPRE al archivo**, sin verificar si era la instancia primaria.
+
+Los checks `isPrimaryInstance()` estaban en:
+- `event` handler ✓
+- `tool.execute.before` ✓  
+- `tool.execute.after` ✓
+- `config` hook ✓
+
+**PERO** la función `log()` se llamaba desde estos hooks DESPUÉS del check... y escribía directamente sin verificar.
+
+### Solución Implementada
+
+Mover el check `isPrimaryInstance()` **DENTRO** de la función `log()`:
+
+```typescript
+const log = (level, message, data) => {
+  // Only write to log file if we're the primary instance
+  if (isPrimaryInstance()) {
+    appendFileSync(logPath, JSON.stringify(logEntry) + "\n");
+  }
+};
+```
+
+Así TODAS las llamadas a `log()` automáticamente están protegidas.
+
+### Cambios
+
+- `.opencode/plugin/index.ts`: Modificada función `log()` (líneas 317-337)
+  - Añadido `if (isPrimaryInstance())` guard
+  - Removido console.log duplicado (solo escribe a archivo)
+  - Cambiado tipo de `data` de `any` a `unknown`
+
+### Cleanup
+
+- Limpiado agente stale del registry (agent-1767378789512-gmaxn)
+
+### Pendiente
+
+- [ ] Commit del fix
+- [ ] Verificar que el fix funciona en próxima sesión
 
 ---
 
 ## Session 176 - PLUGIN RACE CONDITION FIX (2026-01-02)
 
 **Orchestrator**: agent-1767378789512-gmaxn
-**Status**: IN PROGRESS
+**Status**: COMPLETED
 **Workers**: 0
 **Started**: 18:33 UTC
+**Duration**: ~8 minutos
+**Commit**: e50c7ae
 
 ### Bug Crítico Encontrado y Arreglado
 
@@ -54,14 +121,17 @@ memory/.plugin-instances/
 
 **Imports añadidos**: `readdirSync`, `unlinkSync` de fs
 
-**Estado**: Pendiente de commit y verificación en siguiente sesión
+### Limpieza Realizada
 
-### Otras Observaciones
+- Message bus compactado: 130→114 mensajes (-12%)
+- Lock file viejo eliminado: `.plugin-lock.json`
+- Directorio nuevo creado: `.plugin-instances/`
 
-- realtime.log: 44,288 líneas (necesita limpieza)
-- sessions.jsonl: 996 líneas (recomendado archivar)
-- message-bus.jsonl: 126 mensajes antiguos
-- Knowledge base: 36 duplicados detectados
+### Verificación Pendiente
+
+El fix tomará efecto en la próxima sesión de OpenCode. Para verificar:
+1. Ejecutar cualquier herramienta
+2. Verificar que `tail memory/realtime.log` muestra entradas SIN duplicar
 
 ---
 

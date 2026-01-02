@@ -315,27 +315,25 @@ export const MemoryPlugin: Plugin = async (ctx) => {
   };
 
   // Real-time logger
+  // Only writes to file if this is the primary instance (prevents 4x duplicate logging)
   const log = (
     level: "INFO" | "WARN" | "ERROR",
     message: string,
-    data?: any
+    data?: unknown
   ) => {
-    const timestamp = new Date().toISOString();
-    const logEntry = {
-      timestamp,
-      session: currentSessionId,
-      level,
-      message,
-      ...(data && { data }),
-    };
-
-    appendFileSync(logPath, JSON.stringify(logEntry) + "\n");
-
-    const emoji = level === "ERROR" ? "[!]" : level === "WARN" ? "[~]" : "[*]";
-    console.log(
-      `${emoji} [Memory] ${message}`,
-      data ? JSON.stringify(data) : ""
-    );
+    // Only write to log file if we're the primary instance
+    // This fixes the 4x duplicate logging bug
+    if (isPrimaryInstance()) {
+      const timestamp = new Date().toISOString();
+      const logEntry = {
+        timestamp,
+        session: currentSessionId,
+        level,
+        message,
+        ...(data && { data }),
+      };
+      appendFileSync(logPath, JSON.stringify(logEntry) + "\n");
+    }
   };
 
   // Detected role for this agent (set during system transform)

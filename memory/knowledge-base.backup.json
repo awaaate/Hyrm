@@ -1,0 +1,1411 @@
+[
+  {
+    "session_id": "ses_4802ea147ffe6JC5wdP49pA8Jn",
+    "timestamp": 1767377031775,
+    "messages": 103,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types",
+      "feat(dashboard): Add Messages tab with user messages and agent bus"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "Phase 1 complete - Added types, API endpoints, and UI components",
+      "Successfully implemented Phase 2 dashboard enhancements: UserMessagesPanel with send form, MessageBusPanel with type filtering, CreateTaskDialog modal, Messages tab integration, and New Task button. All components exported and wired up with WebSocket and HTTP polling."
+    ]
+  },
+  {
+    "session_id": "ses_4802ea147ffe6JC5wdP49pA8Jn",
+    "timestamp": 1767377031771,
+    "messages": 103,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types",
+      "feat(dashboard): Add Messages tab with user messages and agent bus"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4802ea147ffe6JC5wdP49pA8Jn",
+    "timestamp": 1767377031766,
+    "messages": 103,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types",
+      "feat(dashboard): Add Messages tab with user messages and agent bus"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4802ea147ffe6JC5wdP49pA8Jn",
+    "timestamp": 1767377031763,
+    "messages": 103,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types",
+      "feat(dashboard): Add Messages tab with user messages and agent bus"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_480240573ffes4iGe1pmPl38Cw",
+    "timestamp": 1767376954926,
+    "messages": 95,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types",
+      "feat(dashboard): Add Messages tab with user messages and agent bus"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_480240573ffes4iGe1pmPl38Cw",
+    "timestamp": 1767376954924,
+    "messages": 95,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types",
+      "feat(dashboard): Add Messages tab with user messages and agent bus"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_480240573ffes4iGe1pmPl38Cw",
+    "timestamp": 1767376954920,
+    "messages": 95,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types",
+      "feat(dashboard): Add Messages tab with user messages and agent bus"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_480240573ffes4iGe1pmPl38Cw",
+    "timestamp": 1767376954918,
+    "messages": 95,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types",
+      "feat(dashboard): Add Messages tab with user messages and agent bus"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48028bb5bffeqU7Yj8827lQ4Hq",
+    "timestamp": 1767376602543,
+    "messages": 59,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48028bb5bffeqU7Yj8827lQ4Hq",
+    "timestamp": 1767376602539,
+    "messages": 59,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48028bb5bffeqU7Yj8827lQ4Hq",
+    "timestamp": 1767376602536,
+    "messages": 59,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48028bb5bffeqU7Yj8827lQ4Hq",
+    "timestamp": 1767376602533,
+    "messages": 59,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "feat(dashboard): Add message and task API endpoints with types"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4802d1ff4ffeiHe16f2l2KozoP",
+    "timestamp": 1767376228292,
+    "messages": 29,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "dashboard-ui/src/App.tsx",
+      "dashboard-ui/server.ts",
+      "dashboard-ui/src/components/types.ts",
+      "memory/user-messages.jsonl",
+      "memory/message-bus.jsonl",
+      "memory/tasks.json",
+      "tools/user-message.ts",
+      "tools/task-manager.ts",
+      "dashboard-ui/src/components/OpenCodeSessionsPanel.tsx",
+      "dashboard-ui/src/components/index.ts",
+      "dashboard-ui/src/components/Header.tsx"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [
+      "Primary work: File operations (reading, editing, writing)"
+    ],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4802d1ff4ffeiHe16f2l2KozoP",
+    "timestamp": 1767376228289,
+    "messages": 29,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4802d1ff4ffeiHe16f2l2KozoP",
+    "timestamp": 1767376228287,
+    "messages": 29,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4802d1ff4ffeiHe16f2l2KozoP",
+    "timestamp": 1767376228283,
+    "messages": 29,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4807d9f2effeO2vsmcDjSbbkgx",
+    "timestamp": 1767370849172,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48082eda5ffeqqgopqXvAQGIv7",
+    "timestamp": 1767370530429,
+    "messages": 11,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_480831073ffemH3ZFa5LnKqo8w",
+    "timestamp": 1767371784428,
+    "messages": 79,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/shared/data-fetchers.ts",
+      "tools/agent-conversation-viewer.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_480883561ffeasUFsA4BT4PDHl",
+    "timestamp": 1767370129198,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48088bef6ffeDmoiJR5esz4ds2",
+    "timestamp": 1767370099016,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48089487fffeAMj8xhZaDVmSio",
+    "timestamp": 1767370051969,
+    "messages": 3,
+    "decisions": [
+      "** Nothing to spawn - no pending work. The system is idle."
+    ],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48089d266ffeTmbDMyF9OGnVSM",
+    "timestamp": 1767370037400,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808a5c4cffeP9mwC8rNYbP9DJ",
+    "timestamp": 1767370001983,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808b5b9dffej4wya0jXihTBB6",
+    "timestamp": 1767369939536,
+    "messages": 5,
+    "decisions": [
+      "** System is functioning correctly. Worker is handling the CLI evaluation task. I'll broadcast a status update and exit so the watchdog can restart me"
+    ],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808be128ffeN4hZj8WuRm6P3B",
+    "timestamp": 1767370002422,
+    "messages": 18,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808c5aedffersnYgl0fghgYtk",
+    "timestamp": 1767369881343,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808ce491ffenh7J2Swz0cDHmh",
+    "timestamp": 1767369833280,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808de3f8ffe2xiAhoEUS4vpxg",
+    "timestamp": 1767369772025,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808ee25bffeknIQEfXRUJKTnh",
+    "timestamp": 1767369704481,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481238938ffee6A1C1z5fLIIQk",
+    "timestamp": 1767359953399,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4812412f9ffeYbRf9UlI9Tcs64",
+    "timestamp": 1767359927746,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481249cc4ffex15bnBXaJhLalg",
+    "timestamp": 1767359883497,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481250cb2ffegmbnuOu8TwDZC5",
+    "timestamp": 1767359844761,
+    "messages": 3,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48126e0ebffe71wBAUWgJ588jK",
+    "timestamp": 1767359746065,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4812c14a1ffeXEYXp7P0UVFRCZ",
+    "timestamp": 1767359679073,
+    "messages": 34,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4812f6095ffekyHICUFTCw5keB",
+    "timestamp": 1767359342922,
+    "messages": 24,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "memory/working.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48132a732ffeywT8zRN0K0UmjU",
+    "timestamp": 1767359221282,
+    "messages": 32,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "dashboard-ui/src/components/OpenCodeSessionsPanel.tsx"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481337929ffe7RyXsRq0FHip9p",
+    "timestamp": 1767358997656,
+    "messages": 12,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
+    "timestamp": 1767358852805,
+    "messages": 59,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "memory/working.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48144f988ffeDEpOotwcrakw7I",
+    "timestamp": 1767357770836,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4814d47d8ffeIIDVFJITkTQRq5",
+    "timestamp": 1767357335107,
+    "messages": 19,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4814f7461fferZPhrew0DeG7vZ",
+    "timestamp": 1767357057991,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4815e09e2ffeiMzrKVpF86eoid",
+    "timestamp": 1767356305686,
+    "messages": 14,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "orchestrator-watchdog.sh"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4815e23b7ffex8KhbSJD6EfPad",
+    "timestamp": 1767356190399,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "workflows/self-reflection-guide.md",
+      "workflows/multi-session-validation.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4818ab464ffetsFoSs4dPleW2C",
+    "timestamp": 1767357026897,
+    "messages": 219,
+    "decisions": [
+      "provide a non-blocking way to spawn agents."
+    ],
+    "discoveries": [
+      "subagents don't always properly call `agent_register` themselves."
+    ],
+    "code_created": [
+      "terminal-dashboard/package.json",
+      "terminal-dashboard/types.ts",
+      "terminal-dashboard/data.ts",
+      "terminal-dashboard/index.ts",
+      "terminal-dashboard/tsconfig.json",
+      "tools/debug-capture.ts",
+      "terminal-dashboard/renders.ts",
+      "memory/working.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "provide a non-blocking way to spawn agents."
+    ]
+  },
+  {
+    "session_id": "ses_48190ec16ffeflQdmRJ2Fu7Dst",
+    "timestamp": 1767352972088,
+    "messages": 18,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "dashboard-ui/src/components/charts/ToolTimingChart.tsx",
+      "dashboard-ui/src/components/charts/QualityTrendChart.tsx",
+      "dashboard-ui/src/components/charts/TaskCompletionChart.tsx",
+      "dashboard-ui/src/components/charts/QualitySparkline.tsx",
+      "dashboard-ui/src/components/charts/AgentActivityChart.tsx",
+      "dashboard-ui/src/components/charts/index.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48195e5bcffe3O5osDzMt9rAIJ",
+    "timestamp": 1767352721907,
+    "messages": 14,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "dashboard-ui/src/components/types.ts",
+      "dashboard-ui/src/components/Header.tsx",
+      "dashboard-ui/src/components/StatusBadge.tsx",
+      "dashboard-ui/src/components/StatCard.tsx",
+      "dashboard-ui/src/components/AgentList.tsx",
+      "dashboard-ui/src/components/TaskList.tsx",
+      "dashboard-ui/src/components/MessageStream.tsx",
+      "dashboard-ui/src/components/QualityPanel.tsx",
+      "dashboard-ui/src/components/PerformanceTab.tsx",
+      "dashboard-ui/src/components/SessionAnalyticsPanel.tsx",
+      "dashboard-ui/src/components/index.ts",
+      "dashboard-ui/src/App.tsx"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481aa010fffeU8A0urISmUeKNL",
+    "timestamp": 1767351162066,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481aae460ffeZNMAmU6NvZbDL4",
+    "timestamp": 1767353133540,
+    "messages": 52,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481b67186ffeRefyhEtOMpx0Ix",
+    "timestamp": 1767351042671,
+    "messages": 78,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481bcf20fffenxdmFcE6LcoRzI",
+    "timestamp": 1767350266644,
+    "messages": 45,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481c1eb2bffeytXPJSMOa05SgI",
+    "timestamp": 1767349777869,
+    "messages": 20,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481c20e58fferg5uRmQNcaSCMQ",
+    "timestamp": 1767349753719,
+    "messages": 27,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481c632c7ffe3qFrA2SZpfTD5M",
+    "timestamp": 1767349404924,
+    "messages": 9,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/shared/shared.test.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481cd75b8ffevcv1L5aqaLPZG9",
+    "timestamp": 1767349129623,
+    "messages": 37,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481cfe16dffeGHh1OFh9aspb0N",
+    "timestamp": 1767349532851,
+    "messages": 54,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481d916efffe652gS4BuYh4FWJ",
+    "timestamp": 1767348305464,
+    "messages": 30,
+    "decisions": [],
+    "discoveries": [
+      "the original code uses `c."
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481dfa643ffecGAfLZqLE5spIJ",
+    "timestamp": 1767347906633,
+    "messages": 47,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e2a4b4ffeHFuSYQNCfvwIaC",
+    "timestamp": 1767347575812,
+    "messages": 25,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e2b193ffeZ1pdidLGmD9KaB",
+    "timestamp": 1767347532745,
+    "messages": 19,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e6ce69ffeY4pbPlusEKrFT7",
+    "timestamp": 1767347375770,
+    "messages": 31,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e6df80ffeE9WOUuZPI5PemL",
+    "timestamp": 1767347217509,
+    "messages": 15,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e8e3edffelchOWp0OCgatLa",
+    "timestamp": 1767347098448,
+    "messages": 15,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481ed144affeGlDm5i5UOLeMs4",
+    "timestamp": 1767346957772,
+    "messages": 15,
+    "decisions": [],
+    "discoveries": [
+      "just about the output directory."
+    ],
+    "code_created": [
+      "tools/shared/json-utils.ts",
+      "tools/shared/colors.ts",
+      "tools/shared/time-utils.ts",
+      "tools/shared/string-utils.ts",
+      "tools/shared/paths.ts",
+      "tools/shared/config.ts",
+      "tools/shared/types.ts",
+      "tools/shared/index.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481f0c500ffeVHK1ddLXkP0wAu",
+    "timestamp": 1767346518379,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [
+      "Empty catch blocks (INCONSISTENT)**",
+      "ANSI Color Constants (DUPLICATED IN 12+ FILES)**",
+      "Hardcoded memory directory paths (EVERYWHERE)**",
+      "Time formatting helpers (DUPLICATED)**"
+    ],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481f0dab3ffexmJMTDjKO1xwP9",
+    "timestamp": 1767346528273,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481f17197ffeUvKEP8u5ncvkqa",
+    "timestamp": 1767348615995,
+    "messages": 57,
+    "decisions": [
+      "plugin + wrapper tools (not forking OpenCode)"
+    ],
+    "discoveries": [],
+    "code_created": [
+      "docs/CODEBASE_ANALYSIS.md",
+      "docs/OPENCODE_ARCHITECTURE.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481f97c3dffeXiO48A3gwALPnj",
+    "timestamp": 1767345980313,
+    "messages": 10,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481ffbf05ffeuwRICugL9rtQJZ",
+    "timestamp": 1767346423937,
+    "messages": 96,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_482027677ffedBcpV3SGet2BBE",
+    "timestamp": 1767345390352,
+    "messages": 10,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48206c404ffe2iiP0dGvqqnbAU",
+    "timestamp": 1767345055651,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_482182354ffepRlDEVp5Iz33WO",
+    "timestamp": 1767345456569,
+    "messages": 142,
+    "decisions": [],
+    "discoveries": [
+      "with the contrib."
+    ],
+    "code_created": [
+      "tools/daily-report-generator.ts",
+      "tools/agent-conversation-viewer.ts",
+      "tools/critique-agent.ts",
+      ".opencode/skill/critique-agent/SKILL.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "issue in the terminal-dashboard.",
+      "by calling the correct viewer:",
+      "Replaced canvas widgets with text-based `blessed.box` alternatives using ASCII progress bars"
+    ]
+  },
+  {
+    "session_id": "ses_48261b217ffew6JGwMk9dDgqeV",
+    "timestamp": 1767339237172,
+    "messages": 19,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48268a5afffeWWEUVpx2LgDsjc",
+    "timestamp": 1767339058770,
+    "messages": 36,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/agent-performance-profiler.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4844f5f7effeS1GftImkN5Tgm9",
+    "timestamp": 1767307019097,
+    "messages": 28,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/terminal-dashboard.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48456557cffei9Mxf7fDgNz6x2",
+    "timestamp": 1767306708721,
+    "messages": 39,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/git-integration.ts",
+      ".opencode/plugin/tools/git-tools.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4845eab9effe9kSK7k61M26zfb",
+    "timestamp": 1767306243080,
+    "messages": 39,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/message-bus-manager.ts",
+      "tools/working-memory-manager.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48464b61affeblv65s5yg9yEIp",
+    "timestamp": 1767305708145,
+    "messages": 31,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      ".opencode/plugin/tools/integration.test.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4846f06f2ffei2mChHCzntsK6Q",
+    "timestamp": 1767305171507,
+    "messages": 59,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      ".opencode/plugin/tools/recovery-tools.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48473b182ffe8yb742oUGtrWZ9",
+    "timestamp": 1767304627590,
+    "messages": 32,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4847aa85bffeEPOvSR1mP9praf",
+    "timestamp": 1767304321759,
+    "messages": 35,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48482ff3effeDVcIC3z9P4y2uF",
+    "timestamp": 1767303854057,
+    "messages": 36,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/session-analytics.ts",
+      "dashboard-ui/server.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_484832037ffe9cC2nPlNOlZcW3",
+    "timestamp": 1767303519502,
+    "messages": 11,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/session-analytics.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4848b250dffe6S7Kfsq39MS3qc",
+    "timestamp": 1767303635617,
+    "messages": 68,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/opencode-tracker.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "the session analytics tool."
+    ]
+  },
+  {
+    "session_id": "ses_4848fecc6ffeG1qCN9S8EgFuCL",
+    "timestamp": 1767303324692,
+    "messages": 75,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "dashboard-ui/src/index.css",
+      "dashboard-ui/src/components/ui/button.tsx",
+      "dashboard-ui/src/components/ui/card.tsx",
+      "dashboard-ui/src/components/ui/badge.tsx",
+      "dashboard-ui/src/components/ui/tabs.tsx",
+      "dashboard-ui/src/components/ui/table.tsx",
+      "dashboard-ui/src/components/ui/progress.tsx",
+      "dashboard-ui/vite.config.ts",
+      "dashboard-ui/tsconfig.app.json",
+      "dashboard-ui/src/App.tsx",
+      "dashboard-ui/src/App.css",
+      "tools/conversation-tracker.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48490b364ffe55tWsOfKkylfTV",
+    "timestamp": 1767302465960,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48510f8b0ffeysLfx7THkEFbS8",
+    "timestamp": 1767294086711,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48512250effeGWJTNW9EmkfxoY",
+    "timestamp": 1767294240413,
+    "messages": 20,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "AGENTS.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4852586a0ffehcSzhkMo5wCSxy",
+    "timestamp": 1767292951518,
+    "messages": 30,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4852c076effehgRGcpV8NG0ZbY",
+    "timestamp": 1767292684966,
+    "messages": 46,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4852f6e0fffe2b7Q8VjQzNow7T",
+    "timestamp": 1767292256334,
+    "messages": 25,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "orchestrator-watchdog.sh"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4856cfa5dffe40t8x6qtI5HCr5",
+    "timestamp": 1767288405359,
+    "messages": 29,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/realtime-monitor.ts",
+      ".opencode/plugin/utils/helpers.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_485727992ffeTAO4q9pzNmSBRw",
+    "timestamp": 1767287976443,
+    "messages": 29,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      ".opencode/plugin/tools/tools.test.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4857b2d64ffeb2UmNM5INYMd2i",
+    "timestamp": 1767287608670,
+    "messages": 44,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "AGENTS.md",
+      "memory/system-message-config.json",
+      "tools/system-message-config.ts",
+      "dashboard-ui/src/App.tsx",
+      "dashboard-ui/src/App.css",
+      "dashboard-ui/src/index.css"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4895b3ffaffeVDOdzUaRAMbn1M",
+    "timestamp": 1767222787617,
+    "messages": 62,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/session-summarizer.ts",
+      "tools/knowledge-deduplicator.ts",
+      "dashboard-ui/postcss.config.js",
+      "dashboard-ui/src/index.css",
+      "dashboard-ui/src/lib/utils.ts",
+      "dashboard-ui/src/App.tsx"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48964de81ffeXWM4aA699tMICX",
+    "timestamp": 1767222026079,
+    "messages": 65,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/agent-health-monitor.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4896ef297ffeKeGfMbqzinDUc3",
+    "timestamp": 1767221405851,
+    "messages": 75,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/opencode-cli.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4897036fbffel8ARM4HDVodONo",
+    "timestamp": 1767220739087,
+    "messages": 8,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4897d7fa0ffegdFYG4Fl2W2AFC",
+    "timestamp": 1767220585810,
+    "messages": 96,
+    "decisions": [],
+    "discoveries": [
+      "when the plugin auto-registers the agent on session start (line 517-528 of index."
+    ],
+    "code_created": [
+      "mcp-servers/playwright-mcp/package.json",
+      "mcp-servers/playwright-mcp/tsconfig.json",
+      "mcp-servers/playwright-mcp/src/index.ts",
+      "tools/generate-orchestrator-prompt.ts",
+      "start-main.sh"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  }
+]

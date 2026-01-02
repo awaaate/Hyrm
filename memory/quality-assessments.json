@@ -2315,11 +2315,87 @@
       "metadata": {
         "duration_minutes": 3
       }
+    },
+    {
+      "task_id": "task_1767377656074_mk1m0r",
+      "task_title": "Fix isPrimaryInstance() race condition",
+      "assessed_at": "2026-01-02T18:17:57.588Z",
+      "assessed_by": "ses_4801696dcffez48Sd6iw0YC2YR",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 9,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.7,
+      "lessons_learned": "Race conditions en file-based locking requieren mecanismos determinísticos. El enfoque de election delay + smallest ID es robusto y simple.",
+      "metadata": {
+        "duration_minutes": 3
+      }
+    },
+    {
+      "task_id": "task_1767377976707_t4l4jk",
+      "task_title": "Replace ctx.$ shell commands with fs.appendFileSync",
+      "assessed_at": "2026-01-02T18:22:40.536Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 10,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 9,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 10,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 9.2,
+      "lessons_learned": "Shell template syntax ctx.$ can fail with JSON containing special characters. Always prefer direct file system operations (appendFileSync) over shell redirects when writing structured data.",
+      "metadata": {
+        "duration_minutes": 3
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 60,
-    "avg_overall_score": 8.15166666666667
+    "total_assessed": 62,
+    "avg_overall_score": 8.177419354838714
   },
-  "last_updated": "2026-01-02T17:00:38.320Z"
+  "last_updated": "2026-01-02T18:22:40.537Z"
 }
