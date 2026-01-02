@@ -34,6 +34,42 @@ const OPENCODE_STORAGE = join(require("os").homedir(), ".local", "share", "openc
 const OPENCODE_SESSIONS_DIR = join(OPENCODE_STORAGE, "session");
 const OPENCODE_MESSAGES_DIR = join(OPENCODE_STORAGE, "message");
 
+// Claude API pricing (per 1M tokens) - Claude 3.5 Sonnet pricing as of 2024
+// Note: Cache reads are 90% cheaper than regular input tokens
+const PRICING = {
+  input: 3.00,        // $3.00 per 1M input tokens
+  output: 15.00,      // $15.00 per 1M output tokens  
+  cacheRead: 0.30,    // $0.30 per 1M cache read tokens (90% discount)
+  cacheWrite: 3.75,   // $3.75 per 1M cache write tokens
+};
+
+// Calculate cost from tokens
+function calculateCost(tokens: { input: number; output: number; cache: { read: number; write: number } }): {
+  inputCost: number;
+  outputCost: number;
+  cacheReadCost: number;
+  cacheWriteCost: number;
+  totalCost: number;
+  cacheSavings: number;
+} {
+  const inputCost = (tokens.input / 1_000_000) * PRICING.input;
+  const outputCost = (tokens.output / 1_000_000) * PRICING.output;
+  const cacheReadCost = (tokens.cache.read / 1_000_000) * PRICING.cacheRead;
+  const cacheWriteCost = (tokens.cache.write / 1_000_000) * PRICING.cacheWrite;
+  
+  // Cache savings = what we would have paid if cache reads were regular input tokens
+  const cacheSavings = (tokens.cache.read / 1_000_000) * (PRICING.input - PRICING.cacheRead);
+  
+  return {
+    inputCost,
+    outputCost,
+    cacheReadCost,
+    cacheWriteCost,
+    totalCost: inputCost + outputCost + cacheReadCost + cacheWriteCost,
+    cacheSavings,
+  };
+}
+
 // OpenCode session and message types
 interface OpenCodeMessage {
   id: string;
@@ -441,6 +477,9 @@ function getOpenCodeSessions(): { sessions: any[] } {
         totalTokens.cache.write = Math.round(totalTokens.cache.write * sampleRate);
       }
       
+      // Calculate cost for this session
+      const cost = calculateCost(totalTokens);
+      
       sessions.push({
         id: sessionId,
         messageCount,
@@ -450,6 +489,13 @@ function getOpenCodeSessions(): { sessions: any[] } {
         endTime: lastMsgTime,
         durationMs: lastMsgTime - firstMsgTime,
         tokens: totalTokens,
+        cost: {
+          inputCost: cost.inputCost,
+          outputCost: cost.outputCost,
+          cacheReadCost: cost.cacheReadCost,
+          totalCost: cost.totalCost,
+          cacheSavings: cost.cacheSavings,
+        },
       });
     }
     

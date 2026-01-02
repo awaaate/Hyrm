@@ -9,7 +9,8 @@ import {
   User,
   Bot,
   Coins,
-  ChevronRight,
+  DollarSign,
+  TrendingDown,
 } from "lucide-react";
 import type { OpenCodeSession, OpenCodeMessage } from "./types";
 
@@ -34,10 +35,57 @@ function formatTokens(n: number): string {
   return String(n);
 }
 
+// Format cost in dollars
+function formatCost(cost: number): string {
+  if (cost >= 1) return `$${cost.toFixed(2)}`;
+  if (cost >= 0.01) return `$${cost.toFixed(2)}`;
+  if (cost >= 0.001) return `$${cost.toFixed(3)}`;
+  if (cost > 0) return `<$0.01`;
+  return "$0.00";
+}
+
+// Claude pricing constants (per 1M tokens) for client-side calculation
+const PRICING = {
+  input: 3.00,        // $3.00 per 1M input tokens
+  output: 15.00,      // $15.00 per 1M output tokens  
+  cacheRead: 0.30,    // $0.30 per 1M cache read tokens (90% discount)
+};
+
+// Calculate cost from tokens
+function calculateCost(tokens: { input: number; output: number; cacheRead: number }): {
+  inputCost: number;
+  outputCost: number;
+  cacheReadCost: number;
+  totalCost: number;
+  cacheSavings: number;
+} {
+  const inputCost = (tokens.input / 1_000_000) * PRICING.input;
+  const outputCost = (tokens.output / 1_000_000) * PRICING.output;
+  const cacheReadCost = (tokens.cacheRead / 1_000_000) * PRICING.cacheRead;
+  
+  // Cache savings = what we would have paid if cache reads were regular input tokens
+  const cacheSavings = (tokens.cacheRead / 1_000_000) * (PRICING.input - PRICING.cacheRead);
+  
+  return {
+    inputCost,
+    outputCost,
+    cacheReadCost,
+    totalCost: inputCost + outputCost + cacheReadCost,
+    cacheSavings,
+  };
+}
+
 // Message component
 function MessageItem({ message }: { message: OpenCodeMessage }) {
   const isUser = message.role === "user";
   const isAssistant = message.role === "assistant";
+  
+  // Calculate per-message cost
+  const msgCost = message.tokens ? calculateCost({
+    input: message.tokens.input || 0,
+    output: message.tokens.output || 0,
+    cacheRead: message.tokens.cache?.read || 0,
+  }) : null;
 
   return (
     <div
@@ -56,6 +104,12 @@ function MessageItem({ message }: { message: OpenCodeMessage }) {
           <Bot className="h-4 w-4 text-emerald-400" />
         )}
         <span className="font-medium text-sm capitalize">{message.role}</span>
+        {msgCost && msgCost.totalCost > 0 && (
+          <Badge variant="outline" className="text-xs text-amber-400 border-amber-500/30">
+            <DollarSign className="h-3 w-3 mr-0.5" />
+            {formatCost(msgCost.totalCost)}
+          </Badge>
+        )}
         <span className="text-xs text-muted-foreground ml-auto">
           {formatTime(message.createdAt)}
         </span>
@@ -75,7 +129,7 @@ function MessageItem({ message }: { message: OpenCodeMessage }) {
           <>
             <span>In: {formatTokens(message.tokens.input)}</span>
             <span>Out: {formatTokens(message.tokens.output)}</span>
-            {message.tokens.cache && (
+            {message.tokens.cache && message.tokens.cache.read > 0 && (
               <span className="text-emerald-400">
                 Cache: {formatTokens(message.tokens.cache.read)}
               </span>
@@ -108,6 +162,13 @@ function SessionListItem({
     totalTokens > 0
       ? Math.round((session.tokens.cache.read / (totalTokens + session.tokens.cache.read)) * 100)
       : 0;
+  
+  // Use server-provided cost or calculate locally
+  const cost = session.cost || (totalTokens > 0 ? calculateCost({
+    input: session.tokens.input,
+    output: session.tokens.output,
+    cacheRead: session.tokens.cache.read,
+  }) : null);
 
   return (
     <Card
@@ -119,7 +180,12 @@ function SessionListItem({
           <span className="font-mono text-sm truncate max-w-[200px]">
             {session.id}
           </span>
-          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          {cost && cost.totalCost > 0 && (
+            <Badge variant="default" className="text-xs bg-amber-500/20 text-amber-400 border-amber-500/30">
+              <DollarSign className="h-3 w-3 mr-0.5" />
+              {formatCost(cost.totalCost)}
+            </Badge>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-sm">
@@ -133,7 +199,7 @@ function SessionListItem({
           </div>
         </div>
 
-        <div className="flex gap-2 mt-2">
+        <div className="flex flex-wrap gap-2 mt-2">
           <Badge variant="secondary" className="text-xs">
             <User className="h-3 w-3 mr-1" />
             {session.userMessages}
@@ -151,6 +217,12 @@ function SessionListItem({
           {cacheHitRate > 0 && (
             <Badge variant="outline" className="text-xs text-emerald-400">
               {cacheHitRate}% cache
+            </Badge>
+          )}
+          {cost && cost.cacheSavings > 0.001 && (
+            <Badge variant="outline" className="text-xs text-green-400">
+              <TrendingDown className="h-3 w-3 mr-0.5" />
+              {formatCost(cost.cacheSavings)} saved
             </Badge>
           )}
         </div>
@@ -235,6 +307,9 @@ export function OpenCodeSessionsPanel() {
           { input: 0, output: 0, cacheRead: 0 }
         )
       : null;
+  
+  // Calculate cost for session totals
+  const sessionCost = sessionTotals ? calculateCost(sessionTotals) : null;
 
   if (loading) {
     return (
@@ -270,25 +345,62 @@ export function OpenCodeSessionsPanel() {
           </div>
         </div>
 
-        {/* Token summary */}
-        {sessionTotals && (
+        {/* Token and cost summary */}
+        {sessionTotals && sessionCost && (
           <Card>
-            <CardContent className="p-3">
-              <div className="flex flex-wrap gap-4 text-sm">
+            <CardContent className="p-4">
+              {/* Cost headline */}
+              <div className="flex items-center justify-between mb-3 pb-3 border-b border-muted">
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-5 w-5 text-amber-400" />
+                  <span className="text-lg font-semibold">Session Cost</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-2xl font-bold text-amber-400">{formatCost(sessionCost.totalCost)}</span>
+                  {sessionCost.cacheSavings > 0.001 && (
+                    <div className="text-xs text-green-400 flex items-center justify-end gap-1">
+                      <TrendingDown className="h-3 w-3" />
+                      {formatCost(sessionCost.cacheSavings)} saved with cache
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              {/* Cost breakdown */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                <div className="text-center p-2 rounded bg-muted/30">
+                  <div className="text-xs text-muted-foreground">Input</div>
+                  <div className="font-medium">{formatCost(sessionCost.inputCost)}</div>
+                  <div className="text-xs text-muted-foreground">{formatTokens(sessionTotals.input)} tokens</div>
+                </div>
+                <div className="text-center p-2 rounded bg-muted/30">
+                  <div className="text-xs text-muted-foreground">Output</div>
+                  <div className="font-medium">{formatCost(sessionCost.outputCost)}</div>
+                  <div className="text-xs text-muted-foreground">{formatTokens(sessionTotals.output)} tokens</div>
+                </div>
+                <div className="text-center p-2 rounded bg-muted/30">
+                  <div className="text-xs text-muted-foreground">Cache Reads</div>
+                  <div className="font-medium text-emerald-400">{formatCost(sessionCost.cacheReadCost)}</div>
+                  <div className="text-xs text-muted-foreground">{formatTokens(sessionTotals.cacheRead)} tokens</div>
+                </div>
+                <div className="text-center p-2 rounded bg-muted/30">
+                  <div className="text-xs text-muted-foreground">Cost per Message</div>
+                  <div className="font-medium">{formatCost(sessionCost.totalCost / Math.max(1, messages.length))}</div>
+                  <div className="text-xs text-muted-foreground">{messages.length} messages</div>
+                </div>
+              </div>
+
+              {/* Token summary row */}
+              <div className="flex flex-wrap gap-4 text-sm text-muted-foreground pt-2 border-t border-muted">
                 <div className="flex items-center gap-1">
-                  <Coins className="h-4 w-4 text-muted-foreground" />
-                  <span>Input: {formatTokens(sessionTotals.input)}</span>
+                  <Coins className="h-4 w-4" />
+                  <span>Total: {formatTokens(sessionTotals.input + sessionTotals.output + sessionTotals.cacheRead)} tokens</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span>Output: {formatTokens(sessionTotals.output)}</span>
+                  <span>Cache hit rate: {Math.round((sessionTotals.cacheRead / (sessionTotals.input + sessionTotals.output + sessionTotals.cacheRead)) * 100)}%</span>
                 </div>
-                {sessionTotals.cacheRead > 0 && (
-                  <div className="flex items-center gap-1 text-emerald-400">
-                    <span>Cache Reads: {formatTokens(sessionTotals.cacheRead)}</span>
-                  </div>
-                )}
-                <div className="ml-auto text-muted-foreground">
-                  {messages.length} messages
+                <div className="ml-auto">
+                  Pricing: $3/1M input, $15/1M output, $0.30/1M cache read
                 </div>
               </div>
             </CardContent>

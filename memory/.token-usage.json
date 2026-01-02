@@ -1,8 +1,13 @@
 {
-    "session_start": "2026-01-02T13:05:59+00:00",
+    "session_start": "",
     "input_tokens": 0,
     "output_tokens": 0,
     "total_tokens": 0,
-    "last_updated": "2026-01-02T13:05:59+00:00",
-    "limit_reached": false
+    "last_updated": "2026-01-02T13:13:41+00:00",
+    "limit_reached": false,
+    "limits": {
+        "input": 100000,
+        "output": 50000,
+        "total": 150000
+    }
 }

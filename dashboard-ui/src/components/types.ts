@@ -138,6 +138,13 @@ export interface OpenCodeSession {
       write: number;
     };
   };
+  cost?: {
+    inputCost: number;
+    outputCost: number;
+    cacheReadCost: number;
+    totalCost: number;
+    cacheSavings: number;
+  };
 }
 
 export interface OpenCodeMessage {

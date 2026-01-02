@@ -2201,11 +2201,49 @@
       "metadata": {
         "duration_minutes": 24
       }
+    },
+    {
+      "task_id": "task_1767357229945_z6mnqe",
+      "task_title": "Dashboard: Show messages for selected OpenCode session",
+      "assessed_at": "2026-01-02T13:07:06.987Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Worker successfully implemented full-stack feature: API endpoints + React component with proper types. Good pattern for future dashboard features.",
+      "metadata": {
+        "duration_minutes": 33
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 57,
-    "avg_overall_score": 8.149122807017548
+    "total_assessed": 58,
+    "avg_overall_score": 8.151724137931039
   },
-  "last_updated": "2026-01-02T12:58:24.552Z"
+  "last_updated": "2026-01-02T13:07:06.988Z"
 }

@@ -1578,9 +1578,9 @@
       "title": "Dashboard: Show messages for selected OpenCode session",
       "description": "The OpenCode session panel in the dashboard should show the messages for each session selected. User wants to see actual conversation messages when clicking on a session in the dashboard UI.",
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-02T12:33:49.945Z",
-      "updated_at": "2026-01-02T13:02:33.602Z",
+      "updated_at": "2026-01-02T13:07:06.990Z",
       "created_by": "ses_4814d47d8ffeIIDVFJITkTQRq5",
       "tags": [
         "dashboard",
@@ -1592,8 +1592,13 @@
       "assigned_to": "agent-1767358953150-y6s0s9",
       "claimed_at": "2026-01-02T13:02:33.602Z",
       "notes": [
-        "[2026-01-02T13:02:11.099Z] Reassigned - previous agent (agent-1767357200449-mdvyb) no longer active. Needs worker assignment."
-      ]
+        "[2026-01-02T13:02:11.099Z] Reassigned - previous agent (agent-1767357200449-mdvyb) no longer active. Needs worker assignment.",
+        "[2026-01-02T13:06:44.099Z] Implemented OpenCode sessions panel with message viewing. Added API endpoints in server.ts, created OpenCodeSessionsPanel component, and added OpenCode tab to dashboard.",
+        "[2026-01-02T13:07:03.937Z] Completed by agent-1767358953150-y6s0s9. Implemented OpenCode sessions panel with message viewing. Added API endpoints, OpenCodeSessionsPanel component, types. Quality: 8.2/10."
+      ],
+      "completed_at": "2026-01-02T13:07:03.934Z",
+      "quality_score": 8.3,
+      "quality_notes": "Worker successfully implemented full-stack feature: API endpoints + React component with proper types. Good pattern for future dashboard features."
     },
     {
       "id": "task_1767357231923_pcgu8x",
@@ -1620,8 +1625,27 @@
       ],
       "quality_score": 8.3,
       "quality_notes": "Token data is stored per-message in OpenCode's storage. Cache read/write tracking is valuable for cost analysis. The CLI dashboard pattern works well for terminal-focused users."
+    },
+    {
+      "id": "task_1767359324117_pvr0de",
+      "title": "Dashboard: Add token cost estimation to OpenCode sessions panel",
+      "description": "Add estimated API cost calculation to the OpenCode sessions panel. Use approximate per-token pricing for Claude models (e.g., $3/1M input tokens, $15/1M output tokens for Sonnet). Display total session cost and cost per message. Include cache savings calculation.",
+      "priority": "medium",
+      "status": "in_progress",
+      "created_at": "2026-01-02T13:08:44.117Z",
+      "updated_at": "2026-01-02T13:09:51.526Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "opencode",
+        "analytics"
+      ],
+      "estimated_hours": 1,
+      "complexity": "simple",
+      "assigned_to": "agent-1767359381934-p0p5hm",
+      "claimed_at": "2026-01-02T13:09:51.526Z"
     }
   ],
-  "completed_count": 72,
-  "last_updated": "2026-01-02T13:02:33.602Z"
+  "completed_count": 74,
+  "last_updated": "2026-01-02T13:09:51.526Z"
 }

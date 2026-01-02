@@ -14,12 +14,21 @@
       "agent_id": "agent-1767359166641-hptv4d",
       "session_id": "session-1767359166641",
       "started_at": "2026-01-02T13:06:06.642Z",
-      "last_heartbeat": "2026-01-02T13:06:06.645Z",
+      "last_heartbeat": "2026-01-02T13:09:06.654Z",
       "status": "active",
       "assigned_role": "orchestrator",
       "pid": 525610
+    },
+    {
+      "agent_id": "agent-1767359381934-p0p5hm",
+      "session_id": "session-1767359381934",
+      "started_at": "2026-01-02T13:09:41.935Z",
+      "last_heartbeat": "2026-01-02T13:13:41.954Z",
+      "status": "active",
+      "assigned_role": "orchestrator",
+      "pid": 530336
     }
   ],
-  "last_updated": "2026-01-02T13:06:33.329Z",
-  "lock_version": 207
+  "last_updated": "2026-01-02T13:13:41.954Z",
+  "lock_version": 208
 }

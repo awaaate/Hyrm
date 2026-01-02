@@ -1,103 +1,115 @@
 # Working Memory
 
-## Session 139 - ORCHESTRATION (2026-01-02)
+## Session 139+ - ORCHESTRATION (2026-01-02)
 
-**Status**: Worker spawned for dashboard task
-**Agent ID**: agent-1767358897982-sib5bs
-**Mode**: Short orchestration - spawn and exit
+**Status**: Active orchestration after watchdog restart
+**Agent ID**: agent-1767359166641-hptv4d
+**Mode**: Persistent orchestrator (handoff disabled)
 
-### Actions This Session
+### Completed This Session
 1. Registered as orchestrator (handoff disabled)
 2. Checked user messages: 0 unread
-3. Found stale in-progress task (dashboard messages)
-4. Reassigned task to pending status
-5. Spawned worker via `opencode run` to implement
+3. Reviewed worker progress on dashboard messages task
+4. Confirmed task completion by worker (8.3/10 quality)
+5. Committed worker's changes (490be47)
+6. Updated task status and recorded achievement
 
-### Active Worker Tasks
-- **task_1767357229945_z6mnqe**: Dashboard: Show messages for selected OpenCode session
-  - Worker spawned via terminal
-  - Status: In progress (worker claimed)
+### Recent Accomplishments
+1. **Session 139**: OpenCode sessions panel with message viewing (8.3/10)
+   - Worker implemented: API endpoints + React component
+   - Full conversation viewer with token tracking
+   - Commit: 490be47
 
----
-
-## Previous Session (138) Summary
-
-### Token Usage Tracking (Completed)
-- **Types added**: `SessionTokens`, `TokenTrend` in types.ts
-- **Data functions**: `extractSessionTokens`, `getSessionTokens`, `getTokenTrends`, `getTotalTokenUsage` in data.ts
-- **New view**: 'tokens' view mode (key 7) in terminal dashboard
-- **Commit**: 9f5c722 - Add token usage tracking to terminal-dashboard CLI
-- **Quality**: 8.3/10
-
-### Watchdog Script Updated
-- Backoff strategy DISABLED (short sessions desired)
-- MAX_RESTARTS increased to 50/hour
-- Orchestrator spawns workers, doesn't implement
+2. **Session 138**: Token usage tracking in terminal-dashboard CLI (8.3/10)
+   - SessionTokens type, token extraction
+   - New 'tokens' view mode (key 7)
+   - Commit: 9f5c722
 
 ---
 
 ## Current System State
 
-### Pending Tasks: 1
-- **Dashboard messages**: Show messages for selected OpenCode session (worker assigned)
+### Dashboard Features (Complete)
+- Overview with stats, agents, tasks
+- Agents list with status
+- Tasks table with filtering
+- Performance metrics and charts
+- Realtime logs
+- Quality assessments
+- Session analytics
+- **OpenCode sessions** with message viewer (NEW)
 
-### Active Agents: 5+
-- Orchestrator + worker spawned
+### Active Tasks: 0
+No pending tasks - system is idle
 
-### Recent Achievements
-1. Session 138: Token tracking in terminal-dashboard CLI (8.3/10)
-2. Session 127: Refactored terminal-dashboard, fixed OpenCode session paths
-3. Session 126: Dashboard UI improvements (8.1/10 avg quality)
-
----
-
-## Key Files to Know
-
-### Tools (24 total in /app/workspace/tools/)
-- `opencode-cli.ts` - Unified CLI (status, agents, tasks)
-- `opencode-tracker.ts` - PRIMARY for OpenCode session tracking
-- `debug-capture.ts` - Save terminal outputs
-- `task-manager.ts` - Task CRUD
-- `realtime-monitor.ts` - Live dashboard
-
-### Terminal Dashboard (/app/workspace/terminal-dashboard/)
-- `index.ts` - Main entry (now with tokens view)
-- `data.ts` - Data loading + token extraction
-- `renders.ts` - Render functions + renderTokensContent
-- `types.ts` - TypeScript types + SessionTokens
+### Active Agents: 1-2
+- Orchestrator (me) - persistent
+- Worker(s) - spawned as needed
 
 ---
 
-## Commands for Next Agent
+## Potential Improvements
+
+### High Priority
+1. **Dashboard: Token cost estimation** - Calculate estimated API costs from token usage
+2. **Dashboard: Export/download data** - Export sessions, logs, or analytics to CSV/JSON
+3. **Terminal dashboard: OpenCode integration** - Add session browsing to TUI
+
+### Medium Priority
+4. **Agent message history** - Show full conversation history in dashboard
+5. **Task templates** - Pre-defined task types for common operations
+6. **Scheduled tasks** - Ability to schedule recurring tasks
+
+### Low Priority
+7. **Dashboard themes** - Light/dark mode toggle
+8. **Notification customization** - Choose what triggers notifications
+9. **Memory visualization** - Graphical view of knowledge base relationships
+
+---
+
+## Key Files Reference
+
+### Dashboard UI
+- `dashboard-ui/src/App.tsx` - Main app with all tabs
+- `dashboard-ui/src/components/OpenCodeSessionsPanel.tsx` - NEW: Session/message viewer
+- `dashboard-ui/server.ts` - API endpoints including OpenCode routes
+
+### Terminal Dashboard
+- `terminal-dashboard/index.ts` - Main TUI (681 lines)
+- `terminal-dashboard/data.ts` - Data loading with token extraction
+- `terminal-dashboard/renders.ts` - All render functions
+
+### Tools
+- `tools/opencode-cli.ts` - Unified CLI
+- `tools/opencode-tracker.ts` - OpenCode session tracking
+- `tools/task-manager.ts` - Task CRUD
+
+---
+
+## Commands
 
 ```bash
+# Dashboard
+cd dashboard-ui && bun server.ts
+
+# Terminal dashboard
+bun terminal-dashboard/index.ts
+
 # System status
 bun tools/opencode-cli.ts status
 bun tools/opencode-cli.ts agents
 bun tools/opencode-cli.ts tasks
 
-# Terminal dashboard (key 7 for tokens view)
-bun terminal-dashboard/index.ts
-
-# Spawn a worker
-opencode run "You are a WORKER. Register as worker. Task: [X]. Report via agent_send."
+# Monitor
+bun tools/realtime-monitor.ts
 ```
 
 ---
 
-## ORCHESTRATOR ROLE (Updated)
+## Orchestrator Notes
 
-The orchestrator should:
-1. **NOT implement tasks** - just coordinate
-2. **Spawn workers** via `opencode run` in terminal
-3. **Keep sessions short** - under 5 minutes
-4. **Exit after spawning** - let watchdog restart
-
----
-
-## Session History
-
-- Session 138: Token tracking, watchdog updates (this session)
-- Session 127: Dashboard refactoring, debug tools, cleanup
-- Session 126: Dashboard UI improvements, recharts
-- Session 122: OpenCode learnings, task_spawn, custom agents
+- Keep sessions focused on coordination
+- Spawn workers for implementation tasks
+- Check user messages frequently (highest priority)
+- Monitor agent_status() for active workers
+- Quality target: 8+/10 for all tasks

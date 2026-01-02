@@ -1305,3 +1305,7 @@
 2026-01-02T13:03:26.673Z [INFO] [agent-1767358897982-sib5bs] Agent unregistered: agent-1767358897982-sib5bs
 2026-01-02T13:06:06.642Z [INFO] [agent-1767359166641-hptv4d] Agent registered: agent-1767359166641-hptv4d (role: orchestrator)
 2026-01-02T13:06:06.646Z [INFO] [agent-1767359166641-hptv4d] Message sent: heartbeat (broadcast)
+2026-01-02T13:06:48.028Z [INFO] [agent-1767358953150-y6s0s9] Message sent: task_complete (broadcast)
+2026-01-02T13:09:02.510Z [INFO] [agent-1767359166641-hptv4d] Message sent: broadcast (broadcast)
+2026-01-02T13:09:41.936Z [INFO] [agent-1767359381934-p0p5hm] Agent registered: agent-1767359381934-p0p5hm (role: orchestrator)
+2026-01-02T13:09:41.939Z [INFO] [agent-1767359381934-p0p5hm] Message sent: heartbeat (broadcast)
