@@ -1444,3 +1444,7 @@
 2026-01-02T17:02:03.311Z [INFO] [agent-1767373323307-ta3qca] Message sent: broadcast (broadcast)
 2026-01-02T17:02:09.364Z [INFO] [agent-1767373323307-ta3qca] Status updated: working - Orchestrator mode - no handoff
 2026-01-02T17:02:09.489Z [INFO] [agent-1767373323307-ta3qca] Agent registered: agent-1767373323307-ta3qca (role: orchestrator)
+2026-01-02T17:07:03.326Z [INFO] [agent-1767373323294-938rgo] Message sent: heartbeat (broadcast)
+2026-01-02T17:07:03.333Z [INFO] [agent-1767373323301-co6jma] Message sent: heartbeat (broadcast)
+2026-01-02T17:07:03.334Z [INFO] [agent-1767373323305-kw6y6f] Message sent: heartbeat (broadcast)
+2026-01-02T17:07:03.335Z [INFO] [agent-1767373323307-ta3qca] Message sent: heartbeat (broadcast)

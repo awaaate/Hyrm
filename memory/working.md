@@ -34,8 +34,29 @@ Hay archivos importantes sin trackear:
 1. [x] Verificar que todo compila
 2. [x] Hacer commit de refactorización (cli.ts, data-fetchers.ts, etc) - commit f93871c
 3. [x] Limpiar agentes zombie del registry (4 eliminados)
-4. [x] Fix bug de duplicación de agentes en registry (multi-agent-coordinator.ts)
-5. [ ] Buscar más oportunidades de mejora
+4. [x] Fix bug de duplicación de agentes en registry - commit 125d58e
+5. [x] Limpiar message bus (59→41 mensajes)
+6. [ ] Investigar por qué el plugin crea múltiples agentes "general"
+
+### Commits realizados
+
+- **f93871c**: `refactor(tools): Consolidate CLI and shared utilities`
+  - Renombrado opencode-cli.ts → cli.ts
+  - Añadido shared/data-fetchers.ts
+  - Consolidado TimingEntry types
+  - Eliminados archivos deprecados
+  - **-850 líneas netas**
+
+- **125d58e**: `fix(coordinator): Prevent duplicate agent registrations`
+  - Arreglado bug donde register() añadía siempre en vez de actualizar
+
+### Problemas pendientes
+
+1. **El plugin crea múltiples agentes "general"**: Cada sesión crea 4 agentes con IDs diferentes pero mismo PID. Esto parece ser un artifact de cómo OpenCode ejecuta el plugin en paralelo.
+
+2. **97 usos de `any`**: Deuda técnica que va contra STYLE_GUIDE.md
+
+3. **60 try/catch blocks**: Muchos podrían simplificarse
 
 ---
 

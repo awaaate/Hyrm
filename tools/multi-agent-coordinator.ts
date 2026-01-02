@@ -52,7 +52,16 @@ class MultiAgentCoordinator {
   private heartbeatCount: number = 0;
 
   constructor(sessionId?: string) {
-    this.agentId = `agent-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    // Use session-based agent ID to avoid duplicates from parallel plugin instances
+    // If sessionId is provided, derive agentId from it for consistency
+    // Otherwise fall back to timestamp-based ID
+    if (sessionId) {
+      // Extract a consistent hash from sessionId to create deterministic agentId
+      const hash = sessionId.replace(/[^a-zA-Z0-9]/g, '').slice(-8);
+      this.agentId = `agent-${hash}`;
+    } else {
+      this.agentId = `agent-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    }
     this.sessionId = sessionId || `session-${Date.now()}`;
   }
 
