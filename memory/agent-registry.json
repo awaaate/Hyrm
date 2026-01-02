@@ -5,7 +5,7 @@
       "agent_id": "agent-1767353179414-xlsru",
       "session_id": "session-1767353179414",
       "started_at": "2026-01-02T11:26:19.415Z",
-      "last_heartbeat": "2026-01-02T12:28:19.869Z",
+      "last_heartbeat": "2026-01-02T12:30:19.874Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 468344,
@@ -30,6 +30,6 @@
       "pid": 489487
     }
   ],
-  "last_updated": "2026-01-02T12:28:19.869Z",
+  "last_updated": "2026-01-02T12:30:19.874Z",
   "lock_version": 186
 }
