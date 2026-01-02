@@ -42,7 +42,7 @@ interface Message {
   from: string;
   type: string;
   timestamp: string;
-  payload: any;
+  payload: Record<string, unknown>;
 }
 
 interface ArchiveIndex {

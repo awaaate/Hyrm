@@ -1095,7 +1095,7 @@ async function cmdLearn(days: number = 7) {
   // Save insights to knowledge base
   if (insights.length > 0) {
     const knowledgePath = MEMORY_PATHS.knowledgeBase;
-    const existing = sharedReadJson<any[]>(knowledgePath, []);
+    const existing = sharedReadJson<LearningInsight[]>(knowledgePath, []);
     
     // Add new insights (avoid exact duplicates)
     const existingTitles = new Set(existing.map(e => e.title || e.session_id));
