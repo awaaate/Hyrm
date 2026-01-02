@@ -1104,8 +1104,67 @@
       "completed_at": "2026-01-02T10:09:30.068Z",
       "quality_score": 8.6,
       "quality_notes": "OpenCode is highly extensible via plugins. Task tool creates child sessions with restricted permissions. Best integration approach is wrapper tools + system message injection rather than forking."
+    },
+    {
+      "id": "task_1767348773210_ezwle4",
+      "title": "Complete CLI tool migrations to shared utilities",
+      "description": "Migrate remaining 7 CLI tools to use tools/shared/ utilities: task-manager.ts, daily-report-generator.ts, terminal-dashboard.ts, agent-performance-profiler.ts, git-integration.ts, message-bus-manager.ts, working-memory-manager.ts. Follow established pattern from migrated tools.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T10:12:53.210Z",
+      "updated_at": "2026-01-02T10:19:26.122Z",
+      "created_by": "unknown",
+      "tags": [
+        "refactoring",
+        "code-quality",
+        "shared-utilities"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767348647750-8jx9u",
+      "claimed_at": "2026-01-02T10:13:05.087Z",
+      "completed_at": "2026-01-02T10:19:23.959Z",
+      "notes": [
+        "[2026-01-02T10:19:23.963Z] Migrated all 7 CLI tools: task-manager.ts, daily-report-generator.ts, terminal-dashboard.ts, agent-performance-profiler.ts, git-integration.ts, message-bus-manager.ts, working-memory-manager.ts. Total ~239 lines of duplicated code removed. All tools tested and working."
+      ],
+      "quality_score": 8.9,
+      "quality_notes": "Worker agents can efficiently handle repetitive migration tasks. The shared utilities pattern established in session 114 made migrations straightforward - just replace inline functions with imports."
+    },
+    {
+      "id": "task_1767348775843_qpjn27",
+      "title": "Add automated testing for CLI tools",
+      "description": "Create unit tests for the CLI tools in tools/ directory. Focus on shared utilities first, then individual tool commands. Use bun test framework.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-02T10:12:55.844Z",
+      "updated_at": "2026-01-02T10:12:55.844Z",
+      "created_by": "unknown",
+      "tags": [
+        "testing",
+        "quality",
+        "cli-tools"
+      ],
+      "estimated_hours": 4,
+      "complexity": "moderate"
+    },
+    {
+      "id": "task_1767348778705_uoy1y9",
+      "title": "Enhance dashboard-ui with more visualizations",
+      "description": "Add charts/graphs to dashboard-ui: task completion over time, quality score trends, agent activity heatmap, tool usage breakdown. Consider using chart libraries like recharts.",
+      "priority": "low",
+      "status": "pending",
+      "created_at": "2026-01-02T10:12:58.705Z",
+      "updated_at": "2026-01-02T10:12:58.705Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "visualization",
+        "ui"
+      ],
+      "estimated_hours": 4,
+      "complexity": "moderate"
     }
   ],
-  "completed_count": 52,
-  "last_updated": "2026-01-02T10:09:30.074Z"
+  "completed_count": 53,
+  "last_updated": "2026-01-02T10:19:23.963Z"
 }

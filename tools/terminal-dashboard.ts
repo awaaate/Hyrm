@@ -27,20 +27,10 @@
 import blessed from "blessed";
 import contrib from "blessed-contrib";
 import { existsSync, readFileSync, watch, FSWatcher } from "fs";
-import { join } from "path";
-
-// Configuration
-const MEMORY_DIR = join(process.cwd(), "memory");
-const PATHS = {
-  state: join(MEMORY_DIR, "state.json"),
-  registry: join(MEMORY_DIR, "agent-registry.json"),
-  messageBus: join(MEMORY_DIR, "message-bus.jsonl"),
-  tasks: join(MEMORY_DIR, "tasks.json"),
-  quality: join(MEMORY_DIR, "quality-assessments.json"),
-  userMessages: join(MEMORY_DIR, "user-messages.jsonl"),
-  realtimeLog: join(MEMORY_DIR, "realtime.log"),
-  metrics: join(MEMORY_DIR, "metrics.json"),
-};
+import { readJson, readJsonl } from './shared/json-utils';
+import { formatTimeAgo } from './shared/time-utils';
+import { truncate } from './shared/string-utils';
+import { PATHS } from './shared/paths';
 
 // Data types
 interface AgentData {
@@ -70,51 +60,9 @@ interface MessageData {
   payload: any;
 }
 
-// Utilities
-function readJson<T>(path: string, defaultValue: T): T {
-  try {
-    if (existsSync(path)) {
-      return JSON.parse(readFileSync(path, "utf-8"));
-    }
-  } catch {}
-  return defaultValue;
-}
-
-function readJsonl<T>(path: string): T[] {
-  try {
-    if (existsSync(path)) {
-      return readFileSync(path, "utf-8")
-        .trim()
-        .split("\n")
-        .filter(Boolean)
-        .map((line) => JSON.parse(line));
-    }
-  } catch {}
-  return [];
-}
-
-function formatTimeAgo(timestamp: string): string {
-  const now = Date.now();
-  const then = new Date(timestamp).getTime();
-  const diff = Math.floor((now - then) / 1000);
-
-  if (diff < 0) return "future";
-  if (diff < 5) return "now";
-  if (diff < 60) return `${diff}s`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
-  return `${Math.floor(diff / 86400)}d`;
-}
-
-function truncate(str: string, len: number): string {
-  if (!str) return "";
-  if (str.length <= len) return str;
-  return str.slice(0, len - 1) + "...";
-}
-
 // Data fetching
 function getActiveAgents(): AgentData[] {
-  const registry = readJson<{ agents: AgentData[] }>(PATHS.registry, { agents: [] });
+  const registry = readJson<{ agents: AgentData[] }>(PATHS.agentRegistry, { agents: [] });
   const twoMinutesAgo = Date.now() - 2 * 60 * 1000;
 
   return (registry.agents || []).filter((agent) => {
@@ -141,7 +89,7 @@ function getState(): any {
 }
 
 function getQuality(): any {
-  return readJson<any>(PATHS.quality, { summary: {}, assessments: [] });
+  return readJson<any>(PATHS.qualityAssessments, { summary: {}, assessments: [] });
 }
 
 function getUserMessages(): any[] {
@@ -655,10 +603,10 @@ function showHelp(): void {
 function startWatching(): void {
   const filesToWatch = [
     PATHS.state,
-    PATHS.registry,
+    PATHS.agentRegistry,
     PATHS.messageBus,
     PATHS.tasks,
-    PATHS.quality,
+    PATHS.qualityAssessments,
     PATHS.userMessages,
   ];
   

@@ -17,11 +17,13 @@
  *   bun tools/message-bus-manager.ts stats           # Message statistics
  */
 
-import { existsSync, readFileSync, writeFileSync, readdirSync, statSync, mkdirSync, appendFileSync } from "fs";
-import { join, basename } from "path";
+import { existsSync, writeFileSync, statSync, mkdirSync } from "fs";
+import { join } from "path";
+import { readJson, readJsonl, writeJson } from './shared/json-utils';
+import { formatTimeAgo } from './shared/time-utils';
+import { PATHS, MEMORY_DIR } from './shared/paths';
 
-const MEMORY_DIR = join(process.cwd(), "memory");
-const MESSAGE_BUS_PATH = join(MEMORY_DIR, "message-bus.jsonl");
+const MESSAGE_BUS_PATH = PATHS.messageBus;
 const ARCHIVE_DIR = join(MEMORY_DIR, "message-archives");
 const INDEX_PATH = join(ARCHIVE_DIR, "index.json");
 
@@ -57,17 +59,7 @@ interface ArchiveIndex {
 
 // Utility functions
 function readMessages(path: string = MESSAGE_BUS_PATH): Message[] {
-  if (!existsSync(path)) return [];
-  try {
-    const content = readFileSync(path, "utf-8");
-    return content
-      .trim()
-      .split("\n")
-      .filter(Boolean)
-      .map(line => JSON.parse(line));
-  } catch {
-    return [];
-  }
+  return readJsonl<Message>(path);
 }
 
 function writeMessages(messages: Message[], path: string = MESSAGE_BUS_PATH): void {
@@ -76,18 +68,11 @@ function writeMessages(messages: Message[], path: string = MESSAGE_BUS_PATH): vo
 }
 
 function getIndex(): ArchiveIndex {
-  if (!existsSync(INDEX_PATH)) {
-    return { archives: [], lastUpdated: new Date().toISOString(), totalMessages: 0 };
-  }
-  try {
-    return JSON.parse(readFileSync(INDEX_PATH, "utf-8"));
-  } catch {
-    return { archives: [], lastUpdated: new Date().toISOString(), totalMessages: 0 };
-  }
+  return readJson<ArchiveIndex>(INDEX_PATH, { archives: [], lastUpdated: new Date().toISOString(), totalMessages: 0 });
 }
 
 function saveIndex(index: ArchiveIndex): void {
-  writeFileSync(INDEX_PATH, JSON.stringify(index, null, 2));
+  writeJson(INDEX_PATH, index);
 }
 
 function ensureArchiveDir(): void {
@@ -100,17 +85,6 @@ function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes}B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)}KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
-}
-
-function formatTimeAgo(isoDate: string): string {
-  const now = Date.now();
-  const then = new Date(isoDate).getTime();
-  const seconds = Math.floor((now - then) / 1000);
-  
-  if (seconds < 60) return `${seconds}s ago`;
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-  return `${Math.floor(seconds / 86400)}d ago`;
 }
 
 // Commands

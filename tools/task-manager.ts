@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 /**
  * Persistent Task Manager for Multi-Agent System
@@ -11,38 +11,11 @@
  * - Automatic task quality assessment
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  priority: 'critical' | 'high' | 'medium' | 'low';
-  status: 'pending' | 'in_progress' | 'blocked' | 'completed' | 'cancelled';
-  created_at: string;
-  updated_at: string;
-  created_by: string;
-  assigned_to?: string;
-  completed_at?: string;
-  dependencies?: string[];
-  tags?: string[];
-  parent_task?: string;
-  subtasks?: string[];
-  notes?: string[];
-  quality_score?: number; // 1-10
-  quality_notes?: string;
-}
-
-interface TaskStore {
-  version: string;
-  tasks: Task[];
-  completed_count: number;
-  last_updated: string;
-}
+import { readJson, writeJson } from './shared/json-utils';
+import { PATHS } from './shared/paths';
+import type { Task, TaskStore } from './shared/types';
 
 class TaskManager {
-  private storePath = '/app/workspace/memory/tasks.json';
   private store: TaskStore;
 
   constructor() {
@@ -50,24 +23,17 @@ class TaskManager {
   }
 
   private loadStore(): TaskStore {
-    if (fs.existsSync(this.storePath)) {
-      try {
-        return JSON.parse(fs.readFileSync(this.storePath, 'utf-8'));
-      } catch (e) {
-        console.error('Failed to load task store:', e);
-      }
-    }
-    return {
+    return readJson<TaskStore>(PATHS.tasks, {
       version: '1.0',
       tasks: [],
       completed_count: 0,
       last_updated: new Date().toISOString()
-    };
+    });
   }
 
   private saveStore(): void {
     this.store.last_updated = new Date().toISOString();
-    fs.writeFileSync(this.storePath, JSON.stringify(this.store, null, 2));
+    writeJson(PATHS.tasks, this.store);
   }
 
   private generateId(): string {
@@ -400,8 +366,9 @@ switch (command) {
 
   case 'export':
     const md = tm.exportMarkdown();
+    const { writeFileSync } = require('fs');
     const exportPath = '/app/workspace/memory/task-board.md';
-    fs.writeFileSync(exportPath, md);
+    writeFileSync(exportPath, md);
     console.log(`Exported to ${exportPath}`);
     break;
 

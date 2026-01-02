@@ -1,31 +1,24 @@
 [
   {
-    "session_id": "ses_481f0dab3ffexmJMTDjKO1xwP9",
-    "timestamp": 1767346480551,
+    "session_id": "ses_481cd75b8ffevcv1L5aqaLPZG9",
+    "timestamp": 1767348800146,
     "messages": 2,
     "decisions": [],
     "discoveries": [],
     "code_created": [
-      ".opencode/plugin/index.ts",
-      ".opencode/plugin/tools/memory-tools.ts",
-      ".opencode/plugin/tools/agent-tools.ts",
-      ".opencode/plugin/tools/task-tools.ts",
-      ".opencode/plugin/tools/quality-tools.ts",
-      ".opencode/plugin/tools/user-message-tools.ts",
-      ".opencode/plugin/tools/recovery-tools.ts",
-      ".opencode/plugin/tools/git-tools.ts",
-      "tools/opencode-cli.ts",
+      "tools/shared/index.ts",
+      "tools/shared/json-utils.ts",
+      "tools/shared/colors.ts",
+      "tools/shared/time-utils.ts",
+      "tools/shared/string-utils.ts",
+      "tools/shared/paths.ts",
       "tools/task-manager.ts",
-      "tools/realtime-monitor.ts",
-      "tools/multi-agent-coordinator.ts",
-      "tools/critique-agent.ts",
-      "tools/knowledge-extractor.ts",
-      "tools/session-summarizer.ts",
-      "dashboard-ui/src/App.tsx",
-      "dashboard-ui/server.ts",
-      ".opencode/skill/agent-orchestrator/SKILL.md",
-      ".opencode/command/status.md",
-      ".opencode/plugin/utils/helpers.ts"
+      "tools/daily-report-generator.ts",
+      "tools/terminal-dashboard.ts",
+      "tools/agent-performance-profiler.ts",
+      "tools/git-integration.ts",
+      "tools/message-bus-manager.ts",
+      "tools/working-memory-manager.ts"
     ],
     "problems_solved": [],
     "key_insights": [],
@@ -33,12 +26,167 @@
     "solutions": []
   },
   {
-    "session_id": "ses_481f17197ffeUvKEP8u5ncvkqa",
-    "timestamp": 1767346467999,
-    "messages": 5,
+    "session_id": "ses_481cfe16dffeGHh1OFh9aspb0N",
+    "timestamp": 1767348785350,
+    "messages": 22,
     "decisions": [],
     "discoveries": [],
     "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481d916efffe652gS4BuYh4FWJ",
+    "timestamp": 1767348305464,
+    "messages": 30,
+    "decisions": [],
+    "discoveries": [
+      "the original code uses `c."
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481dfa643ffecGAfLZqLE5spIJ",
+    "timestamp": 1767347906633,
+    "messages": 47,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e2a4b4ffeHFuSYQNCfvwIaC",
+    "timestamp": 1767347575812,
+    "messages": 25,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e2b193ffeZ1pdidLGmD9KaB",
+    "timestamp": 1767347532745,
+    "messages": 19,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e6ce69ffeY4pbPlusEKrFT7",
+    "timestamp": 1767347375770,
+    "messages": 31,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e6df80ffeE9WOUuZPI5PemL",
+    "timestamp": 1767347217509,
+    "messages": 15,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481e8e3edffelchOWp0OCgatLa",
+    "timestamp": 1767347098448,
+    "messages": 15,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481ed144affeGlDm5i5UOLeMs4",
+    "timestamp": 1767346957772,
+    "messages": 15,
+    "decisions": [],
+    "discoveries": [
+      "just about the output directory."
+    ],
+    "code_created": [
+      "tools/shared/json-utils.ts",
+      "tools/shared/colors.ts",
+      "tools/shared/time-utils.ts",
+      "tools/shared/string-utils.ts",
+      "tools/shared/paths.ts",
+      "tools/shared/config.ts",
+      "tools/shared/types.ts",
+      "tools/shared/index.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481f0c500ffeVHK1ddLXkP0wAu",
+    "timestamp": 1767346518379,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [
+      "Empty catch blocks (INCONSISTENT)**",
+      "ANSI Color Constants (DUPLICATED IN 12+ FILES)**",
+      "Hardcoded memory directory paths (EVERYWHERE)**",
+      "Time formatting helpers (DUPLICATED)**"
+    ],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481f0dab3ffexmJMTDjKO1xwP9",
+    "timestamp": 1767346528273,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481f17197ffeUvKEP8u5ncvkqa",
+    "timestamp": 1767348615995,
+    "messages": 57,
+    "decisions": [
+      "plugin + wrapper tools (not forking OpenCode)"
+    ],
+    "discoveries": [],
+    "code_created": [
+      "docs/CODEBASE_ANALYSIS.md",
+      "docs/OPENCODE_ARCHITECTURE.md"
+    ],
     "problems_solved": [],
     "key_insights": [],
     "techniques": [],
@@ -1863,71 +2011,5 @@
     "key_insights": [],
     "techniques": [],
     "solutions": []
-  },
-  {
-    "type": "issue",
-    "title": "The issue is that the original code uses `c.",
-    "description": "The issue is that the original code uses `c.",
-    "sessions": [
-      "ses_481d916efffe652gS4BuYh4FWJ"
-    ],
-    "extracted_at": "2026-01-02T10:04:35.479Z"
-  },
-  {
-    "type": "issue",
-    "title": "The issue is that `c.",
-    "description": "The issue is that `c.",
-    "sessions": [
-      "ses_481d916efffe652gS4BuYh4FWJ"
-    ],
-    "extracted_at": "2026-01-02T10:04:35.479Z"
-  },
-  {
-    "type": "issue",
-    "title": "The issue is with the contrib.",
-    "description": "The issue is with the contrib.",
-    "sessions": [
-      "ses_482182354ffepRlDEVp5Iz33WO"
-    ],
-    "extracted_at": "2026-01-02T10:04:35.704Z"
-  },
-  {
-    "type": "pattern",
-    "title": "Most used tool: read",
-    "description": "read was used 297 times across 30 sessions",
-    "frequency": 297,
-    "sessions": [
-      "ses_481d916efffe652gS4BuYh4FWJ",
-      "ses_481dfa643ffecGAfLZqLE5spIJ",
-      "ses_481e2a4b4ffeHFuSYQNCfvwIaC",
-      "ses_481e2b193ffeZ1pdidLGmD9KaB",
-      "ses_481e6ce69ffeY4pbPlusEKrFT7",
-      "ses_481e6df80ffeE9WOUuZPI5PemL",
-      "ses_481e8e3edffelchOWp0OCgatLa",
-      "ses_481ed144affeGlDm5i5UOLeMs4",
-      "ses_481f0c500ffeVHK1ddLXkP0wAu",
-      "ses_481f0dab3ffexmJMTDjKO1xwP9",
-      "ses_481f17197ffeUvKEP8u5ncvkqa",
-      "ses_481ffbf05ffeuwRICugL9rtQJZ",
-      "ses_481f97c3dffeXiO48A3gwALPnj",
-      "ses_482182354ffepRlDEVp5Iz33WO",
-      "ses_482027677ffedBcpV3SGet2BBE",
-      "ses_48206c404ffe2iiP0dGvqqnbAU",
-      "ses_48261b217ffew6JGwMk9dDgqeV",
-      "ses_48268a5afffeWWEUVpx2LgDsjc",
-      "ses_4844f5f7effeS1GftImkN5Tgm9",
-      "ses_48456557cffei9Mxf7fDgNz6x2",
-      "ses_4845eab9effe9kSK7k61M26zfb",
-      "ses_48464b61affeblv65s5yg9yEIp",
-      "ses_4846f06f2ffei2mChHCzntsK6Q",
-      "ses_48473b182ffe8yb742oUGtrWZ9",
-      "ses_4847aa85bffeEPOvSR1mP9praf",
-      "ses_48482ff3effeDVcIC3z9P4y2uF",
-      "ses_4848b250dffe6S7Kfsq39MS3qc",
-      "ses_484832037ffe9cC2nPlNOlZcW3",
-      "ses_4848fecc6ffeG1qCN9S8EgFuCL",
-      "ses_48490b364ffe55tWsOfKkylfTV"
-    ],
-    "extracted_at": "2026-01-02T10:04:35.909Z"
   }
 ]

@@ -17,11 +17,12 @@
  *   bun tools/working-memory-manager.ts clean         # Clean up and optimize
  */
 
-import { existsSync, readFileSync, writeFileSync, readdirSync, mkdirSync } from "fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
+import { readJson, writeJson } from './shared/json-utils';
+import { PATHS, MEMORY_DIR } from './shared/paths';
 
-const MEMORY_DIR = join(process.cwd(), "memory");
-const WORKING_PATH = join(MEMORY_DIR, "working.md");
+const WORKING_PATH = PATHS.working;
 const ARCHIVE_DIR = join(MEMORY_DIR, "working-archives");
 const INDEX_PATH = join(ARCHIVE_DIR, "index.json");
 
@@ -127,18 +128,11 @@ function parseWorkingMd(content: string): { header: string; sessions: SessionInf
 }
 
 function getIndex(): ArchiveIndex {
-  if (!existsSync(INDEX_PATH)) {
-    return { archives: [], lastUpdated: new Date().toISOString(), totalArchived: 0 };
-  }
-  try {
-    return JSON.parse(readFileSync(INDEX_PATH, "utf-8"));
-  } catch {
-    return { archives: [], lastUpdated: new Date().toISOString(), totalArchived: 0 };
-  }
+  return readJson<ArchiveIndex>(INDEX_PATH, { archives: [], lastUpdated: new Date().toISOString(), totalArchived: 0 });
 }
 
 function saveIndex(index: ArchiveIndex): void {
-  writeFileSync(INDEX_PATH, JSON.stringify(index, null, 2));
+  writeJson(INDEX_PATH, index);
 }
 
 function ensureArchiveDir(): void {

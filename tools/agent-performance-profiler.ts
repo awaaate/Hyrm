@@ -22,32 +22,17 @@
  *   export                - Export metrics to JSON
  */
 
-import { existsSync, readFileSync, writeFileSync, readdirSync } from "fs";
+import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
+import { readJson, writeJson, readJsonl } from './shared/json-utils';
+import { c } from './shared/colors';
+import { formatDuration } from './shared/time-utils';
+import { PATHS, MEMORY_DIR } from './shared/paths';
 
-// Paths
-const MEMORY_DIR = join(process.cwd(), "memory");
+// Additional paths not in shared
 const OPENCODE_STORAGE = join(homedir(), ".local", "share", "opencode", "storage");
-const PERFORMANCE_METRICS_PATH = join(MEMORY_DIR, "agent-performance-metrics.json");
-const QUALITY_ASSESSMENTS_PATH = join(MEMORY_DIR, "quality-assessments.json");
-const MESSAGE_BUS_PATH = join(MEMORY_DIR, "message-bus.jsonl");
-const SESSIONS_LOG_PATH = join(MEMORY_DIR, "sessions.jsonl");
 const PROFILER_CACHE_PATH = join(MEMORY_DIR, ".profiler-cache.json");
-
-// ANSI colors
-const c = {
-  reset: "\x1b[0m",
-  bold: "\x1b[1m",
-  dim: "\x1b[2m",
-  red: "\x1b[31m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  blue: "\x1b[34m",
-  magenta: "\x1b[35m",
-  cyan: "\x1b[36m",
-  white: "\x1b[37m",
-};
 
 // Types
 interface ToolExecution {
@@ -110,38 +95,6 @@ interface ProfilerCache {
 }
 
 // Helper functions
-function readJson<T>(path: string, defaultValue: T): T {
-  try {
-    if (existsSync(path)) {
-      return JSON.parse(readFileSync(path, "utf-8"));
-    }
-  } catch {}
-  return defaultValue;
-}
-
-function writeJson(path: string, data: any): void {
-  writeFileSync(path, JSON.stringify(data, null, 2));
-}
-
-function readJsonl<T>(path: string): T[] {
-  try {
-    if (existsSync(path)) {
-      return readFileSync(path, "utf-8")
-        .split("\n")
-        .filter(line => line.trim())
-        .map(line => JSON.parse(line));
-    }
-  } catch {}
-  return [];
-}
-
-function formatDuration(ms: number): string {
-  if (ms < 1000) return `${ms.toFixed(0)}ms`;
-  if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
-  if (ms < 3600000) return `${(ms / 60000).toFixed(1)}m`;
-  return `${(ms / 3600000).toFixed(1)}h`;
-}
-
 function formatPercent(value: number): string {
   return `${(value * 100).toFixed(1)}%`;
 }
@@ -208,7 +161,7 @@ function analyzeToolExecutions(): Record<string, ToolExecution> {
   }
   
   // Also analyze our internal session log
-  const sessionEvents = readJsonl<any>(SESSIONS_LOG_PATH);
+  const sessionEvents = readJsonl<any>(PATHS.sessions);
   for (const event of sessionEvents) {
     if (event.type === "tool_call" && event.tool) {
       const toolName = event.tool;
@@ -252,7 +205,7 @@ function analyzeAgentProfiles(): Record<string, AgentProfile> {
   const profiles: Record<string, AgentProfile> = {};
   
   // Load existing performance metrics
-  const perfMetrics = readJson<any>(PERFORMANCE_METRICS_PATH, { agents: {} });
+  const perfMetrics = readJson<any>(PATHS.agentPerformanceMetrics, { agents: {} });
   
   for (const [agentId, data] of Object.entries(perfMetrics.agents || {})) {
     const agent = data as any;
@@ -278,7 +231,7 @@ function analyzeAgentProfiles(): Record<string, AgentProfile> {
   }
   
   // Analyze message bus for tool usage per agent
-  const messages = readJsonl<any>(MESSAGE_BUS_PATH);
+  const messages = readJsonl<any>(PATHS.messageBus);
   for (const msg of messages) {
     const agentId = msg.from;
     if (agentId && profiles[agentId]) {
@@ -298,7 +251,7 @@ function analyzeErrorPatterns(): ErrorPattern[] {
   const patterns: Map<string, ErrorPattern> = new Map();
   
   // Analyze session errors
-  const sessionEvents = readJsonl<any>(SESSIONS_LOG_PATH);
+  const sessionEvents = readJsonl<any>(PATHS.sessions);
   for (const event of sessionEvents) {
     if (event.type === "session_error" && event.error) {
       const errorName = event.error.name || "UnknownError";

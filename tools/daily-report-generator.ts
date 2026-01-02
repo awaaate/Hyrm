@@ -22,61 +22,13 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from "fs";
 import { join } from "path";
+import { readJson, readJsonl } from './shared/json-utils';
+import { c } from './shared/colors';
+import { formatDate } from './shared/time-utils';
+import { PATHS, MEMORY_DIR } from './shared/paths';
 
 // Configuration
-const MEMORY_DIR = join(process.cwd(), "memory");
 const REPORTS_DIR = join(MEMORY_DIR, "reports");
-const PATHS = {
-  state: join(MEMORY_DIR, "state.json"),
-  tasks: join(MEMORY_DIR, "tasks.json"),
-  quality: join(MEMORY_DIR, "quality-assessments.json"),
-  sessions: join(MEMORY_DIR, "sessions.jsonl"),
-  messages: join(MEMORY_DIR, "message-bus.jsonl"),
-  registry: join(MEMORY_DIR, "agent-registry.json"),
-  timing: join(MEMORY_DIR, "tool-timing.jsonl"),
-  realtimeLog: join(MEMORY_DIR, "realtime.log"),
-  metrics: join(MEMORY_DIR, "metrics.json"),
-};
-
-// ANSI colors
-const c = {
-  reset: "\x1b[0m",
-  bright: "\x1b[1m",
-  dim: "\x1b[2m",
-  red: "\x1b[31m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  blue: "\x1b[34m",
-  magenta: "\x1b[35m",
-  cyan: "\x1b[36m",
-};
-
-// Utility functions
-function readJson<T>(path: string, defaultValue: T): T {
-  try {
-    if (existsSync(path)) {
-      return JSON.parse(readFileSync(path, "utf-8"));
-    }
-  } catch {}
-  return defaultValue;
-}
-
-function readJsonl<T>(path: string): T[] {
-  try {
-    if (existsSync(path)) {
-      return readFileSync(path, "utf-8")
-        .trim()
-        .split("\n")
-        .filter(Boolean)
-        .map(line => JSON.parse(line));
-    }
-  } catch {}
-  return [];
-}
-
-function formatDate(date: Date): string {
-  return date.toISOString().split("T")[0];
-}
 
 function parseDate(dateStr: string): Date {
   const date = new Date(dateStr);
@@ -139,10 +91,10 @@ interface Suggestion {
 
 // Data collection functions
 function collectAgentProductivity(targetDate: string): AgentProductivity {
-  const registry = readJson<any>(PATHS.registry, { agents: [] });
+  const registry = readJson<any>(PATHS.agentRegistry, { agents: [] });
   const sessions = readJsonl<any>(PATHS.sessions);
-  const messages = readJsonl<any>(PATHS.messages);
-  const timing = readJsonl<any>(PATHS.timing);
+  const messages = readJsonl<any>(PATHS.messageBus);
+  const timing = readJsonl<any>(PATHS.toolTiming);
   const tasks = readJson<any>(PATHS.tasks, { tasks: [] });
   
   // Filter data for target date
@@ -189,7 +141,7 @@ function collectAgentProductivity(targetDate: string): AgentProductivity {
 }
 
 function collectQualityTrends(targetDate: string): QualityTrends {
-  const quality = readJson<any>(PATHS.quality, { assessments: [], summary: {} });
+  const quality = readJson<any>(PATHS.qualityAssessments, { assessments: [], summary: {} });
   const assessments = quality.assessments || [];
   
   // All assessments for trends
@@ -263,7 +215,7 @@ function collectQualityTrends(targetDate: string): QualityTrends {
 }
 
 function collectErrorPatterns(targetDate: string): ErrorPatterns {
-  const timing = readJsonl<any>(PATHS.timing);
+  const timing = readJsonl<any>(PATHS.toolTiming);
   const logs = readJsonl<any>(PATHS.realtimeLog);
   
   // Filter for target date

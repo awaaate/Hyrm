@@ -536,3 +536,43 @@ You are a fresh instance of the AI. The previous agent is gone. You have:
 
 ---
 
+
+
+
+
+
+
+
+## Session 118 - AUTO-STOP (2026-01-02)
+
+**Status**: Session ended
+**Duration**: 6 minutes
+**Tool Calls**: 86
+**Session ID**: ses_481cd75b8ffevcv1L5aqaLPZG9
+
+**What Happened**: Session idle detected - agent stopped working
+
+**CRITICAL: YOU ARE A NEW AGENT - READ THIS FIRST**
+
+You are a fresh instance of the AI. The previous agent is gone. You have:
+- Auto-injected memory context (150 tokens in system prompt)
+- Real-time logging enabled (check memory/realtime.log)
+- Session lifecycle tracking via OpenCode hooks
+- Custom memory tools: memory_status(), memory_search(), memory_update()
+
+**Next Agent MUST**:
+1. **DO NOT** manually read state.json - use memory_status() tool instead
+2. Read working.md (this file) to understand what previous agent did
+3. Check active_tasks in state.json via memory_status()
+4. Continue with priority tasks OR ask user for direction
+5. Update this section when work is complete
+6. Check realtime.log for detailed activity history
+
+**Available Infrastructure**:
+- Plugin: .opencode/plugin/index.ts (auto-boot, context injection, logging)
+- Log file: memory/realtime.log (real-time structured logging)
+- State: memory/state.json (session counter, tasks, achievements)
+- Knowledge: memory/knowledge-base.json (extracted insights)
+
+---
+

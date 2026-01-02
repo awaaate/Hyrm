@@ -23,30 +23,14 @@
  *   stash-pop           Pop stashed changes
  */
 
-import { execSync, spawnSync } from "child_process";
-import { existsSync, readFileSync, writeFileSync, appendFileSync } from "fs";
+import { spawnSync } from "child_process";
+import { existsSync, readFileSync, appendFileSync } from "fs";
 import { join } from "path";
+import { c } from './shared/colors';
+import { truncate } from './shared/string-utils';
+import { MEMORY_DIR } from './shared/paths';
 
-const MEMORY_DIR = join(process.cwd(), "memory");
 const GIT_LOG_PATH = join(MEMORY_DIR, "git-activity.jsonl");
-
-// ANSI colors
-const c = {
-  reset: "\x1b[0m",
-  bright: "\x1b[1m",
-  dim: "\x1b[2m",
-  red: "\x1b[31m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  blue: "\x1b[34m",
-  magenta: "\x1b[35m",
-  cyan: "\x1b[36m",
-  bgBlue: "\x1b[44m",
-  bgGreen: "\x1b[42m",
-  bgYellow: "\x1b[43m",
-  bgRed: "\x1b[41m",
-  white: "\x1b[37m",
-};
 
 interface GitActivity {
   timestamp: string;
@@ -85,10 +69,6 @@ function logActivity(activity: GitActivity): void {
   try {
     appendFileSync(GIT_LOG_PATH, JSON.stringify(activity) + "\n");
   } catch {}
-}
-
-function truncate(str: string, len: number): string {
-  return str.length > len ? str.slice(0, len - 3) + "..." : str;
 }
 
 // Commands

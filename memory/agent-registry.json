@@ -2,25 +2,16 @@
   "version": "1.0.0",
   "agents": [
     {
-      "agent_id": "agent-1767346448863-8nurpb",
-      "session_id": "session-1767346448863",
-      "started_at": "2026-01-02T09:34:08.864Z",
-      "last_heartbeat": "2026-01-02T10:10:09.530Z",
-      "status": "active",
-      "assigned_role": "orchestrator",
-      "pid": 388997
-    },
-    {
       "agent_id": "agent-1767348647750-8jx9u",
       "session_id": "session-1767348647750",
       "started_at": "2026-01-02T10:10:47.750Z",
-      "last_heartbeat": "2026-01-02T10:12:17.771Z",
+      "last_heartbeat": "2026-01-02T10:19:18.278Z",
       "status": "active",
       "assigned_role": "orchestrator",
       "pid": 419760,
       "current_task": "Orchestrator resumed - reviewing system state"
     }
   ],
-  "last_updated": "2026-01-02T10:12:17.772Z",
-  "lock_version": 120
+  "last_updated": "2026-01-02T10:19:18.278Z",
+  "lock_version": 131
 }
