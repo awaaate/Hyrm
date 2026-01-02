@@ -89,15 +89,38 @@ function readMessageParts(msgId: string): any[] {
 
 /**
  * Extract key learnings from text content
+ * Enhanced with better pattern matching for decisions, insights, and solutions
  */
 function extractLearnings(text: string): string[] {
   const learnings: string[] = [];
   
+  // Expanded patterns for better extraction
   const patterns = [
-    /(?:learned|discovered|realized|found out|key insight|important:)\s*(?:that\s+)?([^.!?\n]{20,150}[.!?]?)/gi,
-    /(?:the (?:solution|fix|answer|approach) (?:is|was) (?:to\s+)?([^.!?\n]{20,150}[.!?]?))/gi,
-    /(?:this works because)\s+([^.!?\n]{20,150}[.!?]?)/gi,
-    /(?:successfully (?:implemented|created|fixed|built))\s+([^.!?\n]{20,100}[.!?]?)/gi,
+    // Original patterns (slightly improved)
+    /(?:learned|discovered|realized|found out|key insight|important:)\s*(?:that\s+)?([^.!?\n]{20,200}[.!?]?)/gi,
+    /(?:the (?:solution|fix|answer|approach|trick) (?:is|was) (?:to\s+)?([^.!?\n]{20,200}[.!?]?))/gi,
+    /(?:this works because)\s+([^.!?\n]{20,200}[.!?]?)/gi,
+    /(?:successfully (?:implemented|created|fixed|built|added|enhanced))\s+([^.!?\n]{20,150}[.!?]?)/gi,
+    
+    // Decision patterns
+    /(?:decided to|chose to|opted for|went with)\s+([^.!?\n]{15,150}[.!?]?)/gi,
+    /(?:the best approach is|better to|should use)\s+([^.!?\n]{15,150}[.!?]?)/gi,
+    
+    // Problem/solution patterns
+    /(?:the issue was|problem was|root cause|turned out)\s+([^.!?\n]{20,200}[.!?]?)/gi,
+    /(?:fixed by|solved by|resolved by|addressed by)\s+([^.!?\n]{15,150}[.!?]?)/gi,
+    
+    // Technical insight patterns
+    /(?:note:?|takeaway:?|reminder:?)\s+([^.!?\n]{15,200}[.!?]?)/gi,
+    /(?:for future reference|remember that|don't forget)\s+([^.!?\n]{15,200}[.!?]?)/gi,
+    
+    // Implementation patterns
+    /(?:implemented|created|built|added|enhanced)\s+(?:a |an |the )?([^.!?\n]{15,150}[.!?]?)/gi,
+    /(?:now we have|this adds|this enables|this provides)\s+([^.!?\n]{20,150}[.!?]?)/gi,
+    
+    // Quality observations
+    /(?:quality score|rated|assessed at)\s+([^.!?\n]{10,100}[.!?]?)/gi,
+    /(?:improved|optimized|refactored|enhanced)\s+([^.!?\n]{15,150}[.!?]?)/gi,
   ];
 
   for (const pattern of patterns) {
@@ -105,13 +128,27 @@ function extractLearnings(text: string): string[] {
     let match;
     while ((match = pattern.exec(text)) !== null) {
       const learning = (match[1] || "").trim();
-      if (learning.length >= 20 && learning.length <= 200) {
-        learnings.push(learning);
+      // Filter out very short or overly long matches
+      if (learning.length >= 15 && learning.length <= 250) {
+        // Clean up common artifacts
+        const cleaned = learning
+          .replace(/^(that|to|the|a|an)\s+/i, "")
+          .replace(/\s+/g, " ")
+          .trim();
+        if (cleaned.length >= 10) {
+          learnings.push(cleaned);
+        }
       }
     }
   }
 
-  return [...new Set(learnings)].slice(0, 5);
+  // Deduplicate and limit
+  const unique = [...new Set(learnings)];
+  
+  // Sort by length (prefer more detailed learnings)
+  unique.sort((a, b) => b.length - a.length);
+  
+  return unique.slice(0, 8);
 }
 
 /**

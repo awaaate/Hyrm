@@ -1112,96 +1112,265 @@ Remember: You NEVER stop. Always call agent_set_handoff(enabled=false) first.`;
   }
 
   async function extractSessionKnowledge(sessionId: string, durationMs: number) {
-    // Extract key metrics from this session's tool timing data
+    // Enhanced knowledge extraction from multiple sources
     const sessionKnowledge = {
       session_id: sessionId,
       timestamp: new Date().toISOString(),
       duration_ms: durationMs,
       tool_calls: toolCallCount,
-      patterns: [] as string[],
-      learnings: [] as string[],
+      decisions: [] as string[],
+      discoveries: [] as string[],
+      code_created: [] as string[],
+      problems_solved: [] as string[],
+      key_insights: [] as string[],
+      techniques: [] as string[],
+      solutions: [] as string[],
     };
 
-    // Read recent tool timing entries for this session
+    const now = Date.now();
+    const sessionStartTime = now - durationMs;
+
+    // === 1. EXTRACT FROM MESSAGE BUS (task completions) ===
     try {
-      if (existsSync(toolTimingPath)) {
-        const timingContent = readFileSync(toolTimingPath, "utf-8");
-        const lines = timingContent.trim().split("\n").slice(-100); // Last 100 entries
+      const messageBusPath = join(memoryDir, "message-bus.jsonl");
+      if (existsSync(messageBusPath)) {
+        const content = readFileSync(messageBusPath, "utf-8");
+        const lines = content.trim().split("\n").slice(-200);
         
-        const sessionEntries = lines
-          .filter(Boolean)
-          .map(line => {
-            try { return JSON.parse(line); } catch { return null; }
-          })
-          .filter(entry => entry && entry.session_id === sessionId);
-
-        // Analyze tool usage patterns
-        const toolCounts: Record<string, number> = {};
-        const errorTools: string[] = [];
-        const slowTools: { tool: string; duration: number }[] = [];
-        
-        for (const entry of sessionEntries) {
-          toolCounts[entry.tool] = (toolCounts[entry.tool] || 0) + 1;
-          if (!entry.success) errorTools.push(entry.tool);
-          if (entry.duration_ms > 5000) slowTools.push({ tool: entry.tool, duration: entry.duration_ms });
-        }
-
-        // Generate insights
-        const topTools = Object.entries(toolCounts)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 5)
-          .map(([tool, count]) => `${tool}: ${count}`);
-        
-        if (topTools.length > 0) {
-          sessionKnowledge.patterns.push(`Top tools: ${topTools.join(", ")}`);
-        }
-        
-        if (errorTools.length > 0) {
-          const uniqueErrors = [...new Set(errorTools)];
-          sessionKnowledge.learnings.push(`Error-prone tools: ${uniqueErrors.join(", ")}`);
-        }
-        
-        if (slowTools.length > 0) {
-          const uniqueSlow = [...new Set(slowTools.map(t => t.tool))];
-          sessionKnowledge.learnings.push(`Slow tools (>5s): ${uniqueSlow.join(", ")}`);
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            const msgTime = new Date(msg.timestamp).getTime();
+            
+            // Only process messages from this session's timeframe
+            if (msgTime < sessionStartTime || msgTime > now) continue;
+            
+            // Extract from task_complete messages
+            if (msg.type === "task_complete" || msg.type === "task_completed") {
+              const payload = msg.payload || {};
+              if (payload.summary) {
+                sessionKnowledge.solutions.push(payload.summary);
+              }
+              if (payload.title) {
+                sessionKnowledge.problems_solved.push(payload.title);
+              }
+            }
+            
+            // Extract from broadcasts with findings/learnings
+            if (msg.type === "broadcast" && msg.payload) {
+              const p = msg.payload;
+              if (p.learning) sessionKnowledge.key_insights.push(p.learning);
+              if (p.findings) {
+                if (typeof p.findings === "string") {
+                  sessionKnowledge.discoveries.push(p.findings);
+                } else if (Array.isArray(p.findings)) {
+                  sessionKnowledge.discoveries.push(...p.findings.slice(0, 3));
+                }
+              }
+            }
+          } catch {}
         }
       }
     } catch (error) {
-      log("WARN", "Failed to analyze tool timing", { error: String(error) });
+      log("WARN", "Failed to extract from message bus", { error: String(error) });
     }
 
-    // Save session knowledge to knowledge base if we found anything useful
-    if (sessionKnowledge.patterns.length > 0 || sessionKnowledge.learnings.length > 0) {
-      const knowledgePath = join(memoryDir, "knowledge-base.json");
-      try {
-        const kb = existsSync(knowledgePath) 
-          ? JSON.parse(readFileSync(knowledgePath, "utf-8"))
-          : { insights: [], patterns: [], metadata: { last_updated: "" } };
+    // === 2. EXTRACT FROM QUALITY ASSESSMENTS (lessons learned) ===
+    try {
+      const qualityPath = join(memoryDir, "quality-assessments.json");
+      if (existsSync(qualityPath)) {
+        const qa = JSON.parse(readFileSync(qualityPath, "utf-8"));
+        const assessments = qa.assessments || [];
         
-        // Add session-specific insight
-        kb.insights.push({
-          type: "session_summary",
-          session_id: sessionId,
-          timestamp: new Date().toISOString(),
-          duration_minutes: Math.round(durationMs / 60000),
-          tool_calls: toolCallCount,
-          patterns: sessionKnowledge.patterns,
-          learnings: sessionKnowledge.learnings,
-        });
+        for (const assessment of assessments) {
+          const assessedAt = new Date(assessment.assessed_at).getTime();
+          if (assessedAt >= sessionStartTime && assessedAt <= now) {
+            if (assessment.lessons_learned) {
+              sessionKnowledge.key_insights.push(assessment.lessons_learned);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      log("WARN", "Failed to extract from quality assessments", { error: String(error) });
+    }
+
+    // === 3. EXTRACT FROM TASKS (completed tasks with descriptions) ===
+    try {
+      const tasksPath = join(memoryDir, "tasks.json");
+      if (existsSync(tasksPath)) {
+        const tasks = JSON.parse(readFileSync(tasksPath, "utf-8"));
         
-        // Keep only last 50 session insights
-        const sessionInsights = kb.insights.filter((i: any) => i.type === "session_summary");
-        if (sessionInsights.length > 50) {
-          const toRemove = sessionInsights.slice(0, sessionInsights.length - 50);
-          kb.insights = kb.insights.filter((i: any) => !toRemove.includes(i));
+        for (const task of tasks.tasks || []) {
+          if (task.status !== "completed") continue;
+          const completedAt = task.completed_at ? new Date(task.completed_at).getTime() : 0;
+          
+          if (completedAt >= sessionStartTime && completedAt <= now) {
+            sessionKnowledge.problems_solved.push(task.title);
+            if (task.notes && task.notes.length < 200) {
+              sessionKnowledge.solutions.push(task.notes);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      log("WARN", "Failed to extract from tasks", { error: String(error) });
+    }
+
+    // === 4. EXTRACT FROM GIT ACTIVITY (commit messages) ===
+    try {
+      const gitPath = join(memoryDir, "git-activity.jsonl");
+      if (existsSync(gitPath)) {
+        const content = readFileSync(gitPath, "utf-8");
+        const lines = content.trim().split("\n").slice(-50);
+        
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const entry = JSON.parse(line);
+            const entryTime = new Date(entry.timestamp).getTime();
+            
+            if (entryTime >= sessionStartTime && entryTime <= now) {
+              if (entry.action === "commit" && entry.message) {
+                // Extract the first line of commit message
+                const firstLine = entry.message.split("\n")[0];
+                if (firstLine.length > 10 && firstLine.length < 150) {
+                  sessionKnowledge.code_created.push(firstLine);
+                }
+              }
+            }
+          } catch {}
+        }
+      }
+    } catch (error) {
+      log("WARN", "Failed to extract from git activity", { error: String(error) });
+    }
+
+    // === 5. EXTRACT FROM SESSIONS.JSONL (file edits) ===
+    try {
+      if (existsSync(sessionsPath)) {
+        const content = readFileSync(sessionsPath, "utf-8");
+        const lines = content.trim().split("\n").slice(-100);
+        const editedFiles: string[] = [];
+        
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const entry = JSON.parse(line);
+            if (entry.type === "file_edit" && entry.session_id === sessionId) {
+              const file = entry.file?.replace("/app/workspace/", "") || "";
+              if (file && !editedFiles.includes(file) && !file.startsWith("memory/")) {
+                editedFiles.push(file);
+              }
+            }
+          } catch {}
         }
         
-        kb.metadata.last_updated = new Date().toISOString();
+        if (editedFiles.length > 0) {
+          // Group by type
+          const codeFiles = editedFiles.filter(f => 
+            f.endsWith(".ts") || f.endsWith(".tsx") || f.endsWith(".js") || f.endsWith(".jsx")
+          );
+          if (codeFiles.length > 0) {
+            sessionKnowledge.code_created.push(`Modified: ${codeFiles.slice(0, 5).join(", ")}`);
+          }
+        }
+      }
+    } catch (error) {
+      log("WARN", "Failed to extract from sessions", { error: String(error) });
+    }
+
+    // === 6. ANALYZE TOOL PATTERNS ===
+    try {
+      if (existsSync(toolTimingPath)) {
+        const content = readFileSync(toolTimingPath, "utf-8");
+        const lines = content.trim().split("\n").slice(-200);
+        
+        const sessionEntries = lines
+          .filter(Boolean)
+          .map(line => { try { return JSON.parse(line); } catch { return null; } })
+          .filter(entry => entry && entry.session_id === sessionId);
+
+        // Identify work patterns
+        const categories: Record<string, number> = {};
+        for (const entry of sessionEntries) {
+          categories[entry.category] = (categories[entry.category] || 0) + 1;
+        }
+        
+        const topCategory = Object.entries(categories)
+          .sort((a, b) => b[1] - a[1])[0];
+        
+        if (topCategory && topCategory[1] > 5) {
+          const categoryDescriptions: Record<string, string> = {
+            file_ops: "File operations (reading, editing, writing)",
+            shell: "Command execution",
+            memory: "Memory system management",
+            agent: "Multi-agent coordination",
+            task: "Task management",
+            git: "Git version control",
+            spawn: "Subagent spawning",
+          };
+          const desc = categoryDescriptions[topCategory[0]];
+          if (desc) {
+            sessionKnowledge.techniques.push(`Primary work: ${desc}`);
+          }
+        }
+      }
+    } catch (error) {
+      log("WARN", "Failed to analyze tool patterns", { error: String(error) });
+    }
+
+    // === SAVE TO KNOWLEDGE BASE ===
+    const hasContent = 
+      sessionKnowledge.decisions.length > 0 ||
+      sessionKnowledge.discoveries.length > 0 ||
+      sessionKnowledge.code_created.length > 0 ||
+      sessionKnowledge.problems_solved.length > 0 ||
+      sessionKnowledge.key_insights.length > 0 ||
+      sessionKnowledge.techniques.length > 0 ||
+      sessionKnowledge.solutions.length > 0;
+
+    if (hasContent) {
+      const knowledgePath = join(memoryDir, "knowledge-base.json");
+      try {
+        // Read as array (new format) or migrate from old format
+        let kb: any[] = [];
+        if (existsSync(knowledgePath)) {
+          const content = JSON.parse(readFileSync(knowledgePath, "utf-8"));
+          kb = Array.isArray(content) ? content : (content.insights || []);
+        }
+        
+        // Add session knowledge entry
+        kb.unshift({
+          session_id: sessionId,
+          timestamp: Date.now(),
+          messages: toolCallCount,
+          decisions: sessionKnowledge.decisions,
+          discoveries: sessionKnowledge.discoveries,
+          code_created: sessionKnowledge.code_created,
+          problems_solved: sessionKnowledge.problems_solved,
+          key_insights: sessionKnowledge.key_insights,
+          techniques: sessionKnowledge.techniques,
+          solutions: sessionKnowledge.solutions,
+        });
+        
+        // Keep last 100 entries
+        kb = kb.slice(0, 100);
+        
         writeFileSync(knowledgePath, JSON.stringify(kb, null, 2));
-        log("INFO", "Session knowledge saved to knowledge base");
+        log("INFO", "Enhanced session knowledge saved", {
+          decisions: sessionKnowledge.decisions.length,
+          discoveries: sessionKnowledge.discoveries.length,
+          code_created: sessionKnowledge.code_created.length,
+          problems_solved: sessionKnowledge.problems_solved.length,
+          key_insights: sessionKnowledge.key_insights.length,
+        });
       } catch (error) {
         log("WARN", "Failed to save session knowledge", { error: String(error) });
       }
+    } else {
+      log("INFO", "No significant knowledge to extract from this session");
     }
   }
 
