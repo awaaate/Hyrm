@@ -838,7 +838,7 @@ Multi-Agent Mode Active: Check agent_status() to see other agents working in par
             timestamp: new Date().toISOString(),
             error: event.properties.error,
           });
-          await ctx.$`echo ${errorLog} >> ${sessionsPath}`.quiet();
+          appendFileSync(sessionsPath, errorLog + "\n");
         }
 
         // FILE EDITS (memory files only)
@@ -852,7 +852,7 @@ Multi-Agent Mode Active: Check agent_status() to see other agents working in par
             timestamp: new Date().toISOString(),
             file: event.properties.file,
           });
-          await ctx.$`echo ${fileLog} >> ${sessionsPath}`.quiet();
+          appendFileSync(sessionsPath, fileLog + "\n");
         }
 
         // COMPACTION
@@ -863,7 +863,7 @@ Multi-Agent Mode Active: Check agent_status() to see other agents working in par
             timestamp: new Date().toISOString(),
             session_id: event.properties.sessionID,
           });
-          await ctx.$`echo ${compactionLog} >> ${sessionsPath}`.quiet();
+          appendFileSync(sessionsPath, compactionLog + "\n");
         }
 
         // OTHER EVENTS
@@ -1178,7 +1178,7 @@ Read memory/working.md for full details.`);
       timestamp: currentSessionStart.toISOString(),
       session_id: event.properties.info.id,
     });
-    await ctx.$`echo ${sessionLog} >> ${sessionsPath}`.quiet();
+    appendFileSync(sessionsPath, sessionLog + "\n");
   }
 
   async function handleSessionIdle(event: any) {
@@ -1253,7 +1253,7 @@ Remember: You NEVER stop. Always call agent_set_handoff(enabled=false) first.`;
         duration_ms: sessionDuration,
         tool_calls: toolCallCount,
       });
-      await ctx.$`echo ${sessionEnd} >> ${sessionsPath}`.quiet();
+      appendFileSync(sessionsPath, sessionEnd + "\n");
       
       // === AUTO-EXTRACT SESSION LEARNINGS ===
       log("INFO", "Starting automatic session learning extraction...");
