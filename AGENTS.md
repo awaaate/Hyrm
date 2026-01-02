@@ -34,22 +34,25 @@ A multi-agent AI orchestration system built on OpenCode with persistent memory, 
 │   ├── working.md                # Working memory
 │   └── sessions/                 # Per-session state
 │
-├── tools/                        # CLI utilities (24 tools by domain)
+├── tools/                        # CLI utilities (23 tools)
 │   ├── shared/                   # Shared utilities (colors, paths, json, etc.)
 │   │
-│   │   ## Agent Tools (7)
+│   │   ## CLI Principal (1)
+│   ├── cli.ts                        # Unified CLI (status, agents, tasks, monitor)
+│   │
+│   │   ## Agent Tools (8)
 │   ├── agent-conversation-viewer.ts  # View agent conversations
 │   ├── agent-health-monitor.ts       # Agent health/cleanup
 │   ├── agent-performance-profiler.ts # Agent analytics
 │   ├── critique-agent.ts             # Code review agent
 │   ├── multi-agent-coordinator.ts    # Agent coordination
-│   ├── generate-orchestrator-prompt.ts
 │   ├── message-bus-manager.ts        # Message bus maintenance
+│   ├── generate-orchestrator-prompt.ts # Generate orchestrator prompts
+│   ├── generate-worker-prompt.ts     # Generate worker prompts
 │   │
-│   │   ## Memory Tools (4)
+│   │   ## Memory Tools (3)
 │   ├── knowledge-deduplicator.ts     # Clean duplicate knowledge
 │   ├── knowledge-extractor.ts        # Extract session insights
-│   ├── smart-memory-manager.ts       # Memory pruning
 │   ├── working-memory-manager.ts     # Working.md archival
 │   │
 │   │   ## Task Tools (3)
@@ -57,23 +60,19 @@ A multi-agent AI orchestration system built on OpenCode with persistent memory, 
 │   ├── task-router.ts                # Task routing
 │   ├── quality-assessor.ts           # Quality tracking
 │   │
-│   │   ## Session Tools (3)
-│   ├── session-analytics.ts          # Analyze session patterns
-│   ├── session-summarizer.ts         # Summarize sessions
+│   │   ## Session Tools (2)
 │   ├── opencode-tracker.ts           # OpenCode session tracking (PRIMARY)
+│   ├── session-summarizer.ts         # Summarize sessions
 │   │
 │   │   ## Monitor Tools (2)
-│   ├── realtime-monitor.ts           # Live dashboard
-│   ├── terminal-dashboard.ts         # TUI dashboard (deprecated - use terminal-dashboard/)
+│   ├── realtime-monitor.ts           # Live dashboard (d/a/m/t/l keys)
+│   ├── daily-report-generator.ts     # Performance reports
 │   │
 │   │   ## CLI/Core (4)
-│   ├── opencode-cli.ts               # Unified CLI (status, agents, tasks)
 │   ├── user-message.ts               # User messaging CLI
 │   ├── system-message-config.ts      # System message config
 │   ├── git-integration.ts            # Git operations
-│   │
-│   │   ## Reports
-│   └── daily-report-generator.ts     # Performance reports
+│   └── debug-capture.ts              # Debug output capture
 │
 ├── terminal-dashboard/           # NEW: Modular TUI dashboard
 │   ├── index.ts                  # Main entry point

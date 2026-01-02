@@ -21,9 +21,10 @@
  *   all                 - All sections in detail
  */
 
-import { existsSync, readFileSync, watch, FSWatcher } from "fs";
-import { readJson, readJsonl, c, formatTimeShort, PATHS, truncate, padRight } from "./shared";
-import type { UserMessage, SystemState, QualityStore } from "./shared/types";
+import { existsSync, readFileSync, writeFileSync, appendFileSync, watch, FSWatcher } from "fs";
+import { createInterface, Interface as ReadlineInterface } from "readline";
+import { readJson, readJsonl, writeJson, c, formatTimeShort, PATHS, truncate, padRight, getAllOpenCodeSessions, getOpenCodeSessionStats } from "./shared";
+import type { UserMessage, SystemState, QualityStore, Task, TaskStore, OpenCodeSession } from "./shared/types";
 
 // ANSI escape code prefix (for screen control)
 const ESC = "\x1b";
@@ -46,12 +47,18 @@ const sym = {
   warning: "⚠",
 };
 
+// Interactive mode types
+type InteractiveAction = "send_message" | "create_task" | "show_sessions" | null;
+
 // State
 let mode = "dashboard";
 let lastRender = 0;
 let watchers: FSWatcher[] = [];
 let termWidth = process.stdout.columns || 80;
 let termHeight = process.stdout.rows || 24;
+let interactiveMode = false;
+let currentAction: InteractiveAction = null;
+let rl: ReadlineInterface | null = null;
 
 function clearScreen(): void {
   process.stdout.write(`${ESC}[2J${ESC}[H`);
@@ -495,13 +502,222 @@ function renderQualitySection(): void {
   console.log();
 }
 
+// ============================================================================
+// Interactive Mode Functions
+// ============================================================================
+
+function generateUserMessageId(): string {
+  return `umsg_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+}
+
+function sendUserMessage(message: string, priority: "normal" | "urgent" = "normal"): void {
+  const newMessage: UserMessage = {
+    id: generateUserMessageId(),
+    from: process.env.USER || "monitor",
+    message: message,
+    timestamp: new Date().toISOString(),
+    read: false,
+    priority: priority,
+  };
+  appendFileSync(PATHS.userMessages, JSON.stringify(newMessage) + "\n");
+}
+
+function generateTaskId(): string {
+  return `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function createTask(title: string, priority: Task["priority"] = "medium"): Task {
+  const store = readJson<TaskStore>(PATHS.tasks, {
+    version: "1.0",
+    tasks: [],
+    completed_count: 0,
+    last_updated: new Date().toISOString()
+  });
+
+  const task: Task = {
+    id: generateTaskId(),
+    title: title,
+    description: "",
+    priority: priority,
+    status: "pending",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    created_by: "monitor"
+  };
+
+  store.tasks.push(task);
+  store.last_updated = new Date().toISOString();
+  writeJson(PATHS.tasks, store);
+  return task;
+}
+
+function renderOpenCodeSessions(): void {
+  clearScreen();
+  console.log(`\n${c.bgCyan}${c.white}${c.bright} OPENCODE SESSIONS ${c.reset}\n`);
+
+  try {
+    const sessions = getAllOpenCodeSessions(15);
+    
+    if (sessions.length === 0) {
+      console.log(`${c.dim}No OpenCode sessions found.${c.reset}`);
+    } else {
+      for (const session of sessions) {
+        const stats = getOpenCodeSessionStats(session.id);
+        const timeAgo = formatTimeShort(session.time.updated.toString());
+        const isRecent = Date.now() - session.time.updated < 3600000;
+        
+        console.log(
+          `${isRecent ? c.green : c.dim}●${c.reset} ` +
+          `${c.cyan}${session.id.slice(-12)}${c.reset} ` +
+          `${truncate(session.title || "(no title)", 40)}`
+        );
+        console.log(
+          `  ${c.dim}Dir: ${truncate(session.directory, 35)} | ` +
+          `${stats.toolCount} tools | ${timeAgo}${c.reset}`
+        );
+      }
+    }
+  } catch (err) {
+    console.log(`${c.red}Error loading sessions: ${err}${c.reset}`);
+  }
+
+  console.log(`\n${c.dim}Press any key to return...${c.reset}`);
+}
+
+function enterInteractiveMode(): void {
+  interactiveMode = true;
+  currentAction = null;
+  render();
+}
+
+function exitInteractiveMode(): void {
+  interactiveMode = false;
+  currentAction = null;
+  if (rl) {
+    rl.close();
+    rl = null;
+  }
+  // Re-enable raw mode for keyboard navigation
+  if (process.stdin.isTTY) {
+    process.stdin.setRawMode(true);
+  }
+  render();
+}
+
+function promptForInput(prompt: string, callback: (answer: string) => void): void {
+  showCursor();
+  if (process.stdin.isTTY) {
+    process.stdin.setRawMode(false);
+  }
+  
+  rl = createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.question(prompt, (answer: string) => {
+    if (rl) {
+      rl.close();
+      rl = null;
+    }
+    callback(answer);
+    hideCursor();
+    if (process.stdin.isTTY) {
+      process.stdin.setRawMode(true);
+    }
+  });
+}
+
+function handleInteractiveSendMessage(): void {
+  currentAction = "send_message";
+  clearScreen();
+  console.log(`\n${c.bgYellow}${c.black}${c.bright} SEND USER MESSAGE ${c.reset}\n`);
+  console.log(`${c.dim}Type your message and press Enter.${c.reset}`);
+  console.log(`${c.dim}Leave empty to cancel.${c.reset}\n`);
+
+  promptForInput(`${c.cyan}Message: ${c.reset}`, (message: string) => {
+    if (message.trim()) {
+      const isUrgent = message.toLowerCase().includes("--urgent");
+      const cleanMessage = message.replace(/--urgent/gi, "").trim();
+      sendUserMessage(cleanMessage, isUrgent ? "urgent" : "normal");
+      clearScreen();
+      console.log(`\n${c.green}✓ Message sent!${c.reset}`);
+      console.log(`${c.dim}${cleanMessage}${c.reset}`);
+      setTimeout(() => {
+        exitInteractiveMode();
+      }, 1500);
+    } else {
+      exitInteractiveMode();
+    }
+  });
+}
+
+function handleInteractiveCreateTask(): void {
+  currentAction = "create_task";
+  clearScreen();
+  console.log(`\n${c.bgGreen}${c.white}${c.bright} CREATE NEW TASK ${c.reset}\n`);
+  console.log(`${c.dim}Enter task title and press Enter.${c.reset}`);
+  console.log(`${c.dim}Leave empty to cancel.${c.reset}\n`);
+
+  promptForInput(`${c.cyan}Task title: ${c.reset}`, (title: string) => {
+    if (title.trim()) {
+      clearScreen();
+      console.log(`\n${c.dim}Priority: [c]ritical, [h]igh, [m]edium, [l]ow${c.reset}`);
+      
+      promptForInput(`${c.cyan}Priority (m): ${c.reset}`, (priorityInput: string) => {
+        let priority: Task["priority"] = "medium";
+        const p = priorityInput.toLowerCase().trim();
+        if (p === "c" || p === "critical") priority = "critical";
+        else if (p === "h" || p === "high") priority = "high";
+        else if (p === "l" || p === "low") priority = "low";
+        
+        const task = createTask(title.trim(), priority);
+        clearScreen();
+        console.log(`\n${c.green}✓ Task created!${c.reset}`);
+        console.log(`${c.cyan}ID:${c.reset} ${task.id}`);
+        console.log(`${c.cyan}Title:${c.reset} ${task.title}`);
+        console.log(`${c.cyan}Priority:${c.reset} ${task.priority}`);
+        
+        setTimeout(() => {
+          exitInteractiveMode();
+        }, 2000);
+      });
+    } else {
+      exitInteractiveMode();
+    }
+  });
+}
+
+function handleInteractiveShowSessions(): void {
+  currentAction = "show_sessions";
+  renderOpenCodeSessions();
+}
+
+function renderInteractiveMenu(): void {
+  renderDivider("INTERACTIVE MODE");
+  console.log();
+  console.log(`  ${c.yellow}[s]${c.reset} Send user message to agents`);
+  console.log(`  ${c.yellow}[n]${c.reset} Create a new task`);
+  console.log(`  ${c.yellow}[o]${c.reset} Show OpenCode sessions`);
+  console.log();
+  console.log(`  ${c.dim}[ESC] Return to normal mode${c.reset}`);
+  console.log();
+}
+
 function renderFooter(): void {
   renderDivider();
-  console.log(
-    `${c.dim}` +
-    `[d]ashboard [a]gents [m]essages [t]asks [l]ogs [q]uality [Ctrl+C] exit` +
-    `${c.reset}`
-  );
+  if (interactiveMode && !currentAction) {
+    console.log(
+      `${c.bgYellow}${c.black} INTERACTIVE ${c.reset} ` +
+      `${c.dim}[s]end msg [n]ew task [o]pencode sessions [ESC] exit${c.reset}`
+    );
+  } else {
+    console.log(
+      `${c.dim}` +
+      `[d]ashboard [a]gents [m]essages [t]asks [l]ogs [q]uality [i]nteractive [Ctrl+C] exit` +
+      `${c.reset}`
+    );
+  }
 }
 
 // Main render function based on mode
@@ -515,10 +731,22 @@ function render(): void {
   termWidth = process.stdout.columns || 80;
   termHeight = process.stdout.rows || 24;
 
+  // Don't render if we're in the middle of an interactive action with input
+  if (currentAction && currentAction !== "show_sessions") {
+    return;
+  }
+
   clearScreen();
   hideCursor();
   renderHeader();
   renderStatusBar();
+
+  // Show interactive menu or regular views
+  if (interactiveMode && !currentAction) {
+    renderInteractiveMenu();
+    renderFooter();
+    return;
+  }
 
   switch (mode) {
     case "dashboard":
@@ -601,13 +829,47 @@ function setupKeyboardInput(): void {
     process.stdin.setEncoding("utf8");
 
     process.stdin.on("data", (key: string) => {
-      // Ctrl+C
+      // Ctrl+C - always exit
       if (key === "\u0003") {
         cleanup();
         process.exit(0);
       }
 
-      // Mode switching
+      // ESC key - exit interactive mode or current action
+      if (key === "\u001b" || key === "\x1b") {
+        if (interactiveMode) {
+          exitInteractiveMode();
+          return;
+        }
+      }
+
+      // Handle interactive mode keys
+      if (interactiveMode && !currentAction) {
+        switch (key.toLowerCase()) {
+          case "s":
+            handleInteractiveSendMessage();
+            return;
+          case "n":
+            handleInteractiveCreateTask();
+            return;
+          case "o":
+            handleInteractiveShowSessions();
+            return;
+          case "\u001b": // ESC
+          case "\x1b":
+            exitInteractiveMode();
+            return;
+        }
+        return; // Don't process other keys in interactive mode
+      }
+
+      // Handle returning from sessions view
+      if (currentAction === "show_sessions") {
+        exitInteractiveMode();
+        return;
+      }
+
+      // Normal mode - mode switching
       switch (key.toLowerCase()) {
         case "d":
           mode = "dashboard";
@@ -632,6 +894,9 @@ function setupKeyboardInput(): void {
         case "q":
           mode = "quality";
           render();
+          break;
+        case "i":
+          enterInteractiveMode();
           break;
         case "r":
           // Force refresh
@@ -670,15 +935,22 @@ ${c.cyan}Modes:${c.reset}
   quality     Quality metrics
   all         All sections in detail
 
-${c.cyan}Keyboard:${c.reset}
+${c.cyan}Keyboard (Normal Mode):${c.reset}
   d           Switch to dashboard
   a           Switch to agents
   m           Switch to messages
   t           Switch to tasks
   l           Switch to logs
   q           Switch to quality
+  i           Enter interactive mode
   r           Force refresh
   Ctrl+C      Exit
+
+${c.cyan}Keyboard (Interactive Mode):${c.reset}
+  s           Send a user message to agents
+  n           Create a new task
+  o           Show OpenCode sessions list
+  ESC         Return to normal mode
 
 ${c.cyan}Examples:${c.reset}
   bun tools/realtime-monitor.ts
