@@ -26,9 +26,28 @@ import { readJson, readJsonl } from './shared/json-utils';
 import { c } from './shared/colors';
 import { formatDate } from './shared/time-utils';
 import { PATHS, MEMORY_DIR } from './shared/paths';
+import type { 
+  AgentRegistry, 
+  TaskStore, 
+  Task,
+  Message, 
+  SessionEvent, 
+  ToolTiming,
+  QualityStore,
+  QualityAssessment 
+} from './shared/types';
 
 // Configuration
 const REPORTS_DIR = join(MEMORY_DIR, "reports");
+
+// Local types for realtime log entries (not in shared/types.ts)
+interface RealtimeLogEntry {
+  timestamp: string;
+  level: string;
+  message: string;
+  event?: string;
+  data?: Record<string, unknown>;
+}
 
 function parseDate(dateStr: string): Date {
   const date = new Date(dateStr);
@@ -91,19 +110,19 @@ interface Suggestion {
 
 // Data collection functions
 function collectAgentProductivity(targetDate: string): AgentProductivity {
-  const registry = readJson<any>(PATHS.agentRegistry, { agents: [] });
-  const sessions = readJsonl<any>(PATHS.sessions);
-  const messages = readJsonl<any>(PATHS.messageBus);
-  const timing = readJsonl<any>(PATHS.toolTiming);
-  const tasks = readJson<any>(PATHS.tasks, { tasks: [] });
+  const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
+  const sessions = readJsonl<SessionEvent>(PATHS.sessions);
+  const messages = readJsonl<Message>(PATHS.messageBus);
+  const timing = readJsonl<ToolTiming>(PATHS.toolTiming);
+  const tasks = readJson<TaskStore>(PATHS.tasks, { version: "", tasks: [], completed_count: 0, last_updated: "" });
   
   // Filter data for target date
-  const dayMessages = messages.filter((m: any) => isSameDay(m.timestamp, targetDate));
-  const dayTiming = timing.filter((t: any) => isSameDay(t.timestamp, targetDate));
-  const daySessions = sessions.filter((s: any) => isSameDay(s.timestamp, targetDate));
+  const dayMessages = messages.filter((m: Message) => isSameDay(m.timestamp, targetDate));
+  const dayTiming = timing.filter((t: ToolTiming) => isSameDay(t.timestamp, targetDate));
+  const daySessions = sessions.filter((s: SessionEvent) => isSameDay(s.timestamp, targetDate));
   
   // Active agents today (from messages)
-  const activeAgentIds = new Set(dayMessages.map((m: any) => m.from).filter(Boolean));
+  const activeAgentIds = new Set(dayMessages.map((m: Message) => m.from_agent).filter(Boolean));
   
   // Tool calls by agent
   const toolCallsByAgent: Record<string, number> = {};
@@ -116,16 +135,16 @@ function collectAgentProductivity(targetDate: string): AgentProductivity {
   }
   
   // Tasks completed today
-  const tasksCompletedToday = (tasks.tasks || []).filter((t: any) => 
+  const tasksCompletedToday = (tasks.tasks || []).filter((t: Task) => 
     t.status === "completed" && t.completed_at && isSameDay(t.completed_at, targetDate)
   ).length;
   
-  const tasksCreatedToday = (tasks.tasks || []).filter((t: any) =>
+  const tasksCreatedToday = (tasks.tasks || []).filter((t: Task) =>
     t.created_at && isSameDay(t.created_at, targetDate)
   ).length;
   
-  // Session count
-  const sessionStarts = daySessions.filter((s: any) => s.type === "session_start").length;
+  // Session count - check for session.created event
+  const sessionStarts = daySessions.filter((s: SessionEvent) => s.event === "session.created").length;
   
   return {
     totalAgents: registry.agents?.length || 0,
@@ -141,18 +160,21 @@ function collectAgentProductivity(targetDate: string): AgentProductivity {
 }
 
 function collectQualityTrends(targetDate: string): QualityTrends {
-  const quality = readJson<any>(PATHS.qualityAssessments, { assessments: [], summary: {} });
+  const quality = readJson<QualityStore>(PATHS.qualityAssessments, { 
+    assessments: [], 
+    summary: { average_score: 0, trend: "stable", total_assessed: 0, last_updated: "" } 
+  });
   const assessments = quality.assessments || [];
   
   // All assessments for trends
-  const allScores = assessments.map((a: any) => a.overall_score || 0);
+  const allScores = assessments.map((a: QualityAssessment) => a.overall_score || 0);
   
   // Today's assessments
-  const todayAssessments = assessments.filter((a: any) => 
+  const todayAssessments = assessments.filter((a: QualityAssessment) => 
     a.assessed_at && isSameDay(a.assessed_at, targetDate)
   );
   
-  const todayScores = todayAssessments.map((a: any) => a.overall_score || 0);
+  const todayScores = todayAssessments.map((a: QualityAssessment) => a.overall_score || 0);
   const avgScore = todayScores.length > 0 
     ? todayScores.reduce((s: number, v: number) => s + v, 0) / todayScores.length 
     : quality.summary?.average_score || 0;
@@ -189,17 +211,17 @@ function collectQualityTrends(targetDate: string): QualityTrends {
   if (recentAvg < olderAvg - 0.3) trend = "declining";
   
   // Top and low performers
-  const sortedAssessments = [...todayAssessments].sort((a: any, b: any) => 
+  const sortedAssessments = [...todayAssessments].sort((a: QualityAssessment, b: QualityAssessment) => 
     (b.overall_score || 0) - (a.overall_score || 0)
   );
   
-  const topPerformers = sortedAssessments.slice(0, 3).map((a: any) => ({
-    task: a.task_title || a.task_id || "Unknown",
+  const topPerformers = sortedAssessments.slice(0, 3).map((a: QualityAssessment) => ({
+    task: a.task_id || "Unknown",
     score: a.overall_score || 0,
   }));
   
-  const lowPerformers = sortedAssessments.slice(-3).reverse().map((a: any) => ({
-    task: a.task_title || a.task_id || "Unknown",
+  const lowPerformers = sortedAssessments.slice(-3).reverse().map((a: QualityAssessment) => ({
+    task: a.task_id || "Unknown",
     score: a.overall_score || 0,
   }));
   
@@ -215,15 +237,15 @@ function collectQualityTrends(targetDate: string): QualityTrends {
 }
 
 function collectErrorPatterns(targetDate: string): ErrorPatterns {
-  const timing = readJsonl<any>(PATHS.toolTiming);
-  const logs = readJsonl<any>(PATHS.realtimeLog);
+  const timing = readJsonl<ToolTiming>(PATHS.toolTiming);
+  const logs = readJsonl<RealtimeLogEntry>(PATHS.realtimeLog);
   
   // Filter for target date
-  const dayTiming = timing.filter((t: any) => isSameDay(t.timestamp, targetDate));
-  const dayLogs = logs.filter((l: any) => isSameDay(l.timestamp, targetDate));
+  const dayTiming = timing.filter((t: ToolTiming) => isSameDay(t.timestamp, targetDate));
+  const dayLogs = logs.filter((l: RealtimeLogEntry) => isSameDay(l.timestamp, targetDate));
   
   // Failed tool executions
-  const failedTools = dayTiming.filter((t: any) => !t.success);
+  const failedTools = dayTiming.filter((t: ToolTiming) => !t.success);
   
   // Error types and tools
   const errorsByType: Record<string, number> = {};
@@ -236,7 +258,7 @@ function collectErrorPatterns(targetDate: string): ErrorPatterns {
   }
   
   // Error logs
-  const errorLogs = dayLogs.filter((l: any) => l.level === "ERROR" || l.level === "WARN");
+  const errorLogs = dayLogs.filter((l: RealtimeLogEntry) => l.level === "ERROR" || l.level === "WARN");
   
   // Common patterns (simple string matching)
   const patterns: Record<string, number> = {};
