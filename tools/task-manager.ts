@@ -618,6 +618,9 @@ class TaskManager {
       this.saveStore();
     }
 
+    // Determine final issue state (after actions)
+    const finalState = actions.some(a => a.includes('Closed')) ? 'CLOSED' : issueInfo.state;
+
     return {
       success: true,
       message: actions.length > 0 
@@ -625,7 +628,7 @@ class TaskManager {
         : 'Already in sync',
       data: { 
         issue_number: task.github_issue_number,
-        issue_state: issueInfo.state,
+        issue_state: finalState,
         task_status: task.status,
         actions 
       }
