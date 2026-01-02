@@ -18,7 +18,8 @@ import {
 // Paths - use __dirname to get the correct path relative to this file
 const WORKSPACE_DIR = join(__dirname, "..");
 const MEMORY_DIR = join(WORKSPACE_DIR, "memory");
-const OPENCODE_DIR = join(process.env.HOME || "/root", ".opencode");
+// OpenCode stores sessions in ~/.local/share/opencode/storage/
+const OPENCODE_STORAGE = join(process.env.HOME || "/root", ".local", "share", "opencode", "storage");
 
 export const PATHS = {
   state: join(MEMORY_DIR, "state.json"),
@@ -31,7 +32,10 @@ export const PATHS = {
   sessions: join(MEMORY_DIR, "sessions.jsonl"),
   toolTiming: join(MEMORY_DIR, "tool-timing.jsonl"),
   knowledge: join(MEMORY_DIR, "knowledge-base.json"),
-  opencodeSessions: join(OPENCODE_DIR, "session"),
+  // OpenCode session storage
+  opencodeSessions: join(OPENCODE_STORAGE, "session"),
+  opencodeMessages: join(OPENCODE_STORAGE, "message"),
+  opencodeParts: join(OPENCODE_STORAGE, "part"),
 };
 
 // Helper functions
@@ -175,36 +179,54 @@ export function getToolTiming(limit: number = 100): any[] {
 
 export function getOpenCodeSessions(): OpenCodeSession[] {
   try {
-    if (existsSync(PATHS.opencodeSessions)) {
-      const files = require("fs").readdirSync(PATHS.opencodeSessions);
-      return files
-        .filter((f: string) => f.startsWith("ses_"))
-        .map((f: string) => {
+    if (!existsSync(PATHS.opencodeSessions)) return [];
+    
+    const sessions: OpenCodeSession[] = [];
+    const projectDirs = require("fs").readdirSync(PATHS.opencodeSessions);
+    
+    // Sessions are stored as: session/{projectId}/{sessionId}.json
+    for (const projectDir of projectDirs) {
+      const projectPath = join(PATHS.opencodeSessions, projectDir);
+      try {
+        const stat = require("fs").statSync(projectPath);
+        if (!stat.isDirectory()) continue;
+        
+        // Read all session files in this project
+        const sessionFiles = require("fs").readdirSync(projectPath);
+        for (const sessionFile of sessionFiles) {
+          if (!sessionFile.endsWith(".json")) continue;
+          
           try {
-            const sessionPath = join(PATHS.opencodeSessions, f);
-            const infoPath = join(sessionPath, "info.json");
-            if (existsSync(infoPath)) {
-              const info = JSON.parse(readFileSync(infoPath, "utf-8"));
-              return {
-                id: f,
-                title: info.title || info.summary?.title || "Untitled",
-                started_at: info.created_at || info.started_at,
-                status: info.status || "unknown",
-                messages: info.message_count || info.messages?.length || 0,
-                parent_id: info.parent_id,
-              };
+            const sessionPath = join(projectPath, sessionFile);
+            const sessionData = JSON.parse(readFileSync(sessionPath, "utf-8"));
+            
+            // Count messages for this session
+            const messageDir = join(PATHS.opencodeMessages, sessionData.id || sessionFile.replace(".json", ""));
+            let messageCount = 0;
+            if (existsSync(messageDir)) {
+              messageCount = require("fs").readdirSync(messageDir).filter((f: string) => f.endsWith(".json")).length;
             }
-            return { id: f, title: "Session", status: "unknown" };
-          } catch {
-            return { id: f, title: "Session", status: "error" };
-          }
-        })
-        .sort((a: OpenCodeSession, b: OpenCodeSession) => {
-          if (!a.started_at || !b.started_at) return 0;
-          return new Date(b.started_at).getTime() - new Date(a.started_at).getTime();
-        })
-        .slice(0, 50);
+            
+            sessions.push({
+              id: sessionData.id || sessionFile.replace(".json", ""),
+              title: sessionData.title || "Untitled",
+              started_at: sessionData.time?.created ? new Date(sessionData.time.created).toISOString() : undefined,
+              status: sessionData.time?.archived ? "archived" : "active",
+              messages: messageCount,
+              parent_id: sessionData.parentID,
+            });
+          } catch {}
+        }
+      } catch {}
     }
+    
+    // Sort by started_at descending
+    return sessions
+      .sort((a, b) => {
+        if (!a.started_at || !b.started_at) return 0;
+        return new Date(b.started_at).getTime() - new Date(a.started_at).getTime();
+      })
+      .slice(0, 50);
   } catch {}
   return [];
 }

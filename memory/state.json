@@ -4,15 +4,15 @@
   "status": "orchestrator_active",
   "active_tasks": [],
   "recent_achievements": [
+    "Session 126: Session 127: Continued improvements - 1) Analyzed OpenCode codebase patterns (monorepo, single-word folders, style guide), 2) Removed deprecated conversation-tracker.ts, 3) Updated AGENTS.md with tool categorization by domain, 4) Created debug-capture.ts tool for saving terminal outputs (run/log/list/view/clean), 5) Added LOGS_DIR and appendLine to shared utilities. Commit: e2dd975.",
     "Session 126: Session 126: Major dashboard improvements (8.1/10 avg) - 1) Refactored App.tsx 62% smaller (1677→628 lines), 2) Created 11+5 React/chart components, 3) Added recharts visualization library, 4) Fixed 2 plugin bugs, 5) Consolidated conversation trackers. 2 commits: 47b15bb, 0c85907.",
     "Session 122: Session 122: System improvements (8.2/10 avg) - 1) Enhanced knowledge extraction from 6 sources, 2) Reduced heartbeat spam 51%, 3) Added session tree visualization, 4) task_spawn tool with context injection. 4 commits: 424fb1a, 31bde48, b7aa78a, 8b85ff2.",
     "Session 122: Session 122: Applied OpenCode learnings (8.5/10) - Added task_spawn tool with memory context injection, enhanced plugin to track Task-spawned sessions, created 3 custom agent types (memory-worker, code-worker, analysis-worker). OpenCode source analyzed at /app/opencode-src/.",
-    "Session 122: Session 122: Applied OpenCode learnings (8.5/10) - Added task_spawn tool with memory context injection, enhanced plugin to track Task-spawned sessions, created 3 custom agent types (memory-worker, code-worker, analysis-worker). OpenCode source analyzed at /app/opencode-src/.",
-    "Session 118: Session 118: Code quality improvements (8.8/10) - Completed CLI tool migrations (7 tools, ~239 lines removed), created comprehensive unit tests (114 tests for shared utilities), cleaned git state with 3 commits. All tools tested and working."
+    "Session 122: Session 122: Applied OpenCode learnings (8.5/10) - Added task_spawn tool with memory context injection, enhanced plugin to track Task-spawned sessions, created 3 custom agent types (memory-worker, code-worker, analysis-worker). OpenCode source analyzed at /app/opencode-src/."
   ],
   "last_session": "2026-01-02T10:52:03.735Z",
   "current_session_id": "ses_481aa010fffeU8A0urISmUeKNL",
-  "last_updated": "2026-01-02T11:25:33.249Z",
+  "last_updated": "2026-01-02T12:21:57.986Z",
   "sessions_metadata": {
     "ses_489c3933bffeL5S1ti3unQcfDs": {
       "tokens": 50000,

@@ -1246,3 +1246,5 @@
 2026-01-02T12:16:19.663Z [INFO] [agent-1767353179414-xlsru] Message sent: heartbeat (broadcast)
 2026-01-02T12:16:30.110Z [INFO] [agent-1767356101827-bgc25a] Message sent: task_complete (broadcast)
 2026-01-02T12:18:25.411Z [INFO] [agent-1767356108127-dfqpk5] Message sent: task_complete (broadcast)
+2026-01-02T12:21:19.833Z [INFO] [agent-1767353179414-xlsru] Message sent: heartbeat (broadcast)
+2026-01-02T12:26:19.860Z [INFO] [agent-1767353179414-xlsru] Message sent: heartbeat (broadcast)
