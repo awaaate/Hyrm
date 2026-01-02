@@ -15,8 +15,9 @@ import {
   type OpenCodeSession,
 } from "./types";
 
-// Paths
-const MEMORY_DIR = join(process.cwd(), "..", "memory");
+// Paths - use __dirname to get the correct path relative to this file
+const WORKSPACE_DIR = join(__dirname, "..");
+const MEMORY_DIR = join(WORKSPACE_DIR, "memory");
 const OPENCODE_DIR = join(process.env.HOME || "/root", ".opencode");
 
 export const PATHS = {
