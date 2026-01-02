@@ -44,10 +44,10 @@ import { createGitTools } from "./tools/git-tools";
 const LOCK_STALE_THRESHOLD = 30000; // 30 seconds
 const AGENT_STALE_THRESHOLD = 2 * 60 * 1000; // 2 minutes
 
-// Global instance ID to prevent duplicate event processing
-const INSTANCE_ID = `plugin-${Date.now()}-${Math.random()
-  .toString(36)
-  .slice(2, 8)}`;
+// NOTE: INSTANCE_ID is now generated INSIDE the plugin function (see line ~85)
+// to ensure each plugin instance gets a unique ID. Before this fix, the ID was
+// generated here at module scope, which meant all 4 parallel plugin instances
+// shared the SAME ID, causing all to think they were the primary instance.
 let primaryInstance: string | null = null;
 
 // ============================================================================
@@ -70,6 +70,20 @@ export const MemoryPlugin: Plugin = async (ctx) => {
     console.log("[Memory] Memory system not found, plugin inactive");
     return {};
   }
+
+  // ============================================================================
+  // INSTANCE ID - MUST BE INSIDE PLUGIN FUNCTION
+  // ============================================================================
+  
+  // CRITICAL: This MUST be generated inside the plugin function, not at module scope.
+  // OpenCode creates 4 parallel plugin instances. If INSTANCE_ID is at module scope,
+  // it's generated once when the module is imported, so all 4 instances share the
+  // SAME ID and all think they're the primary instance, causing 4x duplicate logs.
+  //
+  // By generating it here, each plugin instance gets a truly unique ID.
+  const INSTANCE_ID = `plugin-${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2, 8)}`;
 
   // ============================================================================
   // STATE MANAGEMENT
