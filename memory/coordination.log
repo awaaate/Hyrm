@@ -1636,3 +1636,9 @@
 2026-01-02T19:33:13.565Z [INFO] [agent-1767382393563-d0xzth] Agent registered: agent-1767382393563-d0xzth (role: worker)
 2026-01-02T19:33:13.569Z [INFO] [agent-1767382393563-d0xzth] Message sent: heartbeat (broadcast)
 2026-01-02T19:33:13.999Z [INFO] [agent-1767382393563-d0xzth] Status updated: working - realtime.log rotation implementation
+2026-01-02T19:35:28.988Z [INFO] [agent-1767382393563-d0xzth] Message sent: task_complete (broadcast)
+2026-01-02T19:36:02.968Z [INFO] [agent-1767382262935-vcswxp] Message sent: heartbeat (broadcast)
+2026-01-02T19:38:09.259Z [INFO] [agent-1767382689257-2og5] Agent registered: agent-1767382689257-2og5 (role: orchestrator)
+2026-01-02T19:38:09.264Z [INFO] [agent-1767382689257-2og5] Message sent: heartbeat (broadcast)
+2026-01-02T19:39:43.688Z [INFO] [agent-1767382783686-htvc9] Agent registered: agent-1767382783686-htvc9 (role: worker)
+2026-01-02T19:39:43.691Z [INFO] [agent-1767382783686-htvc9] Message sent: heartbeat (broadcast)

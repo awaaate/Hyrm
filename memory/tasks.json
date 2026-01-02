@@ -2056,9 +2056,9 @@
       "title": "Implement realtime.log rotation",
       "description": "Add rotateRealtimeLog() function to working-memory-manager.ts to prevent realtime.log from growing indefinitely. Currently at 11MB/47k lines.\n\nImplementation:\n1. Add rotateRealtimeLog() function (similar to rotateSessionsJsonl)\n2. Keep last 5000 lines\n3. Archive older lines to memory/realtime-archives/\n4. Add 'rotate-realtime' CLI command\n5. Integrate into 'prune' command\n\nReference: rotateSessionsJsonl() at line 317 for pattern to follow.",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-02T19:32:51.883Z",
-      "updated_at": "2026-01-02T19:32:51.883Z",
+      "updated_at": "2026-01-02T19:35:36.462Z",
       "created_by": "unknown",
       "tags": [
         "maintenance",
@@ -2066,9 +2066,30 @@
         "rotation"
       ],
       "estimated_hours": 0.5,
+      "complexity": "simple",
+      "completed_at": "2026-01-02T19:35:36.461Z",
+      "notes": [
+        "[2026-01-02T19:35:27.315Z] Implemented rotateRealtimeLog() - keeps 5000 lines, archives rest. Added CLI command and integrated into prune(). Commit: 6766db6",
+        "[2026-01-02T19:35:36.462Z] Completed by worker agent-1767382393563-d0xzth. Commit 6766db6. Realtime.log rotated from 47k to 5k lines. Archive created at memory/realtime-archives/."
+      ]
+    },
+    {
+      "id": "task_1767382762057_v16xpy",
+      "title": "Fix Bun.spawn stdio bug in plugin respawn",
+      "description": "The orchestrator respawn in `.opencode/plugin/index.ts` fails with \"stdio must be an array\". Need to fix lines 1220-1225 to use proper Bun.spawn options. Either use `stdio: [\"ignore\", \"ignore\", \"ignore\"]` or find correct way to redirect to file.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-02T19:39:22.057Z",
+      "updated_at": "2026-01-02T19:39:22.057Z",
+      "created_by": "unknown",
+      "tags": [
+        "bug",
+        "plugin",
+        "bun"
+      ],
       "complexity": "simple"
     }
   ],
-  "completed_count": 97,
-  "last_updated": "2026-01-02T19:32:51.883Z"
+  "completed_count": 99,
+  "last_updated": "2026-01-02T19:39:22.057Z"
 }
