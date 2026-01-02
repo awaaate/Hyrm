@@ -5,7 +5,7 @@
       "agent_id": "agent-1767374362040-z6x85i",
       "session_id": "session-1767374362040",
       "started_at": "2026-01-02T17:19:22.041Z",
-      "last_heartbeat": "2026-01-02T17:31:22.084Z",
+      "last_heartbeat": "2026-01-02T17:32:22.090Z",
       "status": "active",
       "assigned_role": "orchestrator",
       "pid": 571927
@@ -38,6 +38,6 @@
       "pid": 582804
     }
   ],
-  "last_updated": "2026-01-02T17:31:50.849Z",
+  "last_updated": "2026-01-02T17:32:22.090Z",
   "lock_version": 282
 }
