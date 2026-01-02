@@ -6,8 +6,11 @@
  * Location: ~/.local/share/opencode/storage/
  * 
  * Commands:
- *   sessions [limit]     - List all sessions with metadata
+ *   sessions [limit]     - List all sessions with metadata, tool counts, duration
  *   messages <sessionId> - Show all messages for a session
+ *   view <sessionId>     - Full conversation view with tool calls formatted nicely
+ *   tools <sessionId>    - Show all tool calls with inputs/outputs
+ *   search <query>       - Search across sessions (messages, tools, outputs)
  *   export <sessionId>   - Export full conversation as JSON
  *   watch               - Watch for new messages in real-time
  *   stats               - Show statistics
@@ -93,7 +96,20 @@ interface OpenCodePart {
   result?: any;
   time?: {
     created?: number;
+    completed?: number;
   };
+}
+
+// Tool call info for the tools command
+interface ToolCallInfo {
+  tool: string;
+  messageId: string;
+  callId?: string;
+  input: any;
+  output: any;
+  status: string;
+  duration?: number;
+  timestamp?: number;
 }
 
 // Local JSON reader (for OpenCode storage which returns null on missing)
@@ -127,6 +143,108 @@ function formatTimeAgo(timestamp: number): string {
 
 function truncate(str: string, len: number): string {
   return sharedTruncate(str, len);
+}
+
+// Format JSON for display with truncation
+function formatJsonCompact(obj: any, maxLen: number = 200): string {
+  if (obj === null || obj === undefined) return c.dim + "null" + c.reset;
+  if (typeof obj === "string") return truncate(obj.replace(/\n/g, "\\n"), maxLen);
+  try {
+    const str = JSON.stringify(obj, null, 2);
+    if (str.length > maxLen) {
+      return str.slice(0, maxLen) + c.dim + "..." + c.reset;
+    }
+    return str;
+  } catch {
+    return String(obj);
+  }
+}
+
+// Format duration in human readable form
+function formatDuration(ms: number): string {
+  if (ms < 1000) return `${ms}ms`;
+  if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
+  return `${(ms / 60000).toFixed(1)}m`;
+}
+
+// Get session statistics (tool count, duration, topics)
+function getSessionStats(sessionId: string): { toolCount: number; duration: number; topics: string[] } {
+  const messages = getMessagesForSession(sessionId);
+  let toolCount = 0;
+  const topics: string[] = [];
+  let firstTime = Infinity;
+  let lastTime = 0;
+
+  for (const msg of messages) {
+    if (msg.time.created < firstTime) firstTime = msg.time.created;
+    if (msg.time.created > lastTime) lastTime = msg.time.created;
+    
+    if (msg.summary?.title) {
+      topics.push(msg.summary.title);
+    }
+    
+    const parts = getPartsForMessage(msg.id);
+    for (const part of parts) {
+      const toolName = part.tool || part.toolName;
+      if ((part.type === "tool-invocation" || part.type === "tool") && toolName) {
+        toolCount++;
+      }
+    }
+  }
+
+  return {
+    toolCount,
+    duration: lastTime > firstTime ? lastTime - firstTime : 0,
+    topics: [...new Set(topics)].slice(0, 3),
+  };
+}
+
+// Get all tool calls from a session
+function getToolCallsForSession(sessionId: string): ToolCallInfo[] {
+  const messages = getMessagesForSession(sessionId);
+  const toolCalls: ToolCallInfo[] = [];
+  const pendingCalls: Map<string, ToolCallInfo> = new Map();
+
+  for (const msg of messages) {
+    const parts = getPartsForMessage(msg.id);
+    
+    for (const part of parts) {
+      const toolName = part.tool || part.toolName;
+      const callId = part.callID || part.id;
+      
+      // Handle tool invocations
+      if ((part.type === "tool-invocation" || part.type === "tool") && toolName) {
+        const toolCall: ToolCallInfo = {
+          tool: toolName,
+          messageId: msg.id,
+          callId,
+          input: part.args || part.state?.input || {},
+          output: null,
+          status: part.state?.status || "running",
+          timestamp: part.time?.created || msg.time.created,
+        };
+        
+        if (callId) {
+          pendingCalls.set(callId, toolCall);
+        }
+        toolCalls.push(toolCall);
+      }
+      
+      // Handle tool results
+      if (part.type === "tool-result" && callId) {
+        const pending = pendingCalls.get(callId);
+        if (pending) {
+          pending.output = part.result || part.state?.output;
+          pending.status = "completed";
+          if (part.time?.created && pending.timestamp) {
+            pending.duration = part.time.created - pending.timestamp;
+          }
+        }
+      }
+    }
+  }
+
+  return toolCalls;
 }
 
 // Get all projects
@@ -290,7 +408,7 @@ function getDetailedSessionData(session: OpenCodeSession, maxMessages: number = 
 }
 
 // Commands
-async function cmdSessions(limit: number = 20) {
+async function cmdSessions(limit: number = 20, verbose: boolean = false) {
   console.log(`${c.bold}${c.cyan}OpenCode Sessions${c.reset}\n`);
 
   const sessions = getAllSessions().slice(0, limit);
@@ -305,6 +423,9 @@ async function cmdSessions(limit: number = 20) {
   for (const session of sessions) {
     const timeAgo = formatTimeAgo(session.time.updated);
     const isRecent = Date.now() - session.time.updated < 3600000; // Last hour
+    
+    // Get enhanced stats
+    const stats = getSessionStats(session.id);
 
     console.log(
       `${isRecent ? c.green : c.dim}●${c.reset} ` +
@@ -319,6 +440,13 @@ async function cmdSessions(limit: number = 20) {
     console.log(
       `  ${c.cyan}Updated:${c.reset} ${timeAgo} ${c.dim}(${formatTime(session.time.updated)})${c.reset}`
     );
+    
+    // NEW: Show tool count and duration
+    console.log(
+      `  ${c.cyan}Tools:${c.reset} ${stats.toolCount} calls  ` +
+      `${c.cyan}Duration:${c.reset} ${formatDuration(stats.duration)}`
+    );
+    
     if (session.summary?.files) {
       console.log(
         `  ${c.cyan}Files:${c.reset} ${session.summary.files} ` +
@@ -326,11 +454,21 @@ async function cmdSessions(limit: number = 20) {
         `${c.red}-${session.summary.deletions || 0}${c.reset}`
       );
     }
+    
+    // NEW: Show topics summary
+    if (stats.topics.length > 0) {
+      console.log(
+        `  ${c.cyan}Topics:${c.reset} ${c.dim}${stats.topics.join(", ")}${c.reset}`
+      );
+    }
+    
     if (session.share?.url) {
       console.log(`  ${c.cyan}Share:${c.reset} ${session.share.url}`);
     }
     console.log();
   }
+  
+  console.log(`${c.dim}Tip: Use 'view <session_id>' for full conversation, 'tools <session_id>' for tool calls${c.reset}`);
 }
 
 async function cmdMessages(sessionId: string) {
@@ -373,6 +511,373 @@ async function cmdMessages(sessionId: string) {
     }
     console.log();
   }
+}
+
+// NEW: Full conversation view with all details
+async function cmdView(sessionId: string) {
+  console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}`);
+  console.log(`${c.bold}${c.cyan}  FULL CONVERSATION VIEW: ${sessionId}${c.reset}`);
+  console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}\n`);
+
+  // Find session info
+  const allSessions = getAllSessions();
+  const session = allSessions.find(s => s.id === sessionId);
+  
+  if (session) {
+    console.log(`${c.bold}Session Info:${c.reset}`);
+    console.log(`  ${c.cyan}Title:${c.reset} ${session.title}`);
+    console.log(`  ${c.cyan}Directory:${c.reset} ${session.directory}`);
+    console.log(`  ${c.cyan}Created:${c.reset} ${formatTime(session.time.created)}`);
+    console.log(`  ${c.cyan}Updated:${c.reset} ${formatTime(session.time.updated)}`);
+    if (session.summary?.files) {
+      console.log(`  ${c.cyan}Files:${c.reset} ${session.summary.files} ${c.green}+${session.summary.additions || 0}${c.reset} ${c.red}-${session.summary.deletions || 0}${c.reset}`);
+    }
+    console.log();
+  }
+
+  const messages = getMessagesForSession(sessionId);
+
+  if (messages.length === 0) {
+    console.log(`${c.dim}No messages found for session ${sessionId}${c.reset}`);
+    return;
+  }
+
+  console.log(`${c.dim}Total: ${messages.length} messages${c.reset}\n`);
+  console.log(`${c.dim}───────────────────────────────────────────────────────────────${c.reset}\n`);
+
+  for (let i = 0; i < messages.length; i++) {
+    const msg = messages[i];
+    const roleColor = msg.role === "user" ? c.blue : c.green;
+    const roleBg = msg.role === "user" ? c.bgBlue : c.bgGreen;
+    const roleIcon = msg.role === "user" ? "USER" : "ASSISTANT";
+    
+    // Message header
+    console.log(`${roleBg}${c.white}${c.bold} ${roleIcon} ${c.reset} ${c.dim}[${i + 1}/${messages.length}] ${formatTime(msg.time.created)}${c.reset}`);
+    
+    if (msg.summary?.title) {
+      console.log(`${c.dim}Summary: ${msg.summary.title}${c.reset}`);
+    }
+    console.log();
+
+    // Get all parts for this message
+    const parts = getPartsForMessage(msg.id);
+    
+    for (const part of parts) {
+      const toolName = part.tool || part.toolName;
+      
+      switch (part.type) {
+        case "text":
+          if (part.text) {
+            // Format text with proper line wrapping
+            const lines = part.text.split("\n");
+            for (const line of lines) {
+              if (line.trim()) {
+                console.log(`  ${roleColor}│${c.reset} ${line}`);
+              } else {
+                console.log(`  ${roleColor}│${c.reset}`);
+              }
+            }
+          }
+          break;
+          
+        case "tool":
+        case "tool-invocation":
+          if (toolName) {
+            console.log(`  ${c.yellow}┌─ 🔧 TOOL: ${c.bold}${toolName}${c.reset}`);
+            
+            // Show input/args
+            const input = part.args || part.state?.input;
+            if (input) {
+              console.log(`  ${c.yellow}│${c.reset} ${c.cyan}Input:${c.reset}`);
+              const inputStr = formatJsonCompact(input, 500);
+              for (const line of inputStr.split("\n").slice(0, 10)) {
+                console.log(`  ${c.yellow}│${c.reset}   ${c.dim}${line}${c.reset}`);
+              }
+            }
+            
+            // Show state if available
+            if (part.state?.status) {
+              const statusColor = part.state.status === "completed" ? c.green : 
+                                  part.state.status === "error" ? c.red : c.yellow;
+              console.log(`  ${c.yellow}│${c.reset} ${c.cyan}Status:${c.reset} ${statusColor}${part.state.status}${c.reset}`);
+            }
+          }
+          break;
+          
+        case "tool-result":
+          const output = part.result || part.state?.output;
+          if (output !== undefined) {
+            console.log(`  ${c.green}│${c.reset} ${c.cyan}Output:${c.reset}`);
+            const outputStr = formatJsonCompact(output, 500);
+            for (const line of outputStr.split("\n").slice(0, 15)) {
+              console.log(`  ${c.green}│${c.reset}   ${c.dim}${line}${c.reset}`);
+            }
+            console.log(`  ${c.green}└───────────────────────${c.reset}`);
+          }
+          break;
+          
+        case "reasoning":
+          if (part.text) {
+            console.log(`  ${c.magenta}💭 Reasoning:${c.reset}`);
+            const reasonLines = part.text.split("\n").slice(0, 5);
+            for (const line of reasonLines) {
+              console.log(`  ${c.magenta}│${c.reset} ${c.dim}${truncate(line, 100)}${c.reset}`);
+            }
+          }
+          break;
+          
+        case "step-start":
+          console.log(`  ${c.dim}── Step Start ──${c.reset}`);
+          break;
+          
+        default:
+          // Show other part types in dim
+          if (part.text) {
+            console.log(`  ${c.dim}[${part.type}] ${truncate(part.text, 80)}${c.reset}`);
+          }
+      }
+    }
+    
+    console.log();
+    console.log(`${c.dim}───────────────────────────────────────────────────────────────${c.reset}\n`);
+  }
+  
+  // Summary at the end
+  const stats = getSessionStats(sessionId);
+  console.log(`${c.bold}Summary:${c.reset}`);
+  console.log(`  ${c.cyan}Messages:${c.reset} ${messages.length}`);
+  console.log(`  ${c.cyan}Tool Calls:${c.reset} ${stats.toolCount}`);
+  console.log(`  ${c.cyan}Duration:${c.reset} ${formatDuration(stats.duration)}`);
+  if (stats.topics.length > 0) {
+    console.log(`  ${c.cyan}Topics:${c.reset} ${stats.topics.join(", ")}`);
+  }
+}
+
+// NEW: Show all tool calls for a session
+async function cmdTools(sessionId: string) {
+  console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}`);
+  console.log(`${c.bold}${c.cyan}  TOOL CALLS: ${sessionId}${c.reset}`);
+  console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}\n`);
+
+  const toolCalls = getToolCallsForSession(sessionId);
+
+  if (toolCalls.length === 0) {
+    console.log(`${c.dim}No tool calls found for session ${sessionId}${c.reset}`);
+    return;
+  }
+
+  console.log(`${c.dim}Total: ${toolCalls.length} tool calls${c.reset}\n`);
+
+  // Group tools by name for summary
+  const toolSummary: Record<string, { count: number; totalDuration: number }> = {};
+  
+  for (let i = 0; i < toolCalls.length; i++) {
+    const tc = toolCalls[i];
+    
+    // Update summary
+    if (!toolSummary[tc.tool]) {
+      toolSummary[tc.tool] = { count: 0, totalDuration: 0 };
+    }
+    toolSummary[tc.tool].count++;
+    if (tc.duration) {
+      toolSummary[tc.tool].totalDuration += tc.duration;
+    }
+    
+    // Status color
+    const statusColor = tc.status === "completed" ? c.green :
+                        tc.status === "error" ? c.red : c.yellow;
+    const statusIcon = tc.status === "completed" ? "✓" :
+                       tc.status === "error" ? "✗" : "⋯";
+    
+    console.log(`${c.bold}[${i + 1}]${c.reset} ${c.yellow}${tc.tool}${c.reset} ${statusColor}${statusIcon}${c.reset}`);
+    
+    if (tc.duration) {
+      console.log(`    ${c.cyan}Duration:${c.reset} ${formatDuration(tc.duration)}`);
+    }
+    if (tc.timestamp) {
+      console.log(`    ${c.cyan}Time:${c.reset} ${formatTime(tc.timestamp)}`);
+    }
+    
+    // Show input
+    console.log(`    ${c.cyan}Input:${c.reset}`);
+    const inputStr = formatJsonCompact(tc.input, 300);
+    for (const line of inputStr.split("\n").slice(0, 8)) {
+      console.log(`      ${c.dim}${line}${c.reset}`);
+    }
+    
+    // Show output
+    if (tc.output !== null) {
+      console.log(`    ${c.cyan}Output:${c.reset}`);
+      const outputStr = formatJsonCompact(tc.output, 300);
+      const outputLines = outputStr.split("\n").slice(0, 8);
+      for (const line of outputLines) {
+        const isError = line.toLowerCase().includes("error");
+        console.log(`      ${isError ? c.red : c.dim}${line}${c.reset}`);
+      }
+    }
+    
+    console.log();
+  }
+  
+  // Print summary
+  console.log(`${c.dim}───────────────────────────────────────────────────────────────${c.reset}`);
+  console.log(`${c.bold}Tool Summary:${c.reset}`);
+  
+  const sortedTools = Object.entries(toolSummary)
+    .sort((a, b) => b[1].count - a[1].count);
+  
+  for (const [tool, data] of sortedTools) {
+    const avgDuration = data.totalDuration > 0 ? formatDuration(data.totalDuration / data.count) : "-";
+    const bar = "█".repeat(Math.min(20, data.count));
+    console.log(`  ${c.cyan}${tool.padEnd(25)}${c.reset} ${bar} ${data.count}x ${c.dim}(avg: ${avgDuration})${c.reset}`);
+  }
+}
+
+// NEW: Search across sessions
+async function cmdSearch(query: string, limit: number = 20) {
+  console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}`);
+  console.log(`${c.bold}${c.cyan}  SEARCH: "${query}"${c.reset}`);
+  console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}\n`);
+
+  const sessions = getAllSessions();
+  const queryLower = query.toLowerCase();
+  
+  interface SearchResult {
+    sessionId: string;
+    sessionTitle: string;
+    type: "message" | "tool" | "output" | "title";
+    content: string;
+    timestamp: number;
+    messageId?: string;
+  }
+  
+  const results: SearchResult[] = [];
+  
+  for (const session of sessions) {
+    // Search in session title
+    if (session.title.toLowerCase().includes(queryLower)) {
+      results.push({
+        sessionId: session.id,
+        sessionTitle: session.title,
+        type: "title",
+        content: session.title,
+        timestamp: session.time.updated,
+      });
+    }
+    
+    const messages = getMessagesForSession(session.id);
+    
+    for (const msg of messages) {
+      const parts = getPartsForMessage(msg.id);
+      
+      for (const part of parts) {
+        const toolName = part.tool || part.toolName;
+        
+        // Search in text content
+        if (part.type === "text" && part.text?.toLowerCase().includes(queryLower)) {
+          results.push({
+            sessionId: session.id,
+            sessionTitle: session.title,
+            type: "message",
+            content: part.text,
+            timestamp: msg.time.created,
+            messageId: msg.id,
+          });
+        }
+        
+        // Search in tool names
+        if (toolName?.toLowerCase().includes(queryLower)) {
+          results.push({
+            sessionId: session.id,
+            sessionTitle: session.title,
+            type: "tool",
+            content: toolName,
+            timestamp: msg.time.created,
+            messageId: msg.id,
+          });
+        }
+        
+        // Search in tool inputs/outputs
+        const input = part.args || part.state?.input;
+        const output = part.result || part.state?.output;
+        
+        if (input) {
+          const inputStr = JSON.stringify(input).toLowerCase();
+          if (inputStr.includes(queryLower)) {
+            results.push({
+              sessionId: session.id,
+              sessionTitle: session.title,
+              type: "tool",
+              content: `${toolName || "tool"} input: ${truncate(JSON.stringify(input), 100)}`,
+              timestamp: msg.time.created,
+              messageId: msg.id,
+            });
+          }
+        }
+        
+        if (output) {
+          const outputStr = JSON.stringify(output).toLowerCase();
+          if (outputStr.includes(queryLower)) {
+            results.push({
+              sessionId: session.id,
+              sessionTitle: session.title,
+              type: "output",
+              content: `${toolName || "tool"} output: ${truncate(JSON.stringify(output), 100)}`,
+              timestamp: msg.time.created,
+              messageId: msg.id,
+            });
+          }
+        }
+      }
+    }
+    
+    // Early exit if we have enough results
+    if (results.length >= limit * 2) break;
+  }
+  
+  // Sort by timestamp (most recent first) and limit
+  results.sort((a, b) => b.timestamp - a.timestamp);
+  const limitedResults = results.slice(0, limit);
+  
+  if (limitedResults.length === 0) {
+    console.log(`${c.dim}No results found for "${query}"${c.reset}`);
+    return;
+  }
+  
+  console.log(`${c.dim}Found ${results.length} matches (showing ${limitedResults.length})${c.reset}\n`);
+  
+  for (const result of limitedResults) {
+    const typeColor = result.type === "message" ? c.blue :
+                      result.type === "tool" ? c.yellow :
+                      result.type === "output" ? c.green : c.cyan;
+    const typeIcon = result.type === "message" ? "💬" :
+                     result.type === "tool" ? "🔧" :
+                     result.type === "output" ? "📤" : "📋";
+    
+    console.log(`${typeIcon} ${typeColor}[${result.type.toUpperCase()}]${c.reset} ${c.dim}${formatTimeAgo(result.timestamp)}${c.reset}`);
+    console.log(`   ${c.cyan}Session:${c.reset} ${truncate(result.sessionTitle, 50)}`);
+    console.log(`   ${c.cyan}ID:${c.reset} ${c.dim}${result.sessionId}${c.reset}`);
+    
+    // Highlight the query in content
+    const contentPreview = truncate(result.content.replace(/\n/g, " "), 120);
+    const highlightedContent = contentPreview.replace(
+      new RegExp(`(${query})`, "gi"),
+      `${c.bgYellow}${c.black}$1${c.reset}`
+    );
+    console.log(`   ${highlightedContent}`);
+    console.log();
+  }
+  
+  // Show session summary
+  const sessionIds = [...new Set(limitedResults.map(r => r.sessionId))];
+  console.log(`${c.dim}───────────────────────────────────────────────────────────────${c.reset}`);
+  console.log(`${c.bold}Sessions with matches:${c.reset} ${sessionIds.length}`);
+  for (const sid of sessionIds.slice(0, 5)) {
+    const session = sessions.find(s => s.id === sid);
+    console.log(`  ${c.dim}•${c.reset} ${sid.slice(0, 20)}... - ${truncate(session?.title || "", 40)}`);
+  }
+  
+  console.log(`\n${c.dim}Tip: Use 'view <session_id>' to see full conversation${c.reset}`);
 }
 
 async function cmdExport(sessionId: string) {
@@ -862,6 +1367,45 @@ async function main() {
       await cmdMessages(args[1]);
       break;
 
+    case "view":
+      if (!args[1]) {
+        console.log(`${c.red}Usage: bun tools/opencode-tracker.ts view <sessionId>${c.reset}`);
+        console.log(`\n${c.dim}Recent sessions:${c.reset}`);
+        const recentView = getAllSessions().slice(0, 5);
+        for (const s of recentView) {
+          console.log(`  ${s.id} - ${truncate(s.title, 40)}`);
+        }
+        process.exit(1);
+      }
+      await cmdView(args[1]);
+      break;
+
+    case "tools":
+      if (!args[1]) {
+        console.log(`${c.red}Usage: bun tools/opencode-tracker.ts tools <sessionId>${c.reset}`);
+        console.log(`\n${c.dim}Recent sessions:${c.reset}`);
+        const recentTools = getAllSessions().slice(0, 5);
+        for (const s of recentTools) {
+          const stats = getSessionStats(s.id);
+          console.log(`  ${s.id} - ${truncate(s.title, 30)} (${stats.toolCount} tools)`);
+        }
+        process.exit(1);
+      }
+      await cmdTools(args[1]);
+      break;
+
+    case "search":
+      if (!args[1]) {
+        console.log(`${c.red}Usage: bun tools/opencode-tracker.ts search <query> [limit]${c.reset}`);
+        console.log(`\n${c.cyan}Examples:${c.reset}`);
+        console.log(`  bun tools/opencode-tracker.ts search "error"`);
+        console.log(`  bun tools/opencode-tracker.ts search "task_create" 50`);
+        console.log(`  bun tools/opencode-tracker.ts search "memory" 10`);
+        process.exit(1);
+      }
+      await cmdSearch(args[1], parseInt(args[2]) || 20);
+      break;
+
     case "export":
       if (!args[1]) {
         console.log(`${c.red}Usage: bun tools/opencode-tracker.ts export <sessionId>${c.reset}`);
@@ -893,24 +1437,42 @@ async function main() {
       console.log(`
 ${c.bold}OpenCode Conversation Tracker${c.reset}
 
-Track and log all OpenCode conversations.
+Track and log all OpenCode conversations with full traceability.
 
 ${c.cyan}Commands:${c.reset}
-  sessions [limit]     List all sessions with metadata
-  messages <sessionId> Show all messages for a session
+  ${c.bold}View & Inspect:${c.reset}
+  sessions [limit]     List all sessions with metadata, tool counts, duration
+  messages <sessionId> Show all messages for a session (compact)
+  view <sessionId>     Full conversation view with all parts and tool I/O
+  tools <sessionId>    Show all tool calls with inputs/outputs
+  search <query>       Search across sessions (messages, tools, outputs)
+
+  ${c.bold}Export & Sync:${c.reset}
   export <sessionId>   Export full conversation as JSON
-  watch               Watch for new messages in real-time
-  stats               Show statistics
-  sync                Sync OpenCode sessions to memory system
-  learn [days]        Extract learnings from recent sessions (default: 7 days)
+  sync                 Sync OpenCode sessions to memory system
+
+  ${c.bold}Analysis:${c.reset}
+  stats                Show statistics across all sessions
+  learn [days]         Extract learnings from recent sessions (default: 7 days)
+
+  ${c.bold}Real-time:${c.reset}
+  watch                Watch for new messages in real-time
 
 ${c.cyan}Examples:${c.reset}
+  ${c.dim}# List recent sessions with tool counts${c.reset}
   bun tools/opencode-tracker.ts sessions
-  bun tools/opencode-tracker.ts messages ses_xxx
-  bun tools/opencode-tracker.ts watch
-  bun tools/opencode-tracker.ts stats
-  bun tools/opencode-tracker.ts sync
-  bun tools/opencode-tracker.ts learn 14
+
+  ${c.dim}# View full conversation with all tool calls${c.reset}
+  bun tools/opencode-tracker.ts view ses_xxx
+
+  ${c.dim}# See all tool calls for a session${c.reset}
+  bun tools/opencode-tracker.ts tools ses_xxx
+
+  ${c.dim}# Search for error messages${c.reset}
+  bun tools/opencode-tracker.ts search "error"
+
+  ${c.dim}# Search for specific tool usage${c.reset}
+  bun tools/opencode-tracker.ts search "task_create" 30
 `);
       break;
 

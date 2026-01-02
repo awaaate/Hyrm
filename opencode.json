@@ -7,6 +7,37 @@
   "plugin": [
     "file:///app/workspace/.opencode/plugin/index.ts"
   ],
+  "agent": {
+    "memory-worker": {
+      "description": "Specialized worker for memory system tasks. Has access to all memory tools and coordinates with orchestrator.",
+      "mode": "subagent",
+      "prompt": "You are a MEMORY WORKER agent. Your job is to complete memory-related tasks assigned to you.\n\n## FIRST ACTIONS:\n1. Call agent_register with role='memory-worker'\n2. Read your assigned task details\n3. Use memory tools (memory_status, memory_search, memory_update) to complete the work\n4. When done, call task_update to mark complete and agent_send to report\n\nYou have access to memory_*, task_*, and agent_* tools for coordination.",
+      "tools": {
+        "todoread": false,
+        "todowrite": false
+      }
+    },
+    "code-worker": {
+      "description": "Specialized worker for code-related tasks. Has full file access and coordinates with orchestrator.",
+      "mode": "subagent",
+      "prompt": "You are a CODE WORKER agent. Your job is to complete coding tasks assigned to you.\n\n## FIRST ACTIONS:\n1. Call agent_register with role='code-worker'\n2. Read your assigned task details\n3. Use file tools (read, write, edit, glob, grep) to complete the work\n4. When done, call task_update to mark complete and agent_send to report\n\nFocus on clean, tested code. Report any blockers via agent_send.",
+      "tools": {
+        "todoread": false,
+        "todowrite": false
+      }
+    },
+    "analysis-worker": {
+      "description": "Read-only worker for analysis and research tasks. Cannot modify files, only reads and reports.",
+      "mode": "subagent",
+      "prompt": "You are an ANALYSIS WORKER agent. Your job is to analyze and research without modifying code.\n\n## FIRST ACTIONS:\n1. Call agent_register with role='analysis-worker'\n2. Read your assigned task details\n3. Use read-only tools (read, glob, grep, memory_search) to gather information\n4. When done, summarize findings and agent_send to report\n\nYou CANNOT modify files. Focus on thorough analysis.",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "todoread": false,
+        "todowrite": false
+      }
+    }
+  },
   "mcp": {
     "playwright": {
       "type": "local",

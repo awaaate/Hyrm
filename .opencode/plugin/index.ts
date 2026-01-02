@@ -784,6 +784,47 @@ Multi-Agent Mode Active: Check agent_status() to see other agents working in par
         ) {
           log("INFO", `Memory file edited: ${input.args.filePath}`);
         }
+
+        // === TASK TOOL TRACKING ===
+        // Track when the native Task tool spawns a subagent session
+        if (input.tool === "task" && output.metadata?.sessionId) {
+          log("INFO", "Task tool spawned session", {
+            spawned_session: output.metadata.sessionId,
+            description: output.title,
+            parent_session: currentSessionId,
+          });
+
+          // Record the spawned session in sessions tracking
+          try {
+            const spawnLog = JSON.stringify({
+              type: "session_spawned",
+              timestamp: new Date().toISOString(),
+              parent_session: currentSessionId,
+              child_session: output.metadata.sessionId,
+              description: output.title,
+              duration_ms: duration,
+            });
+            appendFileSync(sessionsPath, spawnLog + "\n");
+
+            // Also log to message bus for agent coordination
+            const messageBusPath = join(memoryDir, "message-bus.jsonl");
+            const message = {
+              message_id: `msg-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+              from_agent: coordinator ? (coordinator as any).agentId : "system",
+              timestamp: new Date().toISOString(),
+              type: "session_spawned",
+              payload: {
+                parent_session: currentSessionId,
+                child_session: output.metadata.sessionId,
+                description: output.title,
+              },
+              read_by: [],
+            };
+            appendFileSync(messageBusPath, JSON.stringify(message) + "\n");
+          } catch (e) {
+            log("WARN", `Failed to record spawned session: ${e}`);
+          }
+        }
       } catch (error) {
         log("ERROR", "Tool tracking error", { error: String(error) });
       }

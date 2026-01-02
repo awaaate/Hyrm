@@ -658,6 +658,140 @@ export function createTaskTools(getContext: () => TaskToolsContext) {
       },
     }),
 
+    /**
+     * Task spawn tool - Wraps OpenCode's Task tool with our task system integration
+     * This creates a persistent task, then spawns a subagent with memory context
+     */
+    task_spawn: tool({
+      description:
+        "Spawn a subagent with full memory context integration. Creates a persistent task, injects memory context into the subagent, and tracks the spawned session. Use this instead of the raw Task tool for better coordination.",
+      args: {
+        title: tool.schema.string().describe("Short task title (3-5 words)"),
+        prompt: tool.schema.string().describe("Detailed task prompt for the subagent"),
+        subagent_type: tool.schema
+          .enum(["general", "explore"])
+          .describe("Type of subagent to spawn (default: general)")
+          .optional(),
+        priority: tool.schema
+          .enum(["critical", "high", "medium", "low"])
+          .describe("Task priority (default: medium)")
+          .optional(),
+        inject_context: tool.schema
+          .boolean()
+          .describe("Whether to inject memory context into subagent prompt (default: true)")
+          .optional(),
+      },
+      async execute({ title, prompt, subagent_type = "general", priority = "medium", inject_context = true }) {
+        try {
+          const ctx = getContext();
+          const tasksPath = getTasksPath();
+
+          // Create the persistent task first
+          const store = existsSync(tasksPath)
+            ? JSON.parse(readFileSync(tasksPath, "utf-8"))
+            : { version: "1.0", tasks: [], completed_count: 0, last_updated: "" };
+
+          const taskId = `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+          const task = {
+            id: taskId,
+            title,
+            description: prompt.slice(0, 500) + (prompt.length > 500 ? "..." : ""),
+            priority,
+            status: "in_progress",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            claimed_at: new Date().toISOString(),
+            created_by: ctx.currentSessionId || "unknown",
+            spawned_by: ctx.agentId || ctx.currentSessionId || "unknown",
+            subagent_type,
+            tags: ["spawned", subagent_type],
+          };
+
+          store.tasks.push(task);
+          store.last_updated = new Date().toISOString();
+          writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+
+          ctx.log("INFO", `Spawned task created: ${taskId}`, { title, priority, subagent_type });
+
+          // Build enhanced prompt with memory context
+          let enhancedPrompt = prompt;
+          if (inject_context) {
+            // Read current state for context
+            const statePath = join(ctx.memoryDir, "state.json");
+            let stateContext = "";
+            try {
+              if (existsSync(statePath)) {
+                const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                stateContext = `
+## Memory System Context (Injected)
+**Session**: ${state.session_count || 0}
+**Your Task ID**: ${taskId}
+**Parent Session**: ${ctx.currentSessionId || "unknown"}
+
+You have access to these tools for coordination:
+- task_update(task_id="${taskId}", status="completed") - Mark when done
+- agent_register(role="worker") - Register as worker
+- agent_send(type="task_complete", payload={...}) - Report completion
+
+`;
+              }
+            } catch {
+              // Ignore state read errors
+            }
+
+            enhancedPrompt = `${stateContext}
+
+## Your Task
+${prompt}
+
+## Instructions
+1. First call agent_register with role="worker"
+2. Work on the task above
+3. When done, call task_update(task_id="${taskId}", status="completed")
+4. Report results via agent_send(type="task_complete")
+`;
+          }
+
+          // Record in message bus for tracking
+          try {
+            const messageBusPath = join(ctx.memoryDir, "message-bus.jsonl");
+            const message = {
+              message_id: `msg-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+              from_agent: ctx.agentId || "system",
+              timestamp: new Date().toISOString(),
+              type: "task_spawned",
+              payload: {
+                task_id: taskId,
+                title,
+                subagent_type,
+                prompt_length: enhancedPrompt.length,
+              },
+              read_by: [],
+            };
+            appendFileSync(messageBusPath, JSON.stringify(message) + "\n");
+          } catch (e) {
+            ctx.log("WARN", `Failed to record spawn: ${e}`);
+          }
+
+          // Return info for the caller to use with the Task tool
+          return JSON.stringify({
+            success: true,
+            task: {
+              id: taskId,
+              title,
+              priority,
+              subagent_type,
+            },
+            enhanced_prompt: enhancedPrompt,
+            message: `Task ${taskId} created. Use the Task tool with this enhanced prompt to spawn the subagent.`,
+            usage_hint: `Call Task tool with: description="${title}", prompt=<enhanced_prompt>, subagent_type="${subagent_type}"`,
+          });
+        } catch (error) {
+          return JSON.stringify({ success: false, error: String(error) });
+        }
+      },
+    }),
+
     task_schedule: tool({
       description:
         "Get smart scheduling recommendations for pending tasks. Shows effective priorities with aging, estimated workload, and suggested execution order.",
