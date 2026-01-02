@@ -1773,9 +1773,47 @@
       "title": "Refactor generate-orchestrator-prompt.ts types",
       "description": "Replace all 10 uses of `any` in generate-orchestrator-prompt.ts with proper types from shared/types.ts.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-02T17:30:12.040Z",
-      "updated_at": "2026-01-02T17:30:12.040Z",
+      "updated_at": "2026-01-02T17:32:57.650Z",
+      "created_by": "unknown",
+      "tags": [
+        "refactoring",
+        "type-safety"
+      ],
+      "complexity": "simple",
+      "completed_at": "2026-01-02T17:32:57.643Z",
+      "notes": [
+        "[2026-01-02T17:32:57.650Z] Worker completed. Commit: 95a2c33"
+      ]
+    },
+    {
+      "id": "task_1767375030579_s0jd55",
+      "title": "Refactor system-message-config.ts types",
+      "description": "Replace all 9 uses of `any` in system-message-config.ts with proper types.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T17:30:30.579Z",
+      "updated_at": "2026-01-02T17:32:58.266Z",
+      "created_by": "unknown",
+      "tags": [
+        "refactoring",
+        "type-safety"
+      ],
+      "complexity": "simple",
+      "completed_at": "2026-01-02T17:32:58.266Z",
+      "notes": [
+        "[2026-01-02T17:32:58.266Z] Worker completed. Commit: ed11ec1"
+      ]
+    },
+    {
+      "id": "task_1767375196648_yaks84",
+      "title": "Refactor realtime-monitor.ts types",
+      "description": "Replace 8 uses of `any` in realtime-monitor.ts with proper types.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-02T17:33:16.648Z",
+      "updated_at": "2026-01-02T17:33:16.648Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1784,13 +1822,13 @@
       "complexity": "simple"
     },
     {
-      "id": "task_1767375030579_s0jd55",
-      "title": "Refactor system-message-config.ts types",
-      "description": "Replace all 9 uses of `any` in system-message-config.ts with proper types.",
+      "id": "task_1767375197450_wmnhv7",
+      "title": "Refactor git-integration.ts types",
+      "description": "Replace 6 uses of `any` in git-integration.ts with proper types.",
       "priority": "high",
       "status": "pending",
-      "created_at": "2026-01-02T17:30:30.579Z",
-      "updated_at": "2026-01-02T17:30:30.579Z",
+      "created_at": "2026-01-02T17:33:17.450Z",
+      "updated_at": "2026-01-02T17:33:17.450Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1799,6 +1837,6 @@
       "complexity": "simple"
     }
   ],
-  "completed_count": 82,
-  "last_updated": "2026-01-02T17:30:30.579Z"
+  "completed_count": 84,
+  "last_updated": "2026-01-02T17:33:17.450Z"
 }

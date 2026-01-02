@@ -29,8 +29,14 @@ import { join } from "path";
 import { c } from './shared/colors';
 import { truncate } from './shared/string-utils';
 import { MEMORY_DIR } from './shared/paths';
+import type { Task, TaskStore } from './shared/types';
 
 const GIT_LOG_PATH = join(MEMORY_DIR, "git-activity.jsonl");
+
+interface FileStatusEntry {
+  status: string;
+  file: string;
+}
 
 interface GitActivity {
   timestamp: string;
@@ -92,8 +98,8 @@ function showStatus(): void {
   } else {
     const lines = status.stdout.split("\n");
     
-    const staged: string[] = [];
-    const modified: string[] = [];
+    const staged: FileStatusEntry[] = [];
+    const modified: FileStatusEntry[] = [];
     const untracked: string[] = [];
     
     for (const line of lines) {
@@ -101,10 +107,10 @@ function showStatus(): void {
       const file = line.slice(3);
       
       if (status[0] !== " " && status[0] !== "?") {
-        staged.push({ status: status[0], file } as any);
+        staged.push({ status: status[0], file });
       }
       if (status[1] === "M" || status[1] === "D") {
-        modified.push({ status: status[1], file } as any);
+        modified.push({ status: status[1], file });
       }
       if (status[0] === "?") {
         untracked.push(file);
@@ -113,7 +119,7 @@ function showStatus(): void {
     
     if (staged.length > 0) {
       console.log(`\n${c.green}Staged:${c.reset}`);
-      for (const f of staged.slice(0, 10) as any[]) {
+      for (const f of staged.slice(0, 10)) {
         console.log(`  ${c.green}${f.status}${c.reset} ${f.file}`);
       }
       if (staged.length > 10) {
@@ -123,7 +129,7 @@ function showStatus(): void {
     
     if (modified.length > 0) {
       console.log(`\n${c.yellow}Modified:${c.reset}`);
-      for (const f of modified.slice(0, 10) as any[]) {
+      for (const f of modified.slice(0, 10)) {
         console.log(`  ${c.yellow}${f.status}${c.reset} ${f.file}`);
       }
       if (modified.length > 10) {
@@ -330,12 +336,12 @@ function createCommit(message: string, agentId?: string, taskId?: string): void 
 function autoCommitTask(taskId: string): void {
   // Load task info from tasks.json
   const tasksPath = join(MEMORY_DIR, "tasks.json");
-  let task: any = null;
+  let task: Task | null = null;
   
   if (existsSync(tasksPath)) {
     try {
-      const store = JSON.parse(readFileSync(tasksPath, "utf-8"));
-      task = store.tasks.find((t: any) => t.id === taskId);
+      const store: TaskStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
+      task = store.tasks.find((t: Task) => t.id === taskId) || null;
     } catch {}
   }
   

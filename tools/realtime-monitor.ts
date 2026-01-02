@@ -23,6 +23,7 @@
 
 import { existsSync, readFileSync, watch, FSWatcher } from "fs";
 import { readJson, readJsonl, c, formatTimeShort, PATHS, truncate, padRight } from "./shared";
+import type { UserMessage, SystemState, QualityStore } from "./shared/types";
 
 // ANSI escape code prefix (for screen control)
 const ESC = "\x1b";
@@ -152,7 +153,14 @@ interface MessageData {
   from_agent?: string;
   type: string;
   timestamp: string;
-  payload: any;
+  payload: Record<string, unknown>;
+}
+
+interface LogEntry {
+  message: string;
+  level: string;
+  timestamp: string;
+  [key: string]: unknown;
 }
 
 function getActiveAgents(): AgentData[] {
@@ -178,28 +186,28 @@ function getMessages(limit: number = 50, excludeHeartbeats: boolean = true): Mes
   return filtered.slice(-limit).reverse();
 }
 
-function getUserMessages(): any[] {
-  return readJsonl<any>(PATHS.userMessages);
+function getUserMessages(): UserMessage[] {
+  return readJsonl<UserMessage>(PATHS.userMessages);
 }
 
-function getState(): any {
-  return readJson<any>(PATHS.state, {});
+function getState(): Partial<SystemState> {
+  return readJson<Partial<SystemState>>(PATHS.state, {});
 }
 
-function getQuality(): any {
-  return readJson<any>(PATHS.qualityAssessments, { summary: {} });
+function getQuality(): Partial<QualityStore> {
+  return readJson<Partial<QualityStore>>(PATHS.qualityAssessments, { summary: {} as Partial<QualityStore["summary"]> });
 }
 
-function getRecentLogs(limit: number = 20): any[] {
+function getRecentLogs(limit: number = 20): LogEntry[] {
   try {
     if (existsSync(PATHS.realtimeLog)) {
       const content = readFileSync(PATHS.realtimeLog, "utf-8");
       const lines = content.trim().split("\n").filter(Boolean);
       return lines
         .slice(-limit)
-        .map((line) => {
+        .map((line): LogEntry => {
           try {
-            return JSON.parse(line);
+            return JSON.parse(line) as LogEntry;
           } catch {
             return { message: line, level: "INFO", timestamp: new Date().toISOString() };
           }
