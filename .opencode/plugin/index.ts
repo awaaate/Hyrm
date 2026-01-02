@@ -1106,7 +1106,7 @@ Read memory/working.md for full details.`);
 
     // Background tasks
     log("INFO", "Starting knowledge extraction (background)");
-    ctx.$`node ${join(ctx.directory, "tools/knowledge-extractor.ts")} extract`
+    ctx.$`bun ${join(ctx.directory, "tools/knowledge-extractor.ts")} extract`
       .quiet()
       .then(() => log("INFO", "Knowledge extraction completed"))
       .catch((e) =>

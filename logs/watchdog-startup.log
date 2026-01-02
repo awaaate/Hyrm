@@ -45,3 +45,28 @@ Ahora hago commit del fix:
 [Memory] Context injected into system prompt (role: orchestrator)
 [Memory] Context injected into system prompt (role: orchestrator)
 [Memory] Context injected into system prompt (role: orchestrator)
+[94m[1m| [0m[90m git_commit  [0m{"message":"fix(plugin): Replace ctx.$ with Bun.spawn for orchestrator respawn\n\nctx.$ doesn't support shell redirects (> file 2>&1 &), causing\n\"expected a command or assignment but got Redirect\" errors.\nBun.spawn properly handles background process execution.","add_all":true}
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Commit hecho y pushed (4e0761b).
+
+Ahora reviso si hay más usos de `ctx.$` que puedan causar problemas:
+[94m[1m| [0m[90m Grep     [0mctx\.\$
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Las otras 3 líneas (1109, 1148, 1272) usan `ctx.$` sin redirects, que debería funcionar. Pero veo que la línea 1109 usa `node` en vez de `bun`. Déjame verificar si eso es intencional:
+[96m[1m| [0m[90m Read     [0m.opencode/plugin/index.ts
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Línea 1109 usa `node` pero debería usar `bun` según las convenciones del proyecto. Voy a arreglar eso:
+[92m[1m| [0m[90m Edit     [0m.opencode/plugin/index.ts
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
