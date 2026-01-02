@@ -1258,7 +1258,7 @@ Remember: You NEVER stop. Always call agent_set_handoff(enabled=false) first.`;
 
       // Update metrics
       const metricsData = existsSync(metricsPath)
-        ? JSON.parse(await ctx.$`cat ${metricsPath}`.text())
+        ? JSON.parse(readFileSync(metricsPath, "utf-8"))
         : { total_sessions: 0, total_tool_calls: 0, total_tokens: 0 };
 
       metricsData.total_sessions = (metricsData.total_sessions || 0) + 1;
@@ -1266,11 +1266,7 @@ Remember: You NEVER stop. Always call agent_set_handoff(enabled=false) first.`;
         (metricsData.total_tool_calls || 0) + toolCallCount;
       metricsData.last_session = new Date().toISOString();
 
-      await ctx.$`echo ${JSON.stringify(
-        metricsData,
-        null,
-        2
-      )} > ${metricsPath}`.quiet();
+      writeFileSync(metricsPath, JSON.stringify(metricsData, null, 2));
 
       // Update working.md for next session
       await updateWorkingMdForHandoff(event, sessionDuration);

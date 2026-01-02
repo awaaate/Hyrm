@@ -1605,3 +1605,4 @@
 2026-01-02T18:40:26.787Z [INFO] [agent-1767378789512-gmaxn] Message sent: broadcast (broadcast)
 2026-01-02T18:41:13.910Z [INFO] [agent-1767379273908-k1b8mt] Agent registered: agent-1767379273908-k1b8mt (role: orchestrator)
 2026-01-02T18:41:13.912Z [INFO] [agent-1767379273908-k1b8mt] Message sent: heartbeat (broadcast)
+2026-01-02T18:46:13.937Z [INFO] [agent-1767379273908-k1b8mt] Message sent: heartbeat (broadcast)

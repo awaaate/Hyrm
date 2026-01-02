@@ -73,10 +73,33 @@ Así TODAS las llamadas a `log()` automáticamente están protegidas.
 
 - Limpiado agente stale del registry (agent-1767378789512-gmaxn)
 
-### Pendiente
+### Commit
 
-- [ ] Commit del fix
-- [ ] Verificar que el fix funciona en próxima sesión
+**Commit**: 1fb595a
+
+### Análisis Adicional: ¿Por qué 4 instancias?
+
+Investigué el código fuente de OpenCode (`/app/opencode-src/`). El plugin se carga UNA vez
+pero aparentemente hay algo interno que causa 4 copias del contexto de ejecución.
+
+Posibles causas:
+1. TUI Worker (2 contextos: main + worker)
+2. Algo interno de Bun con workers
+3. OpenCode internamente crea múltiples instancias del plugin
+
+La solución implementada funciona independientemente de la causa - cada instancia que llame
+a `log()` verificará si es primaria antes de escribir.
+
+### Verificación
+
+El fix tomará efecto en la **próxima sesión** de OpenCode. El código actual ya se cargó
+con la versión anterior del plugin.
+
+Para verificar después del reinicio:
+```bash
+tail -10 /app/workspace/memory/realtime.log
+# Debería mostrar eventos SIN duplicar
+```
 
 ---
 
