@@ -2,33 +2,52 @@
   "version": "1.0.0",
   "agents": [
     {
-      "agent_id": "agent-1767358953150-y6s0s9",
-      "session_id": "session-1767358953150",
-      "started_at": "2026-01-02T13:02:33.150Z",
-      "last_heartbeat": "2026-01-02T13:06:33.329Z",
+      "agent_id": "agent-1767373323294-938rgo",
+      "session_id": "ses_4805743e9ffeB44wn7HuoeFWc3",
+      "started_at": "2026-01-02T17:02:03.294Z",
+      "last_heartbeat": "2026-01-02T17:06:03.324Z",
       "status": "active",
-      "assigned_role": "worker",
-      "pid": 521844
+      "assigned_role": "general",
+      "pid": 555795
     },
     {
-      "agent_id": "agent-1767359166641-hptv4d",
-      "session_id": "session-1767359166641",
-      "started_at": "2026-01-02T13:06:06.642Z",
-      "last_heartbeat": "2026-01-02T13:09:06.654Z",
+      "agent_id": "agent-1767373323301-co6jma",
+      "session_id": "ses_4805743e9ffeB44wn7HuoeFWc3",
+      "started_at": "2026-01-02T17:02:03.301Z",
+      "last_heartbeat": "2026-01-02T17:06:03.326Z",
       "status": "active",
-      "assigned_role": "orchestrator",
-      "pid": 525610
+      "assigned_role": "general",
+      "pid": 555795
     },
     {
-      "agent_id": "agent-1767359381934-p0p5hm",
-      "session_id": "session-1767359381934",
-      "started_at": "2026-01-02T13:09:41.935Z",
-      "last_heartbeat": "2026-01-02T13:13:41.954Z",
+      "agent_id": "agent-1767373323305-kw6y6f",
+      "session_id": "ses_4805743e9ffeB44wn7HuoeFWc3",
+      "started_at": "2026-01-02T17:02:03.305Z",
+      "last_heartbeat": "2026-01-02T17:06:03.327Z",
+      "status": "active",
+      "assigned_role": "general",
+      "pid": 555795
+    },
+    {
+      "agent_id": "agent-1767373323307-ta3qca",
+      "session_id": "ses_4805743e9ffeB44wn7HuoeFWc3",
+      "started_at": "2026-01-02T17:02:03.307Z",
+      "last_heartbeat": "2026-01-02T17:06:03.330Z",
+      "status": "working",
+      "assigned_role": "general",
+      "pid": 555795,
+      "current_task": "Orchestrator mode - no handoff"
+    },
+    {
+      "agent_id": "agent-1767373323307-ta3qca",
+      "session_id": "ses_4805743e9ffeB44wn7HuoeFWc3",
+      "started_at": "2026-01-02T17:02:09.489Z",
+      "last_heartbeat": "2026-01-02T17:02:09.489Z",
       "status": "active",
       "assigned_role": "orchestrator",
-      "pid": 530336
+      "pid": 555795
     }
   ],
-  "last_updated": "2026-01-02T13:13:41.954Z",
-  "lock_version": 208
+  "last_updated": "2026-01-02T17:06:03.330Z",
+  "lock_version": 269
 }

@@ -1,11 +1,300 @@
 [
   {
-    "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
-    "timestamp": 1767358223842,
-    "messages": 1,
+    "session_id": "ses_4807d9f2effeO2vsmcDjSbbkgx",
+    "timestamp": 1767370849172,
+    "messages": 7,
     "decisions": [],
     "discoveries": [],
     "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48082eda5ffeqqgopqXvAQGIv7",
+    "timestamp": 1767370530429,
+    "messages": 11,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_480831073ffemH3ZFa5LnKqo8w",
+    "timestamp": 1767371784428,
+    "messages": 79,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "tools/shared/data-fetchers.ts",
+      "tools/agent-conversation-viewer.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_480883561ffeasUFsA4BT4PDHl",
+    "timestamp": 1767370129198,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48088bef6ffeDmoiJR5esz4ds2",
+    "timestamp": 1767370099016,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48089487fffeAMj8xhZaDVmSio",
+    "timestamp": 1767370051969,
+    "messages": 3,
+    "decisions": [
+      "** Nothing to spawn - no pending work. The system is idle."
+    ],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48089d266ffeTmbDMyF9OGnVSM",
+    "timestamp": 1767370037400,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808a5c4cffeP9mwC8rNYbP9DJ",
+    "timestamp": 1767370001983,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808b5b9dffej4wya0jXihTBB6",
+    "timestamp": 1767369939536,
+    "messages": 5,
+    "decisions": [
+      "** System is functioning correctly. Worker is handling the CLI evaluation task. I'll broadcast a status update and exit so the watchdog can restart me"
+    ],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808be128ffeN4hZj8WuRm6P3B",
+    "timestamp": 1767370002422,
+    "messages": 18,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808c5aedffersnYgl0fghgYtk",
+    "timestamp": 1767369881343,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808ce491ffenh7J2Swz0cDHmh",
+    "timestamp": 1767369833280,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808de3f8ffe2xiAhoEUS4vpxg",
+    "timestamp": 1767369772025,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4808ee25bffeknIQEfXRUJKTnh",
+    "timestamp": 1767369704481,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481238938ffee6A1C1z5fLIIQk",
+    "timestamp": 1767359953399,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4812412f9ffeYbRf9UlI9Tcs64",
+    "timestamp": 1767359927746,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481249cc4ffex15bnBXaJhLalg",
+    "timestamp": 1767359883497,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481250cb2ffegmbnuOu8TwDZC5",
+    "timestamp": 1767359844761,
+    "messages": 3,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48126e0ebffe71wBAUWgJ588jK",
+    "timestamp": 1767359746065,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4812c14a1ffeXEYXp7P0UVFRCZ",
+    "timestamp": 1767359679073,
+    "messages": 34,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4812f6095ffekyHICUFTCw5keB",
+    "timestamp": 1767359342922,
+    "messages": 24,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "memory/working.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_48132a732ffeywT8zRN0K0UmjU",
+    "timestamp": 1767359221282,
+    "messages": 32,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "dashboard-ui/src/components/OpenCodeSessionsPanel.tsx"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_481337929ffe7RyXsRq0FHip9p",
+    "timestamp": 1767358997656,
+    "messages": 12,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
+    "timestamp": 1767358852805,
+    "messages": 59,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "memory/working.md"
+    ],
     "problems_solved": [],
     "key_insights": [],
     "techniques": [],

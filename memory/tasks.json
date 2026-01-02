@@ -1631,9 +1631,9 @@
       "title": "Dashboard: Add token cost estimation to OpenCode sessions panel",
       "description": "Add estimated API cost calculation to the OpenCode sessions panel. Use approximate per-token pricing for Claude models (e.g., $3/1M input tokens, $15/1M output tokens for Sonnet). Display total session cost and cost per message. Include cache savings calculation.",
       "priority": "medium",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-02T13:08:44.117Z",
-      "updated_at": "2026-01-02T13:09:51.526Z",
+      "updated_at": "2026-01-02T13:13:57.436Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -1643,9 +1643,71 @@
       "estimated_hours": 1,
       "complexity": "simple",
       "assigned_to": "agent-1767359381934-p0p5hm",
-      "claimed_at": "2026-01-02T13:09:51.526Z"
+      "claimed_at": "2026-01-02T13:09:51.526Z",
+      "completed_at": "2026-01-02T13:13:54.154Z",
+      "notes": [
+        "[2026-01-02T13:13:54.157Z] Implemented token cost estimation for OpenCode sessions panel. Features: Claude pricing ($3/1M input, $15/1M output, $0.30/1M cache read), session-level cost calculations, per-message costs, cache savings display. Commit: c00eb11"
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Cost estimation for API usage is valuable for budget tracking. Claude's cache pricing (90% discount) significantly reduces costs - displaying cache savings helps users understand the value of the caching system."
+    },
+    {
+      "id": "task_1767369862160_fy3daj",
+      "title": "Self-improvement: Evaluate and improve CLI tools",
+      "description": "Per user directive, continuously work on self-improvement by evaluating and debugging existing CLI tools. Focus areas: 1) Test each CLI tool for errors, 2) Fix any bugs found, 3) Improve error handling and user experience, 4) Document findings in working memory",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T16:04:22.160Z",
+      "updated_at": "2026-01-02T16:06:39.701Z",
+      "created_by": "unknown",
+      "tags": [
+        "self-improvement",
+        "cli-tools",
+        "evaluation",
+        "debugging"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767369881226-ayewvf",
+      "claimed_at": "2026-01-02T16:04:41.481Z",
+      "completed_at": "2026-01-02T16:06:39.693Z",
+      "notes": [
+        "[2026-01-02T16:06:39.701Z] Evaluated and improved task-manager.ts CLI tool. Added 5 improvements: 1) Feedback when list returns empty, 2) search command, 3) --help flag support, 4) cancelled count in summary, 5) list all option. All changes tested and working."
+      ]
+    },
+    {
+      "id": "task_1767369905654_6e870e",
+      "title": "Test task for CLI evaluation",
+      "description": "",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2026-01-02T16:05:05.654Z",
+      "updated_at": "2026-01-02T16:05:12.347Z",
+      "created_by": "orchestrator",
+      "completed_at": "2026-01-02T16:05:12.347Z"
+    },
+    {
+      "id": "task_1767373051051_mfbxvp",
+      "title": "Consolidar TimingEntry en shared/types.ts",
+      "description": "El tipo TimingEntry está duplicado en cli.ts:640 y agent-conversation-viewer.ts:57. Debe consolidarse en shared/types.ts extendiendo el ToolTiming existente.\n\nPasos:\n1. Actualizar ToolTiming en shared/types.ts para incluir todos los campos usados:\n   - call_id, start_time, end_time, input_size, output_size (de cli.ts)\n2. Eliminar interface TimingEntry local de cli.ts\n3. Eliminar interface TimingEntry local de agent-conversation-viewer.ts\n4. Importar ToolTiming from shared/types.ts en ambos archivos\n5. Verificar que el código compila: bun build --no-bundle tools/cli.ts\n\nLa estructura real del JSON es:\n{timestamp, session_id, tool, call_id, start_time, end_time, duration_ms, input_size, output_size, success, category}",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T16:57:31.053Z",
+      "updated_at": "2026-01-02T17:00:38.324Z",
+      "created_by": "ses_4805cd9b9ffeKrD513NS4jYqQm",
+      "tags": [
+        "refactoring",
+        "types",
+        "deduplication"
+      ],
+      "complexity": "simple",
+      "completed_at": "2026-01-02T17:00:15.414Z",
+      "notes": [
+        "[2026-01-02T17:00:15.417Z] Worker completed successfully. Consolidated TimingEntry into ToolTiming in shared/types.ts. Removed duplicate interfaces from cli.ts and agent-conversation-viewer.ts. All files compile."
+      ],
+      "quality_score": 8,
+      "quality_notes": "Worker successfully consolidated TimingEntry to ToolTiming. This reduces code duplication and follows DRY principle."
     }
   ],
-  "completed_count": 74,
-  "last_updated": "2026-01-02T13:09:51.526Z"
+  "completed_count": 78,
+  "last_updated": "2026-01-02T17:00:15.417Z"
 }

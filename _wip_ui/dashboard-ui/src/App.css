@@ -1,0 +1,27 @@
+/* Multi-Agent Memory System Dashboard - Minimal Custom Styles */
+/* Most styling is now handled by Tailwind CSS and shadcn/ui components */
+
+/* Custom animation for status dots */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}

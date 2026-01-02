@@ -2239,11 +2239,87 @@
       "metadata": {
         "duration_minutes": 33
       }
+    },
+    {
+      "task_id": "task_1767359324117_pvr0de",
+      "task_title": "Dashboard: Add token cost estimation to OpenCode sessions panel",
+      "assessed_at": "2026-01-02T13:13:57.432Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Cost estimation for API usage is valuable for budget tracking. Claude's cache pricing (90% discount) significantly reduces costs - displaying cache savings helps users understand the value of the caching system.",
+      "metadata": {
+        "duration_minutes": 5
+      }
+    },
+    {
+      "task_id": "task_1767373051051_mfbxvp",
+      "task_title": "Consolidar TimingEntry en shared/types.ts",
+      "assessed_at": "2026-01-02T17:00:38.308Z",
+      "assessed_by": "ses_4805cd9b9ffeKrD513NS4jYqQm",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8,
+      "lessons_learned": "Worker successfully consolidated TimingEntry to ToolTiming. This reduces code duplication and follows DRY principle.",
+      "metadata": {
+        "duration_minutes": 3
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 58,
-    "avg_overall_score": 8.151724137931039
+    "total_assessed": 60,
+    "avg_overall_score": 8.15166666666667
   },
-  "last_updated": "2026-01-02T13:07:06.988Z"
+  "last_updated": "2026-01-02T17:00:38.320Z"
 }

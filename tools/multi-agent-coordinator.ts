@@ -74,18 +74,31 @@ class MultiAgentCoordinator {
           return lastHB > fiveMinutesAgo;
         });
 
-        // Add this agent
-        const newAgent: Agent = {
-          agent_id: this.agentId,
-          session_id: this.sessionId,
-          started_at: new Date().toISOString(),
-          last_heartbeat: new Date().toISOString(),
-          status: "active",
-          assigned_role: role,
-          pid: process.pid,
-        };
+        // Check if this agent already exists (update vs add)
+        const existingIndex = registry.agents.findIndex(
+          (a) => a.agent_id === this.agentId
+        );
 
-        registry.agents.push(newAgent);
+        const now = new Date().toISOString();
+        
+        if (existingIndex >= 0) {
+          // Update existing agent's role and heartbeat
+          registry.agents[existingIndex].assigned_role = role;
+          registry.agents[existingIndex].last_heartbeat = now;
+          registry.agents[existingIndex].status = "active";
+        } else {
+          // Add new agent
+          const newAgent: Agent = {
+            agent_id: this.agentId,
+            session_id: this.sessionId,
+            started_at: now,
+            last_heartbeat: now,
+            status: "active",
+            assigned_role: role,
+            pid: process.pid,
+          };
+          registry.agents.push(newAgent);
+        }
         registry.last_updated = new Date().toISOString();
         registry.lock_version = expectedVersion + 1;
 

@@ -577,24 +577,26 @@ generate_prompt() {
     # Try to use the TypeScript prompt generator first
     if command -v bun &> /dev/null && [[ -f "tools/generate-orchestrator-prompt.ts" ]]; then
         local ts_prompt
-        ts_prompt=$(bun tools/generate-orchestrator-prompt.ts 2>/dev/null)
-        if [[ -n "$ts_prompt" ]]; then
+        # Pass model and token limit as environment variables
+        ts_prompt=$(MODEL="$MODEL" TOKEN_LIMIT_TOTAL="$TOKEN_LIMIT_TOTAL" bun tools/generate-orchestrator-prompt.ts 2>/dev/null || true)
+        if [[ -n "$ts_prompt" ]] && [[ "$ts_prompt" != "" ]]; then
             echo "$ts_prompt"
-            return
+            return 0
         fi
     fi
     
-    # Dynamic prompt based on user messages queue
+    # Fallback: Dynamic prompt based on user messages queue (bash implementation)
     local session_count=$(get_session_count)
     local unread_messages=$(get_unread_user_messages)
     local pending_tasks=$(get_pending_tasks)
     local has_messages="false"
     
-    if [[ -n "$unread_messages" ]]; then
+    if [[ -n "$unread_messages" ]] && [[ "$unread_messages" != "" ]]; then
         has_messages="true"
     fi
     
-    cat << EOF
+    # Use quoted heredoc to prevent variable expansion issues and allow literal backticks
+    cat << 'PROMPT_EOF'
 You are the MAIN ORCHESTRATOR AGENT (auto-restarted by watchdog v3.0).
 
 ## YOUR ROLE: ORCHESTRATE, DO NOT IMPLEMENT
@@ -616,40 +618,46 @@ You are a COORDINATOR only. Your job is to:
 4. Call task_list with status='pending' to see what needs workers
 
 ## HOW TO SPAWN WORKERS (via terminal):
-\`\`\`bash
+```bash
 # Spawn a worker for a task (non-blocking)
 opencode run "You are a WORKER agent. Call agent_register(role='worker'). Your task: [DESCRIBE TASK]. When done, call agent_send(type='task_complete', payload={...}) and exit."
-\`\`\`
+```
 
 ## CONTEXT:
-- Session count: $session_count
-- Model: $MODEL
-- Token limit: $TOKEN_LIMIT_TOTAL
-
-EOF
+PROMPT_EOF
+    
+    # Output context variables (outside quoted heredoc)
+    echo "- Session count: $session_count"
+    echo "- Model: $MODEL"
+    echo "- Token limit: $TOKEN_LIMIT_TOTAL"
+    echo ""
 
     # Add unread messages section if any
     if [[ "$has_messages" == "true" ]]; then
-        cat << EOF
+        cat << 'MSG_EOF'
 ## UNREAD USER MESSAGES (PRIORITY - Address these first!):
-$unread_messages
-
+MSG_EOF
+        echo "$unread_messages"
+        echo ""
+        cat << 'MSG_EOF'
 After processing each message, use user_messages_mark_read to mark it as handled.
 
-EOF
+MSG_EOF
     else
-        cat << EOF
+        cat << 'MSG_EOF'
 ## USER MESSAGES:
 No unread messages. Use user_messages_read to check for new requests periodically.
 
-EOF
+MSG_EOF
     fi
 
     # Add pending tasks
-    cat << EOF
+    cat << 'TASK_EOF'
 ## PENDING TASKS:
-$pending_tasks
-
+TASK_EOF
+    echo "$pending_tasks"
+    echo ""
+    cat << 'TASK_EOF'
 ## WORKFLOW:
 1. If there are unread user messages -> spawn workers to handle them
 2. If there are pending tasks -> spawn workers for each task
@@ -657,9 +665,9 @@ $pending_tasks
 
 ## SPAWNING WORKERS:
 For each task or user request, spawn a dedicated worker:
-\`\`\`bash
+```bash
 opencode run "You are a WORKER. Register as worker. Task: [X]. Report completion via agent_send."
-\`\`\`
+```
 
 ## AVAILABLE TOOLS:
 - User messages: user_messages_read, user_messages_mark_read
@@ -671,7 +679,7 @@ opencode run "You are a WORKER. Register as worker. Task: [X]. Report completion
 - Keep your session under 5 minutes
 - Spawn workers and exit
 - The watchdog will restart you to check for new work
-EOF
+TASK_EOF
 }
 
 # ==============================================================================

@@ -1,11 +1,36 @@
 {
-  "last_updated": "2025-12-31T22:55:27.663Z",
+  "last_updated": "2026-01-02T17:05:59.112Z",
   "checks_performed": 1,
   "agents_tracked": {},
-  "alerts": [],
+  "alerts": [
+    {
+      "timestamp": "2026-01-02T17:05:59.112Z",
+      "agent_id": "agent-1767372957263-9a6lm",
+      "type": "cleanup",
+      "message": "Agent removed due to inactivity (last heartbeat: 2026-01-02T17:00:57.299Z)"
+    },
+    {
+      "timestamp": "2026-01-02T17:05:59.112Z",
+      "agent_id": "agent-1767372957267-5ok6me",
+      "type": "cleanup",
+      "message": "Agent removed due to inactivity (last heartbeat: 2026-01-02T17:00:57.304Z)"
+    },
+    {
+      "timestamp": "2026-01-02T17:05:59.112Z",
+      "agent_id": "agent-1767372957276-0a1wh",
+      "type": "cleanup",
+      "message": "Agent removed due to inactivity (last heartbeat: 2026-01-02T17:00:57.305Z)"
+    },
+    {
+      "timestamp": "2026-01-02T17:05:59.112Z",
+      "agent_id": "agent-1767372957280-a2aaqs",
+      "type": "cleanup",
+      "message": "Agent removed due to inactivity (last heartbeat: 2026-01-02T17:00:57.306Z)"
+    }
+  ],
   "cleanup_stats": {
-    "total_cleanups": 0,
-    "agents_removed": 0,
-    "last_cleanup": ""
+    "total_cleanups": 1,
+    "agents_removed": 4,
+    "last_cleanup": "2026-01-02T17:05:59.112Z"
   }
 }
