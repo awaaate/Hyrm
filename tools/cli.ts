@@ -33,7 +33,17 @@ import {
   PRIORITY_ORDER,
   STATUS_ORDER,
 } from "./shared";
-import type { ToolTiming } from "./shared/types";
+import type { 
+  ToolTiming, 
+  Agent, 
+  AgentRegistry, 
+  Task, 
+  TaskStore, 
+  SystemState, 
+  Message, 
+  UserMessage, 
+  QualityStore 
+} from "./shared/types";
 
 function box(title: string, content: string): string {
   const lines = content.split("\n");
@@ -52,23 +62,23 @@ ${lines.map(l => {
 
 // Commands
 function showStatus(): void {
-  const state = readJson<any>(PATHS.state, {});
-  const registry = readJson<any>(PATHS.agentRegistry, { agents: [] });
-  const tasks = readJson<any>(PATHS.tasks, { tasks: [] });
-  const quality = readJson<any>(PATHS.qualityAssessments, {});
-  const userMsgs = readJsonl<any>(PATHS.userMessages);
+  const state = readJson<SystemState>(PATHS.state, {} as SystemState);
+  const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
+  const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
+  const quality = readJson<QualityStore>(PATHS.qualityAssessments, { assessments: [], summary: { average_score: 0, trend: "stable", total_assessed: 0, last_updated: "" } });
+  const userMsgs = readJsonl<UserMessage>(PATHS.userMessages);
   
   // Active agents (heartbeat within 2 min)
   const now = Date.now();
-  const activeAgents = registry.agents?.filter((a: any) => 
+  const activeAgents = registry.agents?.filter((a: Agent) => 
     now - new Date(a.last_heartbeat).getTime() < 2 * 60 * 1000
   ) || [];
   
-  const pendingTasks = tasks.tasks?.filter((t: any) => 
+  const pendingTasks = tasks.tasks?.filter((t: Task) => 
     t.status === "pending" || t.status === "in_progress"
   ).length || 0;
   
-  const unreadMsgs = userMsgs.filter((m: any) => !m.read).length;
+  const unreadMsgs = userMsgs.filter((m: UserMessage) => !m.read).length;
 
   console.log(`
 ${c.bgBlue}${c.white}${c.bright}  OPENCODE SYSTEM STATUS  ${c.reset}
@@ -85,7 +95,7 @@ ${c.dim}Last updated: ${new Date().toLocaleTimeString()}${c.reset}
 }
 
 function showAgents(): void {
-  const registry = readJson<any>(PATHS.agentRegistry, { agents: [] });
+  const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
   const now = Date.now();
   
   console.log(`\n${c.bright}${c.cyan}ACTIVE AGENTS${c.reset}\n`);
@@ -97,7 +107,7 @@ function showAgents(): void {
   }
   
   // Group by session
-  const bySession: Record<string, any[]> = {};
+  const bySession: Record<string, Agent[]> = {};
   for (const agent of registry.agents) {
     const session = agent.session_id || "unknown";
     if (!bySession[session]) bySession[session] = [];
@@ -133,15 +143,15 @@ function showAgents(): void {
 }
 
 function showTasks(filter?: string): void {
-  const tasks = readJson<any>(PATHS.tasks, { tasks: [] });
+  const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
   
   let filtered = tasks.tasks || [];
   if (filter && filter !== "all") {
-    filtered = filtered.filter((t: any) => t.status === filter);
+    filtered = filtered.filter((t: Task) => t.status === filter);
   }
   
   // Sort by priority then status
-  filtered.sort((a: any, b: any) => {
+  filtered.sort((a: Task, b: Task) => {
     if (STATUS_ORDER[a.status] !== STATUS_ORDER[b.status]) {
       return STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
     }
@@ -188,8 +198,8 @@ function showTasks(filter?: string): void {
 }
 
 function showMessages(count: number = 20): void {
-  const messages = readJsonl<any>(PATHS.messageBus);
-  const nonHeartbeat = messages.filter((m: any) => m.type !== "heartbeat");
+  const messages = readJsonl<Message>(PATHS.messageBus);
+  const nonHeartbeat = messages.filter((m: Message) => m.type !== "heartbeat");
   const recent = nonHeartbeat.slice(-count).reverse();
   
   console.log(`\n${c.bright}${c.magenta}AGENT MESSAGES${c.reset} ${c.dim}(last ${count}, excluding heartbeats)${c.reset}\n`);
@@ -225,8 +235,8 @@ function showMessages(count: number = 20): void {
 }
 
 function showUserMessages(): void {
-  const messages = readJsonl<any>(PATHS.userMessages);
-  const unread = messages.filter((m: any) => !m.read);
+  const messages = readJsonl<UserMessage>(PATHS.userMessages);
+  const unread = messages.filter((m: UserMessage) => !m.read);
   
   console.log(`\n${c.bright}${c.green}USER MESSAGES${c.reset} ${c.dim}(${unread.length} unread)${c.reset}\n`);
   console.log(`${c.dim}${"─".repeat(80)}${c.reset}\n`);
@@ -276,7 +286,7 @@ function sendUserMessage(message: string, urgent: boolean = false): void {
 }
 
 function showQuality(): void {
-  const quality = readJson<any>(PATHS.qualityAssessments, { assessments: [], summary: {} });
+  const quality = readJson<QualityStore>(PATHS.qualityAssessments, { assessments: [], summary: { average_score: 0, trend: "stable", total_assessed: 0, last_updated: "" } });
   
   console.log(`\n${c.bright}${c.blue}QUALITY METRICS${c.reset}\n`);
   console.log(`${c.dim}${"─".repeat(80)}${c.reset}\n`);
@@ -309,10 +319,10 @@ function showQuality(): void {
 }
 
 function pruneMessages(olderThanHours: number = 24): void {
-  const messages = readJsonl<any>(PATHS.messageBus);
+  const messages = readJsonl<Message>(PATHS.messageBus);
   const cutoff = Date.now() - olderThanHours * 60 * 60 * 1000;
   
-  const kept = messages.filter((m: any) => {
+  const kept = messages.filter((m: Message) => {
     // Keep non-heartbeat messages
     if (m.type !== "heartbeat") return true;
     // Keep recent heartbeats
@@ -321,7 +331,7 @@ function pruneMessages(olderThanHours: number = 24): void {
   
   const removed = messages.length - kept.length;
   
-  const content = kept.map((m: any) => JSON.stringify(m)).join("\n") + "\n";
+  const content = kept.map((m: Message) => JSON.stringify(m)).join("\n") + "\n";
   writeFileSync(PATHS.messageBus, content);
   
   console.log(`\n${c.green}✓ Pruned ${removed} old heartbeat messages${c.reset}`);
@@ -332,25 +342,25 @@ function startMonitor(interval: number = 2000): void {
   const render = () => {
     console.clear();
     
-    const state = readJson<any>(PATHS.state, {});
-    const registry = readJson<any>(PATHS.agentRegistry, { agents: [] });
-    const tasks = readJson<any>(PATHS.tasks, { tasks: [] });
-    const quality = readJson<any>(PATHS.qualityAssessments, {});
-    const userMsgs = readJsonl<any>(PATHS.userMessages);
-    const agentMsgs = readJsonl<any>(PATHS.messageBus);
+    const state = readJson<SystemState>(PATHS.state, {} as SystemState);
+    const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
+    const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
+    const quality = readJson<QualityStore>(PATHS.qualityAssessments, { assessments: [], summary: { average_score: 0, trend: "stable", total_assessed: 0, last_updated: "" } });
+    const userMsgs = readJsonl<UserMessage>(PATHS.userMessages);
+    const agentMsgs = readJsonl<Message>(PATHS.messageBus);
     
     const now = Date.now();
-    const activeAgents = registry.agents?.filter((a: any) => 
+    const activeAgents = registry.agents?.filter((a: Agent) => 
       now - new Date(a.last_heartbeat).getTime() < 2 * 60 * 1000
     ) || [];
     
-    const pendingTasks = tasks.tasks?.filter((t: any) => 
+    const pendingTasks = tasks.tasks?.filter((t: Task) => 
       t.status === "pending" || t.status === "in_progress"
     ) || [];
     
-    const unreadUserMsgs = userMsgs.filter((m: any) => !m.read);
+    const unreadUserMsgs = userMsgs.filter((m: UserMessage) => !m.read);
     const recentAgentMsgs = agentMsgs
-      .filter((m: any) => m.type !== "heartbeat")
+      .filter((m: Message) => m.type !== "heartbeat")
       .slice(-5)
       .reverse();
     
@@ -445,7 +455,7 @@ function startMonitor(interval: number = 2000): void {
 
 // Task management functions
 function createTask(title: string, priority: string = "medium", description?: string): void {
-  const tasks = readJson<any>(PATHS.tasks, { tasks: [] });
+  const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
   
   const newTask = {
     id: `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
@@ -468,8 +478,8 @@ function createTask(title: string, priority: string = "medium", description?: st
 }
 
 function claimTask(taskId: string): void {
-  const tasks = readJson<any>(PATHS.tasks, { tasks: [] });
-  const task = tasks.tasks.find((t: any) => t.id === taskId);
+  const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
+  const task = tasks.tasks.find((t: Task) => t.id === taskId);
   
   if (!task) {
     console.log(`${c.red}Error: Task not found: ${taskId}${c.reset}`);
@@ -493,8 +503,8 @@ function claimTask(taskId: string): void {
 }
 
 function completeTask(taskId: string, notes?: string): void {
-  const tasks = readJson<any>(PATHS.tasks, { tasks: [] });
-  const task = tasks.tasks.find((t: any) => t.id === taskId);
+  const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
+  const task = tasks.tasks.find((t: Task) => t.id === taskId);
   
   if (!task) {
     console.log(`${c.red}Error: Task not found: ${taskId}${c.reset}`);
@@ -875,17 +885,23 @@ function showRecovery(): void {
   }
   
   const { readdirSync, statSync } = require("fs");
-  const sessions = readdirSync(SESSIONS_DIR)
+  interface SessionInfo {
+    sessionId: string;
+    checkpoint: Record<string, unknown> | null;
+    handoff: Record<string, unknown> | null;
+  }
+  
+  const sessions: SessionInfo[] = readdirSync(SESSIONS_DIR)
     .filter((f: string) => {
       const path = join(SESSIONS_DIR, f);
       return statSync(path).isDirectory();
     })
-    .map((sessionId: string) => {
+    .map((sessionId: string): SessionInfo => {
       const checkpointPath = join(SESSIONS_DIR, sessionId, "checkpoint.json");
       const handoffPath = join(SESSIONS_DIR, sessionId, "handoff-state.json");
       
-      let checkpoint = null;
-      let handoff = null;
+      let checkpoint: Record<string, unknown> | null = null;
+      let handoff: Record<string, unknown> | null = null;
       
       if (existsSync(checkpointPath)) {
         try {
@@ -901,10 +917,14 @@ function showRecovery(): void {
       
       return { sessionId, checkpoint, handoff };
     })
-    .filter((s: any) => s.checkpoint || s.handoff)
-    .sort((a: any, b: any) => {
-      const aTime = a.checkpoint?.created_at || a.handoff?.updated_at || "";
-      const bTime = b.checkpoint?.created_at || b.handoff?.updated_at || "";
+    .filter((s: SessionInfo) => s.checkpoint || s.handoff)
+    .sort((a: SessionInfo, b: SessionInfo) => {
+      const aCheckpoint = a.checkpoint as Record<string, unknown> | null;
+      const bCheckpoint = b.checkpoint as Record<string, unknown> | null;
+      const aHandoff = a.handoff as Record<string, unknown> | null;
+      const bHandoff = b.handoff as Record<string, unknown> | null;
+      const aTime = (aCheckpoint?.created_at as string) || (aHandoff?.updated_at as string) || "";
+      const bTime = (bCheckpoint?.created_at as string) || (bHandoff?.updated_at as string) || "";
       return new Date(bTime).getTime() - new Date(aTime).getTime();
     })
     .slice(0, 10);
@@ -914,7 +934,11 @@ function showRecovery(): void {
     return;
   }
   
-  const recoverable = sessions.filter((s: any) => s.checkpoint?.recovery?.can_resume);
+  const recoverable = sessions.filter((s: SessionInfo) => {
+    const cp = s.checkpoint as Record<string, unknown> | null;
+    const recovery = cp?.recovery as Record<string, unknown> | undefined;
+    return recovery?.can_resume;
+  });
   
   console.log(`${c.dim}Found ${sessions.length} session(s), ${recoverable.length} recoverable${c.reset}\n`);
   
@@ -948,28 +972,36 @@ function recoverSession(sessionId?: string): void {
   
   const { readdirSync, statSync } = require("fs");
   
+  interface RecoverableSession {
+    sessionId: string;
+    checkpoint: Record<string, unknown>;
+    created_at: string;
+    can_resume: boolean;
+  }
+  
   // Find session to recover
   let targetSessionId = sessionId;
   if (!targetSessionId) {
     // Find most recent recoverable session
-    const sessions = readdirSync(SESSIONS_DIR)
+    const sessions: RecoverableSession[] = readdirSync(SESSIONS_DIR)
       .filter((f: string) => {
         const checkpointPath = join(SESSIONS_DIR, f, "checkpoint.json");
         return existsSync(checkpointPath);
       })
-      .map((f: string) => {
+      .map((f: string): RecoverableSession => {
         const checkpoint = JSON.parse(
           readFileSync(join(SESSIONS_DIR, f, "checkpoint.json"), "utf-8")
-        );
+        ) as Record<string, unknown>;
+        const recovery = checkpoint.recovery as Record<string, unknown> | undefined;
         return {
           sessionId: f,
           checkpoint,
-          created_at: checkpoint.created_at,
-          can_resume: checkpoint.recovery?.can_resume,
+          created_at: (checkpoint.created_at as string) || "",
+          can_resume: !!(recovery?.can_resume),
         };
       })
-      .filter((s: any) => s.can_resume)
-      .sort((a: any, b: any) => 
+      .filter((s: RecoverableSession) => s.can_resume)
+      .sort((a: RecoverableSession, b: RecoverableSession) => 
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
     
@@ -1148,8 +1180,8 @@ switch (command) {
       console.log(`Usage: bun tools/opencode-cli.ts task-claim <task_id>`);
       // Show pending tasks
       console.log(`\n${c.dim}Pending tasks:${c.reset}`);
-      const pendingTasks = readJson<any>(PATHS.tasks, { tasks: [] }).tasks
-        .filter((t: any) => t.status === "pending")
+      const pendingTasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" }).tasks
+        .filter((t: Task) => t.status === "pending")
         .slice(0, 5);
       for (const t of pendingTasks) {
         console.log(`  ${t.id} - ${truncate(t.title, 40)}`);
