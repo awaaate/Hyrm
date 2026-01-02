@@ -32,8 +32,8 @@
  *   ?/h     Help
  */
 
-import blessed from "blessed";
-import contrib from "blessed-contrib";
+import * as blessed from "blessed";
+import * as contrib from "blessed-contrib";
 import { existsSync, watch, writeFileSync, appendFileSync, FSWatcher } from "fs";
 import {
   PATHS,
@@ -64,13 +64,15 @@ import { VIEW_MODES, type TaskData } from "./types";
 // SCREEN SETUP
 // ============================================================================
 
+// @ts-ignore - cursor type issues with blessed types
 const screen = blessed.screen({
   smartCSR: true,
-  title: "OpenCode Terminal Dashboard v2.0",
+  title: "OpenCode Terminal Dashboard v2.1",
   cursor: {
     artificial: true,
     shape: "block",
     blink: true,
+    color: "white",
   },
 });
 
@@ -81,7 +83,7 @@ const screen = blessed.screen({
 let currentMode = "dashboard";
 let focusedPanel = 0;
 let watchers: FSWatcher[] = [];
-let refreshInterval: NodeJS.Timer | null = null;
+let refreshInterval: NodeJS.Timeout | null = null;
 
 // Panel containers for different modes
 const panels: Record<string, blessed.Widgets.BlessedElement[]> = {
@@ -938,7 +940,7 @@ function stopWatching(): void {
 
 screen.key(["q", "C-c"], () => {
   stopWatching();
-  if (refreshInterval) clearInterval(refreshInterval);
+  if (refreshInterval) clearInterval(refreshInterval as NodeJS.Timeout);
   process.exit(0);
 });
 

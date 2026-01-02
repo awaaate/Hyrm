@@ -36,12 +36,14 @@
       `nohup opencode run '...' > /dev/null 2>&1 &`
     - Workflow: task_create() -> bash spawn -> continue working -> check agent_messages()
 
-11. **New Unified Terminal Dashboard v2.0**
+11. **New Unified Terminal Dashboard v2.0 -> v2.1**
     - Created `terminal-dashboard/` folder with new structure
     - Features: 8 view modes (dashboard, agents, tasks, messages, user, conversations, quality, logs)
     - Keyboard navigation: 1-8 for views, c=claim task, m=message, r=refresh
     - Real-time file watching for instant updates
     - Unified all CLI tool features into single dashboard
+    - v2.1 additions: [n] new task, [x] cancel task, [t] tool stats
+    - Commits: bc6a287, 104d82b
 
 ### User Feedback Addressed
 - [x] agent_register not being properly used - Now auto-registers with detected role
