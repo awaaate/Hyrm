@@ -23,12 +23,12 @@
       "agent_id": "agent-1767381411670-pmsvyj",
       "session_id": "session-1767381411670",
       "started_at": "2026-01-02T19:16:51.672Z",
-      "last_heartbeat": "2026-01-02T19:17:51.682Z",
+      "last_heartbeat": "2026-01-02T19:21:54.655Z",
       "status": "active",
       "assigned_role": "orchestrator",
       "pid": 679169
     }
   ],
-  "last_updated": "2026-01-02T19:17:51.682Z",
+  "last_updated": "2026-01-02T19:21:54.655Z",
   "lock_version": 348
 }

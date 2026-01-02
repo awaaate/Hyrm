@@ -310,6 +310,48 @@ function compressKnowledgeBase(): { before: number; after: number } {
   }
 }
 
+/**
+ * Rotate sessions.jsonl - archive old events and keep recent ones
+ * Keeps the last 100 events in sessions.jsonl, archives the rest
+ */
+function rotateSessionsJsonl(): { before: number; after: number; archived: boolean; archivePath?: string } {
+  if (!existsSync(PATHS.sessions)) return { before: 0, after: 0, archived: false };
+  
+  try {
+    const content = readFileSync(PATHS.sessions, "utf-8");
+    const lines = content.trim().split("\n").filter(l => l);
+    const before = lines.length;
+    
+    // Only rotate if we have more than 200 events
+    if (before <= 200) {
+      return { before, after: before, archived: false };
+    }
+    
+    // Keep last 100 events
+    const keepCount = 100;
+    const toArchive = lines.slice(0, -keepCount);
+    const toKeep = lines.slice(-keepCount);
+    
+    // Create archive file
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const archiveDir = join(MEMORY_DIR, "session-archives");
+    if (!existsSync(archiveDir)) {
+      mkdirSync(archiveDir, { recursive: true });
+    }
+    const archivePath = join(archiveDir, `sessions-${timestamp}.jsonl`);
+    
+    // Write archive
+    writeFileSync(archivePath, toArchive.join("\n") + "\n");
+    
+    // Write rotated sessions.jsonl
+    writeFileSync(PATHS.sessions, toKeep.join("\n") + "\n");
+    
+    return { before, after: toKeep.length, archived: true, archivePath };
+  } catch {
+    return { before: 0, after: 0, archived: false };
+  }
+}
+
 // Parse working.md to extract sessions
 function parseWorkingMd(content: string): { header: string; sessions: SessionInfo[] } {
   const lines = content.split("\n");
@@ -745,6 +787,16 @@ function prune(): void {
   console.log("\n\x1b[36mCleaning working.md...\x1b[0m");
   clean();
   
+  // Rotate sessions.jsonl if needed
+  console.log("\n\x1b[36mRotating sessions.jsonl...\x1b[0m");
+  const sessResult = rotateSessionsJsonl();
+  if (sessResult.archived) {
+    console.log(`  Archived ${sessResult.before - sessResult.after} events (${sessResult.before} -> ${sessResult.after})`);
+    console.log(`  Archive: ${sessResult.archivePath}`);
+  } else {
+    console.log(`  No rotation needed (${sessResult.before} events, threshold: 200)`);
+  }
+  
   // Results
   const healthAfter = analyzeMemoryHealth();
   const tokensSaved = healthBefore.tokenEstimate - healthAfter.tokenEstimate;
@@ -867,6 +919,21 @@ switch (command) {
     const result = autoMaintenance();
     console.log("Auto-maintenance result:", result);
     break;
+  case "rotate":
+  case "rotate-sessions":
+    console.log("\n\x1b[1m\x1b[44m SESSIONS.JSONL ROTATION \x1b[0m\n");
+    const rotateResult = rotateSessionsJsonl();
+    if (rotateResult.archived) {
+      console.log(`\x1b[32m✓ Rotated sessions.jsonl\x1b[0m`);
+      console.log(`  Events archived: ${rotateResult.before - rotateResult.after}`);
+      console.log(`  Events kept: ${rotateResult.after}`);
+      console.log(`  Archive: ${rotateResult.archivePath}`);
+    } else {
+      console.log(`\x1b[33m○ No rotation needed\x1b[0m`);
+      console.log(`  Current events: ${rotateResult.before}`);
+      console.log(`  Threshold: 200`);
+    }
+    break;
   default:
     console.log(`
 Working Memory Manager
@@ -883,6 +950,7 @@ Commands:
   clean           Clean up working.md whitespace
   health          Analyze memory system health
   prune           Prune message bus and compress KB
+  rotate          Rotate sessions.jsonl (archive old events)
   auto            Run automatic maintenance
 `);
 }
@@ -892,6 +960,7 @@ export {
   analyzeMemoryHealth, 
   pruneMessageBus, 
   compressKnowledgeBase,
+  rotateSessionsJsonl,
   estimateTokens,
   calculateValueScore,
   type MemoryHealth 
