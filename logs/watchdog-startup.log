@@ -1,6 +1,7 @@
-[91m[1m| [0m[90m Bash     [0mWait for batch workers
-Checking batch workers...
 
+13
+
+[91m[1m| [0m[90m Bash     [0mCount remaining any
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 

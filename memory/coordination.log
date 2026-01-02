@@ -1493,3 +1493,4 @@
 2026-01-02T17:36:53.716Z [INFO] [agent-1767375413715-gbwret] Agent registered: agent-1767375413715-gbwret (role: worker)
 2026-01-02T17:36:53.717Z [INFO] [agent-1767375413715-gbwret] Message sent: heartbeat (broadcast)
 2026-01-02T17:37:44.624Z [INFO] [agent-1767375412637-ts4gc] Message sent: task_complete (broadcast)
+2026-01-02T17:38:39.210Z [INFO] [agent-1767375413715-gbwret] Message sent: task_complete (broadcast)
