@@ -92,41 +92,158 @@ export const MemoryPlugin: Plugin = async (ctx) => {
   // ============================================================================
 
   // Instance locking for primary/secondary coordination
-  const isPrimaryInstance = (): boolean => {
+  // New approach: Atomic registration with list-based primary election
+  // Solves race condition where multiple instances read lock simultaneously
+  //
+  // How it works:
+  // 1. All instances register immediately on load (append to list in lock file)
+  // 2. First isPrimaryInstance() call waits ELECTION_DELAY_MS to let others register
+  // 3. After delay, smallest INSTANCE_ID alphabetically wins (deterministic)
+  // 4. Result is cached - no re-election until next session
+  
+  const ELECTION_DELAY_MS = 150; // Wait for other instances to register
+  
+  interface InstanceEntry {
+    id: string;
+    timestamp: number;
+  }
+  
+  interface LockFile {
+    instances: InstanceEntry[];
+  }
+  
+  let primaryElectionDone = false;
+  let isPrimary = false;
+  const instanceStartTime = Date.now();
+  
+  // Register this instance immediately (append to list)
+  const registerInstance = (): void => {
     try {
+      let lock: LockFile = { instances: [] };
       if (existsSync(lockPath)) {
-        const lock = JSON.parse(readFileSync(lockPath, "utf-8"));
-        if (Date.now() - lock.timestamp > LOCK_STALE_THRESHOLD) {
-          writeFileSync(
-            lockPath,
-            JSON.stringify({ instance: INSTANCE_ID, timestamp: Date.now() })
-          );
-          primaryInstance = INSTANCE_ID;
-          return true;
+        try {
+          lock = JSON.parse(readFileSync(lockPath, "utf-8"));
+          if (!Array.isArray(lock.instances)) {
+            // Migrate from old format
+            lock = { instances: [] };
+          }
+        } catch {
+          lock = { instances: [] };
         }
-        return lock.instance === INSTANCE_ID;
       }
-      writeFileSync(
-        lockPath,
-        JSON.stringify({ instance: INSTANCE_ID, timestamp: Date.now() })
+      
+      // Add our instance if not already present
+      const now = Date.now();
+      const existing = lock.instances.find(i => i.id === INSTANCE_ID);
+      if (!existing) {
+        lock.instances.push({ id: INSTANCE_ID, timestamp: now });
+      } else {
+        existing.timestamp = now;
+      }
+      
+      writeFileSync(lockPath, JSON.stringify(lock, null, 2));
+    } catch {
+      // Ignore errors during registration
+    }
+  };
+  
+  // Determine primary by reading lock file and selecting smallest active ID
+  const electPrimary = (): boolean => {
+    try {
+      if (!existsSync(lockPath)) {
+        // No lock file = we become primary
+        primaryInstance = INSTANCE_ID;
+        return true;
+      }
+      
+      const lock: LockFile = JSON.parse(readFileSync(lockPath, "utf-8"));
+      if (!Array.isArray(lock.instances)) {
+        // Invalid format, we become primary
+        primaryInstance = INSTANCE_ID;
+        return true;
+      }
+      
+      const now = Date.now();
+      
+      // Filter out stale instances (older than LOCK_STALE_THRESHOLD)
+      const activeInstances = lock.instances.filter(
+        i => now - i.timestamp < LOCK_STALE_THRESHOLD
       );
-      primaryInstance = INSTANCE_ID;
-      return true;
+      
+      if (activeInstances.length === 0) {
+        // All stale, we become primary
+        primaryInstance = INSTANCE_ID;
+        return true;
+      }
+      
+      // Sort by ID alphabetically - smallest ID is primary (deterministic)
+      activeInstances.sort((a, b) => a.id.localeCompare(b.id));
+      const primaryId = activeInstances[0].id;
+      
+      if (primaryId === INSTANCE_ID) {
+        primaryInstance = INSTANCE_ID;
+        return true;
+      }
+      
+      return false;
     } catch {
       return primaryInstance === INSTANCE_ID;
     }
   };
+  
+  // Check if this instance is primary
+  // First call waits for election delay to let all instances register
+  const isPrimaryInstance = (): boolean => {
+    // Return cached result after election
+    if (primaryElectionDone) {
+      return isPrimary;
+    }
+    
+    // Wait for election delay before determining primary
+    const elapsed = Date.now() - instanceStartTime;
+    if (elapsed < ELECTION_DELAY_MS) {
+      // Too early - don't process events yet
+      // This prevents race condition during startup
+      return false;
+    }
+    
+    // Time to elect - do it once and cache
+    isPrimary = electPrimary();
+    primaryElectionDone = true;
+    return isPrimary;
+  };
 
   const refreshLock = () => {
-    if (primaryInstance === INSTANCE_ID) {
-      try {
-        writeFileSync(
-          lockPath,
-          JSON.stringify({ instance: INSTANCE_ID, timestamp: Date.now() })
-        );
-      } catch {}
+    // Only primary should refresh, but all instances update their timestamp
+    try {
+      if (!existsSync(lockPath)) return;
+      
+      const lock: LockFile = JSON.parse(readFileSync(lockPath, "utf-8"));
+      if (!Array.isArray(lock.instances)) return;
+      
+      const now = Date.now();
+      
+      // Update our timestamp
+      const ourEntry = lock.instances.find(i => i.id === INSTANCE_ID);
+      if (ourEntry) {
+        ourEntry.timestamp = now;
+      } else {
+        lock.instances.push({ id: INSTANCE_ID, timestamp: now });
+      }
+      
+      // Clean up stale instances while we're here
+      lock.instances = lock.instances.filter(
+        i => now - i.timestamp < LOCK_STALE_THRESHOLD
+      );
+      
+      writeFileSync(lockPath, JSON.stringify(lock, null, 2));
+    } catch {
+      // Ignore refresh errors
     }
   };
+  
+  // Register immediately on plugin load (before any isPrimaryInstance() calls)
+  registerInstance();
 
   // Handoff state management (per-session)
   const getHandoffStatePath = (sessionId: string | null): string => {
