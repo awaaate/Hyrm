@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-01-02T12:03:03.002Z",
+  "last_updated": "2026-01-02T12:04:23.480Z",
   "agents": {
     "agent-1767302507934-2c671j": {
       "agent_id": "agent-1767302507934-2c671j",
@@ -286,14 +286,14 @@
     "agent-1767353179414-xlsru": {
       "agent_id": "agent-1767353179414-xlsru",
       "tasks_completed": 1,
-      "tasks_claimed": 1,
+      "tasks_claimed": 2,
       "total_duration_ms": 68218,
       "avg_duration_ms": 68218,
       "quality_scores": [
         7.8
       ],
       "avg_quality": 7.8,
-      "last_activity": "2026-01-02T12:03:03.002Z",
+      "last_activity": "2026-01-02T12:04:23.480Z",
       "first_seen": "2026-01-02T12:01:25.314Z"
     }
   }

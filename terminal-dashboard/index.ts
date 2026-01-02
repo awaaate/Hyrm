@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * OpenCode Unified Terminal Dashboard v2.0
+ * OpenCode Unified Terminal Dashboard v2.1
  *
  * A comprehensive terminal UI dashboard for the multi-agent system.
  * Combines all monitoring, management, and communication features.
@@ -9,9 +9,10 @@
  * - Multiple view modes (dashboard, agents, tasks, messages, conversations, etc.)
  * - Real-time file watching for instant updates
  * - Keyboard navigation and actions
- * - Task claiming and management
+ * - Task management (claim, create, cancel)
  * - User messaging to agents
  * - OpenCode session viewing
+ * - Tool usage statistics
  *
  * Usage:
  *   bun terminal-dashboard/index.ts [mode]
@@ -21,9 +22,12 @@
  * Keyboard:
  *   1-8     Switch view modes
  *   Tab     Cycle focus between panels
- *   c       Claim selected task
+ *   c       Claim highest priority task
+ *   n       Create new task
+ *   x       Cancel selected task
  *   m       Send message to agents
  *   r       Refresh all data
+ *   t       Show tool statistics
  *   q       Quit
  *   ?/h     Help
  */
@@ -45,9 +49,14 @@ import {
   getSessionEvents,
   getOpenCodeSessions,
   getStats,
+  getToolStats,
+  getToolTiming,
   formatTimeAgo,
   truncate,
   readJson,
+  createTask,
+  cancelTask,
+  claimTask as claimTaskFn,
 } from "./data";
 import { VIEW_MODES, type TaskData } from "./types";
 
@@ -152,15 +161,17 @@ function updateStatusBar(): void {
   const stats = getStats();
 
   statusBar.setContent(
-    ` {bold}1-8{/bold}:Views | ` +
-      `{bold}Tab{/bold}:Focus | ` +
-      `{bold}c{/bold}:Claim | ` +
-      `{bold}m{/bold}:Message | ` +
-      `{bold}r{/bold}:Refresh | ` +
+    ` {bold}1-8{/bold}:Views ` +
+      `{bold}c{/bold}:Claim ` +
+      `{bold}n{/bold}:New ` +
+      `{bold}x{/bold}:Cancel ` +
+      `{bold}m{/bold}:Msg ` +
+      `{bold}t{/bold}:Tools ` +
+      `{bold}r{/bold}:Refresh ` +
       `{bold}q{/bold}:Quit ` +
-      `{|}{cyan-fg}Agents:{/cyan-fg}${stats.agents} ` +
-      `{yellow-fg}Tasks:{/yellow-fg}${stats.pendingTasks} ` +
-      `{green-fg}Msgs:{/green-fg}${stats.unreadMessages}`
+      `{|}{cyan-fg}A:{/cyan-fg}${stats.agents} ` +
+      `{yellow-fg}T:{/yellow-fg}${stats.pendingTasks} ` +
+      `{green-fg}M:{/green-fg}${stats.unreadMessages}`
   );
 }
 
@@ -657,21 +668,172 @@ function claimTask(): void {
     return (order[a.priority] || 4) - (order[b.priority] || 4);
   })[0];
 
-  try {
-    const taskStore = readJson<{ tasks: TaskData[] }>(PATHS.tasks, { tasks: [] });
-    const idx = taskStore.tasks.findIndex((t) => t.id === task.id);
-    if (idx >= 0) {
-      taskStore.tasks[idx].status = "in_progress";
-      taskStore.tasks[idx].assigned_to = "terminal-user";
-      taskStore.tasks[idx].claimed_at = new Date().toISOString();
-      writeFileSync(PATHS.tasks, JSON.stringify(taskStore, null, 2));
-      statusBar.setContent(` {green-fg}Claimed: ${truncate(task.title, 30)}{/green-fg} `);
-    }
-  } catch (e) {
+  if (claimTaskFn(task.id)) {
+    statusBar.setContent(` {green-fg}Claimed: ${truncate(task.title, 30)}{/green-fg} `);
+  } else {
     statusBar.setContent(` {red-fg}Failed to claim task{/red-fg} `);
   }
 
   render();
+}
+
+function showNewTaskPrompt(): void {
+  const prompt = blessed.prompt({
+    parent: screen,
+    top: "center",
+    left: "center",
+    width: 60,
+    height: 8,
+    border: { type: "line", fg: "yellow" },
+    label: " Create New Task ",
+    style: {
+      fg: "white",
+      bg: "black",
+      border: { fg: "yellow" },
+    },
+  });
+
+  prompt.input("Task title:", "", (err, title) => {
+    if (title && title.trim()) {
+      // Ask for priority
+      const priorityPrompt = blessed.list({
+        parent: screen,
+        top: "center",
+        left: "center",
+        width: 30,
+        height: 10,
+        border: { type: "line", fg: "yellow" },
+        label: " Priority ",
+        items: ["critical", "high", "medium", "low"],
+        keys: true,
+        vi: true,
+        style: {
+          fg: "white",
+          bg: "black",
+          border: { fg: "yellow" },
+          selected: { bg: "yellow", fg: "black" },
+        },
+      });
+
+      priorityPrompt.on("select", (item: any) => {
+        const priority = item.content;
+        const task = createTask(title.trim(), priority);
+        if (task) {
+          statusBar.setContent(` {green-fg}Created: ${truncate(title, 30)} [${priority}]{/green-fg} `);
+        } else {
+          statusBar.setContent(` {red-fg}Failed to create task{/red-fg} `);
+        }
+        priorityPrompt.destroy();
+        render();
+      });
+
+      priorityPrompt.key(["escape", "q"], () => {
+        priorityPrompt.destroy();
+        screen.render();
+      });
+
+      priorityPrompt.focus();
+      screen.render();
+    }
+    prompt.destroy();
+    screen.render();
+  });
+
+  screen.render();
+}
+
+function showCancelTaskPrompt(): void {
+  const tasks = getTasks().filter((t) => t.status === "pending" || t.status === "in_progress");
+
+  if (tasks.length === 0) {
+    statusBar.setContent(` {yellow-fg}No tasks to cancel{/yellow-fg} `);
+    screen.render();
+    return;
+  }
+
+  const taskList = blessed.list({
+    parent: screen,
+    top: "center",
+    left: "center",
+    width: 70,
+    height: 15,
+    border: { type: "line", fg: "red" },
+    label: " Select Task to Cancel ",
+    items: tasks.map((t) => `[${t.priority[0].toUpperCase()}] ${truncate(t.title, 50)} (${t.status})`),
+    keys: true,
+    vi: true,
+    style: {
+      fg: "white",
+      bg: "black",
+      border: { fg: "red" },
+      selected: { bg: "red", fg: "white" },
+    },
+  });
+
+  taskList.on("select", (item: any, index: number) => {
+    const task = tasks[index];
+    if (cancelTask(task.id)) {
+      statusBar.setContent(` {yellow-fg}Cancelled: ${truncate(task.title, 30)}{/yellow-fg} `);
+    } else {
+      statusBar.setContent(` {red-fg}Failed to cancel task{/red-fg} `);
+    }
+    taskList.destroy();
+    render();
+  });
+
+  taskList.key(["escape", "q"], () => {
+    taskList.destroy();
+    screen.render();
+  });
+
+  taskList.focus();
+  screen.render();
+}
+
+function showToolStats(): void {
+  const stats = getToolStats();
+
+  let content = `{bold}TOOL USAGE STATISTICS{/bold}\n${"─".repeat(50)}\n\n`;
+  content += `{cyan-fg}Tool                     Count   Avg Duration{/cyan-fg}\n`;
+  content += `${"─".repeat(50)}\n`;
+
+  for (const stat of stats.slice(0, 20)) {
+    const tool = stat.tool.padEnd(24);
+    const count = String(stat.count).padStart(5);
+    const duration = `${stat.avgDuration}ms`.padStart(12);
+    content += `${tool}${count}${duration}\n`;
+  }
+
+  content += `\n{dim}Showing top 20 tools by usage count{/dim}`;
+  content += `\n\n{dim}Press any key to close{/dim}`;
+
+  const statsBox = blessed.box({
+    parent: screen,
+    top: "center",
+    left: "center",
+    width: 60,
+    height: 30,
+    border: { type: "line", fg: "cyan" },
+    label: " Tool Statistics ",
+    content,
+    tags: true,
+    scrollable: true,
+    keys: true,
+    vi: true,
+    style: {
+      fg: "white",
+      bg: "black",
+      border: { fg: "cyan" },
+    },
+  });
+
+  statsBox.key(["escape", "q", "enter", "space"], () => {
+    statsBox.destroy();
+    screen.render();
+  });
+
+  statsBox.focus();
+  screen.render();
 }
 
 function showHelp(): void {
@@ -680,11 +842,11 @@ function showHelp(): void {
     top: "center",
     left: "center",
     width: 65,
-    height: 25,
+    height: 30,
     border: { type: "line", fg: "cyan" },
     label: " Help ",
     content: `
-{bold}OpenCode Terminal Dashboard v2.0{/bold}
+{bold}OpenCode Terminal Dashboard v2.1{/bold}
 
 {cyan-fg}VIEW MODES:{/cyan-fg}
   1   Dashboard     System overview
@@ -699,7 +861,10 @@ function showHelp(): void {
 {cyan-fg}ACTIONS:{/cyan-fg}
   Tab     Cycle focus
   c       Claim highest priority pending task
+  n       Create new task
+  x       Cancel/select task to cancel
   m       Send message to agents
+  t       Show tool usage statistics
   r       Refresh all data
   
 {cyan-fg}NAVIGATION:{/cyan-fg}
@@ -789,6 +954,18 @@ screen.key(["m"], () => {
 
 screen.key(["c"], () => {
   claimTask();
+});
+
+screen.key(["n"], () => {
+  showNewTaskPrompt();
+});
+
+screen.key(["x"], () => {
+  showCancelTaskPrompt();
+});
+
+screen.key(["t"], () => {
+  showToolStats();
 });
 
 screen.key(["h", "?"], () => {

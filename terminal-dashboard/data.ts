@@ -4,15 +4,15 @@
 
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import type {
-  AgentData,
-  TaskData,
-  MessageData,
-  UserMessageData,
-  QualityData,
-  StateData,
-  SessionEvent,
-  OpenCodeSession,
+import {
+  type AgentData,
+  type TaskData,
+  type MessageData,
+  type UserMessageData,
+  type QualityData,
+  type StateData,
+  type SessionEvent,
+  type OpenCodeSession,
 } from "./types";
 
 // Paths
@@ -233,4 +233,83 @@ export function getStats() {
     avgQuality: quality.summary?.average_score || 0,
     qualityTrend: quality.summary?.trend || "stable",
   };
+}
+
+// Tool statistics
+export function getToolStats(): { tool: string; count: number; avgDuration: number }[] {
+  const timing = getToolTiming(1000);
+  const stats: Record<string, { count: number; totalDuration: number }> = {};
+
+  for (const entry of timing) {
+    if (!stats[entry.tool]) {
+      stats[entry.tool] = { count: 0, totalDuration: 0 };
+    }
+    stats[entry.tool].count++;
+    stats[entry.tool].totalDuration += entry.duration_ms || 0;
+  }
+
+  return Object.entries(stats)
+    .map(([tool, data]) => ({
+      tool,
+      count: data.count,
+      avgDuration: Math.round(data.totalDuration / data.count),
+    }))
+    .sort((a, b) => b.count - a.count);
+}
+
+// Get task by ID
+export function getTaskById(taskId: string): TaskData | undefined {
+  const tasks = getTasks();
+  return tasks.find((t) => t.id === taskId);
+}
+
+// Create a new task
+export function createTask(title: string, priority: string = "medium"): TaskData | null {
+  try {
+    const taskStore = readJson<{ tasks: TaskData[] }>(PATHS.tasks, { tasks: [] });
+    const newTask: TaskData = {
+      id: `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      title,
+      priority,
+      status: "pending",
+      created_at: new Date().toISOString(),
+    };
+    taskStore.tasks.push(newTask);
+    require("fs").writeFileSync(PATHS.tasks, JSON.stringify(taskStore, null, 2));
+    return newTask;
+  } catch {
+    return null;
+  }
+}
+
+// Cancel a task
+export function cancelTask(taskId: string): boolean {
+  try {
+    const taskStore = readJson<{ tasks: TaskData[] }>(PATHS.tasks, { tasks: [] });
+    const idx = taskStore.tasks.findIndex((t) => t.id === taskId);
+    if (idx >= 0) {
+      taskStore.tasks[idx].status = "cancelled";
+      taskStore.tasks[idx].updated_at = new Date().toISOString();
+      require("fs").writeFileSync(PATHS.tasks, JSON.stringify(taskStore, null, 2));
+      return true;
+    }
+  } catch {}
+  return false;
+}
+
+// Claim a task
+export function claimTask(taskId: string, assignee: string = "terminal-user"): boolean {
+  try {
+    const taskStore = readJson<{ tasks: TaskData[] }>(PATHS.tasks, { tasks: [] });
+    const idx = taskStore.tasks.findIndex((t) => t.id === taskId);
+    if (idx >= 0 && taskStore.tasks[idx].status === "pending") {
+      taskStore.tasks[idx].status = "in_progress";
+      taskStore.tasks[idx].assigned_to = assignee;
+      taskStore.tasks[idx].claimed_at = new Date().toISOString();
+      taskStore.tasks[idx].updated_at = new Date().toISOString();
+      require("fs").writeFileSync(PATHS.tasks, JSON.stringify(taskStore, null, 2));
+      return true;
+    }
+  } catch {}
+  return false;
 }

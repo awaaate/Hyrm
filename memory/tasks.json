@@ -1445,16 +1445,18 @@
       "title": "Enhance terminal dashboard with full agent/message viewing",
       "description": "Add ability to: view OpenCode messages per agent, select agents, see tools used, add/cancel tasks, restart services, view all messages. Consider token tracking.",
       "priority": "high",
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2026-01-02T12:00:46.085Z",
-      "updated_at": "2026-01-02T12:00:46.085Z",
+      "updated_at": "2026-01-02T12:04:23.478Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
         "enhancement"
       ],
       "estimated_hours": 4,
-      "complexity": "complex"
+      "complexity": "complex",
+      "assigned_to": "agent-1767353179414-xlsru",
+      "claimed_at": "2026-01-02T12:04:23.478Z"
     },
     {
       "id": "task_1767355248113_jdg91d",
@@ -1546,5 +1548,5 @@
     }
   ],
   "completed_count": 66,
-  "last_updated": "2026-01-02T12:02:33.534Z"
+  "last_updated": "2026-01-02T12:04:23.478Z"
 }
