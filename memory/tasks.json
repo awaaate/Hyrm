@@ -1843,8 +1843,44 @@
       "notes": [
         "[2026-01-02T17:36:24.683Z] Worker completed. Commit: 1c1644c"
       ]
+    },
+    {
+      "id": "task_1767377215299_cbhif5",
+      "title": "Fix duplicate logging bug in plugin (4x events)",
+      "description": "The plugin is logging every event 4 times. The isPrimaryInstance() check is only in the event handler but not in tool.execute.before, tool.execute.after, and config hooks. Need to add the check to all hooks that do logging/writing.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T18:06:55.299Z",
+      "updated_at": "2026-01-02T18:08:47.825Z",
+      "created_by": "ses_4801e0610ffeAthLl6itj05o4L",
+      "tags": [
+        "bug",
+        "plugin",
+        "observability"
+      ],
+      "complexity": "simple",
+      "completed_at": "2026-01-02T18:08:47.823Z",
+      "notes": [
+        "[2026-01-02T18:08:47.825Z] Worker completed. Commit 5882dc9 added isPrimaryInstance() check to tool.execute.before, tool.execute.after, and config hooks."
+      ]
+    },
+    {
+      "id": "task_1767377656074_mk1m0r",
+      "title": "Fix isPrimaryInstance() race condition",
+      "description": "Fix the race condition in isPrimaryInstance() function in .opencode/plugin/index.ts. \n\nThe bug: 4 plugin instances are created simultaneously. They all read the lock file at the same time before any can write it, so all 4 believe they are primary.\n\nSolution: Use INSTANCE_ID as a deterministic tiebreaker. Track all instance IDs in the lock file and only allow the lexicographically smallest ID to be primary. This eliminates the race condition.\n\nChanges needed:\n1. Modify isPrimaryInstance() to write INSTANCE_ID to lock file immediately\n2. Add a short delay (50-100ms) before checking if this instance is primary\n3. The instance with the smallest INSTANCE_ID among those written wins\n4. Verify by running a tool call and checking realtime.log shows only 1 entry",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-02T18:14:16.074Z",
+      "updated_at": "2026-01-02T18:14:16.074Z",
+      "created_by": "ses_4801696dcffez48Sd6iw0YC2YR",
+      "tags": [
+        "bug-fix",
+        "plugin",
+        "race-condition"
+      ],
+      "complexity": "moderate"
     }
   ],
-  "completed_count": 86,
-  "last_updated": "2026-01-02T17:36:24.683Z"
+  "completed_count": 87,
+  "last_updated": "2026-01-02T18:14:16.074Z"
 }

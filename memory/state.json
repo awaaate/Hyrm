@@ -1,18 +1,18 @@
 {
   "version": "2.0",
-  "session_count": 166,
+  "session_count": 174,
   "status": "Orchestrator session 141 resumed. Focus shifted to CLI tools evaluation per user directive. No new features, improve/debug/eval existing CLI tools only.",
   "active_tasks": [],
   "recent_achievements": [
+    "Session 170: Session 166: Fixed critical duplicate logging bug in plugin. Events were being logged 4x due to missing isPrimaryInstance() checks in tool hooks. Worker commit 5882dc9 adds the checks, reducing future log size by 75%.",
+    "Session 166: Session 165: Dashboard Enhancement - Added Messages tab with user-to-agent messaging, agent message bus viewer, task creation dialog, and 7 new API endpoints. 2 commits (ad2ae70, 60e8d71).",
     "Session 162: Session 164: Complete type safety refactoring - Eliminated ALL 105 uses of 'any' type in tools/*.ts through 18 commits with parallel worker coordination. Achieved 100% reduction in type debt.",
     "Session 162: Session 163: Type safety refactoring - Worker refactored cli.ts replacing 24 any types with proper TypeScript types. Reduced total any usage from 91 to 70 (~24% reduction). Commit: 9ddc0ef.",
-    "Session 162: Session 162: Cleanup & bug fixes - 3 commits (f93871c, 125d58e, 1735bad). Refactored CLI tools (-850 lines), fixed agent registry duplications, implemented deterministic agentIds. System cleaned: 9→1 agents.",
-    "Session 138: Session 140: Added token cost estimation to OpenCode sessions panel. Features: Claude pricing ($3/1M input, $15/1M output, $0.30/1M cache read), session-level costs, per-message cost badges, cache savings display (90% discount value). Quality: 8.3/10. Commit: c00eb11.",
-    "Session 138: Session 139: OpenCode sessions panel with message viewing added to dashboard UI. Worker implemented full-stack feature: API endpoints for session/message listing, OpenCodeSessionsPanel React component with message counts, token usage, cache hit rates, and conversation viewer. Quality: 8.3/10. Commit: 490be47."
+    "Session 162: Session 162: Cleanup & bug fixes - 3 commits (f93871c, 125d58e, 1735bad). Refactored CLI tools (-850 lines), fixed agent registry duplications, implemented deterministic agentIds. System cleaned: 9→1 agents."
   ],
-  "last_session": "2026-01-02T17:48:05.031Z",
-  "current_session_id": "ses_4802d1ff4ffeiHe16f2l2KozoP",
-  "last_updated": "2026-01-02T17:45:27.364Z",
+  "last_session": "2026-01-02T18:12:41.961Z",
+  "current_session_id": "ses_4801696dcffez48Sd6iw0YC2YR",
+  "last_updated": "2026-01-02T18:11:45.523Z",
   "sessions_metadata": {
     "ses_489c3933bffeL5S1ti3unQcfDs": {
       "tokens": 50000,

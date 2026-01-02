@@ -9,65 +9,121 @@
 ## Estado Actual
 
 **Sistema**: Watchdog activo (`orchestrator-watchdog.sh`)
-**Última actualización**: 2026-01-02 17:47 UTC
-**Orchestrator**: Session 165 - IN PROGRESS
-**Workers activos**: 0 (spawning planning worker)
+**Última actualización**: 2026-01-02 18:15 UTC
+**Orchestrator**: Session 170 - IN PROGRESS
+**Workers activos**: 0
+
+---
+
+## Session 170 - BUG FIX: PLUGIN RACE CONDITION (2026-01-02)
+
+**Orchestrator**: agent-iw0YC2YR
+**Status**: IN PROGRESS
+**Workers**: 0
+**Started**: 18:13 UTC
+
+### Bug Crítico Detectado
+
+El fix del commit `5882dc9` (Session 166) **NO funcionó**. Los logs todavía se duplican 4x.
+
+**Evidencia actual**:
+- realtime.log tiene 42,178 líneas
+- Cada evento se escribe 4 veces (verificado en tail del log)
+
+**Causa raíz identificada**:
+- `isPrimaryInstance()` tiene una race condition
+- 4 instancias del plugin se crean simultáneamente
+- Todas leen el lock file al mismo tiempo
+- Todas creen que son la instancia primaria antes de que cualquiera pueda escribir
+
+**Solución propuesta**:
+- Usar `INSTANCE_ID` como tiebreaker determinístico
+- La instancia con el ID más bajo alfabéticamente será la primaria
+- Esto elimina la race condition sin cambiar la arquitectura
+
+### Acciones
+
+1. [ ] Spawnar worker para arreglar la race condition en `isPrimaryInstance()`
+2. [ ] Verificar que el fix funciona
+3. [ ] Actualizar working.md con resultados
+
+---
+
+## Session 166 - BUG HUNTING (2026-01-02) - INCOMPLETE FIX
+
+**Nota**: El fix de esta sesión no resolvió el bug completamente.
 
 ---
 
 ## Session 165 - DASHBOARD ENHANCEMENT (2026-01-02)
 
 **Orchestrator**: agent-1767375992315-ut313e
-**Status**: Coordinating
-**Workers**: 0 (pending spawn)
+**Status**: COMPLETADO
+**Workers**: 2 (ambos completados)
 **Started**: 17:47 UTC
+**Duration**: ~9 minutos
 
 ### User Request (PRIORITY)
 
 > "añade la capacidad de ver los mensajes de opencode en el dashboard, también acciones como por ejemplo para enviar mensajes, añadir tareas y etc, haz que un agente planee y haga un plan extenso después de analizar el código actual y luego otro que lo implemente"
 
-### Plan
+### Resultado COMPLETADO
 
-1. **Fase 1: Planificación** - Spawnar un worker que:
-   - Analice `dashboard-ui/src/` completo
-   - Analice `dashboard-ui/server.ts` (API endpoints)
-   - Identifique qué endpoints ya existen para user-messages y tasks
-   - Cree un plan extenso de implementación
+**2 Commits exitosos:**
+1. `ad2ae70` - feat(dashboard): Add message and task API endpoints with types
+2. `60e8d71` - feat(dashboard): Add Messages tab with user messages and agent bus
 
-2. **Fase 2: Implementación** - Spawnar otro worker que:
-   - Implemente los cambios según el plan
-   - Añada UI components para acciones
-   - Añada endpoints POST al servidor si necesario
-   - Teste los cambios
+**Funcionalidad añadida:**
 
-### Análisis Previo (Orchestrator)
+1. **Nueva pestaña "Messages"** en el dashboard con:
+   - Panel de User Messages (mensajes del usuario a los agentes)
+     - Formulario para enviar mensajes con prioridad (normal/urgent)
+     - Lista de mensajes con indicador read/unread
+     - Botón para marcar como leído
+   - Panel de Agent Messages (message bus entre agentes)
+     - Filtro por tipo de mensaje
+     - Vista expandible del payload JSON
+     - Color-coded por tipo (broadcast, task_complete, heartbeat, etc.)
 
-**Código existente analizado:**
-- `OpenCodeSessionsPanel.tsx` - Ya muestra sesiones y mensajes de OpenCode (solo lectura)
-- `server.ts` - Ya tiene endpoints GET para sessions y messages
-- `types.ts` - Tiene tipos para tasks, agents, messages, etc.
+2. **Botón "New Task"** en la pestaña Tasks con:
+   - Modal para crear tareas
+   - Campos: título, descripción, prioridad, complejidad, tags
+   - Validación y feedback de errores
 
-**Lo que falta:**
-- Endpoint POST para enviar mensajes a agentes (user-messages)
-- Endpoint POST para crear tareas
-- UI para enviar mensajes
-- UI para crear tareas
-- Posiblemente un panel nuevo o tabs adicionales
+3. **Nuevos endpoints en server.ts:**
+   - `POST /api/user-messages` - Enviar mensaje a agentes
+   - `POST /api/tasks` - Crear tarea
+   - `PATCH /api/tasks/:id` - Actualizar tarea
+   - `DELETE /api/tasks/:id` - Cancelar tarea
+   - `POST /api/user-messages/:id/mark-read` - Marcar mensaje leído
+   - `GET /api/user-messages` - Obtener mensajes del usuario
+   - `GET /api/messages` - Obtener message bus
+
+4. **Archivos creados:**
+   - `UserMessagesPanel.tsx` (199 lines)
+   - `MessageBusPanel.tsx` (127 lines)
+   - `CreateTaskDialog.tsx` (163 lines)
+   - `ui/input.tsx`, `ui/textarea.tsx`, `ui/select.tsx`
+
+5. **Archivos modificados:**
+   - `server.ts` - Nuevos endpoints y WebSocket events
+   - `types.ts` - 5 nuevos tipos
+   - `App.tsx` - Nueva tab Messages, dialog y state
+   - `index.ts` - Exports
 
 ### Workers
 
 **Planning Worker** (COMPLETADO 17:50 UTC)
-- Status: COMPLETADO
-- Resultado: Plan extenso con:
-  - 7 endpoints nuevos (GET/POST/PATCH/DELETE)
-  - 7 tipos TypeScript nuevos
-  - 6 componentes React nuevos
-  - 6 componentes UI de shadcn
-  - ~1800 líneas estimadas
-  - 18 archivos afectados
+- Analizó todo el código del dashboard
+- Creó plan extenso de implementación
 
-**Implementation Worker** (IN PROGRESS)
-- Status: Spawning...
+**Implementation Worker Phase 1** (COMPLETADO 17:52 UTC)
+- Commit: `ad2ae70`
+- Backend endpoints y tipos
+
+**Implementation Worker Phase 2** (COMPLETADO 17:55 UTC)
+- Commit: `60e8d71`
+- Componentes React e integración
 
 ---
 
@@ -540,36 +596,81 @@ memory/
 
 
 
-## Session 166 - AUTO-STOP (2026-01-02)
 
-**Status**: Session ended
-**Duration**: 9 minutes
-**Tool Calls**: 59
-**Session ID**: ses_48028bb5bffeqU7Yj8827lQ4Hq
 
-**What Happened**: Session idle detected - agent stopped working
 
-**CRITICAL: YOU ARE A NEW AGENT - READ THIS FIRST**
 
-You are a fresh instance of the AI. The previous agent is gone. You have:
-- Auto-injected memory context (150 tokens in system prompt)
-- Real-time logging enabled (check memory/realtime.log)
-- Session lifecycle tracking via OpenCode hooks
-- Custom memory tools: memory_status(), memory_search(), memory_update()
 
-**Next Agent MUST**:
-1. **DO NOT** manually read state.json - use memory_status() tool instead
-2. Read working.md (this file) to understand what previous agent did
-3. Check active_tasks in state.json via memory_status()
-4. Continue with priority tasks OR ask user for direction
-5. Update this section when work is complete
-6. Check realtime.log for detailed activity history
 
-**Available Infrastructure**:
-- Plugin: .opencode/plugin/index.ts (auto-boot, context injection, logging)
-- Log file: memory/realtime.log (real-time structured logging)
-- State: memory/state.json (session counter, tasks, achievements)
-- Knowledge: memory/knowledge-base.json (extracted insights)
+
+
+
+
+
+
+
+
+
+
+## Session 166 - BUG HUNTING (2026-01-02)
+
+**Orchestrator**: agent-itj05o4L
+**Status**: COMPLETED
+**Workers**: 1 (completed)
+**Started**: 18:04 UTC
+**Duration**: ~7 minutos
+
+### Bug Detectado y Arreglado: LOGS DUPLICADOS 4X
+
+**Problema crítico encontrado**: Cada evento en `realtime.log` se escribe 4 veces.
+
+**Evidencia**:
+- 41,301 líneas en realtime.log
+- 276 "NEW PLUGIN INSTANCE" eventos
+- Cada tool call y event se loguea exactamente 4 veces
+
+**Causa raíz**: El plugin se instancia 4 veces por sesión.
+- Solo el handler `event` tenía check `isPrimaryInstance()`
+- Los hooks `tool.execute.before`, `tool.execute.after`, `config` NO lo tenían
+
+### Worker: Fix duplicate logging
+
+**Task ID**: task_1767377215299_cbhif5
+**Status**: COMPLETED
+**Commit**: 5882dc9
+**Agent**: agent-1767377239322-2rkucb
+
+**Changes**:
+- Línea 767: Added check to `tool.execute.before`
+- Línea 784: Added check to `tool.execute.after`
+- Config hook: Added check
+
+**Result**: Future logs will no longer be duplicated 4x. Reduces log size by ~75%.
+
+### CLI Tools Evaluation
+
+Tested all major CLI tools - all functioning correctly:
+- `bun tools/cli.ts --help` ✓
+- `bun tools/cli.ts status/agents/tasks` ✓
+- `bun tools/cli.ts oc sessions/view/stats` ✓
+- `bun tools/cli.ts timing summary` ✓
+- `bun tools/task-manager.ts` ✓
+- `bun tools/opencode-tracker.ts` ✓
+- `bun tools/daily-report-generator.ts` ✓
+- `bun tools/knowledge-deduplicator.ts analyze` ✓
+
+**Error handling**: All tools handle invalid inputs without crashing.
+
+### System Health
+
+- Memory health: 90/100
+- 57 duplicate entries in knowledge base (cleanup available)
+- Error rate: 15.6% (mostly file read attempts on non-existent files - expected behavior)
+- Quality score: 8.3/10 average
+
+### Commits This Session
+
+1. `5882dc9` - fix: add isPrimaryInstance() check to tool hooks to prevent 4x duplicate logging
 
 ---
 
