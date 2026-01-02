@@ -1,20 +1,6 @@
-4 workers spawned in parallel
+[91m[1m| [0m[90m Bash     [0mWait for batch workers
+Checking batch workers...
 
-
-
-[91m[1m| [0m[90m Bash     [0mSpawn 4 workers in parallel[*] [Memory] Detected agent role: orchestrator 
-[Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Detected agent role: orchestrator 
-[Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Detected agent role: orchestrator 
-[Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Detected agent role: orchestrator 
-[Memory] Context injected into system prompt (role: orchestrator)
-[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01VnZnMop5UGVyjmZsaL993D","duration_ms":2,"output_length":641,"success":true}
-[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01VnZnMop5UGVyjmZsaL993D","duration_ms":3,"output_length":641,"success":true}
-[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01VnZnMop5UGVyjmZsaL993D","duration_ms":6,"output_length":641,"success":true}
-[*] [Memory] Tool executed: agent_status {"tool":"agent_status","call_id":"toolu_01VnZnMop5UGVyjmZsaL993D","duration_ms":6,"output_length":641,"success":true}
-[94m[1m| [0m[90m agent_status  [0mUnknown
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
@@ -23,4 +9,3 @@
 [Memory] Context injected into system prompt (role: orchestrator)
 [*] [Memory] Detected agent role: orchestrator 
 [Memory] Context injected into system prompt (role: orchestrator)
-4 agentes. Los nuevos workers se están iniciando. Voy a esperar:

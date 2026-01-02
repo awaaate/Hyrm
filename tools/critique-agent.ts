@@ -591,7 +591,7 @@ function critiqueTask(taskId: string): void {
   }
   
   // Check quality assessment
-  const quality = readJson<{ assessments: any[] }>(PATHS.qualityAssessments, { assessments: [] });
+  const quality = readJson<QualityAssessmentsData>(PATHS.qualityAssessments, { assessments: [] });
   const assessment = quality.assessments.find(a => a.task_id === task.id);
   
   if (assessment) {
@@ -680,7 +680,7 @@ function critiqueSystem(): void {
   }
   
   // Check quality assessments
-  const quality = readJson<{ assessments: any[] }>(PATHS.qualityAssessments, { assessments: [] });
+  const quality = readJson<QualityAssessmentsData>(PATHS.qualityAssessments, { assessments: [] });
   if (quality.assessments.length > 0) {
     const avgScore = quality.assessments.reduce((sum, a) => sum + a.overall_score, 0) / quality.assessments.length;
     if (avgScore >= 8) {
@@ -702,13 +702,13 @@ function critiqueSystem(): void {
   }
   
   // Check knowledge base
-  const knowledge = readJson<{ entries: any[] }>(PATHS.knowledgeBase, { entries: [] });
+  const knowledge = readJson<KnowledgeBaseData>(PATHS.knowledgeBase, { entries: [] });
   if (knowledge.entries && knowledge.entries.length > 0) {
     positives.push(`Knowledge base has ${knowledge.entries.length} entries`);
   }
   
   // Check session state
-  const state = readJson<any>(PATHS.state, {});
+  const state = readJson<StateData>(PATHS.state, {});
   if (state.session_count) {
     positives.push(`${state.session_count} sessions completed`);
   }

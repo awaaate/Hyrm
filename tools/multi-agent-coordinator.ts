@@ -489,7 +489,7 @@ class MultiAgentCoordinator {
   /**
    * Report task completion
    */
-  completeTask(taskId: string, result?: any): void {
+  completeTask(taskId: string, result?: Record<string, unknown>): void {
     this.sendMessage({
       type: "task_complete",
       payload: {
@@ -526,7 +526,7 @@ class MultiAgentCoordinator {
     const messages = this.readMessages();
     return messages.some(m => 
       m.type === "task_claim" && 
-      m.payload.task_id === taskId
+      (m.payload as TaskClaimPayload).task_id === taskId
     );
   }
 
@@ -697,4 +697,17 @@ Examples:
 }
 
 export { MultiAgentCoordinator };
-export type { Agent, AgentRegistry, Message };
+export type { 
+  Agent, 
+  AgentRegistry, 
+  Message, 
+  MessagePayload,
+  BroadcastPayload,
+  HeartbeatPayload,
+  TaskClaimPayload,
+  TaskCompletePayload,
+  RequestHelpPayload,
+  TaskAvailablePayload,
+  FileLockPayload,
+  DirectPayload,
+};

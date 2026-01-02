@@ -269,7 +269,7 @@ function analyzeAgentProfiles(): Record<string, AgentProfile> {
   }
   
   // Analyze message bus for tool usage per agent
-  const messages = readJsonl<any>(PATHS.messageBus);
+  const messages = readJsonl<MessageBusEntry>(PATHS.messageBus);
   for (const msg of messages) {
     const agentId = msg.from;
     if (agentId && profiles[agentId]) {
@@ -289,7 +289,7 @@ function analyzeErrorPatterns(): ErrorPattern[] {
   const patterns: Map<string, ErrorPattern> = new Map();
   
   // Analyze session errors
-  const sessionEvents = readJsonl<any>(PATHS.sessions);
+  const sessionEvents = readJsonl<SessionEvent>(PATHS.sessions);
   for (const event of sessionEvents) {
     if (event.type === "session_error" && event.error) {
       const errorName = event.error.name || "UnknownError";
@@ -320,7 +320,7 @@ function analyzeErrorPatterns(): ErrorPattern[] {
       
       const p = patterns.get(pattern)!;
       p.count++;
-      p.lastOccurred = event.timestamp;
+      p.lastOccurred = event.timestamp || "";
       
       // Determine severity based on count
       if (p.count > 10) p.severity = "critical";
