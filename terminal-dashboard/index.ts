@@ -17,10 +17,10 @@
  * Usage:
  *   bun terminal-dashboard/index.ts [mode]
  *
- * Modes: dashboard, agents, tasks, messages, user, conversations, quality, logs
+ * Modes: dashboard, agents, tasks, messages, user, conversations, tokens, quality, logs
  *
  * Keyboard:
- *   1-8     Switch view modes
+ *   1-9     Switch view modes
  *   Tab     Cycle focus between panels
  *   c       Claim highest priority task
  *   n       Create new task
@@ -53,6 +53,7 @@ import {
   renderMessagesContent,
   renderUserMessagesContent,
   renderConversationsContent,
+  renderTokensContent,
   renderQualityContent,
   renderLogsContent,
   renderToolStatsContent,
@@ -91,6 +92,7 @@ const panels: Record<string, blessed.Widgets.BlessedElement[]> = {
   messages: [],
   user: [],
   conversations: [],
+  tokens: [],
   quality: [],
   logs: [],
 };
@@ -161,7 +163,7 @@ function updateStatusBar(): void {
   const stats = getStats();
 
   statusBar.setContent(
-    ` {bold}1-8{/bold}:Views ` +
+    ` {bold}1-9{/bold}:Views ` +
       `{bold}c{/bold}:Claim ` +
       `{bold}n{/bold}:New ` +
       `{bold}x{/bold}:Cancel ` +
@@ -205,6 +207,11 @@ function renderConversations(): void {
   mainBox.setLabel(" Conversations ");
 }
 
+function renderTokens(): void {
+  mainBox.setContent(renderTokensContent());
+  mainBox.setLabel(" Token Usage ");
+}
+
 function renderQuality(): void {
   mainBox.setContent(renderQualityContent());
   mainBox.setLabel(" Quality ");
@@ -237,6 +244,9 @@ function render(): void {
       break;
     case "conversations":
       renderConversations();
+      break;
+    case "tokens":
+      renderTokens();
       break;
     case "quality":
       renderQuality();
@@ -499,8 +509,9 @@ function showHelp(): void {
   4   Messages      Agent messages
   5   User          User messages to agents
   6   Conversations OpenCode sessions
-  7   Quality       Quality metrics
-  8   Logs          Real-time logs
+  7   Tokens        Token usage analytics
+  8   Quality       Quality metrics
+  9   Logs          Real-time logs
 
 {cyan-fg}ACTIONS:{/cyan-fg}
   Tab     Cycle focus

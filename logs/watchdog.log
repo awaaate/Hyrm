@@ -163,3 +163,133 @@
 [2026-01-02T11:26:14+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
 [2026-01-02T11:26:14+00:00] [OK] Orchestrator started with PID: 468344
 [2026-01-02T11:26:19+00:00] [OK] Orchestrator confirmed running
+[2026-01-02T12:30:57+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-02T12:30:57+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-02T12:30:57+00:00] [OK] Orchestrator started with PID: 508141
+[2026-01-02T12:31:00+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:31:01+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:31:02+00:00] [WARN] Received shutdown signal
+[2026-01-02T12:31:02+00:00] [INFO] Stopping watchdog...
+[2026-01-02T12:31:02+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:31:02+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:31:02+00:00] [OK] Watchdog stopped
+[2026-01-02T12:31:19+00:00] [INFO] Starting watchdog in background...
+[2026-01-02T12:31:19+00:00] [INFO] =========================================
+[2026-01-02T12:31:19+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-02T12:31:19+00:00] [INFO] Check interval: 30s
+[2026-01-02T12:31:19+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T12:31:19+00:00] [INFO] Token limit: 150000
+[2026-01-02T12:31:19+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-02T12:31:19+00:00] [INFO] Watchdog PID: 508328
+[2026-01-02T12:31:19+00:00] [INFO] =========================================
+[2026-01-02T12:31:19+00:00] [INFO] Applying restart backoff: 120s (restart #2)
+[2026-01-02T12:33:19+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-02T12:33:19+00:00] [OK] Orchestrator started with PID: 508557 (model: anthropic/claude-opus-4-5)
+[2026-01-02T12:33:25+00:00] [OK] Orchestrator confirmed running
+[2026-01-02T12:35:55+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:35:55+00:00] [WARN] Received shutdown signal
+[2026-01-02T12:35:55+00:00] [INFO] Stopping watchdog...
+[2026-01-02T12:35:55+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:35:55+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:35:55+00:00] [OK] Watchdog stopped
+[2026-01-02T12:35:56+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:37:25+00:00] [INFO] Starting watchdog in background...
+[2026-01-02T12:37:26+00:00] [INFO] =========================================
+[2026-01-02T12:37:26+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-02T12:37:26+00:00] [INFO] Check interval: 30s
+[2026-01-02T12:37:26+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T12:37:26+00:00] [INFO] Token limit: 150000
+[2026-01-02T12:37:26+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-02T12:37:26+00:00] [INFO] Watchdog PID: 510959
+[2026-01-02T12:37:26+00:00] [INFO] =========================================
+[2026-01-02T12:37:26+00:00] [INFO] Applying restart backoff: 240s (restart #3)
+[2026-01-02T12:39:05+00:00] [INFO] Starting watchdog in background...
+[2026-01-02T12:39:05+00:00] [WARN] Watchdog already running with PID: 510959
+[2026-01-02T12:39:26+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:39:26+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:39:34+00:00] [INFO] Starting watchdog in background...
+[2026-01-02T12:39:34+00:00] [INFO] =========================================
+[2026-01-02T12:39:34+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-02T12:39:34+00:00] [INFO] Check interval: 30s
+[2026-01-02T12:39:34+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T12:39:34+00:00] [INFO] Token limit: 150000
+[2026-01-02T12:39:34+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-02T12:39:34+00:00] [INFO] Watchdog PID: 511188
+[2026-01-02T12:39:34+00:00] [INFO] =========================================
+[2026-01-02T12:39:34+00:00] [INFO] Applying restart backoff: 480s (restart #4)
+[2026-01-02T12:39:43+00:00] [WARN] Watchdog already running with PID: 511188
+[2026-01-02T12:39:47+00:00] [INFO] Starting watchdog in background...
+[2026-01-02T12:39:47+00:00] [WARN] Watchdog already running with PID: 511188
+[2026-01-02T12:40:25+00:00] [WARN] Watchdog already running with PID: 511188
+[2026-01-02T12:41:26+00:00] [WARN] Received shutdown signal
+[2026-01-02T12:41:26+00:00] [INFO] Stopping watchdog...
+[2026-01-02T12:41:26+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:41:26+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:41:26+00:00] [OK] Watchdog stopped
+[2026-01-02T12:46:42+00:00] [INFO] =========================================
+[2026-01-02T12:46:42+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-02T12:46:42+00:00] [INFO] Check interval: 30s
+[2026-01-02T12:46:42+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T12:46:42+00:00] [INFO] Token limit: 150000
+[2026-01-02T12:46:42+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-02T12:46:42+00:00] [INFO] Watchdog PID: 512217
+[2026-01-02T12:46:42+00:00] [INFO] =========================================
+[2026-01-02T12:46:42+00:00] [INFO] Applying restart backoff: 600s (restart #5)
+[2026-01-02T12:48:46+00:00] [WARN] Received shutdown signal
+[2026-01-02T12:48:46+00:00] [INFO] Stopping watchdog...
+[2026-01-02T12:48:46+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:48:46+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:48:46+00:00] [OK] Watchdog stopped
+[2026-01-02T12:48:46+00:00] [INFO] =========================================
+[2026-01-02T12:48:46+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-02T12:48:46+00:00] [INFO] Check interval: 30s
+[2026-01-02T12:48:46+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T12:48:46+00:00] [INFO] Token limit: 150000
+[2026-01-02T12:48:46+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-02T12:48:46+00:00] [INFO] Watchdog PID: 512434
+[2026-01-02T12:48:46+00:00] [INFO] =========================================
+[2026-01-02T12:48:47+00:00] [INFO] Applying restart backoff: 600s (restart #6)
+[2026-01-02T12:48:48+00:00] [WARN] Received shutdown signal
+[2026-01-02T12:48:48+00:00] [INFO] Stopping watchdog...
+[2026-01-02T12:48:48+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:48:48+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:48:48+00:00] [OK] Watchdog stopped
+[2026-01-02T12:49:24+00:00] [INFO] =========================================
+[2026-01-02T12:49:24+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-02T12:49:24+00:00] [INFO] Check interval: 30s
+[2026-01-02T12:49:24+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T12:49:24+00:00] [INFO] Token limit: 150000
+[2026-01-02T12:49:24+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-02T12:49:24+00:00] [INFO] Watchdog PID: 512568
+[2026-01-02T12:49:24+00:00] [INFO] =========================================
+[2026-01-02T12:49:24+00:00] [INFO] Applying restart backoff: 600s (restart #7)
+[2026-01-02T12:50:14+00:00] [WARN] Received shutdown signal
+[2026-01-02T12:50:14+00:00] [INFO] Stopping watchdog...
+[2026-01-02T12:50:14+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:50:14+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:50:14+00:00] [OK] Watchdog stopped
+[2026-01-02T12:50:15+00:00] [INFO] =========================================
+[2026-01-02T12:50:15+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-02T12:50:15+00:00] [INFO] Check interval: 30s
+[2026-01-02T12:50:15+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T12:50:15+00:00] [INFO] Token limit: 150000
+[2026-01-02T12:50:15+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-02T12:50:15+00:00] [INFO] Watchdog PID: 512677
+[2026-01-02T12:50:15+00:00] [INFO] =========================================
+[2026-01-02T12:50:15+00:00] [INFO] Applying restart backoff: 120s (restart #2)
+[2026-01-02T12:50:18+00:00] [WARN] Received shutdown signal
+[2026-01-02T12:50:18+00:00] [INFO] Stopping watchdog...
+[2026-01-02T12:50:18+00:00] [INFO] Stopping orchestrator...
+[2026-01-02T12:50:18+00:00] [OK] Orchestrator stopped
+[2026-01-02T12:50:18+00:00] [OK] Watchdog stopped
+[2026-01-02T12:50:23+00:00] [INFO] =========================================
+[2026-01-02T12:50:23+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-02T12:50:23+00:00] [INFO] Check interval: 30s
+[2026-01-02T12:50:23+00:00] [INFO] Max restarts/hour: 10
+[2026-01-02T12:50:23+00:00] [INFO] Token limit: 150000
+[2026-01-02T12:50:23+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-02T12:50:23+00:00] [INFO] Watchdog PID: 512788
+[2026-01-02T12:50:23+00:00] [INFO] =========================================
+[2026-01-02T12:50:23+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-02T12:50:23+00:00] [OK] Orchestrator started with PID: 512853 (model: anthropic/claude-opus-4-5)
+[2026-01-02T12:50:28+00:00] [OK] Orchestrator confirmed running

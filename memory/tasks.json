@@ -1572,8 +1572,53 @@
       "notes": [
         "[2026-01-02T12:20:53.949Z] Created debug-capture.ts tool with: run (capture command output), log (debug messages), list (view captures), view (inspect specific capture), clean (remove old captures). Added LOGS_DIR and appendLine to shared utilities."
       ]
+    },
+    {
+      "id": "task_1767357229945_z6mnqe",
+      "title": "Dashboard: Show messages for selected OpenCode session",
+      "description": "The OpenCode session panel in the dashboard should show the messages for each session selected. User wants to see actual conversation messages when clicking on a session in the dashboard UI.",
+      "priority": "high",
+      "status": "in_progress",
+      "created_at": "2026-01-02T12:33:49.945Z",
+      "updated_at": "2026-01-02T12:35:11.532Z",
+      "created_by": "ses_4814d47d8ffeIIDVFJITkTQRq5",
+      "tags": [
+        "dashboard",
+        "opencode",
+        "user-request"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767357200449-mdvyb",
+      "claimed_at": "2026-01-02T12:35:11.532Z"
+    },
+    {
+      "id": "task_1767357231923_pcgu8x",
+      "title": "Track token usage in OpenCode sessions",
+      "description": "Track and display tokens used in OpenCode sessions and messages. This should include: 1) Extract token usage from session/message data, 2) Display token counts in the dashboard, 3) Track token trends over time.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T12:33:51.923Z",
+      "updated_at": "2026-01-02T12:58:24.553Z",
+      "created_by": "ses_4814d47d8ffeIIDVFJITkTQRq5",
+      "tags": [
+        "dashboard",
+        "tokens",
+        "opencode",
+        "user-request"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767358223781-o4sn3",
+      "claimed_at": "2026-01-02T12:50:55.681Z",
+      "completed_at": "2026-01-02T12:58:16.625Z",
+      "notes": [
+        "[2026-01-02T12:58:16.627Z] [\"Implemented token tracking in terminal-dashboard CLI\", \"Added SessionTokens type to types.ts\", \"Added extractSessionTokens function to data.ts\", \"Added getTokenTrends and getTotalTokenUsage functions\", \"Updated getOpenCodeSessions to include token data\", \"Added new 'tokens' view mode (key 7)\", \"Tokens shown in conversations view and dedicated tokens view\", \"Shows input/output/reasoning/cache breakdown\", \"Cache efficiency calculation added\", \"Tested and verified working\"]"
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Token data is stored per-message in OpenCode's storage. Cache read/write tracking is valuable for cost analysis. The CLI dashboard pattern works well for terminal-focused users."
     }
   ],
-  "completed_count": 71,
-  "last_updated": "2026-01-02T12:20:53.949Z"
+  "completed_count": 72,
+  "last_updated": "2026-01-02T12:58:16.627Z"
 }

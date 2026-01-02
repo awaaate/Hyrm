@@ -31,6 +31,8 @@ const PATHS = {
 };
 
 const OPENCODE_STORAGE = join(require("os").homedir(), ".local", "share", "opencode", "storage");
+const OPENCODE_SESSIONS_DIR = join(OPENCODE_STORAGE, "session");
+const OPENCODE_MESSAGES_DIR = join(OPENCODE_STORAGE, "message");
 
 // Store connected WebSocket clients
 const clients = new Set<any>();

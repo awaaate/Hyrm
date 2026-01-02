@@ -33,8 +33,28 @@
       "agents": [
         null
       ]
+    },
+    {
+      "filename": "messages-2026-01-02T12-33-20-454Z.jsonl",
+      "startDate": "2026-01-02T09:26:02.242Z",
+      "endDate": "2026-01-02T12:33:20.453Z",
+      "messageCount": 145,
+      "types": [
+        "direct",
+        "task_completed",
+        "broadcast",
+        "task_available",
+        "task_claim",
+        "task_complete",
+        "heartbeat",
+        "session_spawned",
+        "task_spawned"
+      ],
+      "agents": [
+        null
+      ]
     }
   ],
-  "lastUpdated": "2026-01-02T09:25:14.856Z",
-  "totalMessages": 819
+  "lastUpdated": "2026-01-02T12:33:20.456Z",
+  "totalMessages": 964
 }

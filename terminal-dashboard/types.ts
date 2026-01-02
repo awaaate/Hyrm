@@ -100,6 +100,22 @@ export interface OpenCodeSession {
   status?: string;
   messages?: number;
   parent_id?: string;
+  tokens?: SessionTokens;
+}
+
+export interface SessionTokens {
+  input: number;
+  output: number;
+  reasoning: number;
+  cache_read: number;
+  cache_write: number;
+  total: number;
+}
+
+export interface TokenTrend {
+  session_id: string;
+  tokens: SessionTokens;
+  started_at?: string;
 }
 
 export interface ViewMode {
@@ -115,6 +131,7 @@ export const VIEW_MODES: ViewMode[] = [
   { name: "messages", key: "4", description: "Agent Messages" },
   { name: "user", key: "5", description: "User Messages" },
   { name: "conversations", key: "6", description: "OpenCode Sessions" },
-  { name: "quality", key: "7", description: "Quality Metrics" },
-  { name: "logs", key: "8", description: "Real-time Logs" },
+  { name: "tokens", key: "7", description: "Token Usage" },
+  { name: "quality", key: "8", description: "Quality Metrics" },
+  { name: "logs", key: "9", description: "Real-time Logs" },
 ];

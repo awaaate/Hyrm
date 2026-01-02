@@ -2163,11 +2163,49 @@
       "metadata": {
         "duration_minutes": 8
       }
+    },
+    {
+      "task_id": "task_1767357231923_pcgu8x",
+      "task_title": "Track token usage in OpenCode sessions",
+      "assessed_at": "2026-01-02T12:58:24.551Z",
+      "assessed_by": "ses_4813daa79ffe843cbdPc2VFooJ",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Token data is stored per-message in OpenCode's storage. Cache read/write tracking is valuable for cost analysis. The CLI dashboard pattern works well for terminal-focused users.",
+      "metadata": {
+        "duration_minutes": 24
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 56,
-    "avg_overall_score": 8.146428571428576
+    "total_assessed": 57,
+    "avg_overall_score": 8.149122807017548
   },
-  "last_updated": "2026-01-02T12:08:19.448Z"
+  "last_updated": "2026-01-02T12:58:24.552Z"
 }

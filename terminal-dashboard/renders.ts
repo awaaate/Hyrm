@@ -19,6 +19,8 @@ import {
   getStats,
   formatTimeAgo,
   truncate,
+  getTotalTokenUsage,
+  getTokenTrends,
 } from "./data";
 import { VIEW_MODES, type TaskData } from "./types";
 
@@ -307,22 +309,28 @@ export function renderUserMessagesContent(): string {
 export function renderConversationsContent(): string {
   const sessions = getOpenCodeSessions();
   const events = getSessionEvents(20);
+  const tokenUsage = getTotalTokenUsage();
 
   let content = `{bold}{blue-fg}OPENCODE SESSIONS{/blue-fg}{/bold}\n${"─".repeat(60)}\n\n`;
+
+  // Token usage summary at top
+  content += `{bold}{yellow-fg}TOKEN USAGE{/yellow-fg}{/bold}\n`;
+  content += `Today:  {cyan-fg}${formatTokenCount(tokenUsage.today.total)}{/} tokens (in: ${formatTokenCount(tokenUsage.today.input)}, out: ${formatTokenCount(tokenUsage.today.output)})\n`;
+  content += `Total:  {cyan-fg}${formatTokenCount(tokenUsage.total.total)}{/} tokens (cached: ${formatTokenCount(tokenUsage.total.cache_read)})\n\n`;
+
+  content += `{bold}RECENT SESSIONS{/bold}\n${"─".repeat(50)}\n`;
 
   if (sessions.length === 0) {
     content += "{dim}No OpenCode sessions found.{/dim}\n";
     content += "{dim}Sessions are stored in ~/.local/share/opencode/storage/session/{/dim}\n";
   } else {
-    for (const session of sessions.slice(0, 20)) {
+    for (const session of sessions.slice(0, 15)) {
       const status = session.status === "active" ? "{green-fg}ACTIVE{/}" : "{dim}done{/dim}";
-      const parent = session.parent_id ? ` {dim}(child of ${session.parent_id.slice(0, 10)}){/dim}` : "";
+      const parent = session.parent_id ? ` {dim}(child){/dim}` : "";
+      const tokenInfo = session.tokens ? `{cyan-fg}${formatTokenCount(session.tokens.total)}{/}` : "{dim}0{/dim}";
 
-      content += `${status} {bold}${truncate(session.title || "Untitled", 40)}{/bold}${parent}\n`;
-      content += `    ID: ${session.id}\n`;
-      if (session.started_at) {
-        content += `    Started: ${formatTimeAgo(session.started_at)} ago | Messages: ${session.messages || 0}\n`;
-      }
+      content += `${status} {bold}${truncate(session.title || "Untitled", 35)}{/bold}${parent}\n`;
+      content += `    ${session.started_at ? formatTimeAgo(session.started_at) + " ago" : "?"} | Msgs: ${session.messages || 0} | Tokens: ${tokenInfo}\n`;
       content += "\n";
     }
   }
@@ -330,7 +338,7 @@ export function renderConversationsContent(): string {
   // Recent session events
   if (events.length > 0) {
     content += `\n{bold}{cyan-fg}RECENT SESSION EVENTS{/cyan-fg}{/bold}\n${"─".repeat(40)}\n`;
-    for (const event of events.slice(0, 10)) {
+    for (const event of events.slice(0, 8)) {
       const typeColor =
         event.type === "session_start"
           ? "green"
@@ -344,6 +352,64 @@ export function renderConversationsContent(): string {
         content += `  {dim}${truncate(event.description, 50)}{/dim}\n`;
       }
     }
+  }
+
+  return content;
+}
+
+// Format token count for display (e.g., 1234567 -> "1.23M")
+function formatTokenCount(count: number): string {
+  if (count >= 1000000) return `${(count / 1000000).toFixed(2)}M`;
+  if (count >= 1000) return `${(count / 1000).toFixed(1)}K`;
+  return String(count);
+}
+
+export function renderTokensContent(): string {
+  const tokenUsage = getTotalTokenUsage();
+  const trends = getTokenTrends(15);
+
+  let content = `{bold}{yellow-fg}TOKEN USAGE ANALYTICS{/yellow-fg}{/bold}\n${"─".repeat(60)}\n\n`;
+
+  // Summary stats
+  content += `{bold}TODAY'S USAGE{/bold}\n`;
+  content += `  Total:     {cyan-fg}${formatTokenCount(tokenUsage.today.total)}{/} tokens\n`;
+  content += `  Input:     ${formatTokenCount(tokenUsage.today.input)}\n`;
+  content += `  Output:    ${formatTokenCount(tokenUsage.today.output)}\n`;
+  content += `  Reasoning: ${formatTokenCount(tokenUsage.today.reasoning)}\n`;
+  content += `  Cache Read:  {green-fg}${formatTokenCount(tokenUsage.today.cache_read)}{/} {dim}(saved){/dim}\n`;
+  content += `  Cache Write: ${formatTokenCount(tokenUsage.today.cache_write)}\n\n`;
+
+  content += `{bold}ALL TIME USAGE{/bold}\n`;
+  content += `  Total:     {cyan-fg}${formatTokenCount(tokenUsage.total.total)}{/} tokens\n`;
+  content += `  Input:     ${formatTokenCount(tokenUsage.total.input)}\n`;
+  content += `  Output:    ${formatTokenCount(tokenUsage.total.output)}\n`;
+  content += `  Reasoning: ${formatTokenCount(tokenUsage.total.reasoning)}\n`;
+  content += `  Cache Read:  {green-fg}${formatTokenCount(tokenUsage.total.cache_read)}{/} {dim}(saved){/dim}\n`;
+  content += `  Cache Write: ${formatTokenCount(tokenUsage.total.cache_write)}\n\n`;
+
+  // Token breakdown by session
+  content += `{bold}TOKEN USAGE BY SESSION{/bold}\n${"─".repeat(50)}\n`;
+  content += `{dim}Session                           In      Out     Total{/dim}\n`;
+  
+  for (const trend of trends) {
+    const shortId = trend.session_id.slice(0, 25);
+    const input = formatTokenCount(trend.tokens.input).padStart(7);
+    const output = formatTokenCount(trend.tokens.output).padStart(7);
+    const total = formatTokenCount(trend.tokens.total).padStart(8);
+    const time = trend.started_at ? formatTimeAgo(trend.started_at) : "?";
+    
+    content += `${shortId.padEnd(30)} ${input} ${output} {cyan-fg}${total}{/} {dim}${time}{/dim}\n`;
+  }
+
+  // Cache efficiency
+  if (tokenUsage.total.total > 0) {
+    const cacheRatio = tokenUsage.total.cache_read / (tokenUsage.total.input + tokenUsage.total.cache_read) * 100;
+    content += `\n{bold}CACHE EFFICIENCY{/bold}\n`;
+    const barLen = 30;
+    const filled = Math.round((cacheRatio / 100) * barLen);
+    const bar = "{green-fg}" + "=".repeat(filled) + "{/}" + "{dim}" + "-".repeat(barLen - filled) + "{/dim}";
+    content += `  [${bar}] {green-fg}${cacheRatio.toFixed(1)}%{/} of input from cache\n`;
+    content += `  {dim}Cache hits save API costs and reduce latency{/dim}\n`;
   }
 
   return content;

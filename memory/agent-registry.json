@@ -2,34 +2,52 @@
   "version": "1.0.0",
   "agents": [
     {
-      "agent_id": "agent-1767353179414-xlsru",
-      "session_id": "session-1767353179414",
-      "started_at": "2026-01-02T11:26:19.415Z",
-      "last_heartbeat": "2026-01-02T12:30:19.874Z",
+      "agent_id": "agent-1767358223758-7snj9m",
+      "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
+      "started_at": "2026-01-02T12:50:23.759Z",
+      "last_heartbeat": "2026-01-02T12:58:23.808Z",
+      "status": "active",
+      "assigned_role": "general",
+      "pid": 512853
+    },
+    {
+      "agent_id": "agent-1767358223774-uvh7nr",
+      "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
+      "started_at": "2026-01-02T12:50:23.775Z",
+      "last_heartbeat": "2026-01-02T12:58:23.827Z",
+      "status": "active",
+      "assigned_role": "general",
+      "pid": 512853
+    },
+    {
+      "agent_id": "agent-1767358223778-60twsp",
+      "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
+      "started_at": "2026-01-02T12:50:23.778Z",
+      "last_heartbeat": "2026-01-02T12:58:23.828Z",
+      "status": "active",
+      "assigned_role": "general",
+      "pid": 512853
+    },
+    {
+      "agent_id": "agent-1767358223781-o4sn3",
+      "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
+      "started_at": "2026-01-02T12:50:23.782Z",
+      "last_heartbeat": "2026-01-02T12:58:23.828Z",
       "status": "working",
-      "assigned_role": "orchestrator",
-      "pid": 468344,
+      "assigned_role": "general",
+      "pid": 512853,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-1767356101827-bgc25a",
-      "session_id": "session-1767356101827",
-      "started_at": "2026-01-02T12:15:01.827Z",
-      "last_heartbeat": "2026-01-02T12:16:01.829Z",
+      "agent_id": "agent-1767358223781-o4sn3",
+      "session_id": "ses_4813daa79ffe843cbdPc2VFooJ",
+      "started_at": "2026-01-02T12:50:30.733Z",
+      "last_heartbeat": "2026-01-02T12:50:30.733Z",
       "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 489209
-    },
-    {
-      "agent_id": "agent-1767356108127-dfqpk5",
-      "session_id": "session-1767356108127",
-      "started_at": "2026-01-02T12:15:08.127Z",
-      "last_heartbeat": "2026-01-02T12:18:08.433Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 489487
+      "assigned_role": "orchestrator",
+      "pid": 512853
     }
   ],
-  "last_updated": "2026-01-02T12:30:19.874Z",
-  "lock_version": 186
+  "last_updated": "2026-01-02T12:58:23.828Z",
+  "lock_version": 202
 }

@@ -13,6 +13,8 @@ import {
   type StateData,
   type SessionEvent,
   type OpenCodeSession,
+  type SessionTokens,
+  type TokenTrend,
 } from "./types";
 
 // Paths - use __dirname to get the correct path relative to this file
@@ -177,6 +179,47 @@ export function getToolTiming(limit: number = 100): any[] {
   return readJsonl<any>(PATHS.toolTiming).slice(-limit).reverse();
 }
 
+// Token extraction from OpenCode messages (must be defined before getOpenCodeSessions)
+function extractSessionTokens(sessionId: string): SessionTokens {
+  const tokens: SessionTokens = {
+    input: 0,
+    output: 0,
+    reasoning: 0,
+    cache_read: 0,
+    cache_write: 0,
+    total: 0,
+  };
+
+  try {
+    const messageDir = join(PATHS.opencodeMessages, sessionId);
+    if (!existsSync(messageDir)) return tokens;
+
+    const messageFiles = require("fs").readdirSync(messageDir);
+    for (const msgFile of messageFiles) {
+      if (!msgFile.endsWith(".json")) continue;
+      
+      try {
+        const msgPath = join(messageDir, msgFile);
+        const msgData = JSON.parse(readFileSync(msgPath, "utf-8"));
+        
+        if (msgData.tokens) {
+          tokens.input += msgData.tokens.input || 0;
+          tokens.output += msgData.tokens.output || 0;
+          tokens.reasoning += msgData.tokens.reasoning || 0;
+          if (msgData.tokens.cache) {
+            tokens.cache_read += msgData.tokens.cache.read || 0;
+            tokens.cache_write += msgData.tokens.cache.write || 0;
+          }
+        }
+      } catch {}
+    }
+    
+    tokens.total = tokens.input + tokens.output + tokens.reasoning;
+  } catch {}
+
+  return tokens;
+}
+
 export function getOpenCodeSessions(): OpenCodeSession[] {
   try {
     if (!existsSync(PATHS.opencodeSessions)) return [];
@@ -207,13 +250,15 @@ export function getOpenCodeSessions(): OpenCodeSession[] {
               messageCount = require("fs").readdirSync(messageDir).filter((f: string) => f.endsWith(".json")).length;
             }
             
+            const sessionId = sessionData.id || sessionFile.replace(".json", "");
             sessions.push({
-              id: sessionData.id || sessionFile.replace(".json", ""),
+              id: sessionId,
               title: sessionData.title || "Untitled",
               started_at: sessionData.time?.created ? new Date(sessionData.time.created).toISOString() : undefined,
               status: sessionData.time?.archived ? "archived" : "active",
               messages: messageCount,
               parent_id: sessionData.parentID,
+              tokens: extractSessionTokens(sessionId),
             });
           } catch {}
         }
@@ -284,6 +329,60 @@ export function getToolStats(): { tool: string; count: number; avgDuration: numb
 export function getTaskById(taskId: string): TaskData | undefined {
   const tasks = getTasks();
   return tasks.find((t) => t.id === taskId);
+}
+
+// Public wrapper for token extraction
+export function getSessionTokens(sessionId: string): SessionTokens {
+  return extractSessionTokens(sessionId);
+}
+
+// Get token trends across sessions
+export function getTokenTrends(limit: number = 20): TokenTrend[] {
+  const sessions = getOpenCodeSessions().slice(0, limit);
+  return sessions.map(session => ({
+    session_id: session.id,
+    tokens: getSessionTokens(session.id),
+    started_at: session.started_at,
+  }));
+}
+
+// Get total token usage across all recent sessions
+export function getTotalTokenUsage(): { today: SessionTokens; total: SessionTokens } {
+  const sessions = getOpenCodeSessions();
+  const now = Date.now();
+  const oneDayAgo = now - 24 * 60 * 60 * 1000;
+  
+  const today: SessionTokens = {
+    input: 0, output: 0, reasoning: 0, cache_read: 0, cache_write: 0, total: 0
+  };
+  const total: SessionTokens = {
+    input: 0, output: 0, reasoning: 0, cache_read: 0, cache_write: 0, total: 0
+  };
+
+  for (const session of sessions) {
+    const tokens = getSessionTokens(session.id);
+    const startTime = session.started_at ? new Date(session.started_at).getTime() : 0;
+    
+    // Accumulate totals
+    total.input += tokens.input;
+    total.output += tokens.output;
+    total.reasoning += tokens.reasoning;
+    total.cache_read += tokens.cache_read;
+    total.cache_write += tokens.cache_write;
+    total.total += tokens.total;
+    
+    // Accumulate today's totals
+    if (startTime > oneDayAgo) {
+      today.input += tokens.input;
+      today.output += tokens.output;
+      today.reasoning += tokens.reasoning;
+      today.cache_read += tokens.cache_read;
+      today.cache_write += tokens.cache_write;
+      today.total += tokens.total;
+    }
+  }
+
+  return { today, total };
 }
 
 // Create a new task
