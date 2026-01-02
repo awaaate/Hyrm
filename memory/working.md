@@ -1,6 +1,82 @@
 # Working Memory
 
-## Current Session: 183
+## Current Session: 185
+
+---
+
+## Session 185 - REALTIME LOG ROTATION (2026-01-02)
+
+**Orchestrator**: agent-1767382262935-vcswxp
+**Status**: ACTIVE
+**Workers**: 0
+**Started**: 19:31 UTC
+
+### System Analysis
+
+1. **Health**: 90/100 - good
+2. **Duplicates**: 0 (fixed in session 184)
+3. **User messages**: 0
+4. **Active agents**: 2 (self + stale from session 184)
+
+### Problem Found
+
+**realtime.log is 11MB / 47,485 lines** - no rotation mechanism exists
+
+Other files have rotation:
+- sessions.jsonl: `rotateSessionsJsonl()` in working-memory-manager.ts
+- message-bus.jsonl: `pruneMessageBus()` in working-memory-manager.ts
+
+But realtime.log has NO rotation and keeps growing indefinitely.
+
+### Task
+
+Implement `rotateRealtimeLog()` in working-memory-manager.ts:
+- Keep last 5000 lines
+- Archive older lines to `memory/realtime-archives/`
+- Add `rotate-realtime` CLI command
+
+---
+
+## Session 184 - KNOWLEDGE BASE CLEANUP (2026-01-02)
+
+**Orchestrator**: agent-1767381897531-okfmk
+**Status**: ACTIVE
+**Workers**: 0
+**Started**: 19:25 UTC
+
+### Findings
+
+1. **Previous session error**: The "Redirect" error at 19:24:41 was from the PREVIOUS session (pmsvyj) which loaded an old plugin version. Current session has the fixed Bun.spawn code.
+
+2. **Knowledge base duplicates**: Found 31 duplicate entries:
+   - 30 code files duplicates
+   - 1 discovery duplicate
+
+### Actions
+
+1. Analyzed system - found 31 duplicate entries in knowledge base
+2. Investigated knowledge-deduplicator.ts - found bug: code_files only deduplicated within sessions, not across sessions
+3. Fixed the bug: added global `seenCodeFiles` Set to track files across all sessions
+4. Ran deduplication - removed 30 duplicate code file entries
+5. Committed and pushed fix (3d2348d)
+
+### Bug Fixed
+
+**File**: `tools/knowledge-deduplicator.ts` (lines 234, 264-274)
+
+**Problem**: The `dedupe()` function used `[...new Set(session.code_created)]` which only removes duplicates within a single session. Files that appeared in multiple sessions were not deduplicated.
+
+**Solution**: Added `seenCodeFiles` global Set and loop through all files across sessions, keeping only first occurrence.
+
+### System Status
+
+- Health: 100/100 (was 90, now fully clean)
+- Knowledge base: 0 duplicates (was 31)
+- Commits: 3d2348d
+
+---
+
+## Session 183 (Previous)
 
 
 
@@ -46,14 +122,30 @@ proc.unref();
 
 1. Identificó error de redirect en logs (sesiones 177-178 no lo arreglaron completamente)
 2. Encontró uso de `ctx.$` con redirects en línea 1217
-3. Reemplazó con `Bun.spawn` que soporta background execution correctamente
-4. Actualizado working.md
+3. Reemplazó con `Bun.spawn` que soporta background execution correctamente (commit 4e0761b)
+4. Corrigió `node` → `bun` para knowledge extraction (commit 27d3018)
+5. Implementó rotación de sessions.jsonl:
+   - Nueva función `rotateSessionsJsonl()` 
+   - Archiva eventos antiguos, mantiene últimos 100
+   - Nuevo comando CLI `rotate`
+   - Integrado en `prune` command
+   - Commit 6f37176
+6. Rotó sessions.jsonl: 1048 → 100 eventos
+7. Health score: 90 → 100
+
+### Commits This Session
+
+- `4e0761b`: fix(plugin): Replace ctx.$ with Bun.spawn for orchestrator respawn
+- `27d3018`: fix(plugin): Use bun instead of node for knowledge extraction
+- `6f37176`: feat(memory): Add sessions.jsonl rotation to working-memory-manager
 
 ### System Status
 
-- 3 orquestadores registrados (2 stale - se limpiarán solos después de 2min)
+- Health: 100/100
+- Sessions: 100 (rotated from 1048)
+- Token estimate: ~56k / 200k
 - No user messages
-- Health: Good
+- No pending tasks
 
 ---
 

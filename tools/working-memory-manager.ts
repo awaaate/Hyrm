@@ -352,6 +352,48 @@ function rotateSessionsJsonl(): { before: number; after: number; archived: boole
   }
 }
 
+/**
+ * Rotate realtime.log - archive old entries and keep recent ones
+ * Keeps the last 5000 lines in realtime.log, archives the rest
+ */
+function rotateRealtimeLog(): { before: number; after: number; archived: boolean; archivePath?: string } {
+  if (!existsSync(PATHS.realtimeLog)) return { before: 0, after: 0, archived: false };
+  
+  try {
+    const content = readFileSync(PATHS.realtimeLog, "utf-8");
+    const lines = content.trim().split("\n").filter(l => l);
+    const before = lines.length;
+    
+    // Only rotate if we have more than 10000 lines
+    if (before <= 10000) {
+      return { before, after: before, archived: false };
+    }
+    
+    // Keep last 5000 lines
+    const keepCount = 5000;
+    const toArchive = lines.slice(0, -keepCount);
+    const toKeep = lines.slice(-keepCount);
+    
+    // Create archive file
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const archiveDir = join(MEMORY_DIR, "realtime-archives");
+    if (!existsSync(archiveDir)) {
+      mkdirSync(archiveDir, { recursive: true });
+    }
+    const archivePath = join(archiveDir, `realtime-${timestamp}.log`);
+    
+    // Write archive
+    writeFileSync(archivePath, toArchive.join("\n") + "\n");
+    
+    // Write rotated realtime.log
+    writeFileSync(PATHS.realtimeLog, toKeep.join("\n") + "\n");
+    
+    return { before, after: toKeep.length, archived: true, archivePath };
+  } catch {
+    return { before: 0, after: 0, archived: false };
+  }
+}
+
 // Parse working.md to extract sessions
 function parseWorkingMd(content: string): { header: string; sessions: SessionInfo[] } {
   const lines = content.split("\n");
@@ -797,6 +839,16 @@ function prune(): void {
     console.log(`  No rotation needed (${sessResult.before} events, threshold: 200)`);
   }
   
+  // Rotate realtime.log if needed
+  console.log("\n\x1b[36mRotating realtime.log...\x1b[0m");
+  const realtimeResult = rotateRealtimeLog();
+  if (realtimeResult.archived) {
+    console.log(`  Archived ${realtimeResult.before - realtimeResult.after} lines (${realtimeResult.before} -> ${realtimeResult.after})`);
+    console.log(`  Archive: ${realtimeResult.archivePath}`);
+  } else {
+    console.log(`  No rotation needed (${realtimeResult.before} lines, threshold: 10000)`);
+  }
+  
   // Results
   const healthAfter = analyzeMemoryHealth();
   const tokensSaved = healthBefore.tokenEstimate - healthAfter.tokenEstimate;
@@ -934,6 +986,20 @@ switch (command) {
       console.log(`  Threshold: 200`);
     }
     break;
+  case "rotate-realtime":
+    console.log("\n\x1b[1m\x1b[44m REALTIME.LOG ROTATION \x1b[0m\n");
+    const realtimeResult = rotateRealtimeLog();
+    if (realtimeResult.archived) {
+      console.log(`\x1b[32m✓ Rotated realtime.log\x1b[0m`);
+      console.log(`  Lines archived: ${realtimeResult.before - realtimeResult.after}`);
+      console.log(`  Lines kept: ${realtimeResult.after}`);
+      console.log(`  Archive: ${realtimeResult.archivePath}`);
+    } else {
+      console.log(`\x1b[33m○ No rotation needed\x1b[0m`);
+      console.log(`  Current lines: ${realtimeResult.before}`);
+      console.log(`  Threshold: 10000`);
+    }
+    break;
   default:
     console.log(`
 Working Memory Manager
@@ -951,6 +1017,7 @@ Commands:
   health          Analyze memory system health
   prune           Prune message bus and compress KB
   rotate          Rotate sessions.jsonl (archive old events)
+  rotate-realtime Rotate realtime.log (archive old entries)
   auto            Run automatic maintenance
 `);
 }
@@ -961,6 +1028,7 @@ export {
   pruneMessageBus, 
   compressKnowledgeBase,
   rotateSessionsJsonl,
+  rotateRealtimeLog,
   estimateTokens,
   calculateValueScore,
   type MemoryHealth 

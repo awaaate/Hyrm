@@ -2050,8 +2050,25 @@
         "[2026-01-02T19:08:18.022Z] GitHub sync: Closed issue"
       ],
       "completed_at": "2026-01-02T19:08:15.792Z"
+    },
+    {
+      "id": "task_1767382371883_89d3o6",
+      "title": "Implement realtime.log rotation",
+      "description": "Add rotateRealtimeLog() function to working-memory-manager.ts to prevent realtime.log from growing indefinitely. Currently at 11MB/47k lines.\n\nImplementation:\n1. Add rotateRealtimeLog() function (similar to rotateSessionsJsonl)\n2. Keep last 5000 lines\n3. Archive older lines to memory/realtime-archives/\n4. Add 'rotate-realtime' CLI command\n5. Integrate into 'prune' command\n\nReference: rotateSessionsJsonl() at line 317 for pattern to follow.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-02T19:32:51.883Z",
+      "updated_at": "2026-01-02T19:32:51.883Z",
+      "created_by": "unknown",
+      "tags": [
+        "maintenance",
+        "memory",
+        "rotation"
+      ],
+      "estimated_hours": 0.5,
+      "complexity": "simple"
     }
   ],
   "completed_count": 97,
-  "last_updated": "2026-01-02T19:09:23.646Z"
+  "last_updated": "2026-01-02T19:32:51.883Z"
 }

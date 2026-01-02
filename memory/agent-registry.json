@@ -2,33 +2,35 @@
   "version": "1.0.0",
   "agents": [
     {
-      "agent_id": "agent-1767381039813-vjsz7",
-      "session_id": "session-1767381039813",
-      "started_at": "2026-01-02T19:10:39.813Z",
-      "last_heartbeat": "2026-01-02T19:13:39.843Z",
-      "status": "active",
+      "agent_id": "agent-1767381897531-okfmk",
+      "session_id": "session-1767381897531",
+      "started_at": "2026-01-02T19:24:57.533Z",
+      "last_heartbeat": "2026-01-02T19:29:43.858Z",
+      "status": "idle",
       "assigned_role": "orchestrator",
-      "pid": 674064
+      "pid": 686474,
+      "current_task": "Session 184 completed - fixed knowledge deduplication bug"
     },
     {
-      "agent_id": "agent-1767381285444-9tk7w",
-      "session_id": "session-1767381285444",
-      "started_at": "2026-01-02T19:14:45.446Z",
-      "last_heartbeat": "2026-01-02T19:15:45.456Z",
+      "agent_id": "agent-1767382262935-vcswxp",
+      "session_id": "session-1767382262935",
+      "started_at": "2026-01-02T19:31:02.935Z",
+      "last_heartbeat": "2026-01-02T19:34:02.954Z",
       "status": "active",
       "assigned_role": "orchestrator",
-      "pid": 678094
+      "pid": 691917
     },
     {
-      "agent_id": "agent-1767381411670-pmsvyj",
-      "session_id": "session-1767381411670",
-      "started_at": "2026-01-02T19:16:51.672Z",
-      "last_heartbeat": "2026-01-02T19:21:54.655Z",
-      "status": "active",
-      "assigned_role": "orchestrator",
-      "pid": 679169
+      "agent_id": "agent-1767382393563-d0xzth",
+      "session_id": "session-1767382393563",
+      "started_at": "2026-01-02T19:33:13.564Z",
+      "last_heartbeat": "2026-01-02T19:34:13.574Z",
+      "status": "working",
+      "assigned_role": "worker",
+      "pid": 694523,
+      "current_task": "realtime.log rotation implementation"
     }
   ],
-  "last_updated": "2026-01-02T19:21:54.655Z",
-  "lock_version": 348
+  "last_updated": "2026-01-02T19:34:13.574Z",
+  "lock_version": 353
 }

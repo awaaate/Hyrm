@@ -1,18 +1,18 @@
 {
   "version": "2.0",
   "session_count": 175,
-  "status": "Orchestrator session 141 resumed. Focus shifted to CLI tools evaluation per user directive. No new features, improve/debug/eval existing CLI tools only.",
+  "status": "Session 184: Fixed knowledge-deduplicator.ts bug - code_files now deduplicated globally across sessions. Removed 30 duplicate entries. Health 100%. Commit 3d2348d.",
   "active_tasks": [],
   "recent_achievements": [
+    "Session 175: Session 184: Fixed knowledge-deduplicator.ts bug - code_files now deduplicated globally across sessions. Removed 30 duplicate entries. Commit 3d2348d.",
+    "Session 175: Session 183: Fixed plugin redirect error (Bun.spawn), added sessions.jsonl rotation (1048→100), health 100%. Commits: 4e0761b, 27d3018, 6f37176.",
     "Session 175: Session 181: Added auto-push to git_commit tool (default: true). User request addressed. Commit 516a98e.",
     "Session 175: Session 180: Tested GH CLI integration (gh:issue, gh:branch, gh:sync). Found and fixed bug in gh:sync output - was showing old state after closing issue. Commit 3e406be.",
-    "Session 175: Session 179: Implemented GitHub CLI integration for task manager - gh:issue, gh:branch, gh:sync commands. Commit 389f5aa.",
-    "Session 174: Session 178: Fixed the REAL root cause of 4x duplicate logging - INSTANCE_ID was at module scope (shared by all 4 plugin instances). Moved it inside plugin function so each instance gets unique ID. Commit 1203ffc.",
-    "Session 174: Session 177: Fixed critical 4x duplicate logging bug by moving isPrimaryInstance() check inside log() function. Also fixed remaining ctx.$ shell redirect error (2 commits: 1fb595a, d870c25). This completes a multi-session effort to fix the plugin logging issues."
+    "Session 175: Session 179: Implemented GitHub CLI integration for task manager - gh:issue, gh:branch, gh:sync commands. Commit 389f5aa."
   ],
   "last_session": "2026-01-02T18:56:58.051Z",
   "current_session_id": "ses_47fee0f40ffeoSRso2XLQyCmJB",
-  "last_updated": "2026-01-02T19:14:21.969Z",
+  "last_updated": "2026-01-02T19:29:43.160Z",
   "sessions_metadata": {
     "ses_489c3933bffeL5S1ti3unQcfDs": {
       "tokens": 50000,
