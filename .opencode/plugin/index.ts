@@ -234,6 +234,9 @@ export const MemoryPlugin: Plugin = async (ctx) => {
     );
   };
 
+  // Detected role for this agent (set during system transform)
+  let detectedRole: string | null = null;
+
   // Load system message configuration
   const loadSystemMessageConfig = () => {
     const configPath = join(memoryDir, "system-message-config.json");
@@ -244,8 +247,10 @@ export const MemoryPlugin: Plugin = async (ctx) => {
         pending_tasks: { enabled: true, priority: 2, max_items: 5 },
         user_messages: { enabled: true, priority: 3, max_items: 5 },
         agent_status: { enabled: true, priority: 4 },
-        custom_instructions: { enabled: true, priority: 5, content: [] },
+        role_instructions: { enabled: true, priority: 5 },
+        custom_instructions: { enabled: true, priority: 6, content: [] },
       },
+      role_definitions: {},
       custom_sections: [],
     };
 
@@ -255,6 +260,41 @@ export const MemoryPlugin: Plugin = async (ctx) => {
       }
     } catch {}
     return defaultConfig;
+  };
+
+  // Detect agent role from system prompt content
+  const detectAgentRole = (systemPrompt: string): string => {
+    const config = loadSystemMessageConfig();
+    const roleDefinitions = config.role_definitions || {};
+    const promptLower = systemPrompt.toLowerCase();
+    
+    // Check each role's keywords
+    for (const [role, definition] of Object.entries(roleDefinitions)) {
+      const def = definition as any;
+      if (def.keywords && Array.isArray(def.keywords)) {
+        for (const keyword of def.keywords) {
+          if (promptLower.includes(keyword.toLowerCase())) {
+            return role;
+          }
+        }
+      }
+    }
+    
+    // Fallback role
+    return config.role_detection?.fallback_role || "worker";
+  };
+
+  // Build role-specific instructions section
+  const buildRoleInstructionsSection = (role: string) => {
+    const config = loadSystemMessageConfig();
+    const roleDefinitions = config.role_definitions || {};
+    const roleDef = roleDefinitions[role] as any;
+    
+    if (!roleDef || !roleDef.instructions || roleDef.instructions.length === 0) {
+      return null;
+    }
+    
+    return roleDef.instructions.join("\n");
   };
 
   // Build memory context section
@@ -402,13 +442,20 @@ Use memory_status(), task_list(), agent_status() for full context.`;
   };
 
   // Load memory context for system prompt injection (DYNAMIC)
-  const loadMemoryContext = () => {
+  // Now accepts optional existingPrompt to detect role
+  const loadMemoryContext = (existingPrompt?: string) => {
     try {
       if (!existsSync(statePath)) return null;
       const state = JSON.parse(readFileSync(statePath, "utf-8"));
       const config = loadSystemMessageConfig();
 
       if (!config.enabled) return null;
+
+      // Detect role from existing prompt if provided
+      if (existingPrompt && config.role_detection?.enabled !== false) {
+        detectedRole = detectAgentRole(existingPrompt);
+        log("INFO", `Detected agent role: ${detectedRole}`);
+      }
 
       const sections: Array<{ priority: number; content: string }> = [];
       const sectionConfigs = config.sections || {};
@@ -457,6 +504,16 @@ Use memory_status(), task_list(), agent_status() for full context.`;
           });
       }
 
+      // Role-specific instructions section (NEW)
+      if (sectionConfigs.role_instructions?.enabled !== false && detectedRole) {
+        const content = buildRoleInstructionsSection(detectedRole);
+        if (content)
+          sections.push({
+            priority: sectionConfigs.role_instructions?.priority || 5,
+            content,
+          });
+      }
+
       // Custom instructions section
       if (
         sectionConfigs.custom_instructions?.enabled !== false &&
@@ -467,7 +524,7 @@ Use memory_status(), task_list(), agent_status() for full context.`;
         );
         if (content)
           sections.push({
-            priority: sectionConfigs.custom_instructions?.priority || 5,
+            priority: sectionConfigs.custom_instructions?.priority || 6,
             content,
           });
       }
@@ -488,8 +545,10 @@ Use memory_status(), task_list(), agent_status() for full context.`;
       sections.sort((a, b) => a.priority - b.priority);
       const mainContent = sections.map((s) => s.content).join("\n\n");
 
-      return `## Memory System Context
+      const roleInfo = detectedRole ? `\n**Detected Role**: ${detectedRole}` : "";
 
+      return `## Memory System Context
+${roleInfo}
 ${mainContent}
 
 Memory Tools: memory_status, memory_search, memory_update
@@ -585,10 +644,12 @@ Multi-Agent Mode Active: Check agent_status() to see other agents working in par
     // Auto-inject memory context into system prompt
     "experimental.chat.system.transform": async (input, output) => {
       try {
-        const memoryContext = loadMemoryContext();
+        // Combine existing system prompts to detect role
+        const existingPrompt = output.system.join("\n");
+        const memoryContext = loadMemoryContext(existingPrompt);
         if (memoryContext) {
           output.system.push(memoryContext);
-          console.log("[Memory] Context injected into system prompt");
+          console.log("[Memory] Context injected into system prompt" + (detectedRole ? ` (role: ${detectedRole})` : ""));
         }
       } catch (error) {
         console.error("[Memory] Context injection error:", error);
@@ -972,16 +1033,18 @@ Read memory/working.md for full details.`);
         log("WARN", "Message bus maintenance failed", { error: String(e) })
       );
 
-    // Auto-register agent
+    // Auto-register agent with detected role (or "general" if not detected yet)
     try {
       coordinator = new MultiAgentCoordinator(currentSessionId);
-      await coordinator.register("general");
+      const roleToRegister = detectedRole || "general";
+      await coordinator.register(roleToRegister);
       coordinator.startHeartbeat();
-      log("INFO", "Multi-agent coordinator initialized");
+      log("INFO", `Multi-agent coordinator initialized with role: ${roleToRegister}`);
 
       coordinator.broadcastStatus("Agent online and ready", {
         session_id: currentSessionId,
         session_count: sessionCount,
+        role: roleToRegister,
       });
     } catch (error) {
       log("WARN", "Multi-agent coordinator init failed", {

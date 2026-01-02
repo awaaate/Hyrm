@@ -1439,8 +1439,112 @@
         "[2026-01-02T11:18:39.231Z] Successfully refactored App.tsx from 1677 lines to 628 lines. Created 10 modular components in dashboard-ui/src/components/: types.ts (122 lines), Header.tsx (110 lines), StatusBadge.tsx (31 lines), StatCard.tsx (42 lines), AgentList.tsx (42 lines), TaskList.tsx (92 lines), MessageStream.tsx (49 lines), QualityPanel.tsx (106 lines), PerformanceTab.tsx (404 lines), SessionAnalyticsPanel.tsx (161 lines), index.ts (13 lines). Build verified with bun run build, dev server starts correctly.",
         "[2026-01-02T11:18:58.994Z] Worker completed refactoring successfully"
       ]
+    },
+    {
+      "id": "task_1767355246085_ek7ysv",
+      "title": "Enhance terminal dashboard with full agent/message viewing",
+      "description": "Add ability to: view OpenCode messages per agent, select agents, see tools used, add/cancel tasks, restart services, view all messages. Consider token tracking.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-02T12:00:46.085Z",
+      "updated_at": "2026-01-02T12:00:46.085Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "enhancement"
+      ],
+      "estimated_hours": 4,
+      "complexity": "complex"
+    },
+    {
+      "id": "task_1767355248113_jdg91d",
+      "title": "Analyze OpenCode codebase patterns and refactor project structure",
+      "description": "Study /app/opencode-src/ structure, identify patterns to apply. Move from flat tools/ to monorepo-like structure. Create proper documentation.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-02T12:00:48.113Z",
+      "updated_at": "2026-01-02T12:00:48.113Z",
+      "created_by": "unknown",
+      "tags": [
+        "refactoring",
+        "documentation"
+      ],
+      "estimated_hours": 3,
+      "complexity": "complex"
+    },
+    {
+      "id": "task_1767355250010_gt3kac",
+      "title": "Clean up unused tools and optimize token usage",
+      "description": "Analyze tool usage patterns, identify unused/low-value tools, move non-essential functionality to CLI tools, reduce token cost.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T12:00:50.010Z",
+      "updated_at": "2026-01-02T12:03:02.996Z",
+      "created_by": "unknown",
+      "tags": [
+        "optimization",
+        "cleanup"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767353179414-xlsru",
+      "claimed_at": "2026-01-02T12:01:25.313Z",
+      "completed_at": "2026-01-02T12:02:33.531Z",
+      "notes": [
+        "[2026-01-02T12:02:33.534Z] Analyzed 4,316 tool calls. Identified low-usage tools: task_spawn (4), checkpoint_load (0), recovery_cleanup (0), git_log (4), memory_search (8). Recommended keeping core tools, moving infrequent tools to CLI."
+      ],
+      "quality_score": 7.8,
+      "quality_notes": "Tool usage analysis from tool-timing.jsonl provides valuable insights. High-usage tools (read, edit, agent_*, task_*) should remain in plugin. Low-usage tools like task_spawn and recovery tools could move to CLI to reduce token cost."
+    },
+    {
+      "id": "task_1767355251859_3gmv0e",
+      "title": "Create workflows folder with self-reflection documentation",
+      "description": "Create workflows/ folder with guides for: analyzing previous sessions, self-reflection patterns, exam/test system for multi-session validation.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-02T12:00:51.859Z",
+      "updated_at": "2026-01-02T12:00:51.859Z",
+      "created_by": "unknown",
+      "tags": [
+        "documentation",
+        "workflows"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate"
+    },
+    {
+      "id": "task_1767355253372_rjqjur",
+      "title": "Improve watchdog with configuration and token limits",
+      "description": "Allow configuration in watchdog script, add max token limits, improve restart logic.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-02T12:00:53.372Z",
+      "updated_at": "2026-01-02T12:00:53.372Z",
+      "created_by": "unknown",
+      "tags": [
+        "infrastructure",
+        "watchdog"
+      ],
+      "estimated_hours": 1,
+      "complexity": "simple"
+    },
+    {
+      "id": "task_1767355254784_i5mmcr",
+      "title": "Add debugging tools - save terminal outputs",
+      "description": "Create proper debugging infrastructure: save terminal outputs, create documentation agent for README generation.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-02T12:00:54.784Z",
+      "updated_at": "2026-01-02T12:00:54.784Z",
+      "created_by": "unknown",
+      "tags": [
+        "debugging",
+        "infrastructure"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate"
     }
   ],
-  "completed_count": 65,
-  "last_updated": "2026-01-02T11:24:49.419Z"
+  "completed_count": 66,
+  "last_updated": "2026-01-02T12:02:33.534Z"
 }

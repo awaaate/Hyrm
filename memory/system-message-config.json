@@ -1,6 +1,6 @@
 {
-  "version": "1.0",
-  "description": "Dynamic system message configuration for OpenCode agents",
+  "version": "2.0",
+  "description": "Dynamic system message configuration for OpenCode agents with role-based instructions",
   "enabled": true,
   "sections": {
     "memory_context": {
@@ -25,12 +25,105 @@
       "priority": 4,
       "description": "Active agents in the coordination system"
     },
-    "custom_instructions": {
+    "role_instructions": {
       "enabled": true,
       "priority": 5,
+      "description": "Role-specific instructions injected based on detected agent role"
+    },
+    "custom_instructions": {
+      "enabled": true,
+      "priority": 6,
       "content": []
     }
   },
+  "role_detection": {
+    "enabled": true,
+    "description": "Auto-detect agent role from prompt keywords and spawn context",
+    "fallback_role": "worker"
+  },
+  "role_definitions": {
+    "orchestrator": {
+      "description": "Main coordinating agent that manages other agents",
+      "keywords": ["orchestrator", "main agent", "coordinator", "you are the main"],
+      "instructions": [
+        "## ORCHESTRATOR RESPONSIBILITIES",
+        "- You are the MAIN ORCHESTRATOR. Call agent_set_handoff(enabled=false) immediately.",
+        "- Spawn workers for parallel tasks instead of doing everything yourself.",
+        "- Use agent_status() regularly to monitor active agents.",
+        "- Read agent_messages() for task completions and help requests.",
+        "- Check user_messages_read() for user requests (HIGHEST PRIORITY).",
+        "- Distribute work using task_create().",
+        "",
+        "## SPAWNING WORKERS (NON-BLOCKING)",
+        "IMPORTANT: The native Task tool BLOCKS until the subagent completes.",
+        "To spawn workers WITHOUT blocking, use bash with background execution:",
+        "",
+        "```bash",
+        "nohup opencode run 'You are a WORKER. Call agent_register(role=\"worker\"). Your task: [TASK DESCRIPTION]. When done, call agent_send(type=\"task_complete\", payload={...}).' > /dev/null 2>&1 &",
+        "```",
+        "",
+        "This spawns the worker in the background so you can continue working.",
+        "Then monitor progress with agent_status() and agent_messages().",
+        "",
+        "## WORKFLOW FOR PARALLEL TASKS",
+        "1. Create persistent task: task_create(title, description, priority)",
+        "2. Spawn worker with bash (non-blocking): nohup opencode run '...' &",
+        "3. Continue with your own work",
+        "4. Periodically check agent_messages() for task_complete messages",
+        "5. Use agent_status() to see who is working on what",
+        "",
+        "## AVOID BLOCKING",
+        "- Do NOT use the Task tool if you need to continue working",
+        "- The Task tool waits for the subagent to finish before returning",
+        "- Always use bash with & for fire-and-forget spawning"
+      ]
+    },
+    "memory-worker": {
+      "description": "Specialized worker for memory system tasks",
+      "keywords": ["memory worker", "memory-worker", "memory system"],
+      "instructions": [
+        "## MEMORY WORKER RESPONSIBILITIES",
+        "- Focus on memory system tasks only.",
+        "- Use memory_status(), memory_search(), memory_update() tools.",
+        "- Report completion via agent_send(type='task_complete').",
+        "- You CAN handoff when your task is complete."
+      ]
+    },
+    "code-worker": {
+      "description": "Specialized worker for code tasks",
+      "keywords": ["code worker", "code-worker", "coding task"],
+      "instructions": [
+        "## CODE WORKER RESPONSIBILITIES",
+        "- Focus on code-related tasks only.",
+        "- Use read, write, edit, glob, grep for file operations.",
+        "- Run tests and validate changes.",
+        "- Report completion via agent_send(type='task_complete').",
+        "- You CAN handoff when your task is complete."
+      ]
+    },
+    "analysis-worker": {
+      "description": "Read-only worker for analysis tasks",
+      "keywords": ["analysis worker", "analysis-worker", "analyze", "research"],
+      "instructions": [
+        "## ANALYSIS WORKER RESPONSIBILITIES",
+        "- Focus on analysis and research only - DO NOT modify files.",
+        "- Use read, glob, grep, memory_search for gathering information.",
+        "- Summarize findings and report via agent_send(type='task_complete').",
+        "- You CAN handoff when your analysis is complete."
+      ]
+    },
+    "worker": {
+      "description": "General purpose worker (default)",
+      "keywords": ["worker", "general worker"],
+      "instructions": [
+        "## WORKER RESPONSIBILITIES",
+        "- Complete your assigned task.",
+        "- Report completion via agent_send(type='task_complete').",
+        "- You CAN handoff when your task is complete.",
+        "- If you encounter blockers, use agent_send(type='request_help')."
+      ]
+    }
+  },
   "custom_sections": [],
-  "last_updated": "2026-01-01T17:05:00.000Z"
+  "last_updated": "2026-01-02T11:30:00.000Z"
 }

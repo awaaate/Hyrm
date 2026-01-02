@@ -1,0 +1,14 @@
+{
+  "name": "opencode-terminal-dashboard",
+  "version": "2.0.0",
+  "description": "Unified terminal dashboard for OpenCode multi-agent system",
+  "main": "index.ts",
+  "scripts": {
+    "start": "bun index.ts",
+    "dev": "bun --watch index.ts"
+  },
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.11.0"
+  }
+}

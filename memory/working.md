@@ -1,17 +1,76 @@
 # Working Memory
 
-## Current Session: 126
+## Current Session: 126+
 
 **Date**: 2026-01-02
 **Orchestrator**: Active, handoff disabled (PERSISTENT)
-**Agent ID**: agent-1767351072014-rf3roz
+**Agent ID**: agent-1767353179414-xlsru
 
-### Session 126 Progress (Continuation from Session 122)
+### Session 126+ Progress (Continuation)
 
-**Started**: 2026-01-02 10:51 UTC (watchdog restart)
-**Status**: Orchestrator active - System health and cleanup
+**Started**: 2026-01-02 11:26 UTC (watchdog restart)
+**Status**: Orchestrator active - Addressing user feedback on agent coordination
 
-### Completed Work
+### Latest Work (This Instance)
+
+8. **Dynamic Role-Based Instructions**
+   - Enhanced system-message-config.json to v2.0
+   - Added role_definitions with role-specific instructions for:
+     - orchestrator: Non-blocking spawning, coordination duties
+     - memory-worker: Memory system tasks
+     - code-worker: File operations
+     - analysis-worker: Read-only research
+     - worker: General purpose fallback
+   - Added role_detection for auto-detecting agent roles from prompts
+   - Role keywords used for detection (e.g., "orchestrator", "memory worker")
+
+9. **Plugin Role Detection Enhancement**
+   - Added detectAgentRole() function to parse system prompt for keywords
+   - Auto-registers agents with detected role instead of always "general"
+   - Role-specific instructions now injected into system prompt
+   - Detected role shown in memory context header
+
+10. **Non-Blocking Subagent Spawning Documentation**
+    - Documented that native Task tool BLOCKS until completion
+    - Added explicit instructions for non-blocking spawning using bash:
+      `nohup opencode run '...' > /dev/null 2>&1 &`
+    - Workflow: task_create() -> bash spawn -> continue working -> check agent_messages()
+
+11. **New Unified Terminal Dashboard v2.0**
+    - Created `terminal-dashboard/` folder with new structure
+    - Features: 8 view modes (dashboard, agents, tasks, messages, user, conversations, quality, logs)
+    - Keyboard navigation: 1-8 for views, c=claim task, m=message, r=refresh
+    - Real-time file watching for instant updates
+    - Unified all CLI tool features into single dashboard
+
+### User Feedback Addressed
+- [x] agent_register not being properly used - Now auto-registers with detected role
+- [x] Subagent blocking issue - Documented non-blocking pattern in orchestrator instructions
+- [x] Dynamic role-based instructions - Implemented in system-message-config.json v2.0
+- [x] Create new terminal-dashboard folder - Created with 3 files (index.ts, types.ts, data.ts)
+
+### New Tasks Created (from user messages)
+- [HIGH] Enhance terminal dashboard with full agent/message viewing
+- [HIGH] Analyze OpenCode codebase patterns and refactor project structure
+- [HIGH] Clean up unused tools and optimize token usage - IN PROGRESS
+- [MEDIUM] Create workflows folder with self-reflection documentation
+- [MEDIUM] Improve watchdog with configuration and token limits
+- [MEDIUM] Add debugging tools - save terminal outputs
+
+### Tool Usage Analysis (4,316 total calls)
+**High Usage** (keep in plugin):
+- File ops: 1,888 calls (read/edit/write)
+- Agent tools: 508 calls (coordination)
+- Task tools: 436 calls (management)
+- todowrite: 220 calls
+
+**Low Usage** (consider removing):
+- task_spawn: 4 calls - replaced by bash spawning
+- checkpoint_load, recovery_cleanup: 0 calls each
+- git_log: 4 calls
+- memory_search: 8 calls
+
+### Previous Work (Earlier in Session 126)
 
 1. **System Health Assessment**
    - Spawned explore agent to analyze codebase for issues
@@ -35,11 +94,31 @@
    - Archived 9 old sessions (94-114) to archive file
    - Reduced working.md from 716 to 205 lines (71% reduction)
 
+5. **Dashboard Refactoring** (spawned worker)
+   - Refactored App.tsx from 1677 to 628 lines (62% reduction)
+   - Created 11 component files in src/components/
+   - Quality score: 8.3/10
+
+6. **Recharts Visualization** (spawned worker)
+   - Installed recharts 3.6.0
+   - Created 5 chart components (ToolTimingChart, AgentActivityChart, etc.)
+   - Added sparklines for quality trends
+   - Quality score: 8.3/10
+
+7. **Tool Consolidation**
+   - Marked conversation-tracker.ts as deprecated
+   - Updated opencode-tracker.ts as primary tool
+   - Added migration guide in deprecated tool header
+   - Quality score: 7.7/10
+
 ### Key Metrics
 - **Tasks cancelled**: 3 (stale)
-- **Tasks created**: 3 (new)
+- **Tasks completed**: 3 (new)
 - **Bugs fixed**: 2 (plugin)
 - **Lines archived**: 511
+- **Components created**: 11 dashboard components + 5 chart components
+- **Quality average**: 8.1/10
+- **Commits**: 2 (47b15bb, 0c85907)
 
 ---
 
@@ -225,12 +304,20 @@ You are a fresh instance of the AI. The previous agent is gone. You have:
 
 
 
+
+
+
+
+
+
+
+
 ## Session 126 - AUTO-STOP (2026-01-02)
 
 **Status**: Session ended
-**Duration**: 31 minutes
-**Tool Calls**: 120
-**Session ID**: ses_48190ec16ffeflQdmRJ2Fu7Dst
+**Duration**: 34 minutes
+**Tool Calls**: 147
+**Session ID**: ses_481aae460ffeZNMAmU6NvZbDL4
 
 **What Happened**: Session idle detected - agent stopped working
 
