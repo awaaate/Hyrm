@@ -1969,8 +1969,89 @@
       "notes": [
         "[2026-01-02T18:38:31.325Z] Implemented directory-based locking. Each plugin instance now creates its own file in memory/.plugin-instances/{INSTANCE_ID}.lock. This is atomic and prevents race conditions. The smallest INSTANCE_ID alphabetically wins the election after 150ms delay."
       ]
+    },
+    {
+      "id": "task_1767380203797_kg0h70",
+      "title": "Implement gh CLI integration in task-manager.ts",
+      "description": "# WORKER AGENT - Implement gh CLI Integration for Tasks\n\n## Your Task\n\nIntegrate GitHub CLI (`gh`) with the task management system to enable:\n1. Creating GitHub issues from tasks\n2. Creating git branches from tasks  \n3. Syncing task status with GitHub (close issue when task completes)\n\n## Prerequisites Verified\n\n- `gh` is installed (v2.23.0)\n- `gh` is authenticated as `awaaate`\n- Repository is configured for https\n\n## Implementation Requirements\n\n### 1. Update types.ts (tools/shared/types.ts)\n\nA...",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T18:56:43.797Z",
+      "updated_at": "2026-01-02T19:05:01.330Z",
+      "claimed_at": "2026-01-02T18:56:43.797Z",
+      "created_by": "unknown",
+      "spawned_by": "agent-1767380127092-wgo9i6",
+      "subagent_type": "general",
+      "tags": [
+        "spawned",
+        "general"
+      ],
+      "completed_at": "2026-01-02T19:05:01.330Z",
+      "notes": [
+        "[2026-01-02T19:03:24.919Z] Implemented GitHub CLI integration for task-manager. Features: gh:issue, gh:branch, gh:sync commands. Commit: 389f5aa",
+        "[2026-01-02T19:05:01.330Z] Successfully implemented GitHub CLI integration. Created issue #1 and test branch."
+      ]
+    },
+    {
+      "id": "task_1767380475553_oml3k5",
+      "title": "Test gh CLI integration",
+      "description": "",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T19:01:15.553Z",
+      "updated_at": "2026-01-02T19:10:19.626Z",
+      "created_by": "orchestrator",
+      "github_issue_number": 1,
+      "github_issue_url": "https://github.com/awaaate/Hyrm/issues/1",
+      "notes": [
+        "[2026-01-02T19:01:54.108Z] Created GitHub issue #1",
+        "[2026-01-02T19:02:05.905Z] Created branch: task/high/3_oml3k5-test-gh-cli-integration",
+        "[2026-01-02T19:09:23.646Z] Tested all gh CLI commands successfully. Found and fixed bug in gh:sync output (commit 3e406be). Tests: gh:issue created issues #2 and #3, gh:branch created test branch, gh:sync correctly closed issues."
+      ],
+      "github_branch": "task/high/3_oml3k5-test-gh-cli-integration",
+      "assigned_to": "agent-1767380734154-mvw47",
+      "claimed_at": "2026-01-02T19:05:58.758Z",
+      "completed_at": "2026-01-02T19:09:23.644Z",
+      "quality_score": 8.8,
+      "quality_notes": "Testing CLI tools systematically reveals bugs that aren't obvious during implementation. The gh:sync fix was a simple 3-line change but required full end-to-end testing to discover."
+    },
+    {
+      "id": "task_1767380783837_moviy3",
+      "title": "Test session 180 - gh CLI validation",
+      "description": "",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T19:06:23.838Z",
+      "updated_at": "2026-01-02T19:07:08.875Z",
+      "created_by": "orchestrator",
+      "github_issue_number": 2,
+      "github_issue_url": "https://github.com/awaaate/Hyrm/issues/2",
+      "notes": [
+        "[2026-01-02T19:06:31.982Z] Created GitHub issue #2",
+        "[2026-01-02T19:06:39.254Z] Created branch: task/high/7_moviy3-test-session-180-gh-cli-validation",
+        "[2026-01-02T19:07:08.875Z] GitHub sync: Closed issue"
+      ],
+      "github_branch": "task/high/7_moviy3-test-session-180-gh-cli-validation",
+      "completed_at": "2026-01-02T19:06:59.198Z"
+    },
+    {
+      "id": "task_1767380887365_ljvsp5",
+      "title": "Verify sync fix",
+      "description": "",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T19:08:07.365Z",
+      "updated_at": "2026-01-02T19:08:18.022Z",
+      "created_by": "orchestrator",
+      "github_issue_number": 3,
+      "github_issue_url": "https://github.com/awaaate/Hyrm/issues/3",
+      "notes": [
+        "[2026-01-02T19:08:15.748Z] Created GitHub issue #3",
+        "[2026-01-02T19:08:18.022Z] GitHub sync: Closed issue"
+      ],
+      "completed_at": "2026-01-02T19:08:15.792Z"
     }
   ],
-  "completed_count": 92,
-  "last_updated": "2026-01-02T18:38:31.325Z"
+  "completed_count": 97,
+  "last_updated": "2026-01-02T19:09:23.646Z"
 }

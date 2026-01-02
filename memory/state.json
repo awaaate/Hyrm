@@ -1,18 +1,18 @@
 {
   "version": "2.0",
-  "session_count": 174,
+  "session_count": 175,
   "status": "Orchestrator session 141 resumed. Focus shifted to CLI tools evaluation per user directive. No new features, improve/debug/eval existing CLI tools only.",
   "active_tasks": [],
   "recent_achievements": [
-    "Session 174: Session 176: Fixed critical plugin race condition with directory-based atomic locking (commit e50c7ae). The previous JSON-based locking had a race condition where 4 instances overwrote each other. New solution uses individual lock files in memory/.plugin-instances/ for atomic registration.",
-    "Session 174: Session 175: Completed 2 user requests - (1) Added interactive mode to realtime-monitor.ts with send message, create task, show OpenCode sessions, (2) Created comprehensive docs/TOOLS_REFERENCE.md (483 lines). Commit cd0ea50.",
-    "Session 174: Session 174: Fixed ctx.$ shell escape bug (commit ae87c93). Replaced 5 instances of shell redirects with appendFileSync to fix JSON logging failures with special characters.",
-    "Session 174: Session 170: Fixed critical isPrimaryInstance() race condition (commit 90a5f78). New election mechanism with 150ms delay + smallest ID wins. Logs will no longer duplicate 4x. Also identified ctx.$ shell escape bug for next session.",
-    "Session 170: Session 166: Fixed critical duplicate logging bug in plugin. Events were being logged 4x due to missing isPrimaryInstance() checks in tool hooks. Worker commit 5882dc9 adds the checks, reducing future log size by 75%."
+    "Session 175: Session 181: Added auto-push to git_commit tool (default: true). User request addressed. Commit 516a98e.",
+    "Session 175: Session 180: Tested GH CLI integration (gh:issue, gh:branch, gh:sync). Found and fixed bug in gh:sync output - was showing old state after closing issue. Commit 3e406be.",
+    "Session 175: Session 179: Implemented GitHub CLI integration for task manager - gh:issue, gh:branch, gh:sync commands. Commit 389f5aa.",
+    "Session 174: Session 178: Fixed the REAL root cause of 4x duplicate logging - INSTANCE_ID was at module scope (shared by all 4 plugin instances). Moved it inside plugin function so each instance gets unique ID. Commit 1203ffc.",
+    "Session 174: Session 177: Fixed critical 4x duplicate logging bug by moving isPrimaryInstance() check inside log() function. Also fixed remaining ctx.$ shell redirect error (2 commits: 1fb595a, d870c25). This completes a multi-session effort to fix the plugin logging issues."
   ],
-  "last_session": "2026-01-02T18:12:41.961Z",
-  "current_session_id": "ses_4801696dcffez48Sd6iw0YC2YR",
-  "last_updated": "2026-01-02T18:39:30.197Z",
+  "last_session": "2026-01-02T18:56:58.051Z",
+  "current_session_id": "ses_47fee0f40ffeoSRso2XLQyCmJB",
+  "last_updated": "2026-01-02T19:14:21.969Z",
   "sessions_metadata": {
     "ses_489c3933bffeL5S1ti3unQcfDs": {
       "tokens": 50000,

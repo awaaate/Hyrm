@@ -1214,12 +1214,23 @@ Spawn workers for parallel tasks using: opencode run "worker prompt"
 Remember: You NEVER stop. Always call agent_set_handoff(enabled=false) first.`;
 
       const respawnLogFile = join(memoryDir, "orchestrator-respawn.log");
-      ctx.$`nohup opencode run --model claude-opus-4-5 ${respawnPrompt} > ${respawnLogFile} 2>&1 &`
-        .quiet()
-        .then(() => log("INFO", "Orchestrator re-spawn command sent"))
-        .catch((e) =>
-          log("ERROR", "Failed to re-spawn orchestrator", { error: String(e) })
-        );
+      
+      // Use Bun.spawn for background process - ctx.$ doesn't support shell redirects
+      try {
+        const logFileHandle = Bun.file(respawnLogFile).writer();
+        const proc = Bun.spawn(["opencode", "run", "--model", "claude-opus-4-5", respawnPrompt], {
+          stdout: logFileHandle,
+          stderr: logFileHandle,
+          // Don't wait for the process - let it run in background
+        });
+        
+        // Unref so the parent process can exit
+        proc.unref();
+        
+        log("INFO", "Orchestrator re-spawn command sent", { pid: proc.pid });
+      } catch (e) {
+        log("ERROR", "Failed to re-spawn orchestrator", { error: String(e) });
+      }
 
       return;
     }

@@ -1,5 +1,60 @@
 [
   {
+    "session_id": "ses_47fef8dc7ffepDNa8ONJfFAtLF",
+    "timestamp": 1767380720505,
+    "messages": 65,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [
+      "Implement gh CLI integration in task-manager.ts",
+      "Implement gh CLI Integration for Tasks",
+      "Implement gh CLI integration in task-manager.ts",
+      "Implement gh CLI integration in task-manager.ts"
+    ],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "Successfully integrated GitHub CLI with task-manager. Added 3 new commands: gh:issue (creates GitHub issues from tasks), gh:branch (creates git branches with naming convention task/<priority>/<id>-<slug>), gh:sync (syncs task status with GitHub - closes issues when task completed). Also added view command to show task details including GitHub info. Tested successfully: created issue #1 on GitHub and branch task/high/3_oml3k5-test-gh-cli-integration. Files modified: tools/shared/types.ts (4 insertions), tools/task-manager.ts (427 insertions).",
+      [
+        "[2026-01-02T19:03:24.919Z] Implemented GitHub CLI integration for task-manager. Features: gh:issue, gh:branch, gh:sync commands. Commit: 389f5aa",
+        "[2026-01-02T19:05:01.330Z] Successfully implemented GitHub CLI integration. Created issue #1 and test branch."
+      ]
+    ]
+  },
+  {
+    "session_id": "ses_47fee0f40ffeoSRso2XLQyCmJB",
+    "timestamp": 1767380618233,
+    "messages": 49,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [
+      "memory/working.md",
+      "tools/shared/types.ts",
+      "tools/task-manager.ts"
+    ],
+    "problems_solved": [
+      "Implement gh CLI integration in task-manager.ts",
+      "Implement gh CLI Integration for Tasks",
+      "Implement gh CLI integration in task-manager.ts"
+    ],
+    "key_insights": [
+      "test branch: `task/high/3_oml3k5-test-gh-cli-integration`",
+      "test issue: https://github.",
+      "`github_issue_number?",
+      "`github_issue_url?"
+    ],
+    "techniques": [
+      "Primary work: File operations (reading, editing, writing)"
+    ],
+    "solutions": [
+      "Successfully integrated GitHub CLI with task-manager. Added 3 new commands: gh:issue (creates GitHub issues from tasks), gh:branch (creates git branches with naming convention task/<priority>/<id>-<slug>), gh:sync (syncs task status with GitHub - closes issues when task completed). Also added view command to show task details including GitHub info. Tested successfully: created issue #1 on GitHub and branch task/high/3_oml3k5-test-gh-cli-integration. Files modified: tools/shared/types.ts (4 insertions), tools/task-manager.ts (427 insertions).",
+      [
+        "[2026-01-02T19:03:24.919Z] Implemented GitHub CLI integration for task-manager. Features: gh:issue, gh:branch, gh:sync commands. Commit: 389f5aa"
+      ]
+    ]
+  },
+  {
     "session_id": "ses_4802ea147ffe6JC5wdP49pA8Jn",
     "timestamp": 1767377031775,
     "messages": 103,
@@ -1370,38 +1425,6 @@
     "discoveries": [],
     "code_created": [
       "tools/opencode-cli.ts"
-    ],
-    "problems_solved": [],
-    "key_insights": [],
-    "techniques": [],
-    "solutions": []
-  },
-  {
-    "session_id": "ses_4897036fbffel8ARM4HDVodONo",
-    "timestamp": 1767220739087,
-    "messages": 8,
-    "decisions": [],
-    "discoveries": [],
-    "code_created": [],
-    "problems_solved": [],
-    "key_insights": [],
-    "techniques": [],
-    "solutions": []
-  },
-  {
-    "session_id": "ses_4897d7fa0ffegdFYG4Fl2W2AFC",
-    "timestamp": 1767220585810,
-    "messages": 96,
-    "decisions": [],
-    "discoveries": [
-      "when the plugin auto-registers the agent on session start (line 517-528 of index."
-    ],
-    "code_created": [
-      "mcp-servers/playwright-mcp/package.json",
-      "mcp-servers/playwright-mcp/tsconfig.json",
-      "mcp-servers/playwright-mcp/src/index.ts",
-      "tools/generate-orchestrator-prompt.ts",
-      "start-main.sh"
     ],
     "problems_solved": [],
     "key_insights": [],
