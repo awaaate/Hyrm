@@ -1821,11 +1821,239 @@
       "metadata": {
         "duration_minutes": 11
       }
+    },
+    {
+      "task_id": "task_1767349926620_836elg",
+      "task_title": "Apply OpenCode learnings to improve system architecture",
+      "assessed_at": "2026-01-02T10:36:35.435Z",
+      "assessed_by": "ses_481bcf20fffenxdmFcE6LcoRzI",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "OpenCode source is well-structured - agents defined in config, plugins can hook into tool execution, session linking via parentID. The task_spawn tool creates better coordination by injecting memory context and task IDs into subagent prompts.",
+      "metadata": {
+        "duration_minutes": 4
+      }
+    },
+    {
+      "task_id": "task_1767350438773_eop2kb",
+      "task_title": "Improve automatic knowledge extraction quality",
+      "assessed_at": "2026-01-02T10:44:34.232Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.1,
+      "lessons_learned": "Multi-source knowledge extraction is more reliable than regex on conversation text alone. Structured data from message bus task_complete messages, quality assessments lessons_learned, and git commits provides factual information vs inferred learnings.",
+      "metadata": {
+        "duration_minutes": 4
+      }
+    },
+    {
+      "task_id": "task_1767350442149_qnozk0",
+      "task_title": "Compact message bus - remove excessive heartbeats",
+      "assessed_at": "2026-01-02T10:46:54.881Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.1,
+      "lessons_learned": "Heartbeat frequency can be reduced significantly (30s->60s) without affecting agent health detection. Message bus heartbeats can be sent less frequently than registry updates since coordination messages are the primary use case.",
+      "metadata": {
+        "duration_minutes": 6
+      }
+    },
+    {
+      "task_id": "task_1767350445520_hih29g",
+      "task_title": "Add parent-child session visualization",
+      "assessed_at": "2026-01-02T10:50:12.819Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "OpenCode stores parentID in session objects allowing easy tree reconstruction. Visual tree formatting with Unicode box-drawing characters (├── └──) works well in terminals. Grouping by session type using title keywords provides good UX.",
+      "metadata": {
+        "duration_minutes": 9
+      }
+    },
+    {
+      "task_id": "task_1767352351947_r8bqq2",
+      "task_title": "Refactor dashboard-ui App.tsx into components",
+      "assessed_at": "2026-01-02T11:19:01.480Z",
+      "assessed_by": "ses_481aa010fffeU8A0urISmUeKNL",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Breaking large React components into smaller, focused components improves maintainability. Creating a shared types.ts file prevents circular dependencies. Barrel exports (index.ts) simplify imports. The 62% reduction in App.tsx lines makes the codebase much more navigable.",
+      "metadata": {
+        "duration_minutes": 6
+      }
+    },
+    {
+      "task_id": "task_1767352353899_xp5f2m",
+      "task_title": "Add recharts visualization library to dashboard",
+      "assessed_at": "2026-01-02T11:23:14.173Z",
+      "assessed_by": "ses_481aa010fffeU8A0urISmUeKNL",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Recharts integrates well with React TypeScript projects. Creating separate chart components in a charts/ subdirectory keeps the code organized. Color-coding data by thresholds (green/amber/red) provides instant visual feedback. Sparklines are excellent for showing trends in compact spaces.",
+      "metadata": {
+        "duration_minutes": 11
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 47,
-    "avg_overall_score": 8.15957446808511
+    "total_assessed": 53,
+    "avg_overall_score": 8.171698113207551
   },
-  "last_updated": "2026-01-02T10:23:52.331Z"
+  "last_updated": "2026-01-02T11:23:14.174Z"
 }

@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "checkpoint_id": "ckpt_1767351033820_jky8nx",
+  "created_at": "2026-01-02T10:50:33.820Z",
+  "agent_id": "agent-1767350313896-8mgpde",
+  "session_id": "session-1767351033818",
+  "current_task": null,
+  "files_modified": [
+    {
+      "path": ".opencode/plugin/index.ts",
+      "action": "modified"
+    },
+    {
+      "path": ".opencode/plugin/tools/task-tools.ts",
+      "action": "modified"
+    },
+    {
+      "path": "opencode.json",
+      "action": "modified"
+    },
+    {
+      "path": "tools/session-summarizer.ts",
+      "action": "modified"
+    },
+    {
+      "path": "tools/message-bus-manager.ts",
+      "action": "modified"
+    },
+    {
+      "path": "tools/multi-agent-coordinator.ts",
+      "action": "modified"
+    },
+    {
+      "path": "tools/opencode-tracker.ts",
+      "action": "modified"
+    }
+  ],
+  "context": {
+    "what_was_happening": "Session 122 - Completed 4 improvements to the multi-agent system",
+    "next_steps": [
+      "Check for new user messages",
+      "Monitor system health",
+      "Consider additional improvements"
+    ]
+  },
+  "recovery": {
+    "can_resume": false,
+    "estimated_remaining_work": "0% remaining"
+  }
+}

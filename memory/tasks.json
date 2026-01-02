@@ -1160,9 +1160,9 @@
       "title": "Enhance dashboard-ui with more visualizations",
       "description": "Add charts/graphs to dashboard-ui: task completion over time, quality score trends, agent activity heatmap, tool usage breakdown. Consider using chart libraries like recharts.",
       "priority": "low",
-      "status": "pending",
+      "status": "cancelled",
       "created_at": "2026-01-02T10:12:58.705Z",
-      "updated_at": "2026-01-02T10:12:58.705Z",
+      "updated_at": "2026-01-02T11:12:01.063Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -1170,9 +1170,269 @@
         "ui"
       ],
       "estimated_hours": 4,
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "terminal-user",
+      "notes": [
+        "[2026-01-02T11:12:01.063Z] Cancelled - assigned to terminal-user (stale). Dashboard visualizations are low priority. Will recreate when focusing on UI improvements."
+      ]
+    },
+    {
+      "id": "task_1767349529403_09cipw",
+      "title": "Enhance opencode-tracker for full agent/session traceability",
+      "description": "User request: Need more traceability of agents/sessions. Must see EVERYTHING: messages, parts, tool calls in conversation style. Leverage and improve opencode-tracker.ts to provide complete visibility into agent sessions.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T10:25:29.403Z",
+      "updated_at": "2026-01-02T10:29:31.901Z",
+      "created_by": "ses_481cd75b8ffevcv1L5aqaLPZG9",
+      "tags": [
+        "traceability",
+        "opencode-tracker",
+        "user-request"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767348800103-tr5phe",
+      "claimed_at": "2026-01-02T10:26:02.183Z",
+      "completed_at": "2026-01-02T10:29:31.881Z",
+      "notes": [
+        "[2026-01-02T10:29:31.901Z] Enhanced opencode-tracker.ts with 3 new commands: view (full conversation with all parts), tools (tool calls with I/O), search (cross-session search). Also enhanced sessions command to show tool counts, duration, and topics."
+      ]
+    },
+    {
+      "id": "task_1767349531023_a796l4",
+      "title": "Debug and fix terminal dashboard display issues",
+      "description": "User request: Debug terminal dashboard, things not displaying correctly. Investigate and fix visual issues. Then expand to unify all CLI commands within the dashboard.",
+      "priority": "high",
+      "status": "cancelled",
+      "created_at": "2026-01-02T10:25:31.023Z",
+      "updated_at": "2026-01-02T11:11:59.047Z",
+      "created_by": "ses_481cd75b8ffevcv1L5aqaLPZG9",
+      "tags": [
+        "terminal-dashboard",
+        "debugging",
+        "user-request"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767348800103-tr5phe",
+      "claimed_at": "2026-01-02T10:25:52.800Z",
+      "notes": [
+        "[2026-01-02T10:39:16.841Z] Agent that claimed this task may be stale. Checking if work was completed.",
+        "[2026-01-02T11:11:59.047Z] Cancelled - assigned to stale agent. Terminal dashboard works but needs refinement. Will recreate if needed."
+      ]
+    },
+    {
+      "id": "task_1767349532596_z8mmzv",
+      "title": "Create specialized documentation agent skill",
+      "description": "User request: Create an agent specialized in documentation. Should be able to generate, update, and maintain documentation across the codebase.",
+      "priority": "medium",
+      "status": "cancelled",
+      "created_at": "2026-01-02T10:25:32.596Z",
+      "updated_at": "2026-01-02T11:12:00.221Z",
+      "created_by": "ses_481cd75b8ffevcv1L5aqaLPZG9",
+      "tags": [
+        "documentation",
+        "agent-skill",
+        "user-request"
+      ],
+      "estimated_hours": 1,
+      "complexity": "simple",
+      "assigned_to": "terminal-user",
+      "notes": [
+        "[2026-01-02T11:12:00.221Z] Cancelled - assigned to terminal-user (stale). Documentation agent skill not critical - can recreate later."
+      ]
+    },
+    {
+      "id": "task_1767349926620_836elg",
+      "title": "Apply OpenCode learnings to improve system architecture",
+      "description": "Based on OPENCODE_ARCHITECTURE.md and CODEBASE_ANALYSIS.md, implement improvements:\n1. Fix subagent context inheritance (subagents don't get memory context)\n2. Create task wrapper tool that integrates Task with our task system\n3. Add session linking to track child sessions\n4. Improve plugin hooks using OpenCode patterns\n5. Consider custom agents in .opencode/agent/\n\nSource code available at /app/opencode-src/",
+      "priority": "critical",
+      "status": "completed",
+      "created_at": "2026-01-02T10:32:06.620Z",
+      "updated_at": "2026-01-02T10:36:35.440Z",
+      "created_by": "ses_481bcf20fffenxdmFcE6LcoRzI",
+      "tags": [
+        "opencode",
+        "architecture",
+        "improvement",
+        "high-priority"
+      ],
+      "estimated_hours": 4,
+      "complexity": "complex",
+      "assigned_to": "agent-1767349882378-7ghrlg",
+      "claimed_at": "2026-01-02T10:32:17.573Z",
+      "completed_at": "2026-01-02T10:36:28.379Z",
+      "notes": [
+        "[2026-01-02T10:36:28.383Z] Completed OpenCode improvements: 1) Added task_spawn tool with memory context injection, 2) Enhanced plugin to track Task-spawned sessions, 3) Added 3 custom agent types (memory-worker, code-worker, analysis-worker) to opencode.json"
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "OpenCode source is well-structured - agents defined in config, plugins can hook into tool execution, session linking via parentID. The task_spawn tool creates better coordination by injecting memory context and task IDs into subagent prompts."
+    },
+    {
+      "id": "task_1767350438773_eop2kb",
+      "title": "Improve automatic knowledge extraction quality",
+      "description": "The session.end hook extracts knowledge automatically but the results in knowledge-base.json are mostly empty. Enhance the extraction to: 1) Better detect decisions and discoveries from conversation, 2) Extract code changes with meaningful context, 3) Identify problems solved and techniques used, 4) Create actionable insights. Review existing extractSessionKnowledge function in plugin/index.ts.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-02T10:40:38.773Z",
+      "updated_at": "2026-01-02T10:44:34.236Z",
+      "created_by": "unknown",
+      "tags": [
+        "enhancement",
+        "memory",
+        "plugin"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767350313896-8mgpde",
+      "claimed_at": "2026-01-02T10:40:51.546Z",
+      "completed_at": "2026-01-02T10:44:30.706Z",
+      "notes": [
+        "[2026-01-02T10:44:30.710Z] Enhanced extractSessionKnowledge to pull from 6 data sources (message bus, quality assessments, tasks, git activity, sessions, tool timing). Improved session-summarizer extractLearnings with 15 regex patterns for decisions, insights, solutions. Knowledge base now stores structured data."
+      ],
+      "quality_score": 8.1,
+      "quality_notes": "Multi-source knowledge extraction is more reliable than regex on conversation text alone. Structured data from message bus task_complete messages, quality assessments lessons_learned, and git commits provides factual information vs inferred learnings."
+    },
+    {
+      "id": "task_1767350442149_qnozk0",
+      "title": "Compact message bus - remove excessive heartbeats",
+      "description": "The message-bus.jsonl contains many heartbeat messages that clutter coordination. Create a scheduled cleanup that: 1) Keeps only latest heartbeat per agent, 2) Archives messages older than 1 hour, 3) Runs automatically on session start. Use tools/message-bus-manager.ts as foundation.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T10:40:42.149Z",
+      "updated_at": "2026-01-02T10:46:54.885Z",
+      "created_by": "unknown",
+      "tags": [
+        "optimization",
+        "memory"
+      ],
+      "estimated_hours": 1,
+      "complexity": "simple",
+      "assigned_to": "agent-1767350313896-8mgpde",
+      "claimed_at": "2026-01-02T10:44:54.772Z",
+      "completed_at": "2026-01-02T10:46:51.606Z",
+      "notes": [
+        "[2026-01-02T10:46:51.612Z] Reduced heartbeat spam: lowered thresholds in message-bus-manager, reduced heartbeat frequency to 60s, only send to message bus every 5 min. Result: 51% message reduction."
+      ],
+      "quality_score": 8.1,
+      "quality_notes": "Heartbeat frequency can be reduced significantly (30s->60s) without affecting agent health detection. Message bus heartbeats can be sent less frequently than registry updates since coordination messages are the primary use case."
+    },
+    {
+      "id": "task_1767350445520_hih29g",
+      "title": "Add parent-child session visualization",
+      "description": "Now that we track session spawns (parent_session -> child_session in sessions.jsonl), create a visualization tool that shows the session tree. Show which orchestrator spawned which workers, task associations, and timing. Add to opencode-tracker.ts as new 'tree' command.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T10:40:45.520Z",
+      "updated_at": "2026-01-02T10:50:12.824Z",
+      "created_by": "unknown",
+      "tags": [
+        "feature",
+        "monitoring"
+      ],
+      "estimated_hours": 1.5,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767350313896-8mgpde",
+      "claimed_at": "2026-01-02T10:47:10.066Z",
+      "completed_at": "2026-01-02T10:50:09.574Z",
+      "notes": [
+        "[2026-01-02T10:50:09.581Z] Added 'tree' command to opencode-tracker.ts that shows parent-child session relationships. Visual tree with icons (🎯 orchestrator, ⚙️ worker, 🔍 explore), connectors, tool counts, and duration. Groups orphan and standalone sessions."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "OpenCode stores parentID in session objects allowing easy tree reconstruction. Visual tree formatting with Unicode box-drawing characters (├── └──) works well in terminals. Grouping by session type using title keywords provides good UX."
+    },
+    {
+      "id": "task_1767352351947_r8bqq2",
+      "title": "Refactor dashboard-ui App.tsx into components",
+      "description": "App.tsx is 1677 lines - split into separate component files for better maintainability. Extract: Header, Sidebar, AgentList, TaskList, MessageStream, QualityPanel, PerformanceTab",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T11:12:31.947Z",
+      "updated_at": "2026-01-02T11:19:01.482Z",
+      "created_by": "ses_481aa010fffeU8A0urISmUeKNL",
+      "tags": [
+        "dashboard",
+        "refactor",
+        "ui"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767351123740-fin1ue",
+      "claimed_at": "2026-01-02T11:13:37.573Z",
+      "completed_at": "2026-01-02T11:18:58.237Z",
+      "notes": [
+        "[2026-01-02T11:18:58.240Z] Refactored App.tsx from 1677 lines to 628 lines. Created 11 component files in components/ directory. Build verified successful."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Breaking large React components into smaller, focused components improves maintainability. Creating a shared types.ts file prevents circular dependencies. Barrel exports (index.ts) simplify imports. The 62% reduction in App.tsx lines makes the codebase much more navigable."
+    },
+    {
+      "id": "task_1767352353899_xp5f2m",
+      "title": "Add recharts visualization library to dashboard",
+      "description": "Install recharts and implement actual charts for: tool execution times, task completion trends, quality score history, agent activity over time",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T11:12:33.899Z",
+      "updated_at": "2026-01-02T11:23:14.176Z",
+      "created_by": "ses_481aa010fffeU8A0urISmUeKNL",
+      "tags": [
+        "dashboard",
+        "visualization",
+        "charts"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767351123740-fin1ue",
+      "claimed_at": "2026-01-02T11:19:14.571Z",
+      "completed_at": "2026-01-02T11:23:09.259Z",
+      "notes": [
+        "[2026-01-02T11:22:50.310Z] Implemented recharts visualization library in dashboard-ui:\n1. Installed recharts v3.6.0\n2. Created 5 chart components in src/components/charts/:\n   - ToolTimingChart: Horizontal bar chart for tool execution times (color-coded by speed)\n   - AgentActivityChart: Line chart showing agent quality and efficiency metrics\n   - QualityTrendChart: Area chart for quality score history\n   - TaskCompletionChart: Line chart for task completion rates\n   - QualitySparkline: Mini sparkline for trend visualization\n3. Updated PerformanceTab.tsx with new recharts visualizations\n4. Updated QualityPanel.tsx with quality sparkline\n5. Build successful, dev server verified working",
+        "[2026-01-02T11:23:09.263Z] Added recharts 3.6.0, created 5 chart components (ToolTimingChart, AgentActivityChart, QualityTrendChart, TaskCompletionChart, QualitySparkline), updated PerformanceTab.tsx and QualityPanel.tsx. Build verified successful."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Recharts integrates well with React TypeScript projects. Creating separate chart components in a charts/ subdirectory keeps the code organized. Color-coding data by thresholds (green/amber/red) provides instant visual feedback. Sparklines are excellent for showing trends in compact spaces."
+    },
+    {
+      "id": "task_1767352356106_042zzf",
+      "title": "Consolidate conversation-tracker and opencode-tracker",
+      "description": "Both tools track OpenCode conversations with overlapping functionality. Consolidate into a single tool or clearly define roles - one for viewing sessions, one for syncing to our memory",
+      "priority": "low",
+      "status": "pending",
+      "created_at": "2026-01-02T11:12:36.106Z",
+      "updated_at": "2026-01-02T11:12:36.106Z",
+      "created_by": "ses_481aa010fffeU8A0urISmUeKNL",
+      "tags": [
+        "cleanup",
+        "refactor",
+        "tools"
+      ],
+      "estimated_hours": 1,
+      "complexity": "simple"
+    },
+    {
+      "id": "task_1767352431470_h49swr",
+      "title": "Refactor dashboard-ui App.tsx into components",
+      "description": "You are a CODE WORKER specializing in React/TypeScript refactoring.\n\n## TASK\nRefactor `/app/workspace/dashboard-ui/src/App.tsx` (1677 lines) into modular components.\n\n## REQUIREMENTS\n1. Create a `components/` directory in `dashboard-ui/src/`\n2. Extract these components:\n   - `Header.tsx` - Top navigation bar\n   - `Sidebar.tsx` - Left sidebar navigation\n   - `AgentList.tsx` - Agent status display\n   - `TaskList.tsx` - Task queue display\n   - `MessageStream.tsx` - Real-time message feed\n   - `Qual...",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-02T11:13:51.470Z",
+      "updated_at": "2026-01-02T11:18:58.994Z",
+      "claimed_at": "2026-01-02T11:13:51.470Z",
+      "created_by": "ses_481aa010fffeU8A0urISmUeKNL",
+      "spawned_by": "agent-1767351123740-fin1ue",
+      "subagent_type": "general",
+      "tags": [
+        "spawned",
+        "general"
+      ],
+      "completed_at": "2026-01-02T11:18:58.993Z",
+      "notes": [
+        "[2026-01-02T11:18:39.231Z] Successfully refactored App.tsx from 1677 lines to 628 lines. Created 10 modular components in dashboard-ui/src/components/: types.ts (122 lines), Header.tsx (110 lines), StatusBadge.tsx (31 lines), StatCard.tsx (42 lines), AgentList.tsx (42 lines), TaskList.tsx (92 lines), MessageStream.tsx (49 lines), QualityPanel.tsx (106 lines), PerformanceTab.tsx (404 lines), SessionAnalyticsPanel.tsx (161 lines), index.ts (13 lines). Build verified with bun run build, dev server starts correctly.",
+        "[2026-01-02T11:18:58.994Z] Worker completed refactoring successfully"
+      ]
     }
   ],
-  "completed_count": 54,
-  "last_updated": "2026-01-02T10:23:49.904Z"
+  "completed_count": 64,
+  "last_updated": "2026-01-02T11:23:09.263Z"
 }

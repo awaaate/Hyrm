@@ -1,18 +1,18 @@
 {
   "version": "2.0",
-  "session_count": 118,
+  "session_count": 126,
   "status": "orchestrator_active",
   "active_tasks": [],
   "recent_achievements": [
-    "Session 114: OpenCode architecture analysis (8.6/10) - Analyzed OpenCode source from GitHub. Documented package structure, agent system, tool system, Task tool internals. Created integration plan with 4 customization options. Recommended plugin + wrapper approach.",
-    "Session 114: Enhanced OpenCode conversation tracking (8.5/10) - Improved sync command saves rich session data with tool patterns, topics, file changes to memory/opencode-sessions.json. Added learn command for extracting insights. Migrated to shared utilities.",
-    "Session 114: Deep codebase analysis & code quality improvements (8.6/10) - Created comprehensive analysis doc, built 8-file shared utilities module (json-utils, colors, time-utils, string-utils, paths, config, types, index), migrated 6 CLI tools removing ~200 lines of duplicated code",
-    "Session 110: Session 106 continuation: Refactored memory system (8.2/10) - Added automatic session knowledge extraction on session.end, extractSessionKnowledge function for tool pattern analysis, summarize-current command for quiet auto-summarization, and Memory System Architecture documentation in AGENTS.md",
-    "Session 106: Session 106 continuation: Added real-time Performance tab to dashboard-ui (8.3/10) with tool execution times chart, agent efficiency leaderboard, error pattern alerts, and optimization suggestions panel. WebSocket integration for real-time updates."
+    "Session 122: Session 122: System improvements (8.2/10 avg) - 1) Enhanced knowledge extraction from 6 sources, 2) Reduced heartbeat spam 51%, 3) Added session tree visualization, 4) task_spawn tool with context injection. 4 commits: 424fb1a, 31bde48, b7aa78a, 8b85ff2.",
+    "Session 122: Session 122: Applied OpenCode learnings (8.5/10) - Added task_spawn tool with memory context injection, enhanced plugin to track Task-spawned sessions, created 3 custom agent types (memory-worker, code-worker, analysis-worker). OpenCode source analyzed at /app/opencode-src/.",
+    "Session 122: Session 122: Applied OpenCode learnings (8.5/10) - Added task_spawn tool with memory context injection, enhanced plugin to track Task-spawned sessions, created 3 custom agent types (memory-worker, code-worker, analysis-worker). OpenCode source analyzed at /app/opencode-src/.",
+    "Session 118: Session 118: Code quality improvements (8.8/10) - Completed CLI tool migrations (7 tools, ~239 lines removed), created comprehensive unit tests (114 tests for shared utilities), cleaned git state with 3 commits. All tools tested and working.",
+    "Session 114: OpenCode architecture analysis (8.6/10) - Analyzed OpenCode source from GitHub. Documented package structure, agent system, tool system, Task tool internals. Created integration plan with 4 customization options. Recommended plugin + wrapper approach."
   ],
-  "last_session": "2026-01-02T10:13:20.099Z",
-  "current_session_id": "ses_481cd75b8ffevcv1L5aqaLPZG9",
-  "last_updated": "2026-01-02T10:09:39.504Z",
+  "last_session": "2026-01-02T10:52:03.735Z",
+  "current_session_id": "ses_481aa010fffeU8A0urISmUeKNL",
+  "last_updated": "2026-01-02T10:50:42.402Z",
   "sessions_metadata": {
     "ses_489c3933bffeL5S1ti3unQcfDs": {
       "tokens": 50000,

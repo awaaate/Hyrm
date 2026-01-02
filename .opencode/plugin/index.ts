@@ -227,7 +227,7 @@ export const MemoryPlugin: Plugin = async (ctx) => {
 
     appendFileSync(logPath, JSON.stringify(logEntry) + "\n");
 
-    const emoji = level === "ERROR" ? "" : level === "WARN" ? "" : "";
+    const emoji = level === "ERROR" ? "[!]" : level === "WARN" ? "[~]" : "[*]";
     console.log(
       `${emoji} [Memory] ${message}`,
       data ? JSON.stringify(data) : ""
@@ -933,11 +933,9 @@ Read memory/working.md for full details.`);
         log("WARN", "Knowledge extraction failed", { error: String(e) })
       );
 
-    log("INFO", "Starting sync engine (background)");
-    ctx.$`npx tsx ${join(ctx.directory, "tools/sync-engine.ts")} pull`
-      .quiet()
-      .then(() => log("INFO", "Sync engine completed"))
-      .catch((e) => log("WARN", "Sync engine failed", { error: String(e) }));
+    // Note: sync-engine.ts was planned but not implemented
+    // Conversation tracking is now done via opencode-tracker.ts learn command
+    // Manual: bun tools/opencode-tracker.ts sync && bun tools/opencode-tracker.ts learn
 
     log("INFO", "Boot sequence complete");
 

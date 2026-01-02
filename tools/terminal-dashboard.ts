@@ -150,8 +150,11 @@ const agentTable = grid.set(1, 0, 4, 6, contrib.table, {
   interactive: true,
   label: " Agents ",
   border: { type: "line", fg: "cyan" },
-  columnSpacing: 2,
-  columnWidth: [25, 12, 10, 8],
+  columnSpacing: 1,
+  columnWidth: [20, 12, 8, 8],
+  style: {
+    border: { fg: "cyan" },
+  },
 });
 
 // Task list
@@ -163,8 +166,11 @@ const taskTable = grid.set(1, 6, 4, 6, contrib.table, {
   interactive: true,
   label: " Tasks (pending) ",
   border: { type: "line", fg: "yellow" },
-  columnSpacing: 2,
-  columnWidth: [6, 35, 8, 12],
+  columnSpacing: 1,
+  columnWidth: [3, 32, 6, 10],
+  style: {
+    border: { fg: "yellow" },
+  },
 });
 
 // Message log
@@ -175,6 +181,9 @@ const messageLog = grid.set(5, 0, 4, 8, contrib.log, {
   border: { type: "line", fg: "green" },
   tags: true,
   bufferLength: 100,
+  style: {
+    border: { fg: "green" },
+  },
 });
 
 // Quality stats box (replaced donut to avoid canvas width issues)
@@ -199,18 +208,15 @@ const taskStatusBox = grid.set(7, 8, 2, 4, blessed.box, {
   },
 });
 
-// System stats LCD
-const systemLcd = grid.set(9, 0, 2, 4, contrib.lcd, {
-  segmentWidth: 0.06,
-  segmentInterval: 0.11,
-  strokeWidth: 0.11,
-  elements: 5,
-  display: "00000",
-  elementSpacing: 4,
-  elementPadding: 2,
-  color: "green",
+// System stats box (replaced LCD to avoid canvas rendering issues)
+const systemBox = grid.set(9, 0, 2, 4, blessed.box, {
   label: " Session # ",
+  tags: true,
   border: { type: "line", fg: "green" },
+  style: {
+    fg: "green",
+    border: { fg: "green" },
+  },
 });
 
 // User messages box
@@ -219,6 +225,7 @@ const userMsgBox = grid.set(9, 4, 2, 4, blessed.list, {
   border: { type: "line", fg: "magenta" },
   style: {
     fg: "white",
+    border: { fg: "magenta" },
     selected: { bg: "magenta", fg: "black" },
   },
   keys: true,
@@ -232,7 +239,7 @@ const activityBox = grid.set(9, 8, 2, 4, blessed.box, {
   tags: true,
   border: { type: "line", fg: "cyan" },
   style: {
-    fg: "white",
+    fg: "cyan",
     border: { fg: "cyan" },
   },
 });
@@ -389,10 +396,15 @@ function updateTaskStatusBox(): void {
   );
 }
 
-function updateSystemLcd(): void {
+function updateSystemBox(): void {
   const state = getState();
-  const sessionNum = String(state.session_count || 0).padStart(5, "0");
-  systemLcd.setDisplay(sessionNum);
+  const sessionNum = state.session_count || 0;
+  
+  // Create a large text display for session number
+  systemBox.setContent(
+    `{center}{bold}{green-fg}Session{/green-fg}{/bold}{/center}\n` +
+    `{center}{bold}${sessionNum}{/bold}{/center}`
+  );
 }
 
 function updateUserMessages(): void {
@@ -448,7 +460,7 @@ function updateAll(): void {
   updateMessageLog();
   updateQualityBox();
   updateTaskStatusBox();
-  updateSystemLcd();
+  updateSystemBox();
   updateUserMessages();
   updateActivityBox();
   screen.render();
@@ -456,9 +468,15 @@ function updateAll(): void {
 
 // Focus management
 function cycleFocus(): void {
-  panels[focusedPanel].style.border.fg = "white";
+  // Reset previous panel border
+  if (panels[focusedPanel].style && panels[focusedPanel].style.border) {
+    panels[focusedPanel].style.border.fg = "white";
+  }
   focusedPanel = (focusedPanel + 1) % panels.length;
-  panels[focusedPanel].style.border.fg = "green";
+  // Highlight new panel border
+  if (panels[focusedPanel].style && panels[focusedPanel].style.border) {
+    panels[focusedPanel].style.border.fg = "green";
+  }
   panels[focusedPanel].focus();
   screen.render();
 }
@@ -666,7 +684,9 @@ screen.key(["1"], () => {
   focusedPanel = 0;
   panels[focusedPanel].focus();
   panels.forEach((p, i) => {
-    p.style.border.fg = i === focusedPanel ? "green" : "white";
+    if (p.style && p.style.border) {
+      p.style.border.fg = i === focusedPanel ? "green" : "white";
+    }
   });
   screen.render();
 });
@@ -675,7 +695,9 @@ screen.key(["2"], () => {
   focusedPanel = 1;
   panels[focusedPanel].focus();
   panels.forEach((p, i) => {
-    p.style.border.fg = i === focusedPanel ? "green" : "white";
+    if (p.style && p.style.border) {
+      p.style.border.fg = i === focusedPanel ? "green" : "white";
+    }
   });
   screen.render();
 });
@@ -684,7 +706,9 @@ screen.key(["3"], () => {
   focusedPanel = 2;
   panels[focusedPanel].focus();
   panels.forEach((p, i) => {
-    p.style.border.fg = i === focusedPanel ? "green" : "white";
+    if (p.style && p.style.border) {
+      p.style.border.fg = i === focusedPanel ? "green" : "white";
+    }
   });
   screen.render();
 });
@@ -697,9 +721,11 @@ function main(): void {
   // Start file watching
   startWatching();
   
-  // Focus first panel
+  // Focus first panel with proper null checks
   panels[focusedPanel].focus();
-  panels[focusedPanel].style.border.fg = "green";
+  if (panels[focusedPanel].style && panels[focusedPanel].style.border) {
+    panels[focusedPanel].style.border.fg = "green";
+  }
   
   // Periodic refresh as backup (every 5 seconds)
   setInterval(() => {

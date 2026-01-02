@@ -26,8 +26,27 @@
         "end": "unknown"
       },
       "lineCount": 815
+    },
+    {
+      "filename": "sessions-94-114-2026-01-02T11-12-22-167Z.md",
+      "sessions": [
+        94,
+        94,
+        98,
+        99,
+        102,
+        106,
+        110,
+        114,
+        114
+      ],
+      "dateRange": {
+        "start": "unknown",
+        "end": "2026-01-02"
+      },
+      "lineCount": 556
     }
   ],
-  "lastUpdated": "2026-01-01T22:22:33.486Z",
-  "totalArchived": 17
+  "lastUpdated": "2026-01-02T11:12:22.168Z",
+  "totalArchived": 26
 }

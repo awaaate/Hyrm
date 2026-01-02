@@ -2,16 +2,26 @@
   "version": "1.0.0",
   "agents": [
     {
-      "agent_id": "agent-1767348647750-8jx9u",
-      "session_id": "session-1767348647750",
-      "started_at": "2026-01-02T10:10:47.750Z",
-      "last_heartbeat": "2026-01-02T10:23:48.315Z",
+      "agent_id": "agent-1767350313896-8mgpde",
+      "session_id": "session-1767350313896",
+      "started_at": "2026-01-02T10:38:33.896Z",
+      "last_heartbeat": "2026-01-02T10:50:34.104Z",
+      "status": "idle",
+      "assigned_role": "orchestrator",
+      "pid": 443223,
+      "current_task": "Session 122 - Completed 4 tasks, awaiting new work"
+    },
+    {
+      "agent_id": "agent-1767351072014-rf3roz",
+      "session_id": "session-1767351072014",
+      "started_at": "2026-01-02T10:51:12.015Z",
+      "last_heartbeat": "2026-01-02T11:22:42.873Z",
       "status": "active",
       "assigned_role": "orchestrator",
-      "pid": 419760,
-      "current_task": "Orchestrator resumed - reviewing system state"
+      "pid": 454043,
+      "current_task": "Session 122 - Orchestrator resumed, assessing work queue"
     }
   ],
-  "last_updated": "2026-01-02T10:23:48.315Z",
-  "lock_version": 135
+  "last_updated": "2026-01-02T11:23:01.146Z",
+  "lock_version": 170
 }

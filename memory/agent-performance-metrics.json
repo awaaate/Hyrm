@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-01-02T10:23:52.350Z",
+  "last_updated": "2026-01-02T11:23:14.178Z",
   "agents": {
     "agent-1767302507934-2c671j": {
       "agent_id": "agent-1767302507934-2c671j",
@@ -229,16 +229,58 @@
     },
     "agent-1767348800103-tr5phe": {
       "agent_id": "agent-1767348800103-tr5phe",
-      "tasks_completed": 1,
-      "tasks_claimed": 1,
-      "total_duration_ms": 187908,
-      "avg_duration_ms": 187908,
+      "tasks_completed": 2,
+      "tasks_claimed": 3,
+      "total_duration_ms": 397606,
+      "avg_duration_ms": 198803,
       "quality_scores": [
         8.7
       ],
       "avg_quality": 8.7,
-      "last_activity": "2026-01-02T10:23:52.350Z",
+      "last_activity": "2026-01-02T10:29:31.882Z",
       "first_seen": "2026-01-02T10:20:41.994Z"
+    },
+    "agent-1767349882378-7ghrlg": {
+      "agent_id": "agent-1767349882378-7ghrlg",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 250806,
+      "avg_duration_ms": 250806,
+      "quality_scores": [
+        8.5
+      ],
+      "avg_quality": 8.5,
+      "last_activity": "2026-01-02T10:36:35.451Z",
+      "first_seen": "2026-01-02T10:32:17.578Z"
+    },
+    "agent-1767350313896-8mgpde": {
+      "agent_id": "agent-1767350313896-8mgpde",
+      "tasks_completed": 3,
+      "tasks_claimed": 3,
+      "total_duration_ms": 515502,
+      "avg_duration_ms": 171834,
+      "quality_scores": [
+        8.1,
+        8.1,
+        8.3
+      ],
+      "avg_quality": 8.17,
+      "last_activity": "2026-01-02T10:50:12.827Z",
+      "first_seen": "2026-01-02T10:40:51.550Z"
+    },
+    "agent-1767351123740-fin1ue": {
+      "agent_id": "agent-1767351123740-fin1ue",
+      "tasks_completed": 3,
+      "tasks_claimed": 2,
+      "total_duration_ms": 771081,
+      "avg_duration_ms": 257027,
+      "quality_scores": [
+        8.3,
+        8.3
+      ],
+      "avg_quality": 8.3,
+      "last_activity": "2026-01-02T11:23:14.178Z",
+      "first_seen": "2026-01-02T11:13:37.576Z"
     }
   }
 }
