@@ -8,9 +8,17 @@
 
 import { readJson } from "./shared/json-utils";
 import { PATHS } from "./shared/paths";
+import type { SystemState } from "./shared/types";
 
-function loadState(): any {
-  return readJson<any>(PATHS.state, { session_count: 0 });
+function loadState(): SystemState {
+  return readJson<SystemState>(PATHS.state, { 
+    session_count: 0, 
+    status: "", 
+    last_updated: "", 
+    achievements: [], 
+    active_tasks: [], 
+    total_tokens: 0 
+  });
 }
 
 function generateWorkerPrompt(task: string): string {
