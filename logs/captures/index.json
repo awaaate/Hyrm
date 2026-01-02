@@ -1,0 +1,19 @@
+{
+  "captures": [
+    {
+      "id": "cap_1767356439867_cr1q3",
+      "timestamp": "2026-01-02T12:20:39.868Z",
+      "type": "log",
+      "message": "Test debug message from orchestrator"
+    },
+    {
+      "id": "cap_1767356433687_26vo1",
+      "timestamp": "2026-01-02T12:20:33.687Z",
+      "type": "command",
+      "command": "echo hello && date",
+      "exitCode": 0,
+      "duration": 9,
+      "outputFile": "/app/workspace/logs/captures/cap_1767356433687_26vo1.txt"
+    }
+  ]
+}

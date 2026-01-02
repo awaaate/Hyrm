@@ -17,6 +17,7 @@ export {
   writeJson,
   readJsonl,
   appendJsonl,
+  appendLine,
   safeJsonParse,
 } from "./json-utils";
 
@@ -65,6 +66,7 @@ export {
   TOOLS_DIR,
   PLUGIN_DIR,
   SESSIONS_DIR,
+  LOGS_DIR,
   PATHS,
   getMemoryPath,
   getSessionPath,

@@ -1236,3 +1236,13 @@
 2026-01-02T12:07:59.079Z [INFO] [agent-1767353179414-xlsru] Message sent: broadcast (broadcast)
 2026-01-02T12:11:19.636Z [INFO] [agent-1767353179414-xlsru] Message sent: heartbeat (broadcast)
 2026-01-02T12:13:55.496Z [INFO] [agent-1767353179414-xlsru] Status updated: active - Completed dashboard debugging, monitoring for new tasks
+2026-01-02T12:15:01.828Z [INFO] [agent-1767356101827-bgc25a] Agent registered: agent-1767356101827-bgc25a (role: code-worker)
+2026-01-02T12:15:01.829Z [INFO] [agent-1767356101827-bgc25a] Message sent: heartbeat (broadcast)
+2026-01-02T12:15:08.128Z [INFO] [agent-1767356108127-dfqpk5] Agent registered: agent-1767356108127-dfqpk5 (role: code-worker)
+2026-01-02T12:15:08.128Z [INFO] [agent-1767356108127-dfqpk5] Message sent: heartbeat (broadcast)
+2026-01-02T12:15:10.978Z [INFO] [agent-1767353179414-xlsru] Message sent: broadcast (broadcast)
+2026-01-02T12:15:29.705Z [INFO] [agent-1767353179414-xlsru] Status updated: working - Orchestrating: 2 workers spawned, monitoring progress
+2026-01-02T12:16:04.157Z [INFO] [agent-1767353179414-xlsru] Status updated: working - Orchestrator mode - no handoff
+2026-01-02T12:16:19.663Z [INFO] [agent-1767353179414-xlsru] Message sent: heartbeat (broadcast)
+2026-01-02T12:16:30.110Z [INFO] [agent-1767356101827-bgc25a] Message sent: task_complete (broadcast)
+2026-01-02T12:18:25.411Z [INFO] [agent-1767356108127-dfqpk5] Message sent: task_complete (broadcast)

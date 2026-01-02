@@ -34,21 +34,51 @@ A multi-agent AI orchestration system built on OpenCode with persistent memory, 
 │   ├── working.md                # Working memory
 │   └── sessions/                 # Per-session state
 │
-├── tools/                        # CLI utilities (14 tools)
-│   ├── opencode-cli.ts           # Unified CLI (status, agents, tasks, monitor)
-│   ├── task-manager.ts           # Task CRUD operations
-│   ├── realtime-monitor.ts       # Live dashboard with file watching
-│   ├── user-message.ts           # User messaging CLI
-│   ├── multi-agent-coordinator.ts # Agent coordination
-│   ├── knowledge-extractor.ts    # Extract session insights
-│   ├── session-summarizer.ts     # Summarize sessions
-│   ├── knowledge-deduplicator.ts # Clean duplicates
-│   ├── quality-assessor.ts       # Quality tracking
-│   ├── agent-health-monitor.ts   # Agent health/cleanup
-│   ├── smart-memory-manager.ts   # Memory pruning
-│   ├── task-router.ts            # Task routing
-│   ├── system-message-config.ts  # System message config
-│   └── generate-orchestrator-prompt.ts
+├── tools/                        # CLI utilities (24 tools by domain)
+│   ├── shared/                   # Shared utilities (colors, paths, json, etc.)
+│   │
+│   │   ## Agent Tools (7)
+│   ├── agent-conversation-viewer.ts  # View agent conversations
+│   ├── agent-health-monitor.ts       # Agent health/cleanup
+│   ├── agent-performance-profiler.ts # Agent analytics
+│   ├── critique-agent.ts             # Code review agent
+│   ├── multi-agent-coordinator.ts    # Agent coordination
+│   ├── generate-orchestrator-prompt.ts
+│   ├── message-bus-manager.ts        # Message bus maintenance
+│   │
+│   │   ## Memory Tools (4)
+│   ├── knowledge-deduplicator.ts     # Clean duplicate knowledge
+│   ├── knowledge-extractor.ts        # Extract session insights
+│   ├── smart-memory-manager.ts       # Memory pruning
+│   ├── working-memory-manager.ts     # Working.md archival
+│   │
+│   │   ## Task Tools (3)
+│   ├── task-manager.ts               # Task CRUD operations
+│   ├── task-router.ts                # Task routing
+│   ├── quality-assessor.ts           # Quality tracking
+│   │
+│   │   ## Session Tools (3)
+│   ├── session-analytics.ts          # Analyze session patterns
+│   ├── session-summarizer.ts         # Summarize sessions
+│   ├── opencode-tracker.ts           # OpenCode session tracking (PRIMARY)
+│   │
+│   │   ## Monitor Tools (2)
+│   ├── realtime-monitor.ts           # Live dashboard
+│   ├── terminal-dashboard.ts         # TUI dashboard (deprecated - use terminal-dashboard/)
+│   │
+│   │   ## CLI/Core (4)
+│   ├── opencode-cli.ts               # Unified CLI (status, agents, tasks)
+│   ├── user-message.ts               # User messaging CLI
+│   ├── system-message-config.ts      # System message config
+│   ├── git-integration.ts            # Git operations
+│   │
+│   │   ## Reports
+│   └── daily-report-generator.ts     # Performance reports
+│
+├── terminal-dashboard/           # NEW: Modular TUI dashboard
+│   ├── index.ts                  # Main entry point
+│   ├── data.ts                   # Data loading functions
+│   └── types.ts                  # TypeScript types
 │
 ├── mcp-servers/                  # MCP server implementations
 │
@@ -128,7 +158,7 @@ bun tools/knowledge-deduplicator.ts analyze
 - `knowledge-deduplicator.ts` - Clean duplicate knowledge
 
 **DEPRECATED/LEGACY:**
-- `conversation-tracker.ts` - Use `opencode-tracker.ts` instead (same features + more)
+- `conversation-tracker.ts` - REMOVED, use `opencode-tracker.ts` instead
 
 ## Multi-Agent System
 

@@ -37,6 +37,11 @@ export const PLUGIN_DIR = join(WORKSPACE_DIR, ".opencode", "plugin");
 export const SESSIONS_DIR = join(MEMORY_DIR, "sessions");
 
 /**
+ * Logs directory for debug outputs and terminal captures.
+ */
+export const LOGS_DIR = process.env.LOGS_DIR || join(WORKSPACE_DIR, "logs");
+
+/**
  * Memory file paths - centralized constants for all memory files.
  */
 export const PATHS = {
@@ -68,6 +73,10 @@ export const PATHS = {
   pluginLock: join(MEMORY_DIR, ".plugin-lock.json"),
   handoffState: join(MEMORY_DIR, ".handoff-state.json"),
   watchdogStatus: join(MEMORY_DIR, ".watchdog-status.json"),
+  
+  // Debug/logs
+  debugLog: join(LOGS_DIR, "debug.log"),
+  commandLog: join(LOGS_DIR, "commands.jsonl"),
 } as const;
 
 /**
@@ -141,6 +150,7 @@ export function ensureDir(dir: string): boolean {
 export function ensureMemoryStructure(): void {
   ensureDir(MEMORY_DIR);
   ensureDir(SESSIONS_DIR);
+  ensureDir(LOGS_DIR);
   ensureDir(join(MEMORY_DIR, "working-archives"));
   ensureDir(join(MEMORY_DIR, "message-archives"));
   ensureDir(join(MEMORY_DIR, "critiques"));

@@ -1,0 +1,11 @@
+=== Command: echo hello && date ===
+=== Timestamp: 2026-01-02T12:20:33.687Z ===
+=== Duration: 9ms ===
+=== Exit Code: 0 ===
+
+=== STDOUT ===
+hello
+Fri Jan  2 12:20:33 UTC 2026
+
+
+=== STDERR ===

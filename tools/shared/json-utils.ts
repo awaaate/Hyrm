@@ -127,3 +127,22 @@ export function safeJsonParse<T>(jsonString: string, defaultValue: T): T {
     return defaultValue;
   }
 }
+
+/**
+ * Append a line to a text file.
+ * Creates the file if it doesn't exist.
+ * 
+ * @param path - Absolute path to the file
+ * @param line - Line to append (newline is added automatically)
+ * 
+ * @example
+ * appendLine('/app/workspace/logs/debug.log', 'Debug message');
+ */
+export function appendLine(path: string, line: string): void {
+  try {
+    appendFileSync(path, line + "\n");
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to append to file ${path}: ${message}`);
+  }
+}

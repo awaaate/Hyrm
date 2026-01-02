@@ -1470,16 +1470,22 @@
       "title": "Analyze OpenCode codebase patterns and refactor project structure",
       "description": "Study /app/opencode-src/ structure, identify patterns to apply. Move from flat tools/ to monorepo-like structure. Create proper documentation.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-02T12:00:48.113Z",
-      "updated_at": "2026-01-02T12:00:48.113Z",
+      "updated_at": "2026-01-02T12:18:04.696Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
         "documentation"
       ],
       "estimated_hours": 3,
-      "complexity": "complex"
+      "complexity": "complex",
+      "assigned_to": "agent-1767353179414-xlsru",
+      "claimed_at": "2026-01-02T12:16:21.155Z",
+      "completed_at": "2026-01-02T12:18:04.691Z",
+      "notes": [
+        "[2026-01-02T12:18:04.696Z] Analyzed OpenCode codebase patterns. Key findings: 1) Monorepo with workspaces pattern, 2) Single-word folder names, 3) STYLE_GUIDE.md conventions. Applied: 1) Updated AGENTS.md with proper tool categorization by domain, 2) Removed deprecated conversation-tracker.ts, 3) Created terminal-dashboard/ as separate module following the pattern."
+      ]
     },
     {
       "id": "task_1767355250010_gt3kac",
@@ -1510,50 +1516,64 @@
       "title": "Create workflows folder with self-reflection documentation",
       "description": "Create workflows/ folder with guides for: analyzing previous sessions, self-reflection patterns, exam/test system for multi-session validation.",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-02T12:00:51.859Z",
-      "updated_at": "2026-01-02T12:00:51.859Z",
+      "updated_at": "2026-01-02T12:16:27.309Z",
       "created_by": "unknown",
       "tags": [
         "documentation",
         "workflows"
       ],
       "estimated_hours": 2,
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "completed_at": "2026-01-02T12:16:27.308Z",
+      "notes": [
+        "[2026-01-02T12:16:27.309Z] Created workflows folder with self-reflection-guide.md and multi-session-validation.md"
+      ]
     },
     {
       "id": "task_1767355253372_rjqjur",
       "title": "Improve watchdog with configuration and token limits",
       "description": "Allow configuration in watchdog script, add max token limits, improve restart logic.",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-02T12:00:53.372Z",
-      "updated_at": "2026-01-02T12:00:53.372Z",
+      "updated_at": "2026-01-02T12:18:23.002Z",
       "created_by": "unknown",
       "tags": [
         "infrastructure",
         "watchdog"
       ],
       "estimated_hours": 1,
-      "complexity": "simple"
+      "complexity": "simple",
+      "completed_at": "2026-01-02T12:18:23.001Z",
+      "notes": [
+        "[2026-01-02T12:18:23.002Z] Upgraded watchdog from v2.0 to v3.0 with: 1) Configuration file support (.watchdog.conf) with init-config command, 2) Token limit tracking and enforcement (100k input, 50k output, 150k total default), 3) Memory usage monitoring (configurable limit), 4) Session timeout configuration, 5) Model selection with fallback support, 6) Log rotation with configurable size/count, 7) Exponential backoff for restarts, 8) Enhanced status display with token usage. All tests pass."
+      ]
     },
     {
       "id": "task_1767355254784_i5mmcr",
       "title": "Add debugging tools - save terminal outputs",
       "description": "Create proper debugging infrastructure: save terminal outputs, create documentation agent for README generation.",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-02T12:00:54.784Z",
-      "updated_at": "2026-01-02T12:00:54.784Z",
+      "updated_at": "2026-01-02T12:20:53.949Z",
       "created_by": "unknown",
       "tags": [
         "debugging",
         "infrastructure"
       ],
       "estimated_hours": 2,
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "agent-1767353179414-xlsru",
+      "claimed_at": "2026-01-02T12:18:19.552Z",
+      "completed_at": "2026-01-02T12:20:53.943Z",
+      "notes": [
+        "[2026-01-02T12:20:53.949Z] Created debug-capture.ts tool with: run (capture command output), log (debug messages), list (view captures), view (inspect specific capture), clean (remove old captures). Added LOGS_DIR and appendLine to shared utilities."
+      ]
     }
   ],
-  "completed_count": 67,
-  "last_updated": "2026-01-02T12:08:17.060Z"
+  "completed_count": 71,
+  "last_updated": "2026-01-02T12:20:53.949Z"
 }
