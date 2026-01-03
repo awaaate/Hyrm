@@ -1051,3 +1051,27 @@
 [2026-01-03T14:10:30+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
 [2026-01-03T14:10:30+00:00] [OK] Orchestrator started with PID: 194187 (model: anthropic/claude-opus-4-5)
 [2026-01-03T14:10:35+00:00] [OK] Orchestrator confirmed running
+[2026-01-03T14:15:36+00:00] [INFO] Healthy leader exists: agent-1767449438319-onify (epoch 6), lease valid for 151s
+[2026-01-03T14:15:36+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767449438319-onify:epoch6). Skipping respawn.
+[2026-01-03T14:16:36+00:00] [INFO] Healthy leader exists: agent-1767449438319-onify (epoch 6), lease valid for 91s
+[2026-01-03T14:16:36+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767449438319-onify:epoch6). Skipping respawn.
+[2026-01-03T14:17:36+00:00] [INFO] Healthy leader exists: agent-1767449438319-onify (epoch 6), lease valid for 31s
+[2026-01-03T14:17:36+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767449438319-onify:epoch6). Skipping respawn.
+[2026-01-03T14:18:37+00:00] [WARN] Leader lease expired 58s ago: agent-1767449438319-onify (epoch 6)
+[2026-01-03T14:18:37+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-03T14:18:37+00:00] [WARN] Leader lease expired 58s ago: agent-1767449438319-onify (epoch 6)
+[2026-01-03T14:18:37+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-03T14:18:37+00:00] [OK] Orchestrator started with PID: 199766 (model: anthropic/claude-opus-4-5)
+[2026-01-03T14:18:42+00:00] [OK] Orchestrator confirmed running
+[2026-01-03T14:29:44+00:00] [INFO] Healthy leader exists: agent-1767449923682-u31sna (epoch 7), lease valid for 149s
+[2026-01-03T14:29:44+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767449923682-u31sna:epoch7). Skipping respawn.
+[2026-01-03T14:30:44+00:00] [INFO] Healthy leader exists: agent-1767449923682-u31sna (epoch 7), lease valid for 89s
+[2026-01-03T14:30:44+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767449923682-u31sna:epoch7). Skipping respawn.
+[2026-01-03T14:31:44+00:00] [INFO] Healthy leader exists: agent-1767449923682-u31sna (epoch 7), lease valid for 29s
+[2026-01-03T14:31:44+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767449923682-u31sna:epoch7). Skipping respawn.
+[2026-01-03T14:32:44+00:00] [WARN] Leader lease expired 61s ago: agent-1767449923682-u31sna (epoch 7)
+[2026-01-03T14:32:44+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-03T14:32:45+00:00] [WARN] Leader lease expired 61s ago: agent-1767449923682-u31sna (epoch 7)
+[2026-01-03T14:32:45+00:00] [INFO] Starting orchestrator agent (restart #3 this hour)...
+[2026-01-03T14:32:45+00:00] [OK] Orchestrator started with PID: 211305 (model: anthropic/claude-opus-4-5)
+[2026-01-03T14:32:50+00:00] [OK] Orchestrator confirmed running

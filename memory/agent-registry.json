@@ -1,28 +1,18 @@
 {
   "agents": [
     {
-      "agent_id": "agent-1767448413323-mirh4r",
-      "session_id": "session-1767448413323",
-      "started_at": "2026-01-03T13:53:33.324Z",
-      "last_heartbeat": "2026-01-03T14:06:33.389Z",
+      "agent_id": "agent-1767450772105-d66vhu",
+      "session_id": "session-1767450772105",
+      "started_at": "2026-01-03T14:32:52.106Z",
+      "last_heartbeat": "2026-01-03T14:38:52.138Z",
       "status": "working",
       "assigned_role": "orchestrator",
-      "pid": 162569,
-      "current_task": "Monitoring 3 workers for user-requested tasks: README, git integration, agent cleanup"
-    },
-    {
-      "agent_id": "agent-1767449438319-onify",
-      "session_id": "session-1767449438319",
-      "started_at": "2026-01-03T14:10:38.320Z",
-      "last_heartbeat": "2026-01-03T14:12:38.340Z",
-      "status": "working",
-      "assigned_role": "orchestrator",
-      "pid": 194187,
-      "current_task": "Investigating working.md usage across agents per user request"
+      "pid": 211305,
+      "current_task": "Orchestrator mode - no handoff"
     }
   ],
   "leader": null,
   "version": 1,
-  "last_updated": "2026-01-03T14:12:38.340Z",
-  "lock_version": 24
+  "last_updated": "2026-01-03T14:38:52.138Z",
+  "lock_version": 39
 }

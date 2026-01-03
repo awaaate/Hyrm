@@ -2568,24 +2568,32 @@
       "title": "Create README.md for autonomous self-improving agent",
       "description": "Create a comprehensive README.md for the repository explaining this is an autonomous self-improving agent system. Include: project overview, architecture, how to start the system, key features (multi-agent coordination, persistent memory, task management, quality assessment), and how the self-improvement loop works.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-03T14:05:24.100Z",
-      "updated_at": "2026-01-03T14:05:24.100Z",
+      "updated_at": "2026-01-03T14:24:09.727Z",
       "created_by": "unknown",
       "tags": [
         "documentation",
         "user-request"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "agent-1767449923682-u31sna",
+      "claimed_at": "2026-01-03T14:22:42.939Z",
+      "completed_at": "2026-01-03T14:24:09.710Z",
+      "notes": [
+        "[2026-01-03T14:24:09.716Z] Created comprehensive README.md at repo root. Includes: overview, architecture diagram, quick start, self-improvement loop explanation, key features, plugin tools reference, project structure. Committed as 8493d5b."
+      ],
+      "quality_score": 6.8,
+      "quality_notes": "Auto-assessed"
     },
     {
       "id": "task_1767449126995_ie797j",
       "title": "Improve git integration with gh CLI and auto-issue creation",
       "description": "Enhance git-integration.ts to: 1) Use gh CLI for GitHub operations 2) Auto-create GitHub issues from tasks using task_create hook 3) Link branches to issues 4) Consider creating branches per task. This enables better project management visibility on GitHub.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-03T14:05:26.996Z",
-      "updated_at": "2026-01-03T14:05:26.996Z",
+      "updated_at": "2026-01-03T14:28:42.518Z",
       "created_by": "unknown",
       "tags": [
         "git",
@@ -2593,41 +2601,107 @@
         "automation",
         "user-request"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "agent-1767449923682-u31sna",
+      "claimed_at": "2026-01-03T14:26:13.738Z",
+      "completed_at": "2026-01-03T14:28:42.498Z",
+      "notes": [
+        "[2026-01-03T14:28:42.503Z] Implemented GitHub CLI integration: gh-status, issues, issue-task (create issue from task), branch-task (create branch for task), pr-task (create PR from task). All functions gracefully handle missing/unauthenticated gh CLI. Functions exported for plugin use. Committed as 4b524d3."
+      ],
+      "quality_score": 6.9,
+      "quality_notes": "Auto-assessed"
     },
     {
       "id": "task_1767449130409_uyousb",
       "title": "Improve agent registry auto-cleanup",
       "description": "Enhance the agent cleanup mechanism in agent-tools.ts and related files: 1) Make stale agent detection more aggressive 2) Clean up agents that haven't sent heartbeat in 2 minutes 3) Add periodic cleanup on orchestrator heartbeat 4) Consider adding a watchdog-style health check for agents.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-03T14:05:30.409Z",
-      "updated_at": "2026-01-03T14:05:30.409Z",
+      "updated_at": "2026-01-03T14:26:08.310Z",
       "created_by": "unknown",
       "tags": [
         "agent-system",
         "cleanup",
         "user-request"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "agent-1767449923682-u31sna",
+      "claimed_at": "2026-01-03T14:24:14.729Z",
+      "completed_at": "2026-01-03T14:26:08.297Z",
+      "notes": [
+        "[2026-01-03T14:26:08.302Z] Implemented: 1) Reduced stale threshold from 5min to 2min, 2) Added cleanupStaleAgents() method, 3) Added getAgentHealthStatus() for health monitoring, 4) Orchestrator heartbeat now runs cleanup automatically, 5) agent_status() tool runs cleanup on every call, 6) Added 'health' CLI command. Committed as 53c2cf9."
+      ],
+      "quality_score": 6.9,
+      "quality_notes": "Auto-assessed"
     },
     {
       "id": "task_1767449532262_smsyvq",
       "title": "Fix memory_search tool - readFileSync not defined",
       "description": "The memory_search tool in .opencode/plugin/tools/memory-tools.ts is broken. When called with scope=\"working\", it throws \"ReferenceError: readFileSync is not defined\". The import for readFileSync may be missing or the function is using a different pattern than expected. Fix the import and verify the tool works correctly.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-03T14:12:12.262Z",
-      "updated_at": "2026-01-03T14:12:12.262Z",
+      "updated_at": "2026-01-03T14:13:52.743Z",
       "created_by": "unknown",
       "tags": [
         "bug",
         "memory-tools",
         "plugin"
       ],
+      "complexity": "moderate",
+      "completed_at": "2026-01-03T14:13:52.743Z"
+    },
+    {
+      "id": "task_1767450975777_nwtn6a",
+      "title": "Fix remaining empty catch blocks in task-router and agent-performance-profiler",
+      "description": "Several empty catch blocks remain after the initial error handling cleanup. Fix empty catch blocks in: 1) tools/task-router.ts line 279 - registry load failure 2) tools/agent-performance-profiler.ts lines 196, 198 - silently swallowed errors. Add proper error logging using existing error-handler utilities.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-03T14:36:15.777Z",
+      "updated_at": "2026-01-03T14:36:15.777Z",
+      "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
+      "tags": [
+        "bug",
+        "error-handling",
+        "quick-win"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "task_1767450978364_n5l4uc",
+      "title": "Remove deprecated code from _deprecated directory",
+      "description": "The _deprecated/ directory contains ~1400 lines of unused code (session-analytics.ts, terminal-dashboard.ts). These files are not imported anywhere but add confusion. Verify no external dependencies, then delete the _deprecated/ directory.",
+      "priority": "medium",
+      "status": "in_progress",
+      "created_at": "2026-01-03T14:36:18.364Z",
+      "updated_at": "2026-01-03T14:39:18.835Z",
+      "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
+      "tags": [
+        "cleanup",
+        "code-hygiene",
+        "quick-win"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-sI3Oq6u4",
+      "claimed_at": "2026-01-03T14:39:18.835Z"
+    },
+    {
+      "id": "task_1767450981450_8a6g5u",
+      "title": "Migrate git-integration.ts to use shared readJson utility",
+      "description": "git-integration.ts has 4 duplicated JSON.parse(readFileSync(...)) patterns for reading tasks.json. Replace with the centralized readJson() utility from tools/shared/json-utils.ts for consistency and better error handling.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-03T14:36:21.450Z",
+      "updated_at": "2026-01-03T14:36:21.450Z",
+      "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
+      "tags": [
+        "refactor",
+        "code-quality"
+      ],
       "complexity": "moderate"
     }
   ],
-  "completed_count": 124,
-  "last_updated": "2026-01-03T14:12:12.262Z"
+  "completed_count": 128,
+  "last_updated": "2026-01-03T14:39:18.835Z"
 }
