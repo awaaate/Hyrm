@@ -1,26 +1,7 @@
+[91m[1m| [0m[90m Bash     [0mTest quality-tools syntax
 
 
-
-
-[44m[37m[1m  GIT INTEGRATION  [0m
-
-[36mUsage:[0m
-  bun tools/git-integration.ts <command> [args]
-
-[36mView Commands:[0m
-  [1mstatus[0m              Show git status (staged, modified, untracked)
-  [1mdiff[0m [file]         Show current changes
-  [1mlog[0m [n]             Show recent commits (default: 10)
-  [1mbranches[0m            List branches with current highlighted
-  [1mchanges[0m [since]     Show changes since commit/ref (default: HEAD~5)
-  [1magent-commits[0m       Show commits made by agents
-  [1msummary[0m             Show git integration summary
-
-[36mAction Commands:[0m
-  [1mcommit[0m <msg>        Create commit with agent metadata
-  [1mauto-commit[0m <task>  Auto-commit for completed task
-  [1msearch[0m <query>      Search commit history
-  [1mstash[0m               Stash current changes
+OK
 [Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
 603 |   // Now accepts optional existingPrompt to detect role
 604 |   const loadMemoryContext = (existingPrompt?: string) => {
@@ -73,4 +54,4 @@ ReferenceError: readFileSync is not defined
       at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
       at trigger (src/plugin/index.ts:68:13)
 
-Works. Let me commit:
+Let me commit these type safety improvements:

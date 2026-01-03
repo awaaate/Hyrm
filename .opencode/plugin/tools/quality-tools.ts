@@ -10,6 +10,7 @@ import { tool } from "@opencode-ai/plugin";
 import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
 import { readJson, writeJson } from "../../../tools/shared/json-utils";
+import type { Task, TaskStore } from "../../../tools/shared/types";
 
 // Update agent quality metrics
 function updateAgentQualityMetrics(memoryDir: string, agentId: string, qualityScore: number): void {
@@ -115,7 +116,7 @@ The overall score is saved to the task and agent metrics for trend tracking.`,
           }
 
           const tasksStore = readJson(tasksPath, { tasks: [] });
-          const task = tasksStore.tasks.find((t: any) => t.id === task_id);
+          const task = tasksStore.tasks.find((t: Task) => t.id === task_id);
 
           if (!task) {
             return JSON.stringify({
@@ -309,7 +310,7 @@ Use this to:
               assessments.map((a: any) => a.task_id)
             );
             unassessedCount = (tasks.tasks || []).filter(
-              (t: any) => t.status === "completed" && !assessedIds.has(t.id)
+              (t: Task) => t.status === "completed" && !assessedIds.has(t.id)
             ).length;
           }
 

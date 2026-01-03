@@ -38,6 +38,7 @@ export interface Task {
   updated_at: string;
   created_by: string;
   assigned_to?: string;
+  claimed_at?: string;
   completed_at?: string;
   dependencies?: string[];
   tags?: string[];

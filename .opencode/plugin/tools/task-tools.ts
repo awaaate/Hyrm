@@ -21,6 +21,7 @@ import {
 } from "../../../tools/shared/data-fetchers";
 import { readJson, writeJson } from "../../../tools/shared/json-utils";
 import { withFileLock } from "./file-lock";
+import type { Task, TaskStore } from "../../../tools/shared/types";
 
 // Agent performance metrics types
 interface AgentPerformanceMetrics {
@@ -159,7 +160,7 @@ const PRIORITY_AGING = {
 };
 
 // Calculate effective priority with aging
-function calculateEffectivePriority(task: any): number {
+function calculateEffectivePriority(task: Task): number {
   const basePriority = PRIORITY_ORDER[task.priority] || 2;
   const createdAt = new Date(task.created_at).getTime();
   const now = Date.now();
@@ -175,7 +176,7 @@ function calculateEffectivePriority(task: any): number {
 }
 
 // Calculate heuristic quality score based on task metadata
-function calculateHeuristicQualityScore(task: any, ctx: TaskToolsContext): number {
+function calculateHeuristicQualityScore(task: Task, ctx: TaskToolsContext): number {
   let score = 7.0; // Default baseline score
   
   // Factor 1: Task completion time vs estimated time
@@ -237,7 +238,7 @@ async function performQualityAssessment(taskId: string, heuristicScore: number, 
   
   // Load task data
   const tasksStore = readJson(tasksPath, { tasks: [] });
-  const task = tasksStore.tasks.find((t: any) => t.id === taskId);
+  const task = tasksStore.tasks.find((t: Task) => t.id === taskId);
   
   if (!task) {
     throw new Error("Task not found for quality assessment");
@@ -358,19 +359,19 @@ Returns: Array of tasks sorted by priority (critical > high > medium > low).`,
           let tasks = store.tasks || [];
 
           if (status !== "all") {
-            tasks = tasks.filter((t: any) => t.status === status);
+            tasks = tasks.filter((t: Task) => t.status === status);
           }
 
           // Sort by priority
           tasks.sort(
-            (a: any, b: any) =>
+            (a: Task, b: Task) =>
               PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]
           );
 
           return JSON.stringify({
             success: true,
             count: tasks.length,
-            tasks: tasks.slice(0, 10).map((t: any) => ({
+            tasks: tasks.slice(0, 10).map((t: Task) => ({
               id: t.id,
               title: t.title,
               priority: t.priority,
@@ -435,7 +436,7 @@ Notes:
         try {
           const ctx = getContext();
           const tasksPath = getTasksPath();
-          let task: any;
+          let task: Task | undefined;
 
           await withFileLock(
             tasksPath,
@@ -452,12 +453,12 @@ Notes:
 
               // Validate dependencies exist
               const validDeps = depends_on.filter((depId: string) =>
-                store.tasks.some((t: any) => t.id === depId)
+                store.tasks.some((t: Task) => t.id === depId)
               );
 
               // Check if dependencies are blocked (not completed)
               const blockedDeps = validDeps.filter((depId: string) => {
-                const dep = store.tasks.find((t: any) => t.id === depId);
+                const dep = store.tasks.find((t: Task) => t.id === depId);
                 return dep && dep.status !== "completed";
               });
 
@@ -587,7 +588,7 @@ Side effects:
           }
 
           const store = readJson(tasksPath, { tasks: [] });
-          const task = store.tasks.find((t: any) => t.id === task_id);
+          const task = store.tasks.find((t: Task) => t.id === task_id);
 
           if (!task) {
             return JSON.stringify({
@@ -647,7 +648,7 @@ Side effects:
                 if (t.depends_on && t.depends_on.includes(task_id)) {
                   // Check if all dependencies are now complete
                   const allDepsComplete = t.depends_on.every((depId: string) => {
-                    const dep = store.tasks.find((d: any) => d.id === depId);
+                    const dep = store.tasks.find((d: Task) => d.id === depId);
                     return dep && dep.status === "completed";
                   });
                   
@@ -746,25 +747,25 @@ Behavior:
           const store = readJson(tasksPath, { tasks: [] });
           
           // Helper to check if all dependencies are complete
-          const dependenciesComplete = (task: any): boolean => {
+          const dependenciesComplete = (task: Task): boolean => {
             if (!task.depends_on || task.depends_on.length === 0) return true;
             return task.depends_on.every((depId: string) => {
-              const dep = store.tasks.find((t: any) => t.id === depId);
+              const dep = store.tasks.find((t: Task) => t.id === depId);
               return dep && dep.status === "completed";
             });
           };
 
           // Find pending tasks that have all dependencies met, sorted by effective priority (with aging)
           const available = store.tasks
-            .filter((t: any) => t.status === "pending" && dependenciesComplete(t))
+            .filter((t: Task) => t.status === "pending" && dependenciesComplete(t))
             .sort(
-              (a: any, b: any) =>
+              (a: Task, b: Task) =>
                 calculateEffectivePriority(a) - calculateEffectivePriority(b)
             );
           
           // Also get blocked tasks count
           const blockedCount = store.tasks
-            .filter((t: any) => t.status === "blocked" || 
+            .filter((t: Task) => t.status === "blocked" || 
               (t.status === "pending" && !dependenciesComplete(t)))
             .length;
 
@@ -842,7 +843,7 @@ Edge cases:
           }
 
           const store = readJson(tasksPath, { tasks: [] });
-          const task = store.tasks.find((t: any) => t.id === task_id);
+          const task = store.tasks.find((t: Task) => t.id === task_id);
 
           if (!task) {
             return JSON.stringify({
@@ -1112,10 +1113,10 @@ Use this for planning work distribution across workers.`,
           const store = readJson(tasksPath, { tasks: [] });
           
           // Helper to check dependencies
-          const dependenciesComplete = (task: any): boolean => {
+          const dependenciesComplete = (task: Task): boolean => {
             if (!task.depends_on || task.depends_on.length === 0) return true;
             return task.depends_on.every((depId: string) => {
-              const dep = store.tasks.find((t: any) => t.id === depId);
+              const dep = store.tasks.find((t: Task) => t.id === depId);
               return dep && dep.status === "completed";
             });
           };
@@ -1134,8 +1135,8 @@ Use this for planning work distribution across workers.`,
 
           // Get available tasks with scheduling info
           const available = store.tasks
-            .filter((t: any) => t.status === "pending" && dependenciesComplete(t))
-            .map((t: any) => {
+            .filter((t: Task) => t.status === "pending" && dependenciesComplete(t))
+            .map((t: Task) => {
               const effectivePriority = calculateEffectivePriority(t);
               const hoursWaiting = (Date.now() - new Date(t.created_at).getTime()) / (1000 * 60 * 60);
               const complexityScore = getComplexityScore(t.complexity || "moderate");
@@ -1162,25 +1163,25 @@ Use this for planning work distribution across workers.`,
 
           // Get blocked tasks
           const blocked = store.tasks
-            .filter((t: any) => t.status === "blocked" || (t.status === "pending" && !dependenciesComplete(t)))
-            .map((t: any) => ({
+            .filter((t: Task) => t.status === "blocked" || (t.status === "pending" && !dependenciesComplete(t)))
+            .map((t: Task) => ({
               id: t.id,
               title: t.title,
               blocked_by: t.depends_on?.filter((depId: string) => {
-                const dep = store.tasks.find((d: any) => d.id === depId);
+                const dep = store.tasks.find((d: Task) => d.id === depId);
                 return dep && dep.status !== "completed";
               }) || [],
             }));
 
           // Calculate total estimated hours
           const totalEstimatedHours = available
-            .filter((t: any) => t.estimated_hours)
-            .reduce((sum: number, t: any) => sum + t.estimated_hours, 0);
+            .filter((t: Task) => t.estimated_hours)
+            .reduce((sum: number, t: Task) => sum + (t.estimated_hours || 0), 0);
 
           // Get in-progress tasks
           const inProgress = store.tasks
-            .filter((t: any) => t.status === "in_progress")
-            .map((t: any) => ({
+            .filter((t: Task) => t.status === "in_progress")
+            .map((t: Task) => ({
               id: t.id,
               title: t.title,
               assigned_to: t.assigned_to,

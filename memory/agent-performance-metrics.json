@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-01-03T14:40:49.092Z",
+  "last_updated": "2026-01-03T14:48:12.051Z",
   "agents": {
     "agent-1767302507934-2c671j": {
       "agent_id": "agent-1767302507934-2c671j",
@@ -595,16 +595,17 @@
     },
     "agent-sI3Oq6u4": {
       "agent_id": "agent-sI3Oq6u4",
-      "tasks_completed": 4,
-      "tasks_claimed": 3,
-      "total_duration_ms": 77530,
-      "avg_duration_ms": 19383,
+      "tasks_completed": 6,
+      "tasks_claimed": 4,
+      "total_duration_ms": 166316,
+      "avg_duration_ms": 27719,
       "quality_scores": [
         6.9,
-        6.9
+        6.9,
+        6.8
       ],
-      "avg_quality": 6.9,
-      "last_activity": "2026-01-03T14:40:49.092Z",
+      "avg_quality": 6.87,
+      "last_activity": "2026-01-03T14:48:12.051Z",
       "first_seen": "2026-01-03T14:39:18.843Z"
     }
   }
