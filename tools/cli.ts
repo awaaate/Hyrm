@@ -892,8 +892,9 @@ function recoverSession(sessionId?: string): void {
         return existsSync(checkpointPath);
       })
       .map((f: string): RecoverableSession => {
-        const checkpoint = JSON.parse(
-          readFileSync(join(SESSIONS_DIR, f, "checkpoint.json"), "utf-8")
+        const checkpoint = readJson(
+          join(SESSIONS_DIR, f, "checkpoint.json"),
+          {}
         ) as Record<string, unknown>;
         const recovery = checkpoint.recovery as Record<string, unknown> | undefined;
         return {
