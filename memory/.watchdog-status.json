@@ -1,13 +1,13 @@
 {
-    "status": "running",
-    "last_check": "2026-01-02T19:40:07+00:00",
-    "orchestrator_pid": 700343,
-    "details": "Monitoring active",
-    "watchdog_pid": 549127,
-    "restarts_this_hour": 7,
+    "status": "shutdown",
+    "last_check": "2026-01-03T07:13:07+00:00",
+    "orchestrator_pid": 0,
+    "details": "Watchdog shut down",
+    "watchdog_pid": 45059,
+    "restarts_this_hour": 3,
     "token_usage": 0,
     "token_limit": 150000,
-    "model": "anthropic/claude-opus-4-5",
+    "model": "openai/gpt-5.1-high",
     "config_loaded": true,
     "version": "3.0"
 }

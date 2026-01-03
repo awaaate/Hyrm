@@ -53,21 +53,26 @@ export interface UserMessageData {
 export interface QualityAssessment {
   task_id: string;
   assessed_at: string;
-  completeness: number;
-  code_quality: number;
-  documentation: number;
-  efficiency: number;
-  impact: number;
-  overall: number;
+  assessed_by?: string;
+  scores?: {
+    completeness: number;
+    code_quality: number;
+    documentation: number;
+    efficiency: number;
+    impact: number;
+  };
+  overall_score: number;
   lessons_learned?: string;
+  notes?: string;
 }
 
 export interface QualityData {
   assessments: QualityAssessment[];
   summary: {
     average_score?: number;
-    count?: number;
+    total_assessed?: number;
     trend?: string;
+    last_updated?: string;
   };
 }
 
@@ -82,11 +87,11 @@ export interface StateData {
 }
 
 export interface SessionEvent {
-  type: string;
   timestamp: string;
-  session_id?: string;
-  parent_session?: string;
-  child_session?: string;
+  event: string;
+  session_id: string;
+  data?: Record<string, unknown>;
+  // Optional derived fields used by the dashboard
   description?: string;
   duration_ms?: number;
   tool_calls?: number;

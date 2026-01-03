@@ -339,17 +339,31 @@ export function renderConversationsContent(): string {
   if (events.length > 0) {
     content += `\n{bold}{cyan-fg}RECENT SESSION EVENTS{/cyan-fg}{/bold}\n${"─".repeat(40)}\n`;
     for (const event of events.slice(0, 8)) {
+      const eventType = (event as any).event || (event as any).type || "unknown";
       const typeColor =
-        event.type === "session_start"
+        eventType === "session.created"
           ? "green"
-          : event.type === "session_end"
+          : eventType === "session.end" || eventType === "session_end"
           ? "yellow"
-          : event.type === "session_spawned"
+          : eventType === "session.error" || eventType === "session_error"
+          ? "red"
+          : eventType === "session_spawned" || eventType === "tool_call"
           ? "magenta"
           : "dim";
-      content += `{${typeColor}-fg}[${event.type}]{/} ${formatTimeAgo(event.timestamp)}\n`;
-      if (event.description) {
-        content += `  {dim}${truncate(event.description, 50)}{/dim}\n`;
+      content += `{${typeColor}-fg}[${eventType}]{/} ${formatTimeAgo(event.timestamp)}\n`;
+
+      let description = (event as any).description as string | undefined;
+      const data = (event as any).data as any;
+      if (!description && data) {
+        description =
+          (data.description as string) ||
+          (data.message as string) ||
+          (data.error?.message as string) ||
+          (data.error?.data?.message as string);
+      }
+
+      if (description) {
+        content += `  {dim}${truncate(description, 50)}{/dim}\n`;
       }
     }
   }
@@ -433,7 +447,7 @@ export function renderQualityContent(): string {
 
   content += `{bold}Average Score:{/bold} {${scoreColor}-fg}${avgScore.toFixed(1)}{/}/10 ${trendIcon}\n`;
   content += `[${bar}]\n`;
-  content += `{bold}Tasks Assessed:{/bold} ${summary.count || 0}\n\n`;
+  content += `{bold}Tasks Assessed:{/bold} ${summary.total_assessed || 0}\n\n`;
 
   // Recent assessments
   content += `{bold}RECENT ASSESSMENTS:{/bold}\n${"─".repeat(40)}\n`;
@@ -442,7 +456,7 @@ export function renderQualityContent(): string {
     content += "{dim}No assessments yet.{/dim}\n";
   } else {
     for (const assessment of assessments.slice(-10).reverse()) {
-      const score = assessment.overall || 0;
+      const score = assessment.overall_score || 0;
       const color = score >= 8 ? "green" : score >= 6 ? "yellow" : "red";
       content += `{${color}-fg}${score.toFixed(1)}{/}/10 Task: ${truncate(assessment.task_id, 30)} {dim}${formatTimeAgo(assessment.assessed_at)}{/dim}\n`;
       if (assessment.lessons_learned) {

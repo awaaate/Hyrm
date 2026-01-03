@@ -16,6 +16,17 @@ import { PATHS, MEMORY_DIR, getMemoryPath } from "./shared";
 const REGISTRY_PATH = PATHS.agentRegistry;
 const MESSAGE_BUS_PATH = PATHS.messageBus;
 const COORDINATION_LOG = PATHS.coordinationLog;
+const ORCHESTRATOR_STATE_PATH = PATHS.orchestratorState || getMemoryPath("orchestrator-state.json");
+
+// Leader lease configuration (for orchestrator election)
+const ORCHESTRATOR_LEASE_TTL_MS = 3 * 60 * 1000; // 3 minutes
+
+interface OrchestratorLease {
+  leader_id: string;
+  leader_epoch: number;
+  last_heartbeat: string;
+  ttl_ms: number;
+}
 
 interface Agent {
   agent_id: string;
@@ -107,6 +118,8 @@ class MultiAgentCoordinator {
   private sessionId: string;
   private heartbeatInterval?: NodeJS.Timeout;
   private heartbeatCount: number = 0;
+  private isLeader: boolean = false;
+  private leaderEpoch: number | null = null;
 
   constructor(sessionId?: string) {
     // Use session-based agent ID to avoid duplicates from parallel plugin instances
@@ -173,6 +186,12 @@ class MultiAgentCoordinator {
         
         if (success) {
           this.log("INFO", `Agent registered: ${this.agentId} (role: ${role || "general"})`);
+
+          if (role === "orchestrator") {
+            // Initialize leader election for orchestrator agents
+            this.initializeLeaderElection();
+          }
+
           return true;
         }
 
@@ -232,6 +251,9 @@ class MultiAgentCoordinator {
       agent.last_heartbeat = new Date().toISOString();
       registry.last_updated = new Date().toISOString();
       writeFileSync(REGISTRY_PATH, JSON.stringify(registry, null, 2));
+
+      // If this coordinator is the orchestrator leader, refresh the lease heartbeat as well
+      this.refreshLeaderLease();
     }
 
     // Only send message bus heartbeat every 5th call (every 5 minutes with 60s interval)
@@ -439,6 +461,240 @@ class MultiAgentCoordinator {
       } catch (error) {
         this.log("WARN", `Failed to release lock on ${filePath}: ${error}`);
       }
+    }
+  }
+
+  /**
+   * Read the current orchestrator leader lease without acquiring a lock.
+   * Callers should hold the ORCHESTRATOR_STATE_PATH lock before calling.
+   */
+  private readLeaderLeaseUnsafe(): OrchestratorLease | null {
+    if (!existsSync(ORCHESTRATOR_STATE_PATH)) {
+      return null;
+    }
+
+    try {
+      const raw = readFileSync(ORCHESTRATOR_STATE_PATH, "utf-8");
+      const data = JSON.parse(raw) as OrchestratorLease;
+
+      if (!data.leader_id || typeof data.leader_epoch !== "number" || !data.last_heartbeat) {
+        return null;
+      }
+
+      // Default ttl_ms if missing or invalid
+      if (typeof data.ttl_ms !== "number" || data.ttl_ms <= 0) {
+        data.ttl_ms = ORCHESTRATOR_LEASE_TTL_MS;
+      }
+
+      return data;
+    } catch (error) {
+      this.log("WARN", `Failed to read orchestrator lease: ${error}`);
+      return null;
+    }
+  }
+
+  /**
+   * Persist a new orchestrator leader lease.
+   * Callers should hold the ORCHESTRATOR_STATE_PATH lock before calling.
+   */
+  private writeLeaderLeaseUnsafe(lease: OrchestratorLease): void {
+    writeFileSync(ORCHESTRATOR_STATE_PATH, JSON.stringify(lease, null, 2));
+  }
+
+  /**
+   * Determine whether a lease has expired based on its ttl_ms.
+   */
+  private isLeaseExpired(lease: OrchestratorLease, nowMs: number = Date.now()): boolean {
+    const last = new Date(lease.last_heartbeat).getTime();
+    const ttl = lease.ttl_ms > 0 ? lease.ttl_ms : ORCHESTRATOR_LEASE_TTL_MS;
+    if (!last) return true;
+    return nowMs - last > ttl;
+  }
+
+  /**
+   * Initialize leader election for orchestrator agents.
+   * Called during register() when role === "orchestrator".
+   */
+  private initializeLeaderElection(): void {
+    try {
+      const locked = this.requestFileLock(ORCHESTRATOR_STATE_PATH);
+      if (!locked) {
+        this.log("ERROR", "Failed to acquire lock for orchestrator-state.json during leader election");
+        this.isLeader = false;
+        this.leaderEpoch = null;
+        return;
+      }
+
+      try {
+        const nowMs = Date.now();
+        const nowIso = new Date(nowMs).toISOString();
+        const current = this.readLeaderLeaseUnsafe();
+
+        if (!current) {
+          // No existing lease -> become leader with epoch 1
+          const newLease: OrchestratorLease = {
+            leader_id: this.agentId,
+            leader_epoch: 1,
+            last_heartbeat: nowIso,
+            ttl_ms: ORCHESTRATOR_LEASE_TTL_MS,
+          };
+          this.writeLeaderLeaseUnsafe(newLease);
+          this.isLeader = true;
+          this.leaderEpoch = newLease.leader_epoch;
+          this.log("INFO", `Acquired new orchestrator leader lease (epoch ${newLease.leader_epoch})`);
+          return;
+        }
+
+        if (this.isLeaseExpired(current, nowMs)) {
+          // Existing lease is stale -> take over with incremented epoch
+          const nextEpoch = (current.leader_epoch || 0) + 1;
+          const newLease: OrchestratorLease = {
+            leader_id: this.agentId,
+            leader_epoch: nextEpoch,
+            last_heartbeat: nowIso,
+            ttl_ms: current.ttl_ms > 0 ? current.ttl_ms : ORCHESTRATOR_LEASE_TTL_MS,
+          };
+          this.writeLeaderLeaseUnsafe(newLease);
+          this.isLeader = true;
+          this.leaderEpoch = newLease.leader_epoch;
+          this.log(
+            "WARN",
+            `Took over orchestrator leader lease from stale leader ${current.leader_id} (epoch ${newLease.leader_epoch})`
+          );
+          return;
+        }
+
+        if (current.leader_id === this.agentId) {
+          // We are already the recorded leader -> refresh heartbeat in lease
+          const refreshed: OrchestratorLease = {
+            ...current,
+            last_heartbeat: nowIso,
+          };
+          this.writeLeaderLeaseUnsafe(refreshed);
+          this.isLeader = true;
+          this.leaderEpoch = refreshed.leader_epoch;
+          this.log("INFO", `Confirmed as current orchestrator leader (epoch ${refreshed.leader_epoch})`);
+          return;
+        }
+
+        // Another healthy leader exists; this agent should NOT act as orchestrator
+        this.isLeader = false;
+        this.leaderEpoch = null;
+        this.log(
+          "WARN",
+          `Detected existing healthy orchestrator leader ${current.leader_id} (epoch ${current.leader_epoch}). ` +
+          `This agent (${this.agentId}) should self-demote and NOT act as orchestrator. ` +
+          `Use isOrchestratorLeader() to check before spawning workers or respawning.`
+        );
+      } finally {
+        this.releaseFileLock(ORCHESTRATOR_STATE_PATH);
+      }
+    } catch (error) {
+      this.log("ERROR", `Leader election initialization failed: ${error}`);
+      this.isLeader = false;
+      this.leaderEpoch = null;
+    }
+  }
+
+  /**
+   * Refresh the leader lease if this coordinator is the current leader.
+   * Called from sendHeartbeat().
+   */
+  private refreshLeaderLease(): void {
+    if (!this.isLeader || this.leaderEpoch == null) {
+      return;
+    }
+
+    try {
+      const locked = this.requestFileLock(ORCHESTRATOR_STATE_PATH);
+      if (!locked) {
+        this.log("WARN", "Failed to acquire lock for orchestrator-state.json during lease refresh");
+        return;
+      }
+
+      try {
+        const nowMs = Date.now();
+        const nowIso = new Date(nowMs).toISOString();
+        const current = this.readLeaderLeaseUnsafe();
+
+        if (!current) {
+          // Lease file missing - recreate with current epoch
+          const recreated: OrchestratorLease = {
+            leader_id: this.agentId,
+            leader_epoch: this.leaderEpoch,
+            last_heartbeat: nowIso,
+            ttl_ms: ORCHESTRATOR_LEASE_TTL_MS,
+          };
+          this.writeLeaderLeaseUnsafe(recreated);
+          this.log("WARN", "Recreated missing orchestrator leader lease");
+          return;
+        }
+
+        if (current.leader_id !== this.agentId || current.leader_epoch !== this.leaderEpoch) {
+          // Another leader has taken over; demote self
+          this.isLeader = false;
+          this.leaderEpoch = null;
+          this.log(
+            "WARN",
+            `Lost orchestrator leadership to ${current.leader_id} (epoch ${current.leader_epoch}); demoting self.`
+          );
+          return;
+        }
+
+        // Still leader -> refresh heartbeat
+        const refreshed: OrchestratorLease = {
+          ...current,
+          last_heartbeat: nowIso,
+        };
+        this.writeLeaderLeaseUnsafe(refreshed);
+      } finally {
+        this.releaseFileLock(ORCHESTRATOR_STATE_PATH);
+      }
+    } catch (error) {
+      this.log("WARN", `Failed to refresh orchestrator leader lease: ${error}`);
+    }
+  }
+
+  /**
+   * Check if this coordinator is currently the orchestrator leader.
+   */
+  public isOrchestratorLeader(): boolean {
+    return this.isLeader && this.leaderEpoch != null;
+  }
+
+  /**
+   * Get the current leader epoch (for fencing token use).
+   */
+  public getLeaderEpoch(): number | null {
+    return this.leaderEpoch;
+  }
+
+  /**
+   * Get this coordinator's agent ID.
+   */
+  public getAgentId(): string {
+    return this.agentId;
+  }
+
+  /**
+   * Public helper to inspect current leader lease.
+   */
+  public getCurrentLeaderLease(): OrchestratorLease | null {
+    try {
+      const locked = this.requestFileLock(ORCHESTRATOR_STATE_PATH);
+      if (!locked) {
+        this.log("WARN", "Failed to acquire lock for orchestrator-state.json while reading leader lease");
+        return null;
+      }
+
+      try {
+        return this.readLeaderLeaseUnsafe();
+      } finally {
+        this.releaseFileLock(ORCHESTRATOR_STATE_PATH);
+      }
+    } catch (error) {
+      this.log("WARN", `Failed to read current leader lease: ${error}`);
+      return null;
     }
   }
 

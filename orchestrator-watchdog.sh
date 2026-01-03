@@ -58,7 +58,7 @@ SESSION_TIMEOUT=0           # max session duration in seconds (0 = unlimited)
 IDLE_TIMEOUT=0              # restart if idle for this many seconds (0 = disabled)
 
 # Model configuration
-MODEL="anthropic/claude-opus-4-5"   # default model to use
+MODEL="openai/gpt-5.1-high"   # default model to use
 MODEL_FALLBACK=""           # fallback model if primary fails (empty = disabled)
 
 # Memory limits
@@ -130,7 +130,7 @@ IDLE_TIMEOUT=0              # restart if idle for this many seconds (0 = disable
 # ==============================================================================
 # MODEL CONFIGURATION
 # ==============================================================================
-MODEL="anthropic/claude-opus-4-5"   # primary model to use
+MODEL="openai/gpt-5.1-high"   # primary model to use
 MODEL_FALLBACK=""                   # fallback model if primary fails
 
 # ==============================================================================
@@ -577,15 +577,14 @@ generate_prompt() {
     # Try to use the TypeScript prompt generator first
     if command -v bun &> /dev/null && [[ -f "tools/generate-orchestrator-prompt.ts" ]]; then
         local ts_prompt
-        # Pass model and token limit as environment variables
-        ts_prompt=$(MODEL="$MODEL" TOKEN_LIMIT_TOTAL="$TOKEN_LIMIT_TOTAL" bun tools/generate-orchestrator-prompt.ts 2>/dev/null || true)
+        ts_prompt=$(bun tools/generate-orchestrator-prompt.ts 2>/dev/null || true)
         if [[ -n "$ts_prompt" ]] && [[ "$ts_prompt" != "" ]]; then
             echo "$ts_prompt"
             return 0
         fi
     fi
     
-    # Fallback: Dynamic prompt based on user messages queue (bash implementation)
+    # Dynamic prompt based on user messages queue
     local session_count=$(get_session_count)
     local unread_messages=$(get_unread_user_messages)
     local pending_tasks=$(get_pending_tasks)

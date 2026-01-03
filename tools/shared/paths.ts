@@ -49,6 +49,7 @@ export const PATHS = {
   state: join(MEMORY_DIR, "state.json"),
   tasks: join(MEMORY_DIR, "tasks.json"),
   agentRegistry: join(MEMORY_DIR, "agent-registry.json"),
+  orchestratorState: join(MEMORY_DIR, "orchestrator-state.json"),
   knowledgeBase: join(MEMORY_DIR, "knowledge-base.json"),
   qualityAssessments: join(MEMORY_DIR, "quality-assessments.json"),
   

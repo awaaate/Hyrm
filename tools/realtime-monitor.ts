@@ -483,7 +483,7 @@ function renderQualitySection(): void {
   console.log(
     `  ${c.cyan}Average:${c.reset} ${c.bright}${avgScore}/10${c.reset} ` +
     `${c.dim}|${c.reset} ` +
-    `${c.cyan}Assessed:${c.reset} ${c.bright}${summary.count || 0}${c.reset} ` +
+    `${c.cyan}Assessed:${c.reset} ${c.bright}${summary.total_assessed || 0}${c.reset} ` +
     `${c.dim}|${c.reset} ` +
     `${c.cyan}Trend:${c.reset} ${trendColor}${trendIcon} ${trend}${c.reset}`
   );

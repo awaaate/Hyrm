@@ -2,43 +2,34 @@
   "version": "1.0.0",
   "agents": [
     {
-      "agent_id": "agent-1767382262935-vcswxp",
-      "session_id": "session-1767382262935",
-      "started_at": "2026-01-02T19:31:02.935Z",
-      "last_heartbeat": "2026-01-02T19:37:02.971Z",
-      "status": "active",
-      "assigned_role": "orchestrator",
-      "pid": 691917
-    },
-    {
-      "agent_id": "agent-1767382393563-d0xzth",
-      "session_id": "session-1767382393563",
-      "started_at": "2026-01-02T19:33:13.564Z",
-      "last_heartbeat": "2026-01-02T19:35:13.574Z",
+      "agent_id": "agent-1767423659871-5cdl3g",
+      "session_id": "session-1767423659871",
+      "started_at": "2026-01-03T07:00:59.872Z",
+      "last_heartbeat": "2026-01-03T07:15:59.951Z",
       "status": "working",
-      "assigned_role": "worker",
-      "pid": 694523,
-      "current_task": "realtime.log rotation implementation"
+      "assigned_role": "leader-impl-worker",
+      "pid": 38349,
+      "current_task": "Implement orchestrator leader election and stale-agent cleanup (task_1767422728098_488s1n)"
     },
     {
-      "agent_id": "agent-1767382689257-2og5",
-      "session_id": "session-1767382689257",
-      "started_at": "2026-01-02T19:38:09.258Z",
-      "last_heartbeat": "2026-01-02T19:40:09.275Z",
+      "agent_id": "agent-tfgi6u8O",
+      "session_id": "ses_47d4b4858ffeecXcp7tfgi6u8O",
+      "started_at": "2026-01-03T07:14:00.251Z",
+      "last_heartbeat": "2026-01-03T07:16:00.257Z",
+      "status": "active",
+      "assigned_role": "general",
+      "pid": 45714
+    },
+    {
+      "agent_id": "agent-1767424446228-4p78mk",
+      "session_id": "session-1767424446228",
+      "started_at": "2026-01-03T07:14:06.229Z",
+      "last_heartbeat": "2026-01-03T07:16:06.245Z",
       "status": "active",
       "assigned_role": "orchestrator",
-      "pid": 700343
-    },
-    {
-      "agent_id": "agent-1767382783686-htvc9",
-      "session_id": "session-1767382783686",
-      "started_at": "2026-01-02T19:39:43.687Z",
-      "last_heartbeat": "2026-01-02T19:39:43.690Z",
-      "status": "active",
-      "assigned_role": "worker",
-      "pid": 701756
+      "pid": 45714
     }
   ],
-  "last_updated": "2026-01-02T19:40:09.275Z",
-  "lock_version": 355
+  "last_updated": "2026-01-03T07:16:06.245Z",
+  "lock_version": 413
 }

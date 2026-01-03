@@ -102,3 +102,5 @@
 {"type":"file_edit","timestamp":"2026-01-02T19:32:30.415Z","file":"/app/workspace/memory/working.md"}
 {"type":"file_edit","timestamp":"2026-01-02T19:36:15.582Z","file":"/app/workspace/memory/working.md"}
 {"type":"file_edit","timestamp":"2026-01-02T19:39:04.167Z","file":"/app/workspace/memory/working.md"}
+{"type":"session_start","timestamp":"2026-01-03T07:14:00.241Z","session_id":"ses_47d4b4858ffeecXcp7tfgi6u8O"}
+{"type":"session_error","timestamp":"2026-01-03T07:14:00.352Z","error":{"name":"UnknownError","data":{"message":"Cannot read binary file: /app/workspace/.opencode/index"}}}

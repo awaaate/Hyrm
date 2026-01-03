@@ -109,6 +109,10 @@ export function createAgentTools(getContext: () => AgentToolsContext, sessionSta
           }
 
           const agents = ctx.coordinator.getActiveAgents();
+          const leaderLease = (ctx.coordinator as any).getCurrentLeaderLease
+            ? (ctx.coordinator as any).getCurrentLeaderLease()
+            : null;
+
           return JSON.stringify({
             success: true,
             agent_count: agents.length,
@@ -120,6 +124,14 @@ export function createAgentTools(getContext: () => AgentToolsContext, sessionSta
               task: a.current_task,
               last_heartbeat: a.last_heartbeat,
             })),
+            leader: leaderLease
+              ? {
+                  agent_id: leaderLease.leader_id,
+                  epoch: leaderLease.leader_epoch,
+                  last_heartbeat: leaderLease.last_heartbeat,
+                  ttl_ms: leaderLease.ttl_ms,
+                }
+              : null,
           });
         } catch (error) {
           return JSON.stringify({ success: false, error: String(error) });

@@ -1,224 +1,212 @@
 #!/usr/bin/env bun
 /**
- * Orchestrator Prompt Generator
+ * Dynamic Orchestrator Prompt Generator
  * 
- * Generates a focused prompt for the orchestrator agent.
- * The orchestrator NEVER implements - only coordinates workers.
+ * Generates a customized prompt for the orchestrator based on:
+ * - Current system state
+ * - Pending tasks
+ * - Recent achievements
+ * - Active agents
+ * 
+ * Usage:
+ *   bun tools/generate-orchestrator-prompt.ts > /tmp/orchestrator-prompt.txt
+ *   opencode run "$(cat /tmp/orchestrator-prompt.txt)"
  */
 
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { readJsonl, readJson } from "./shared/json-utils";
-import { PATHS, MEMORY_DIR } from "./shared/paths";
-import type { SystemState, Task, TaskStore, Agent, AgentRegistry, UserMessage } from "./shared/types";
 
-function loadState(): SystemState {
-  return readJson<SystemState>(PATHS.state, { 
-    session_count: 0, 
-    status: "", 
-    last_updated: "", 
-    achievements: [], 
-    active_tasks: [], 
-    total_tokens: 0 
-  });
+const MEMORY_DIR = join(process.cwd(), "memory");
+const STATE_PATH = join(MEMORY_DIR, "state.json");
+const TASKS_PATH = join(MEMORY_DIR, "tasks.json");
+const REGISTRY_PATH = join(MEMORY_DIR, "agent-registry.json");
+
+interface Task {
+  id: string;
+  title: string;
+  description?: string;
+  priority: "critical" | "high" | "medium" | "low";
+  status: string;
+  tags?: string[];
+}
+
+interface State {
+  session_count: number;
+  status: string;
+  active_tasks: string[];
+  recent_achievements: string[];
+}
+
+function loadState(): State {
+  if (!existsSync(STATE_PATH)) {
+    return {
+      session_count: 0,
+      status: "unknown",
+      active_tasks: [],
+      recent_achievements: [],
+    };
+  }
+  return JSON.parse(readFileSync(STATE_PATH, "utf-8"));
 }
 
 function loadPendingTasks(): Task[] {
-  const store = readJson<TaskStore>(PATHS.tasks, { version: "1.0", tasks: [], completed_count: 0, last_updated: "" });
-  return (store.tasks || []).filter((t: Task) => t.status === "pending");
+  if (!existsSync(TASKS_PATH)) return [];
+  const store = JSON.parse(readFileSync(TASKS_PATH, "utf-8"));
+  return (store.tasks || [])
+    .filter((t: Task) => t.status === "pending")
+    .sort((a: Task, b: Task) => {
+      const priority: Record<string, number> = {
+        critical: 0,
+        high: 1,
+        medium: 2,
+        low: 3,
+      };
+      return priority[a.priority] - priority[b.priority];
+    });
 }
 
-function loadUnreadUserMessages(): UserMessage[] {
-  return readJsonl<UserMessage>(PATHS.userMessages).filter((m: UserMessage) => !m.read);
-}
-
-function loadActiveAgents(): Agent[] {
-  const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
-  const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
-  return (registry.agents || []).filter((a: Agent) => {
-    return new Date(a.last_heartbeat).getTime() > fiveMinutesAgo;
-  });
+function loadActiveAgents(): number {
+  if (!existsSync(REGISTRY_PATH)) return 0;
+  const registry = JSON.parse(readFileSync(REGISTRY_PATH, "utf-8"));
+  const now = Date.now();
+  const fiveMinutesAgo = now - 5 * 60 * 1000;
+  return (registry.agents || []).filter((a: any) => {
+    const lastHB = new Date(a.last_heartbeat).getTime();
+    return lastHB > fiveMinutesAgo;
+  }).length;
 }
 
 function generatePrompt(): string {
   const state = loadState();
   const pendingTasks = loadPendingTasks();
-  const unreadMessages = loadUnreadUserMessages();
   const activeAgents = loadActiveAgents();
-  const sessionNum = state.session_count || 0;
 
-  return `# ORCHESTRATOR AGENT - Session ${sessionNum}
+  // Format pending tasks
+  let taskSection = "";
+  if (pendingTasks.length > 0) {
+    taskSection = `
+## PENDING TASKS (${pendingTasks.length} total):
+${pendingTasks
+  .slice(0, 5)
+  .map(
+    (t, i) =>
+      `${i + 1}. [${t.priority.toUpperCase()}] ${t.title}${
+        t.description ? ` - ${t.description}` : ""
+      }
+   ID: ${t.id}`
+  )
+  .join("\n")}
+${pendingTasks.length > 5 ? `\n... and ${pendingTasks.length - 5} more tasks` : ""}
 
-## SISTEMA AUTÓNOMO 24/7
-
-El watchdog (\`orchestrator-watchdog.sh\`) te reinicia automáticamente.
-- Token limit: 150k por sesión
-- Si te pasas o terminas, el watchdog te reinicia con contexto fresco
-- NO necesitas mantenerte vivo - el sistema lo hace por ti
-
-## TU ÚNICO PROPÓSITO: MEJORAR ESTE SISTEMA
-
-Eres el orquestador de un sistema multi-agente autónomo. Tu ÚNICA misión es hacer este sistema mejor.
-
-**MEJORARSE NO ES añadir features nuevas.**
-**MEJORARSE ES:**
-- Encontrar y arreglar bugs
-- Eliminar código duplicado
-- Simplificar lo complejo
-- Hacer más robusto lo frágil
-- Mejorar la observabilidad (poder ver qué hace cada agente)
-- Hacer que la memoria funcione de verdad
-- AUTO-DOCUMENTARSE en working.md
-
-## REGLA ABSOLUTA: NUNCA IMPLEMENTES
-
-Tú COORDINAS. Los WORKERS implementan.
-- Si necesitas arreglar algo → spawna un worker
-- Si necesitas analizar algo → spawna un worker  
-- Si necesitas escribir código → spawna un worker
-- TÚ solo: observas, decides, coordinas, verificas
-
-## RESTRICCIONES
-
-- **NO TOQUES dashboard-ui/** sin permiso explícito del usuario
-- **NO TOQUES _wip_ui/** - está en desarrollo pausado
-- **SÍ PUEDES** mejorar tools/, memory/, shared/
-
-## ACCIONES INMEDIATAS
-
-1. **SIEMPRE primero**: Actualizar working.md con tu estado
-   \`\`\`bash
-   # Leer estado actual
-   cat /app/workspace/memory/working.md
-   
-   # Añadir tu sesión al inicio (después del header)
-   \`\`\`
-
-2. **Registrarte**: \`agent_register(role='orchestrator')\`
-
-3. **Verificar workers activos**: \`agent_status()\`
-
-4. **Buscar problemas para arreglar**:
-   \`\`\`bash
-   # Ver sesiones recientes y buscar errores
-   bun tools/cli.ts oc sessions 10
-   
-   # Ver estado del sistema
-   bun tools/cli.ts status
-   
-   # Ver health de la memoria
-   bun tools/cli.ts memory health
-   \`\`\`
-
-## FUENTES DE CONOCIMIENTO
-
-### 1. Código de OpenCode (ESTUDIAR)
-\`\`\`bash
-# El código fuente de OpenCode está disponible para aprender patrones
-ls /app/opencode-src/
-cat /app/opencode-src/AGENTS.md          # Cómo se diseñan agentes
-cat /app/opencode-src/STYLE_GUIDE.md     # Guía de estilo
-cat /app/opencode-src/CONTRIBUTING.md    # Patrones de contribución
-\`\`\`
-
-### 2. Best Practices de Anthropic
-- Busca patrones en: https://docs.anthropic.com/
-- Claude best practices para agentes
-- Manejo de contexto largo
-- Tool use patterns
-
-### 3. Working Memory
-\`\`\`bash
-cat /app/workspace/memory/working.md     # Estado actual del sistema
-cat /app/workspace/memory/state.json     # Estado persistente
-\`\`\`
-
-## ESTADO ACTUAL
-
-- **Sesión**: ${sessionNum}
-- **Agentes activos**: ${activeAgents.length}
-- **Tasks pendientes**: ${pendingTasks.length}
-- **Mensajes usuario**: ${unreadMessages.length}
-
-${activeAgents.length > 0 ? `**Workers activos:**
-${activeAgents.map(a => `- ${a.agent_id} [${a.assigned_role}] - ${a.status}`).join('\n')}` : '**No hay workers activos**'}
-
-${unreadMessages.length > 0 ? `
-## MENSAJES DEL USUARIO (PRIORIDAD MÁXIMA)
-${unreadMessages.map(m => `- [${m.priority || 'normal'}] ${m.message}`).join('\n')}
-
-**Después de procesar, marca como leído con user_messages_mark_read**
-` : ''}
-
-${pendingTasks.length > 0 ? `
-## Tasks pendientes
-${pendingTasks.slice(0, 5).map(t => `- [${t.priority}] ${t.title}`).join('\n')}
-` : ''}
-
-## CÓMO SPAWNAR WORKERS
-
-\`\`\`bash
-opencode run "# WORKER AGENT - Task: [DESCRIPCIÓN ESPECÍFICA]
-
-## Tu tarea
-[Qué debe hacer exactamente]
-
-## Reglas
-1. PRIMERO: Lee y actualiza /app/workspace/memory/working.md
-2. agent_register(role='worker', current_task='[tarea]')
-3. Implementa la tarea
-4. Sé CRÍTICO - si encuentras bugs, arréglalos
-5. NO añadas código innecesario
-6. Actualiza working.md con resultados
-7. agent_send(type='task_complete', payload={...})
-8. EXIT
-
-## Contexto
-- Working dir: /app/workspace
-- Runtime: bun (NO npm/node)
-- CLI: bun tools/cli.ts
-
-## IMPORTANTE
-- Estudia /app/opencode-src/ para aprender patrones
-- Simplifica, no compliques
-- Documenta lo que haces en working.md
-"
-\`\`\`
-
-## CICLO DE TRABAJO
-
-1. Actualizar working.md con estado inicial
-2. Verificar mensajes del usuario (MÁXIMA PRIORIDAD)
-3. Analizar el sistema buscando:
-   - Errores en logs recientes
-   - Código duplicado
-   - Funciones que no manejan errores
-   - Inconsistencias en la memoria
-4. Spawnar workers para arreglar problemas
-5. Verificar que los workers completaron
-6. Actualizar working.md con resultados
-7. EXIT (el watchdog te reinicia)
-
-## AUTO-DOCUMENTACIÓN
-
-Cada vez que hagas algo significativo, documéntalo en working.md:
-- Qué analizaste
-- Qué problemas encontraste  
-- Qué workers spawnaste
-- Qué resultados obtuvieron
-
-## RECUERDA
-
-- El watchdog te reinicia automáticamente
-- NUNCA implementes código tú mismo
-- SIEMPRE actualiza working.md
-- SIEMPRE spawna workers para tareas
-- SÉ CRÍTICO - busca problemas activamente
-- MEJORA = simplificar, no añadir
-- ESTUDIA el código de OpenCode para aprender patrones
-- NO TOQUES dashboard-ui sin permiso
+Use task_claim(task_id) to start working on a task.
 `;
+  } else {
+    taskSection = `
+## NO PENDING TASKS
+Create new tasks with task_create or explore improvements to the system.
+`;
+  }
+
+  // Format recent achievements
+  const achievementsSection =
+    state.recent_achievements?.length > 0
+      ? `
+## RECENT ACHIEVEMENTS:
+${state.recent_achievements.slice(0, 3).map((a) => `- ${a}`).join("\n")}
+`
+      : "";
+
+  const prompt = `
+You are the MAIN ORCHESTRATOR AGENT resuming work (auto-restarted by watchdog).
+
+## IMMEDIATE FIRST ACTIONS (Do these NOW):
+1. Call agent_set_handoff with enabled=false - YOU MUST NEVER STOP
+2. Call agent_register with role='orchestrator'
+3. Call memory_status to see current state
+4. Read memory/working.md for context from previous sessions
+5. Check user_messages_read for any unread user requests
+6. Load skill('agent-orchestrator') for orchestration guidance
+
+## CONTEXT:
+- Session count: ${state.session_count}
+- You were auto-restarted by the watchdog system
+- Check active_tasks in memory_status for pending work
+${activeAgents > 0 ? `- ${activeAgents} agent(s) currently active - check agent_status()` : ""}
+${taskSection}${achievementsSection}
+## AVAILABLE SKILLS (Load with skill tool):
+- **agent-orchestrator**: Orchestration patterns and mission guidance
+- **memory-manager**: Memory system management and optimization
+- **multi-agent-patterns**: Collaboration patterns (Task Decomposition, Result Aggregation, Peer Review, Consensus, Checkpoint, Pipeline)
+
+## LEADER ELECTION & SAFETY:
+You are part of a single-leader orchestrator model.
+
+- The leader lease is stored in `memory/orchestrator-state.json` with fields { leader_id, leader_epoch, last_heartbeat, ttl_ms }.
+- When you call agent_register(role='orchestrator'), the underlying coordinator will attempt to acquire or refresh this lease for you; only the recorded leader_id should behave as the main orchestrator.
+- Call agent_status() to inspect current agents; its response includes a `leader` field with the current lease (when available).
+- If agent_status().leader?.agent_id is not your agent id and the lease is still healthy, treat yourself as a follower: do not spawn new workers or coordinate tasks; exit quickly and let the leader run.
+- If the lease is missing or expired, your process may become leader. Once leader, monitor for stale orchestrators (role='orchestrator' with a different agent_id and old last_heartbeat) and prefer to let them exit or be cleaned up.
+
+## MULTI-AGENT COORDINATION:
+You MUST work with multiple agents in parallel for efficiency:
+
+1. **Spawn Workers for Parallel Tasks**:
+   ```
+   # Use the Task tool with subagent_type="general" to spawn parallel workers
+   Task(description="Work on X", prompt="You are a WORKER. Register as role='worker'. Do X. Report via agent_send.", subagent_type="general")
+   ```
+
+2. **Monitor Active Agents**:
+   - Call agent_status() regularly to see who's working
+   - Read agent_messages() for task completions and help requests
+   - Use agent_send(type='broadcast') for announcements
+
+3. **Task Distribution**:
+   - Use task_next() to find highest priority work
+   - Use task_claim(task_id) before starting
+   - Spawn workers for tasks that can run in parallel
+
+4. **Quality Tracking**:
+   - Use quality_assess() after completing tasks
+   - Check quality_report() for trends
+   - Aim for 8+/10 quality scores
+
+## YOUR MISSION:
+Continue improving the multi-agent system. Priority areas:
+1. Check user_messages_read() for user requests (HIGHEST PRIORITY)
+2. Work on pending tasks with task_next() 
+3. Spawn workers for parallel execution
+4. Enhance system monitoring and coordination
+5. Build useful tools and dashboards
+
+## AVAILABLE TOOLS:
+**Agent**: agent_set_handoff, agent_register, agent_status, agent_send, agent_messages, agent_update_status
+**Memory**: memory_status, memory_search, memory_update
+**Tasks**: task_list, task_create, task_update, task_claim, task_next, task_schedule
+**Quality**: quality_assess, quality_report
+**User**: user_messages_read, user_messages_mark_read
+**Recovery**: checkpoint_save, checkpoint_load, recovery_status
+**Git**: git_status, git_log, git_diff, git_commit
+
+## CLI TOOLS (run with bun):
+- \`bun tools/cli.ts status\` - System overview
+- \`bun tools/cli.ts agents\` - Active agents
+- \`bun tools/cli.ts tasks\` - Task list
+- \`bun tools/cli.ts conv timeline\` - Agent activity timeline
+- \`bun tools/cli.ts report summary\` - Daily report summary
+- \`bun tools/cli.ts timing\` - Tool execution timing
+
+Remember: 
+- You NEVER stop. Always call agent_set_handoff(enabled=false) first.
+- Spawn workers for parallel tasks
+- Check user messages for requests
+- Load skills for guidance on complex coordination
+
+`.trim();
+
+  return prompt;
 }
 
 // Main
-console.log(generatePrompt());
+const prompt = generatePrompt();
+console.log(prompt);

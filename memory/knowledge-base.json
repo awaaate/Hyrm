@@ -1,8 +1,496 @@
 [
   {
+    "session_id": "ses_47d4da9e6ffeVXvjKfcGmn7J4q",
+    "timestamp": 1767424284224,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d54d0c9ffegbsLBaT4sAZ31g",
+    "timestamp": 1767423815517,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d57a693ffekPWnzter11Y3bM",
+    "timestamp": 1767423764073,
+    "messages": 10,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [
+      "it usually gets the next pending task and spawns a worker to handle it using 'task_claim.' However, in previous runs, some tasks had been assigned to"
+    ],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d57cc89ffeXUKKOrQvv7a4J3",
+    "timestamp": 1767423742595,
+    "messages": 9,
+    "decisions": [
+      "skip creating new tasks for improvements this session, focusing instead on my core responsibilities."
+    ],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d580f44ffeaS8IZR5uTjdAJu",
+    "timestamp": 1767424036555,
+    "messages": 21,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d588d65fferKMoSHl80CxZ7A",
+    "timestamp": 1767423794698,
+    "messages": 17,
+    "decisions": [],
+    "discoveries": [
+      "the `task_list` function returns tasks, and filtering by ID could help confirm what we have."
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d58a468ffe1gljwAUXQEjHaS",
+    "timestamp": 1767423605907,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5a273effeMq5gIgC6XLYojt",
+    "timestamp": 1767423572922,
+    "messages": 11,
+    "decisions": [
+      "the 'edit' tool after reading the file, which we already did."
+    ],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5a8ee8ffetkTIyjfX6pO0EW",
+    "timestamp": 1767423537354,
+    "messages": 9,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5acaccffe39a8HfPvO1xdVP",
+    "timestamp": 1767423461799,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5b8db0ffenDu0UYbXDJH6ck",
+    "timestamp": 1767423423964,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5b9a33ffec0KaXWxab5xa0c",
+    "timestamp": 1767423432285,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5cc16bffekWzIMl6XdbftEo",
+    "timestamp": 1767423484513,
+    "messages": 15,
+    "decisions": [],
+    "discoveries": [
+      "without an explicit type, I don't need to re-export it; the CLI can simply use an inline type annotation from `ReturnTyp"
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5d776fffeZ2be1S2gMyh4Me",
+    "timestamp": 1767423334400,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5e755cffe0iSn3iJoEIPKW5",
+    "timestamp": 1767423213062,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5ead4fffe0QYNaT3lqt4PU1",
+    "timestamp": 1767423520256,
+    "messages": 23,
+    "decisions": [
+      "a leader lease state."
+    ],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5f0fe2ffekO7p17E2MrMYV4",
+    "timestamp": 1767423318688,
+    "messages": 15,
+    "decisions": [],
+    "discoveries": [
+      "`task_next` returned none."
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5f5347ffezG9inrTpz4gNQY",
+    "timestamp": 1767423168810,
+    "messages": 4,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d5f7543ffeRETEzdqW4I1OYG",
+    "timestamp": 1767423136691,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d60dd09ffeaC9EKRsgX81U2d",
+    "timestamp": 1767423126298,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d615e54ffetqB5pGSZNTx9TF",
+    "timestamp": 1767423072094,
+    "messages": 11,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d63495fffeP2sSWnomOkhNKD",
+    "timestamp": 1767422927277,
+    "messages": 7,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d653369ffezs2VcaeWNsDZLU",
+    "timestamp": 1767422799957,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d6557e0ffefLwanu4fL7tSVR",
+    "timestamp": 1767423016395,
+    "messages": 18,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d671d38ffePKBLOxnNSWu1z3",
+    "timestamp": 1767422683747,
+    "messages": 10,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d6728c1ffee7fix6mUJVHrns",
+    "timestamp": 1767422731883,
+    "messages": 11,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "call todowrite and mark plan_inspect_agents as 'in_progress'."
+    ]
+  },
+  {
+    "session_id": "ses_47d67c3fbffe06vZe2Qefc3AZL",
+    "timestamp": 1767423000019,
+    "messages": 45,
+    "decisions": [],
+    "discoveries": [
+      "in one of the CLI edits, there was a typo where I changed 'task-complete' to `."
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d67d65dffeQr1KiCVjOQDPNy",
+    "timestamp": 1767422685554,
+    "messages": 13,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d690757ffexXzzMYZaMWXnYJ",
+    "timestamp": 1767422592916,
+    "messages": 12,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d69d14dffeMp437d4x4bwjUG",
+    "timestamp": 1767422619926,
+    "messages": 14,
+    "decisions": [
+      "first by fixing the 'showQuality' bug, then possibly tracking token usage in the multi-agent setup."
+    ],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d6af157ffesUs1365MAkcl9Y",
+    "timestamp": 1767422402917,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d6c7f63ffesCLPqOQCC6Nyxg",
+    "timestamp": 1767422287260,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d6e67ddffeevu293MufN721B",
+    "timestamp": 1767422138436,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47d7a0a71ffeTExqp41hT6oBJl",
+    "timestamp": 1767421375907,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47fc702f0ffeWv35Bx4wVx2zft",
+    "timestamp": 1767382843188,
+    "messages": 10,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47fc872a6ffe1xNjIWR7zS4o2N",
+    "timestamp": 1767382895270,
+    "messages": 25,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47fccf4d2ffeHtmrf6jr8sTud0",
+    "timestamp": 1767382529140,
+    "messages": 22,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47fcef3caffenxrYkGpIkC6ccC",
+    "timestamp": 1767382620936,
+    "messages": 42,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47fd48a01ffefLQqfZuoQX0nMu",
+    "timestamp": 1767382184063,
+    "messages": 38,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
     "session_id": "ses_47fdbf667ffeMRIH4jcDKRWiZN",
-    "timestamp": 1767381833651,
-    "messages": 54,
+    "timestamp": 1767381868649,
+    "messages": 58,
     "decisions": [],
     "discoveries": [],
     "code_created": [],
@@ -731,7 +1219,9 @@
     "messages": 24,
     "decisions": [],
     "discoveries": [],
-    "code_created": [],
+    "code_created": [
+      "memory/working.md"
+    ],
     "problems_solved": [],
     "key_insights": [],
     "techniques": [],
@@ -769,7 +1259,9 @@
     "messages": 59,
     "decisions": [],
     "discoveries": [],
-    "code_created": [],
+    "code_created": [
+      "memory/working.md"
+    ],
     "problems_solved": [],
     "key_insights": [],
     "techniques": [],
@@ -857,7 +1349,8 @@
       "terminal-dashboard/index.ts",
       "terminal-dashboard/tsconfig.json",
       "tools/debug-capture.ts",
-      "terminal-dashboard/renders.ts"
+      "terminal-dashboard/renders.ts",
+      "memory/working.md"
     ],
     "problems_solved": [],
     "key_insights": [],
@@ -1233,6 +1726,7 @@
     ],
     "code_created": [
       "tools/daily-report-generator.ts",
+      "tools/agent-conversation-viewer.ts",
       "tools/critique-agent.ts",
       ".opencode/skill/critique-agent/SKILL.md"
     ],
@@ -1388,7 +1882,9 @@
     "messages": 11,
     "decisions": [],
     "discoveries": [],
-    "code_created": [],
+    "code_created": [
+      "tools/session-analytics.ts"
+    ],
     "problems_solved": [],
     "key_insights": [],
     "techniques": [],
@@ -1426,6 +1922,7 @@
       "dashboard-ui/src/components/ui/progress.tsx",
       "dashboard-ui/vite.config.ts",
       "dashboard-ui/tsconfig.app.json",
+      "dashboard-ui/src/App.tsx",
       "dashboard-ui/src/App.css",
       "tools/conversation-tracker.ts"
     ],
@@ -1502,7 +1999,9 @@
     "messages": 25,
     "decisions": [],
     "discoveries": [],
-    "code_created": [],
+    "code_created": [
+      "orchestrator-watchdog.sh"
+    ],
     "problems_solved": [],
     "key_insights": [],
     "techniques": [],
@@ -1544,8 +2043,12 @@
     "decisions": [],
     "discoveries": [],
     "code_created": [
+      "AGENTS.md",
       "memory/system-message-config.json",
-      "tools/system-message-config.ts"
+      "tools/system-message-config.ts",
+      "dashboard-ui/src/App.tsx",
+      "dashboard-ui/src/App.css",
+      "dashboard-ui/src/index.css"
     ],
     "problems_solved": [],
     "key_insights": [],
@@ -1562,7 +2065,9 @@
       "tools/session-summarizer.ts",
       "tools/knowledge-deduplicator.ts",
       "dashboard-ui/postcss.config.js",
-      "dashboard-ui/src/lib/utils.ts"
+      "dashboard-ui/src/index.css",
+      "dashboard-ui/src/lib/utils.ts",
+      "dashboard-ui/src/App.tsx"
     ],
     "problems_solved": [],
     "key_insights": [],
@@ -1621,6 +2126,7 @@
       "mcp-servers/playwright-mcp/package.json",
       "mcp-servers/playwright-mcp/tsconfig.json",
       "mcp-servers/playwright-mcp/src/index.ts",
+      "tools/generate-orchestrator-prompt.ts",
       "start-main.sh"
     ],
     "problems_solved": [],
@@ -1824,7 +2330,8 @@
     "decisions": [],
     "discoveries": [],
     "code_created": [
-      "tools/task-manager.ts"
+      "tools/task-manager.ts",
+      "memory/working.md"
     ],
     "problems_solved": [],
     "key_insights": [],
@@ -1930,6 +2437,7 @@
       "MCP_SERVERS_RESEARCH.md",
       "WORKER_AGENT_TEMPLATE.md",
       "WORKER_AGENT_TEMPLATES.md",
+      "tools/smart-memory-manager.ts",
       "ORCHESTRATOR_STATUS.md",
       "ORCHESTRATOR_STATUS_REPORT.md",
       "PROOF_OF_VALUE.md",
@@ -1996,6 +2504,8 @@
     "decisions": [],
     "discoveries": [],
     "code_created": [
+      "WORKER_AGENT_TEMPLATE.md",
+      "ORCHESTRATOR_STATUS.md",
       "SESSION16_SUMMARY.md"
     ],
     "problems_solved": [],
@@ -2122,8 +2632,11 @@
     ],
     "code_created": [
       "opencode.json",
+      "start-main.sh",
       "memory/state.json",
-      "memory/metrics.json"
+      "memory/metrics.json",
+      "memory/agent-registry.json",
+      "memory/working.md"
     ],
     "problems_solved": [],
     "key_insights": [
@@ -2169,6 +2682,7 @@
     "decisions": [],
     "discoveries": [],
     "code_created": [
+      "memory/agent-registry.json",
       "memory/message-bus.jsonl",
       "tools/multi-agent-coordinator.ts",
       "MULTI_AGENT_GUIDE.md",
@@ -2200,7 +2714,9 @@
     "messages": 27,
     "decisions": [],
     "discoveries": [],
-    "code_created": [],
+    "code_created": [
+      "CURRENT_SESSION.md"
+    ],
     "problems_solved": [],
     "key_insights": [],
     "techniques": [],
@@ -2447,7 +2963,8 @@
     "decisions": [],
     "discoveries": [],
     "code_created": [
-      "BASELINE_TEST.md"
+      "BASELINE_TEST.md",
+      "PROOF_OF_VALUE.md"
     ],
     "problems_solved": [],
     "key_insights": [],
@@ -2559,7 +3076,8 @@
     "decisions": [],
     "discoveries": [],
     "code_created": [
-      "VALIDATION_TEST.md"
+      "VALIDATION_TEST.md",
+      "demo-api-client.ts"
     ],
     "problems_solved": [],
     "key_insights": [],
@@ -2766,6 +3284,7 @@
       "memory/dashboard/public/styles.css",
       "memory/dashboard/public/app.js",
       "memory/start-dashboard.sh",
+      "memory/dashboard/README.md",
       "memory/SESSION8_SUMMARY.md",
       "memory/QUICKSTART.md"
     ],
@@ -2838,7 +3357,9 @@
     "messages": 35,
     "decisions": [],
     "discoveries": [],
-    "code_created": [],
+    "code_created": [
+      "memory/metrics.json"
+    ],
     "problems_solved": [],
     "key_insights": [],
     "techniques": [],
@@ -2862,7 +3383,8 @@
     "messages": 59,
     "decisions": [],
     "discoveries": [
-      "the current extraction patterns are too strict and look for specific keywords like \"discovered:\", \"f"
+      "the current extraction patterns are too strict and look for specific keywords like \"discovered:\", \"f",
+      "the current extraction patterns are too strict and look for specific keywords like \"discovered:\", \"found that\", etc."
     ],
     "code_created": [
       "memory/plugin.ts",
@@ -2926,6 +3448,9 @@
     "discoveries": [],
     "code_created": [
       "memory/architecture.md",
+      "memory/state.json",
+      "memory/working.md",
+      "memory/metrics.json",
       "memory/manager.ts",
       "memory/knowledge/opencode_essentials.md",
       "memory/boot.sh",

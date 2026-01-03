@@ -2078,18 +2078,218 @@
       "title": "Fix Bun.spawn stdio bug in plugin respawn",
       "description": "The orchestrator respawn in `.opencode/plugin/index.ts` fails with \"stdio must be an array\". Need to fix lines 1220-1225 to use proper Bun.spawn options. Either use `stdio: [\"ignore\", \"ignore\", \"ignore\"]` or find correct way to redirect to file.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-02T19:39:22.057Z",
-      "updated_at": "2026-01-02T19:39:22.057Z",
+      "updated_at": "2026-01-02T19:40:56.955Z",
       "created_by": "unknown",
       "tags": [
         "bug",
         "plugin",
         "bun"
       ],
-      "complexity": "simple"
+      "complexity": "simple",
+      "completed_at": "2026-01-02T19:40:56.954Z",
+      "notes": [
+        "[2026-01-02T19:40:41.594Z] Fixed Bun.spawn stdio bug. Commit f7c4568. Changed stdout/stderr from file handle (invalid) to \"ignore\" (valid).",
+        "[2026-01-02T19:40:56.955Z] Fixed by worker agent-1767382783686-htvc9. Commit f7c4568. Changed Bun.spawn to use stdin/stdout/stderr: \"ignore\" instead of file handles."
+      ]
+    },
+    {
+      "id": "task_1767422564433_bk0h88",
+      "title": "Design orchestrator leader election and stale-agent cleanup",
+      "description": "Analyze the current multi-orchestrator state (multiple active orchestrators in agent_status) and propose a design for a single-leader orchestrator with safe failover and stale-agent cleanup. Focus on architecture and coordination patterns; avoid code changes for now. Document findings in working memory (memory/working.md or a design note) and report completion via agent_send(task_complete).",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-03T06:42:44.433Z",
+      "updated_at": "2026-01-03T06:44:43.026Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "coordination",
+        "design"
+      ],
+      "estimated_hours": 1,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767422606160-f4l1zp",
+      "claimed_at": "2026-01-03T06:43:30.539Z",
+      "completed_at": "2026-01-03T06:44:40.344Z",
+      "notes": [
+        "[2026-01-03T06:44:40.346Z] Proposed and documented a single-leader orchestrator design with heartbeat-based leader lease, epoch tokens, self-demotion for non-leaders, and stale-agent cleanup using agent_status and memory state. Summary appended to memory/working.md under Session 188."
+      ],
+      "quality_score": 9.7,
+      "quality_notes": "Multiple orchestrators can be present simultaneously; introducing a single-leader model with explicit epoch-based leasing and heartbeats simplifies coordination and enables safe failover plus stale-agent cleanup."
+    },
+    {
+      "id": "task_1767422571222_xifnzr",
+      "title": "Audit and debug CLI dashboard & multi-agent monitor outputs",
+      "description": "Review tools/cli.ts monitor/watch, tools/realtime-monitor.ts, and terminal-dashboard data layer to ensure OpenCode sessions, messages, and metrics are displayed correctly (no formatting errors, no empty panels). Align outputs with tools/opencode-tracker.ts and avoid UI-only tweaks; focus on data correctness, robustness, and clear error reporting.",
+      "priority": "high",
+      "status": "in_progress",
+      "created_at": "2026-01-03T06:42:51.222Z",
+      "updated_at": "2026-01-03T06:59:24.464Z",
+      "created_by": "unknown",
+      "tags": [
+        "cli",
+        "monitor",
+        "opencode",
+        "multi-agent",
+        "debug"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767423494522-3a1e0r",
+      "claimed_at": "2026-01-03T06:44:28.679Z",
+      "notes": [
+        "[2026-01-03T06:59:24.464Z] Current orchestrator instance resuming CLI dashboard & monitor audit; previous orchestrator agent-1767422633466-ypcjdc is superseded."
+      ]
+    },
+    {
+      "id": "task_1767422728098_488s1n",
+      "title": "Implement orchestrator leader election and stale-agent cleanup",
+      "description": "Implement the single-leader orchestrator model with heartbeat-based lease, leader epoch and fencing tokens, stale-orchestrator detection, and self-shutdown, based on the design from task_1767422564433_bk0h88. Integrate with agent_status, agent_set_handoff, and existing monitoring so that only one orchestrator acts as leader at a time while others stay idle or shut down safely.",
+      "priority": "critical",
+      "status": "in_progress",
+      "created_at": "2026-01-03T06:45:28.098Z",
+      "updated_at": "2026-01-03T07:00:02.424Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "multi-agent",
+        "leader-election"
+      ],
+      "depends_on": [
+        "task_1767422564433_bk0h88"
+      ],
+      "estimated_hours": 4,
+      "complexity": "complex",
+      "assigned_to": "agent-1767423576529-lc6l8",
+      "notes": [
+        "[2026-01-03T06:45:49.780Z] Worker started; implementing orchestrator leader election + stale-agent cleanup.",
+        "[2026-01-03T06:59:24.014Z] Requeued by orchestrator agent-1767423494522-3a1e0r because previous leader-impl-worker is no longer active in agent_status; ready for a fresh leader-impl-worker to claim."
+      ],
+      "claimed_at": "2026-01-03T07:00:02.424Z"
+    },
+    {
+      "id": "task_1767423071616_2xmg77",
+      "title": "Validate orchestrator leader election and multi-orchestrator cleanup",
+      "description": "After task_1767422728098_488s1n implements the single-leader orchestrator model with heartbeat-based lease, leader epoch and fencing tokens, and stale-orchestrator cleanup, validate the behavior in a live multi-agent run. Ensure only one orchestrator acts as leader, others demote or exit safely, and monitoring/CLI views reflect correct leader state. Propose any follow-up refinements needed.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-03T06:51:11.616Z",
+      "updated_at": "2026-01-03T06:58:34.368Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "monitoring",
+        "stability"
+      ],
+      "depends_on": [
+        "task_1767422728098_488s1n"
+      ],
+      "blocked_by": [
+        "task_1767422728098_488s1n"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767423215783-oj3a6j",
+      "claimed_at": "2026-01-03T06:53:35.829Z",
+      "completed_at": "2026-01-03T06:58:34.368Z",
+      "notes": [
+        "[2026-01-03T06:58:34.368Z] Leader-election validation: implementation of the Session 188 single-leader design is not yet present; multiple orchestrators remain active with no leader lease, and CLI/monitoring do not surface leader state. See Session 189 in memory/working.md for full findings and recommendations."
+      ]
+    },
+    {
+      "id": "task_1767423270940_xmgxle",
+      "title": "Integrate leader election state into CLI dashboard/monitor",
+      "description": "Update CLI monitoring tools (tools/cli.ts monitor/watch, tools/realtime-monitor.ts, and any supporting trackers) to surface the new single-leader orchestrator state. Show which orchestrator is leader, follower counts, and stale-orchestrator detections based on the leader-election implementation from task_1767422728098_488s1n and the design in Session 188 (memory/working.md). Focus on data correctness and robust error handling if leader state is missing or inconsistent; avoid cosmetic-only UI tweaks.",
+      "priority": "high",
+      "status": "in_progress",
+      "created_at": "2026-01-03T06:54:30.940Z",
+      "updated_at": "2026-01-03T06:55:14.859Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "cli",
+        "monitoring",
+        "leader-election"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate",
+      "assigned_to": "agent-1767423314532-41ys2",
+      "claimed_at": "2026-01-03T06:55:14.859Z",
+      "notes": [
+        "[2026-01-03T06:54:45.209Z] Releasing claim from orchestrator; task should be picked up by a dedicated worker spawned via opencode run."
+      ]
+    },
+    {
+      "id": "task_1767423420053_426y6d",
+      "title": "Backfill quality assessments for unassessed tasks",
+      "description": "Use quality_report and task_list to identify tasks without assessments, then create or update quality_assess entries so overall quality stats accurately reflect recent work.",
+      "priority": "medium",
+      "status": "in_progress",
+      "created_at": "2026-01-03T06:57:00.053Z",
+      "updated_at": "2026-01-03T06:57:38.364Z",
+      "created_by": "unknown",
+      "tags": [
+        "quality",
+        "meta"
+      ],
+      "estimated_hours": 1,
+      "complexity": "simple",
+      "assigned_to": "agent-1767423456035-2rzueq",
+      "claimed_at": "2026-01-03T06:57:38.364Z"
+    },
+    {
+      "id": "task_1767423756900_wguutv",
+      "title": "Harden orchestrator startup and watchdog behavior for single-leader model",
+      "description": "After the orchestrator leader election and stale-agent cleanup implementation (task_1767422728098_488s1n) lands, refine orchestrator startup and watchdog behavior so that new processes prefer reusing an existing healthy leader instead of spawning parallel orchestrators. Implement self-shutdown or idle behavior for non-leader orchestrators that start when a healthy leader lease exists, and tighten stale-orchestrator cleanup to minimize multi-leader windows, following Session 189 follow-up recommendation #4 in memory/working.md.",
+      "priority": "high",
+      "status": "blocked",
+      "created_at": "2026-01-03T07:02:36.900Z",
+      "updated_at": "2026-01-03T07:02:36.900Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "leader-election",
+        "watchdog",
+        "startup"
+      ],
+      "depends_on": [
+        "task_1767422728098_488s1n"
+      ],
+      "blocked_by": [
+        "task_1767422728098_488s1n"
+      ],
+      "estimated_hours": 4,
+      "complexity": "moderate"
+    },
+    {
+      "id": "task_1767423758123_5sy7qw",
+      "title": "Re-run leader election validation after implementation and CLI integration",
+      "description": "Once the single-leader orchestrator model is implemented (task_1767422728098_488s1n) and leader state is surfaced in CLI/monitoring (task_1767423270940_xmgxle), perform a second end-to-end validation of leader election and stale-orchestrator cleanup as described in Session 189. Confirm only one orchestrator holds the leader lease at a time, non-leaders self-demote or exit, and CLI/monitoring views accurately reflect leader id/epoch and cleanup events. Document findings in memory/working.md and update task quality assessments if needed.",
+      "priority": "high",
+      "status": "blocked",
+      "created_at": "2026-01-03T07:02:38.123Z",
+      "updated_at": "2026-01-03T07:02:38.123Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "leader-election",
+        "validation",
+        "monitoring"
+      ],
+      "depends_on": [
+        "task_1767422728098_488s1n",
+        "task_1767423270940_xmgxle"
+      ],
+      "blocked_by": [
+        "task_1767422728098_488s1n",
+        "task_1767423270940_xmgxle"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate"
     }
   ],
-  "completed_count": 99,
-  "last_updated": "2026-01-02T19:39:22.057Z"
+  "completed_count": 103,
+  "last_updated": "2026-01-03T07:02:38.123Z"
 }

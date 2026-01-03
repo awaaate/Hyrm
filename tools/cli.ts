@@ -243,7 +243,7 @@ function showUserMessages(): void {
   
   if (messages.length === 0) {
     console.log(`${c.dim}No user messages. Send one with:${c.reset}`);
-    console.log(`${c.cyan}  bun tools/opencode-cli.ts send "Your message"${c.reset}\n`);
+    console.log(`${c.cyan}  bun tools/cli.ts send "Your message"${c.reset}\n`);
     return;
   }
   
@@ -294,7 +294,7 @@ function showQuality(): void {
   const summary = quality.summary || {};
   
   console.log(`${c.cyan}Average Score:${c.reset}  ${c.bright}${summary.average_score?.toFixed(1) || "N/A"}${c.reset}/10`);
-  console.log(`${c.cyan}Tasks Assessed:${c.reset} ${c.bright}${summary.count || 0}${c.reset}`);
+  console.log(`${c.cyan}Tasks Assessed:${c.reset} ${c.bright}${summary.total_assessed || 0}${c.reset}`);
   
   const trendColor = summary.trend === "improving" ? c.green : 
                      summary.trend === "declining" ? c.red : c.yellow;
@@ -960,7 +960,7 @@ function showRecovery(): void {
   }
   
   if (recoverable.length > 0) {
-    console.log(`${c.cyan}To recover:${c.reset} bun tools/opencode-cli.ts recover ${recoverable[0].sessionId}`);
+    console.log(`${c.cyan}To recover:${c.reset} bun tools/cli.ts recover ${recoverable[0].sessionId}`);
   }
 }
 
@@ -1167,7 +1167,7 @@ switch (command) {
       : "medium";
     if (!taskTitle) {
       console.log(`${c.red}Error: Task title required${c.reset}`);
-      console.log(`Usage: bun tools/opencode-cli.ts task-create "Task title" --priority high`);
+      console.log(`Usage: bun tools/cli.ts task-create "Task title" --priority high`);
       process.exit(1);
     }
     createTask(taskTitle, taskPriority);
@@ -1177,7 +1177,7 @@ switch (command) {
   case "claim-task":
     if (!args[1]) {
       console.log(`${c.red}Error: Task ID required${c.reset}`);
-      console.log(`Usage: bun tools/opencode-cli.ts task-claim <task_id>`);
+      console.log(`Usage: bun tools/cli.ts task-claim <task_id>`);
       // Show pending tasks
       console.log(`\n${c.dim}Pending tasks:${c.reset}`);
       const pendingTasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" }).tasks
@@ -1195,9 +1195,10 @@ switch (command) {
   case "complete-task":
     if (!args[1]) {
       console.log(`${c.red}Error: Task ID required${c.reset}`);
-      console.log(`Usage: bun tools/opencode-cli.ts task-complete <task_id> [notes]`);
+      console.log(`Usage: bun tools/cli.ts task-complete <task_id> [notes]`);
       process.exit(1);
     }
+
     completeTask(args[1], args.slice(2).join(" "));
     break;
     
@@ -1214,7 +1215,7 @@ switch (command) {
     const urgent = args.includes("--urgent");
     if (!message) {
       console.log(`${c.red}Error: Message required${c.reset}`);
-      console.log(`Usage: bun tools/opencode-cli.ts send "Your message"`);
+      console.log(`Usage: bun tools/cli.ts send "Your message"`);
       process.exit(1);
     }
     sendUserMessage(message, urgent);

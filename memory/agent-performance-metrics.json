@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-01-02T19:10:19.635Z",
+  "last_updated": "2026-01-03T07:00:02.425Z",
   "agents": {
     "agent-1767302507934-2c671j": {
       "agent_id": "agent-1767302507934-2c671j",
@@ -371,6 +371,85 @@
       "avg_quality": 8.8,
       "last_activity": "2026-01-02T19:10:19.635Z",
       "first_seen": "2026-01-02T19:05:58.761Z"
+    },
+    "agent-1767422606160-f4l1zp": {
+      "agent_id": "agent-1767422606160-f4l1zp",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 69805,
+      "avg_duration_ms": 69805,
+      "quality_scores": [
+        9.7
+      ],
+      "avg_quality": 9.7,
+      "last_activity": "2026-01-03T06:44:43.027Z",
+      "first_seen": "2026-01-03T06:43:30.541Z"
+    },
+    "agent-1767422633466-ypcjdc": {
+      "agent_id": "agent-1767422633466-ypcjdc",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-03T06:44:28.682Z",
+      "first_seen": "2026-01-03T06:44:28.682Z"
+    },
+    "agent-1767423215783-oj3a6j": {
+      "agent_id": "agent-1767423215783-oj3a6j",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 298539,
+      "avg_duration_ms": 298539,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-03T06:58:34.368Z",
+      "first_seen": "2026-01-03T06:53:35.830Z"
+    },
+    "agent-1767423173812-5t8vph": {
+      "agent_id": "agent-1767423173812-5t8vph",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-03T06:54:33.767Z",
+      "first_seen": "2026-01-03T06:54:33.767Z"
+    },
+    "agent-1767423314532-41ys2": {
+      "agent_id": "agent-1767423314532-41ys2",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-03T06:55:14.860Z",
+      "first_seen": "2026-01-03T06:55:14.860Z"
+    },
+    "agent-1767423456035-2rzueq": {
+      "agent_id": "agent-1767423456035-2rzueq",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-03T06:57:38.365Z",
+      "first_seen": "2026-01-03T06:57:38.365Z"
+    },
+    "agent-1767423576529-lc6l8": {
+      "agent_id": "agent-1767423576529-lc6l8",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-03T07:00:02.425Z",
+      "first_seen": "2026-01-03T07:00:02.425Z"
     }
   }
 }

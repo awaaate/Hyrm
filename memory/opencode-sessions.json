@@ -1977,7 +1977,7 @@
       "user_queries": [
         "\"we are running multiple opencode. we have a memory system and a multi agent system,  have on min...",
         "i don't see that the idle hook it's working. nor i don't now if you ahev access to the meorry. al...",
-        "and set the defualt model in the root ocnfig form opencode to · claude-opus-4-5-20251101",
+        "and set the defualt model in the root ocnfig form opencode to · openai/gpt-5.1-high-20251101",
         "also insitialize a github repo . git remote add origin https://github.com/awaaate/Hyrm.git git br...",
         "it's working? it's so give me the script to run its in loop to cretae a sytem with memory and cap..."
       ]
