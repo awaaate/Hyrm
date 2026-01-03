@@ -21,6 +21,9 @@ const ORCHESTRATOR_STATE_PATH = PATHS.orchestratorState || getMemoryPath("orches
 // Leader lease configuration (for orchestrator election)
 const ORCHESTRATOR_LEASE_TTL_MS = 3 * 60 * 1000; // 3 minutes
 
+// Stale agent detection configuration
+const STALE_AGENT_THRESHOLD_MS = 2 * 60 * 1000; // 2 minutes - more aggressive than before
+
 interface OrchestratorLease {
   leader_id: string;
   leader_epoch: number;
@@ -146,11 +149,20 @@ class MultiAgentCoordinator {
         const registry = this.readRegistry();
         const expectedVersion = registry.lock_version;
 
-        // Remove stale agents (no heartbeat in 5 minutes)
-        const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+        // Remove stale agents (no heartbeat in 2 minutes - more aggressive)
+        const staleThreshold = Date.now() - STALE_AGENT_THRESHOLD_MS;
+        const staleAgents = registry.agents.filter((agent) => {
+          const lastHB = new Date(agent.last_heartbeat).getTime();
+          return lastHB <= staleThreshold;
+        });
+        
+        if (staleAgents.length > 0) {
+          this.log("INFO", `Cleaning up ${staleAgents.length} stale agent(s): ${staleAgents.map(a => a.agent_id).join(", ")}`);
+        }
+        
         registry.agents = registry.agents.filter((agent) => {
           const lastHB = new Date(agent.last_heartbeat).getTime();
-          return lastHB > fiveMinutesAgo;
+          return lastHB > staleThreshold;
         });
 
         // Check if this agent already exists (update vs add)
@@ -241,6 +253,7 @@ class MultiAgentCoordinator {
   /**
    * Send heartbeat to update agent status
    * Only updates registry - message bus heartbeats are reduced to every 5th call
+   * Orchestrator leaders also run periodic cleanup on every heartbeat
    */
   private sendHeartbeat(): void {
     this.heartbeatCount++;
@@ -254,6 +267,14 @@ class MultiAgentCoordinator {
 
       // If this coordinator is the orchestrator leader, refresh the lease heartbeat as well
       this.refreshLeaderLease();
+      
+      // Orchestrator leaders perform periodic cleanup on every heartbeat
+      if (this.isLeader) {
+        const cleanedUp = this.cleanupStaleAgents();
+        if (cleanedUp > 0) {
+          this.log("INFO", `Orchestrator heartbeat: cleaned up ${cleanedUp} stale agents`);
+        }
+      }
     }
 
     // Only send message bus heartbeat every 5th call (every 5 minutes with 60s interval)
@@ -286,16 +307,77 @@ class MultiAgentCoordinator {
   }
 
   /**
-   * Get all active agents
+   * Get all active agents (filters out stale agents automatically)
    */
   getActiveAgents(): Agent[] {
     const registry = this.readRegistry();
-    const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+    const staleThreshold = Date.now() - STALE_AGENT_THRESHOLD_MS;
     
     return registry.agents.filter((agent) => {
       const lastHB = new Date(agent.last_heartbeat).getTime();
-      return lastHB > fiveMinutesAgo;
+      return lastHB > staleThreshold;
     });
+  }
+
+  /**
+   * Clean up stale agents from the registry
+   * Returns the number of agents cleaned up
+   */
+  cleanupStaleAgents(): number {
+    const registry = this.readRegistry();
+    const staleThreshold = Date.now() - STALE_AGENT_THRESHOLD_MS;
+    const originalCount = registry.agents.length;
+    
+    const staleAgents = registry.agents.filter((agent) => {
+      const lastHB = new Date(agent.last_heartbeat).getTime();
+      return lastHB <= staleThreshold;
+    });
+    
+    if (staleAgents.length === 0) {
+      return 0;
+    }
+    
+    registry.agents = registry.agents.filter((agent) => {
+      const lastHB = new Date(agent.last_heartbeat).getTime();
+      return lastHB > staleThreshold;
+    });
+    
+    registry.last_updated = new Date().toISOString();
+    registry.lock_version++;
+    
+    writeFileSync(REGISTRY_PATH, JSON.stringify(registry, null, 2));
+    
+    this.log("INFO", `Cleaned up ${staleAgents.length} stale agent(s): ${staleAgents.map(a => a.agent_id).join(", ")}`);
+    
+    return staleAgents.length;
+  }
+
+  /**
+   * Get health status of all agents with detailed metrics
+   */
+  getAgentHealthStatus(): { healthy: Agent[]; stale: Agent[]; unhealthy: Agent[] } {
+    const registry = this.readRegistry();
+    const now = Date.now();
+    const staleThreshold = now - STALE_AGENT_THRESHOLD_MS;
+    const unhealthyThreshold = now - (STALE_AGENT_THRESHOLD_MS / 2); // 1 minute for "unhealthy" warning
+    
+    const healthy: Agent[] = [];
+    const stale: Agent[] = [];
+    const unhealthy: Agent[] = [];
+    
+    for (const agent of registry.agents) {
+      const lastHB = new Date(agent.last_heartbeat).getTime();
+      
+      if (lastHB <= staleThreshold) {
+        stale.push(agent);
+      } else if (lastHB <= unhealthyThreshold) {
+        unhealthy.push(agent);
+      } else {
+        healthy.push(agent);
+      }
+    }
+    
+    return { healthy, stale, unhealthy };
   }
 
   /**
@@ -885,8 +967,38 @@ if (import.meta.main) {
     case "cleanup":
       // Clean up stale locks and agents
       console.log("Cleaning up stale entries...");
+      const cleanedCount = coordinator.cleanupStaleAgents();
       const registryCleanup = coordinator.getActiveAgents();
-      console.log(`${registryCleanup.length} active agents remaining`);
+      console.log(`Cleaned up ${cleanedCount} stale agents, ${registryCleanup.length} active agents remaining`);
+      break;
+
+    case "health":
+      // Show health status of all agents
+      const health = coordinator.getAgentHealthStatus();
+      console.log("\n=== Agent Health Status ===\n");
+      
+      console.log(`Healthy (${health.healthy.length}):`);
+      health.healthy.forEach(a => {
+        const ago = Math.round((Date.now() - new Date(a.last_heartbeat).getTime()) / 1000);
+        console.log(`  - ${a.agent_id} (${a.assigned_role || 'general'}) - ${ago}s ago`);
+      });
+      
+      if (health.unhealthy.length > 0) {
+        console.log(`\nUnhealthy - no heartbeat >1min (${health.unhealthy.length}):`);
+        health.unhealthy.forEach(a => {
+          const ago = Math.round((Date.now() - new Date(a.last_heartbeat).getTime()) / 1000);
+          console.log(`  - ${a.agent_id} (${a.assigned_role || 'general'}) - ${ago}s ago`);
+        });
+      }
+      
+      if (health.stale.length > 0) {
+        console.log(`\nStale - will be cleaned up (${health.stale.length}):`);
+        health.stale.forEach(a => {
+          const ago = Math.round((Date.now() - new Date(a.last_heartbeat).getTime()) / 1000);
+          console.log(`  - ${a.agent_id} (${a.assigned_role || 'general'}) - ${ago}s ago`);
+        });
+      }
+      console.log();
       break;
 
     case "prune-messages":
@@ -941,7 +1053,8 @@ Commands:
   status              - Show all active agents
   messages            - Show unread messages
   send <type> <json>  - Send message to other agents
-  cleanup             - Clean up stale entries
+  cleanup             - Clean up stale entries (>2min no heartbeat)
+  health              - Show health status of all agents
   prune-messages [ms] - Remove old heartbeat messages (default: 1 hour)
 
 Examples:

@@ -112,11 +112,14 @@ Example usage:
 Returns:
 - agents: List of {id, session, role, status, task, last_heartbeat}
 - leader: Current leader info (agent_id, epoch, last_heartbeat, ttl_ms)
+- cleaned_up: Number of stale agents cleaned during this call
 
 Use this to:
 - Check what workers are doing
 - Verify leader election status
-- Detect stale agents (last_heartbeat > 2 min ago)`,
+- Detect stale agents (last_heartbeat > 2 min ago)
+
+Note: Automatically cleans up stale agents (no heartbeat in 2 minutes).`,
       args: {},
       async execute() {
         try {
@@ -127,6 +130,11 @@ Use this to:
               message: "Agent not registered. Use agent_register first.",
             });
           }
+
+          // Run cleanup on every status check to keep registry clean
+          const cleanedUp = (ctx.coordinator as any).cleanupStaleAgents
+            ? (ctx.coordinator as any).cleanupStaleAgents()
+            : 0;
 
           const agents = ctx.coordinator.getActiveAgents();
           const leaderLease = (ctx.coordinator as any).getCurrentLeaderLease
@@ -152,11 +160,12 @@ Use this to:
                   ttl_ms: leaderLease.ttl_ms,
                 }
               : null,
+            cleaned_up: cleanedUp,
           });
         } catch (error) {
           return JSON.stringify({ success: false, error: String(error) });
         }
-      },
+      }
     }),
 
     agent_send: tool({
