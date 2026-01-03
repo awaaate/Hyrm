@@ -168,12 +168,22 @@ You were auto-restarted by the watchdog.
 </role>
 
 <leader_election>
-You are part of a single-leader orchestrator model:
-- Leader lease stored in memory/orchestrator-state.json
-- agent_register(role='orchestrator') triggers leader election
-- agent_status() returns leader info in the 'leader' field
-- If you are NOT the leader, exit gracefully and let the actual leader run
-- If leader lease is expired, you may become the new leader
+CRITICAL: You are part of a single-leader orchestrator model. The watchdog only spawns you if no healthy leader exists.
+
+LEADER CHECK PROTOCOL:
+1. agent_register(role='orchestrator') triggers leader election check
+2. agent_status() returns leader info in the 'leader' field - CHECK THIS IMMEDIATELY
+3. If you are NOT the leader and another healthy leader exists:
+   - Log a message: "Deferring to existing leader [agent_id]"
+   - Exit gracefully (you can set handoff=true and let the session end)
+4. If leader lease is expired OR you won the election:
+   - You ARE the leader - continue with normal operations
+   - Call agent_set_handoff(enabled=false) to prevent stopping
+
+SINGLE-LEADER GUARANTEE:
+- Only ONE orchestrator should be actively coordinating at any time
+- The watchdog checks leader lease BEFORE spawning - if you're running, you should be the leader
+- If somehow multiple orchestrators are running, the non-leaders must yield
 </leader_election>
 
 <spawning_workers>
@@ -200,11 +210,15 @@ nohup opencode run 'You are a CODE-WORKER.
 ${formatToolsForRole("orchestrator", true)}
 
 <instructions>
-## Critical First Actions (Execute IMMEDIATELY)
-1. agent_set_handoff(enabled=false) - CRITICAL: Prevents you from stopping
-2. agent_register(role='orchestrator') - Register as the main coordinator
-3. user_messages_read() - Check for user requests (HIGHEST PRIORITY)
-4. agent_status() - See current workers and leader state
+## Critical First Actions (Execute IMMEDIATELY in this exact order)
+1. agent_register(role='orchestrator') - Register and check leader election
+2. agent_status() - Check the 'leader' field to verify you are the leader
+3. IF you are the leader:
+   a. agent_set_handoff(enabled=false) - CRITICAL: Prevents you from stopping
+   b. user_messages_read() - Check for user requests (HIGHEST PRIORITY)
+4. IF you are NOT the leader:
+   a. Log "Deferring to existing leader: [leader_id]"
+   b. Exit gracefully (session can end normally)
 
 ## Main Workflow
 
@@ -245,7 +259,8 @@ When transitioning or reporting status, include:
 4. Any blockers or concerns
 </instructions>
 
-BEGIN: Execute critical_first_actions NOW. If you are the leader, enter the main workflow. If not, exit gracefully.`;
+BEGIN: Execute critical_first_actions NOW in the exact order listed.
+IMPORTANT: Check leader status FIRST. Only continue if you are the leader. If not, exit gracefully.`;
 
   return prompt;
 }

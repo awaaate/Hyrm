@@ -34,6 +34,11 @@ RESTART_COUNT_FILE="memory/.restart-count.json"
 CONFIG_FILE="memory/.watchdog.conf"
 TOKEN_TRACKING_FILE="memory/.token-usage.json"
 RATE_LIMIT_FILE="memory/.rate-limit-status.json"
+ORCHESTRATOR_STATE_FILE="memory/orchestrator-state.json"
+
+# Leader election configuration
+LEADER_TTL_MS=180000           # Default leader TTL: 3 minutes (matches plugin)
+LEADER_GRACE_PERIOD_MS=30000   # Grace period before considering leader dead
 
 # Timing configuration
 CHECK_INTERVAL=30           # seconds between health checks
@@ -355,6 +360,72 @@ check_token_limits() {
     fi
     
     return 0
+}
+
+# ==============================================================================
+# LEADER ELECTION CHECK
+# ==============================================================================
+
+# Check if a healthy leader exists (lease not expired)
+# Returns:
+#   0 = healthy leader exists (do NOT spawn new orchestrator)
+#   1 = no leader or leader expired (OK to spawn)
+check_leader_lease() {
+    if [[ ! -f "$ORCHESTRATOR_STATE_FILE" ]]; then
+        log "No orchestrator state file - no leader exists" "DEBUG"
+        return 1  # No leader, OK to spawn
+    fi
+    
+    # Read leader state
+    local leader_id leader_epoch last_heartbeat ttl_ms
+    leader_id=$(jq -r '.leader_id // ""' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "")
+    leader_epoch=$(jq -r '.leader_epoch // 0' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "0")
+    last_heartbeat=$(jq -r '.last_heartbeat // ""' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "")
+    ttl_ms=$(jq -r '.ttl_ms // 180000' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "180000")
+    
+    if [[ -z "$leader_id" ]] || [[ "$leader_id" == "null" ]]; then
+        log "No leader registered in state file" "DEBUG"
+        return 1  # No leader, OK to spawn
+    fi
+    
+    if [[ -z "$last_heartbeat" ]] || [[ "$last_heartbeat" == "null" ]]; then
+        log "Leader has no heartbeat timestamp" "DEBUG"
+        return 1  # Invalid state, OK to spawn
+    fi
+    
+    # Calculate if lease is expired
+    local last_hb_epoch now_epoch age_ms effective_ttl
+    last_hb_epoch=$(date -d "$last_heartbeat" +%s%3N 2>/dev/null || echo "0")
+    now_epoch=$(date +%s%3N)
+    age_ms=$((now_epoch - last_hb_epoch))
+    
+    # Use configured TTL plus grace period
+    effective_ttl=$((ttl_ms + LEADER_GRACE_PERIOD_MS))
+    
+    if [[ $age_ms -lt $effective_ttl ]]; then
+        local remaining_ms=$((effective_ttl - age_ms))
+        local remaining_sec=$((remaining_ms / 1000))
+        log "Healthy leader exists: $leader_id (epoch $leader_epoch), lease valid for ${remaining_sec}s" "INFO"
+        return 0  # Healthy leader, do NOT spawn
+    else
+        local expired_sec=$(((age_ms - ttl_ms) / 1000))
+        log "Leader lease expired ${expired_sec}s ago: $leader_id (epoch $leader_epoch)" "WARN"
+        return 1  # Expired, OK to spawn
+    fi
+}
+
+# Get leader info for logging
+get_leader_info() {
+    if [[ ! -f "$ORCHESTRATOR_STATE_FILE" ]]; then
+        echo "none"
+        return
+    fi
+    
+    local leader_id leader_epoch
+    leader_id=$(jq -r '.leader_id // "none"' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "none")
+    leader_epoch=$(jq -r '.leader_epoch // 0' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "0")
+    
+    echo "${leader_id}:epoch${leader_epoch}"
 }
 
 # ==============================================================================
@@ -807,6 +878,16 @@ TASK_EOF
 
 # Start the orchestrator
 start_orchestrator() {
+    # CRITICAL: Check if a healthy leader already exists
+    # This prevents spawning multiple orchestrators when one is already running
+    if check_leader_lease; then
+        local current_leader
+        current_leader=$(get_leader_info)
+        log "Healthy leader already exists ($current_leader). Skipping spawn." "INFO"
+        update_status "leader_exists" "Healthy leader: $current_leader" 0
+        return 0  # Return success - the system is healthy, just not spawning
+    fi
+    
     local restart_count=$(increment_restart_count)
     
     if [[ $restart_count -gt $MAX_RESTARTS ]]; then
@@ -995,6 +1076,19 @@ show_status() {
     # Model
     echo -e "Model: ${CYAN}$MODEL${NC}"
     
+    # Leader status
+    if [[ -f "$ORCHESTRATOR_STATE_FILE" ]]; then
+        local leader_info
+        leader_info=$(get_leader_info)
+        if check_leader_lease; then
+            echo -e "Leader: ${GREEN}$leader_info${NC} (healthy)"
+        else
+            echo -e "Leader: ${YELLOW}$leader_info${NC} (expired)"
+        fi
+    else
+        echo -e "Leader: ${RED}none${NC}"
+    fi
+    
     # Token usage
     if [[ -f "$TOKEN_TRACKING_FILE" ]]; then
         local tokens
@@ -1131,10 +1225,20 @@ run_watchdog() {
         
         # Check if orchestrator is running
         if ! is_orchestrator_running; then
-            log "Orchestrator not running - restarting..." "WARN"
-            start_orchestrator || true
-            token_check_counter=0
-            memory_check_counter=0
+            # Before restarting, check if a healthy leader exists
+            # Another orchestrator might be running that we didn't start (e.g., from another watchdog instance)
+            if check_leader_lease; then
+                local current_leader
+                current_leader=$(get_leader_info)
+                log "Orchestrator not running locally but healthy leader exists ($current_leader). Skipping respawn." "INFO"
+                update_status "leader_exists" "Healthy leader: $current_leader" 0
+                # Continue monitoring without spawning
+            else
+                log "Orchestrator not running and no healthy leader - starting new orchestrator..." "WARN"
+                start_orchestrator || true
+                token_check_counter=0
+                memory_check_counter=0
+            fi
             continue
         fi
         
