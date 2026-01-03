@@ -34,6 +34,74 @@ import type { Task, TaskStore } from './shared/types';
 
 const GIT_LOG_PATH = join(MEMORY_DIR, "git-activity.jsonl");
 
+// GitHub CLI integration
+interface GHStatus {
+  available: boolean;
+  authenticated: boolean;
+  repo?: string;
+  owner?: string;
+}
+
+let ghStatusCache: GHStatus | null = null;
+
+// Helper to run gh commands
+function gh(args: string[], silent: boolean = false): { stdout: string; stderr: string; success: boolean } {
+  try {
+    const result = spawnSync("gh", args, {
+      encoding: "utf-8",
+      cwd: process.cwd(),
+    });
+    return {
+      stdout: result.stdout?.trim() || "",
+      stderr: result.stderr?.trim() || "",
+      success: result.status === 0,
+    };
+  } catch (error) {
+    return {
+      stdout: "",
+      stderr: String(error),
+      success: false,
+    };
+  }
+}
+
+// Check if gh CLI is available and authenticated
+function getGHStatus(): GHStatus {
+  if (ghStatusCache) return ghStatusCache;
+  
+  // Check if gh is installed
+  const version = gh(["--version"], true);
+  if (!version.success) {
+    ghStatusCache = { available: false, authenticated: false };
+    return ghStatusCache;
+  }
+  
+  // Check if authenticated
+  const auth = gh(["auth", "status"], true);
+  if (!auth.success) {
+    ghStatusCache = { available: true, authenticated: false };
+    return ghStatusCache;
+  }
+  
+  // Get repo info
+  let repo: string | undefined;
+  let owner: string | undefined;
+  
+  const repoInfo = gh(["repo", "view", "--json", "name,owner"], true);
+  if (repoInfo.success) {
+    try {
+      const data = JSON.parse(repoInfo.stdout);
+      repo = data.name;
+      owner = data.owner?.login;
+    } catch (e) {
+      // Ignore parse errors
+    }
+  }
+  
+  ghStatusCache = { available: true, authenticated: true, repo, owner };
+  return ghStatusCache;
+}
+
 interface FileStatusEntry {
   status: string;
   file: string;
@@ -507,6 +575,359 @@ function stashPop(): void {
   });
 }
 
+// GitHub Integration Functions
+
+function showGHStatus(): void {
+  console.log(`\n${c.bgMagenta}${c.white}${c.bright}  GITHUB STATUS  ${c.reset}\n`);
+  
+  const status = getGHStatus();
+  
+  if (!status.available) {
+    console.log(`${c.red}gh CLI not installed${c.reset}`);
+    console.log(`${c.dim}Install from: https://cli.github.com/${c.reset}`);
+    return;
+  }
+  
+  if (!status.authenticated) {
+    console.log(`${c.yellow}gh CLI not authenticated${c.reset}`);
+    console.log(`${c.dim}Run: gh auth login${c.reset}`);
+    return;
+  }
+  
+  console.log(`${c.green}✓ GitHub CLI authenticated${c.reset}`);
+  
+  if (status.repo && status.owner) {
+    console.log(`${c.cyan}Repository:${c.reset} ${status.owner}/${status.repo}`);
+    
+    // Show open issues count
+    const issues = gh(["issue", "list", "--state", "open", "--limit", "1", "--json", "number"], true);
+    if (issues.success) {
+      const issueCount = gh(["issue", "list", "--state", "open", "--json", "number"], true);
+      if (issueCount.success) {
+        try {
+          const data = JSON.parse(issueCount.stdout);
+          console.log(`${c.cyan}Open Issues:${c.reset} ${data.length}`);
+        } catch (e) {
+          // Ignore
+        }
+      }
+    }
+    
+    // Show open PRs count
+    const prs = gh(["pr", "list", "--state", "open", "--json", "number"], true);
+    if (prs.success) {
+      try {
+        const data = JSON.parse(prs.stdout);
+        console.log(`${c.cyan}Open PRs:${c.reset} ${data.length}`);
+      } catch (e) {
+        // Ignore
+      }
+    }
+  } else {
+    console.log(`${c.yellow}Not in a GitHub repository${c.reset}`);
+  }
+  
+  console.log();
+}
+
+interface CreateIssueOptions {
+  title: string;
+  body?: string;
+  labels?: string[];
+  assignee?: string;
+}
+
+function createGHIssue(options: CreateIssueOptions): { success: boolean; number?: number; url?: string; error?: string } {
+  const status = getGHStatus();
+  
+  if (!status.available) {
+    return { success: false, error: "gh CLI not installed" };
+  }
+  
+  if (!status.authenticated) {
+    return { success: false, error: "gh CLI not authenticated" };
+  }
+  
+  const args = ["issue", "create", "--title", options.title];
+  
+  if (options.body) {
+    args.push("--body", options.body);
+  }
+  
+  if (options.labels && options.labels.length > 0) {
+    args.push("--label", options.labels.join(","));
+  }
+  
+  if (options.assignee) {
+    args.push("--assignee", options.assignee);
+  }
+  
+  const result = gh(args);
+  
+  if (!result.success) {
+    return { success: false, error: result.stderr };
+  }
+  
+  // Parse issue URL to get number
+  const url = result.stdout;
+  const match = url.match(/\/issues\/(\d+)$/);
+  const number = match ? parseInt(match[1]) : undefined;
+  
+  logActivity({
+    timestamp: new Date().toISOString(),
+    action: "gh-issue-create",
+    message: options.title,
+  });
+  
+  return { success: true, number, url };
+}
+
+function createIssueFromTask(taskId: string): void {
+  console.log(`\n${c.bright}${c.magenta}Creating GitHub Issue from Task${c.reset}\n`);
+  
+  // Load task info
+  const tasksPath = join(MEMORY_DIR, "tasks.json");
+  let task: Task | null = null;
+  
+  if (existsSync(tasksPath)) {
+    try {
+      const store: TaskStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
+      task = store.tasks.find((t: Task) => t.id === taskId) || null;
+    } catch (error) {
+      console.log(`${c.red}Error reading tasks: ${getErrorMessage(error)}${c.reset}`);
+      return;
+    }
+  }
+  
+  if (!task) {
+    console.log(`${c.red}Task ${taskId} not found${c.reset}`);
+    return;
+  }
+  
+  // Build issue body
+  let body = task.description || "";
+  body += `\n\n---\n`;
+  body += `**Task ID:** \`${taskId}\`\n`;
+  body += `**Priority:** ${task.priority || "medium"}\n`;
+  if (task.complexity) {
+    body += `**Complexity:** ${task.complexity}\n`;
+  }
+  body += `\n_Created from multi-agent task system_`;
+  
+  // Map priority to labels
+  const labels: string[] = [];
+  if (task.priority === "critical") labels.push("critical", "priority:high");
+  else if (task.priority === "high") labels.push("priority:high");
+  else if (task.priority === "low") labels.push("priority:low");
+  
+  if (task.tags) {
+    // Add task tags as labels (limited set)
+    const validLabels = ["bug", "enhancement", "documentation", "feature", "refactor"];
+    for (const tag of task.tags) {
+      if (validLabels.includes(tag.toLowerCase())) {
+        labels.push(tag.toLowerCase());
+      }
+    }
+  }
+  
+  const result = createGHIssue({
+    title: task.title,
+    body,
+    labels: labels.length > 0 ? labels : undefined,
+  });
+  
+  if (!result.success) {
+    console.log(`${c.red}Failed to create issue: ${result.error}${c.reset}`);
+    return;
+  }
+  
+  console.log(`${c.green}✓ Issue created!${c.reset}`);
+  console.log(`${c.cyan}Number:${c.reset} #${result.number}`);
+  console.log(`${c.cyan}URL:${c.reset} ${result.url}`);
+  console.log();
+}
+
+function createBranchForTask(taskId: string, branchName?: string): void {
+  console.log(`\n${c.bright}${c.cyan}Creating Branch for Task${c.reset}\n`);
+  
+  // Load task info
+  const tasksPath = join(MEMORY_DIR, "tasks.json");
+  let task: Task | null = null;
+  
+  if (existsSync(tasksPath)) {
+    try {
+      const store: TaskStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
+      task = store.tasks.find((t: Task) => t.id === taskId) || null;
+    } catch (error) {
+      console.log(`${c.red}Error reading tasks: ${getErrorMessage(error)}${c.reset}`);
+      return;
+    }
+  }
+  
+  // Generate branch name from task if not provided
+  if (!branchName) {
+    if (task) {
+      // Create branch name from task title
+      const slug = task.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+        .slice(0, 50);
+      branchName = `task/${taskId.split("_").slice(-1)[0]}/${slug}`;
+    } else {
+      branchName = `task/${taskId.split("_").slice(-1)[0]}`;
+    }
+  }
+  
+  // Check if branch exists
+  const exists = git(["branch", "--list", branchName]);
+  if (exists.stdout) {
+    console.log(`${c.yellow}Branch already exists: ${branchName}${c.reset}`);
+    console.log(`${c.dim}Use: git checkout ${branchName}${c.reset}`);
+    return;
+  }
+  
+  // Create and checkout branch
+  const result = git(["checkout", "-b", branchName]);
+  
+  if (!result.success) {
+    console.log(`${c.red}Failed to create branch: ${result.stderr}${c.reset}`);
+    return;
+  }
+  
+  console.log(`${c.green}✓ Branch created and checked out${c.reset}`);
+  console.log(`${c.cyan}Branch:${c.reset} ${branchName}`);
+  
+  if (task) {
+    console.log(`${c.cyan}Task:${c.reset} ${task.title}`);
+  }
+  
+  logActivity({
+    timestamp: new Date().toISOString(),
+    action: "branch-create",
+    task_id: taskId,
+    message: `Created branch: ${branchName}`,
+  });
+  
+  console.log();
+}
+
+function listGHIssues(limit: number = 10): void {
+  console.log(`\n${c.bright}${c.magenta}GITHUB ISSUES${c.reset} ${c.dim}(last ${limit})${c.reset}\n`);
+  
+  const status = getGHStatus();
+  
+  if (!status.available || !status.authenticated) {
+    console.log(`${c.yellow}GitHub CLI not available or authenticated${c.reset}`);
+    return;
+  }
+  
+  const result = gh(["issue", "list", "--limit", String(limit), "--json", "number,title,state,labels,createdAt"]);
+  
+  if (!result.success) {
+    console.log(`${c.red}Failed to list issues: ${result.stderr}${c.reset}`);
+    return;
+  }
+  
+  try {
+    const issues = JSON.parse(result.stdout);
+    
+    if (issues.length === 0) {
+      console.log(`${c.dim}No open issues${c.reset}`);
+      return;
+    }
+    
+    for (const issue of issues) {
+      const stateColor = issue.state === "OPEN" ? c.green : c.red;
+      const labels = issue.labels?.map((l: any) => l.name).join(", ") || "";
+      
+      console.log(
+        `${stateColor}#${issue.number}${c.reset} ` +
+        `${c.bright}${truncate(issue.title, 60)}${c.reset}`
+      );
+      if (labels) {
+        console.log(`  ${c.dim}Labels: ${labels}${c.reset}`);
+      }
+    }
+  } catch (error) {
+    console.log(`${c.red}Failed to parse issues: ${getErrorMessage(error)}${c.reset}`);
+  }
+  
+  console.log();
+}
+
+function createPRForTask(taskId: string, baseBranch: string = "main"): void {
+  console.log(`\n${c.bright}${c.magenta}Creating Pull Request for Task${c.reset}\n`);
+  
+  const status = getGHStatus();
+  
+  if (!status.available || !status.authenticated) {
+    console.log(`${c.yellow}GitHub CLI not available or authenticated${c.reset}`);
+    return;
+  }
+  
+  // Load task info
+  const tasksPath = join(MEMORY_DIR, "tasks.json");
+  let task: Task | null = null;
+  
+  if (existsSync(tasksPath)) {
+    try {
+      const store: TaskStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
+      task = store.tasks.find((t: Task) => t.id === taskId) || null;
+    } catch (error) {
+      console.log(`${c.red}Error reading tasks: ${getErrorMessage(error)}${c.reset}`);
+      return;
+    }
+  }
+  
+  // Get current branch
+  const currentBranch = git(["branch", "--show-current"]).stdout;
+  
+  if (currentBranch === baseBranch) {
+    console.log(`${c.red}Cannot create PR from ${baseBranch} to itself${c.reset}`);
+    console.log(`${c.dim}Create a task branch first with: bun tools/git-integration.ts branch-task ${taskId}${c.reset}`);
+    return;
+  }
+  
+  // Build PR body
+  const title = task?.title || `Task: ${taskId}`;
+  let body = task?.description || "";
+  body += `\n\n## Task Details\n`;
+  body += `- **Task ID:** \`${taskId}\`\n`;
+  body += `- **Priority:** ${task?.priority || "medium"}\n`;
+  if (task?.complexity) {
+    body += `- **Complexity:** ${task.complexity}\n`;
+  }
+  body += `\n_Created from multi-agent task system_`;
+  
+  // Push current branch first
+  console.log(`${c.dim}Pushing branch to remote...${c.reset}`);
+  const push = git(["push", "-u", "origin", currentBranch]);
+  if (!push.success && !push.stderr.includes("Everything up-to-date")) {
+    console.log(`${c.yellow}Warning: ${push.stderr}${c.reset}`);
+  }
+  
+  // Create PR
+  const result = gh(["pr", "create", "--title", title, "--body", body, "--base", baseBranch]);
+  
+  if (!result.success) {
+    console.log(`${c.red}Failed to create PR: ${result.stderr}${c.reset}`);
+    return;
+  }
+  
+  console.log(`${c.green}✓ Pull Request created!${c.reset}`);
+  console.log(`${c.cyan}URL:${c.reset} ${result.stdout}`);
+  
+  logActivity({
+    timestamp: new Date().toISOString(),
+    action: "gh-pr-create",
+    task_id: taskId,
+    message: title,
+  });
+  
+  console.log();
+}
+
 function showSummary(): void {
   console.log(`\n${c.bgBlue}${c.white}${c.bright}  GIT INTEGRATION SUMMARY  ${c.reset}\n`);
   
@@ -570,6 +991,13 @@ ${c.cyan}Action Commands:${c.reset}
   ${c.bright}stash${c.reset}               Stash current changes
   ${c.bright}stash-pop${c.reset}           Pop stashed changes
 
+${c.cyan}GitHub Commands:${c.reset} ${c.dim}(requires gh CLI)${c.reset}
+  ${c.bright}gh-status${c.reset}           Show GitHub CLI status and repo info
+  ${c.bright}issues${c.reset} [n]          List open GitHub issues (default: 10)
+  ${c.bright}issue-task${c.reset} <taskId> Create GitHub issue from task
+  ${c.bright}branch-task${c.reset} <taskId> Create git branch for task
+  ${c.bright}pr-task${c.reset} <taskId>    Create PR for task (from current branch)
+
 ${c.cyan}Environment:${c.reset}
   GIT_AGENT_ID       Agent ID to include in commits
   GIT_TASK_ID        Task ID to include in commits
@@ -579,7 +1007,8 @@ ${c.cyan}Examples:${c.reset}
   bun tools/git-integration.ts commit "Add new feature"
   bun tools/git-integration.ts auto-commit task_123
   bun tools/git-integration.ts search "fix bug"
-  bun tools/git-integration.ts changes yesterday
+  bun tools/git-integration.ts issue-task task_123_abc
+  bun tools/git-integration.ts branch-task task_123_abc
 
 ${c.dim}Activity logged to: ${GIT_LOG_PATH}${c.reset}
 `);
@@ -656,6 +1085,43 @@ switch (command) {
   case "summary":
     showSummary();
     break;
+  
+  // GitHub Commands
+  case "gh-status":
+  case "github":
+    showGHStatus();
+    break;
+    
+  case "issues":
+    listGHIssues(parseInt(args[1]) || 10);
+    break;
+    
+  case "issue-task":
+    if (!args[1]) {
+      console.log(`${c.red}Error: Task ID required${c.reset}`);
+      console.log(`Usage: bun tools/git-integration.ts issue-task <task_id>`);
+      process.exit(1);
+    }
+    createIssueFromTask(args[1]);
+    break;
+    
+  case "branch-task":
+    if (!args[1]) {
+      console.log(`${c.red}Error: Task ID required${c.reset}`);
+      console.log(`Usage: bun tools/git-integration.ts branch-task <task_id> [branch_name]`);
+      process.exit(1);
+    }
+    createBranchForTask(args[1], args[2]);
+    break;
+    
+  case "pr-task":
+    if (!args[1]) {
+      console.log(`${c.red}Error: Task ID required${c.reset}`);
+      console.log(`Usage: bun tools/git-integration.ts pr-task <task_id> [base_branch]`);
+      process.exit(1);
+    }
+    createPRForTask(args[1], args[2] || "main");
+    break;
     
   case "help":
   case "--help":
@@ -672,3 +1138,18 @@ switch (command) {
     showHelp();
     process.exit(1);
 }
+
+// Export functions for use by other tools/plugins
+export {
+  git,
+  gh,
+  getGHStatus,
+  createGHIssue,
+  createCommit,
+  createBranchForTask,
+  createPRForTask,
+  logActivity,
+  type GHStatus,
+  type CreateIssueOptions,
+  type GitActivity,
+};
