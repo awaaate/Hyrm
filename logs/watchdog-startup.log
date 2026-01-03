@@ -278,3 +278,435 @@ ReferenceError: readFileSync is not defined
       at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
       at trigger (src/plugin/index.ts:68:13)
 
+[94m[1m| [0m[90m git_commit  [0m{"message":"chore: remove deprecated code files (session-analytics.ts, terminal-dashboard.ts)","add_all":true}
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[94m[1m| [0m[90m task_update  [0m{"task_id":"task_1767450978364_n5l4uc","status":"completed","auto_assess":true}
+[MultiAgent] 2026-01-03T14:39:50.921Z [INFO] [agent-sI3Oq6u4] Message sent: task_complete (broadcast)
+[94m[1m| [0m[90m agent_send  [0m{"type":"task_complete","payload":{"task_id":"task_1767450978364_n5l4uc","summary":"Removed _deprecated directory with session-analytics.ts (778 lines) and terminal-dashboard.ts (598 lines). Verified no imports. Commit: ebf445a"}}
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[MultiAgent] 2026-01-03T14:39:52.142Z [INFO] [agent-1767450772105-d66vhu] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-03T14:39:52.146Z [INFO] [agent-1767450772105-d66vhu] File unlocked: /app/workspace/memory/orchestrator-state.json
+Good. Now let me handle the other tasks. Let me do the error handling fix quickly:
+
+[94m[1m| [0m[90m task_claim  [0m{"task_id":"task_1767450975777_nwtn6a"}[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[96m[1m| [0m[90m Read     [0mtools/task-router.ts
+
+[96m[1m| [0m[90m Read     [0mtools/agent-performance-profiler.ts[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+Let me get more context around these empty catches:
+[96m[1m| [0m[90m Read     [0mtools/agent-performance-profiler.ts
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[96m[1m| [0m[90m Read     [0mtools/agent-performance-profiler.ts
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+Now I understand the context. Let me fix these empty catches:
+
+[92m[1m| [0m[90m Edit     [0mtools/task-router.ts[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[92m[1m| [0m[90m Edit     [0mtools/agent-performance-profiler.ts
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+
+[Memory] Failed to load context: 602 |   // Load memory context for system prompt injection (DYNAMIC)
+603 |   // Now accepts optional existingPrompt to detect role
+604 |   const loadMemoryContext = (existingPrompt?: string) => {
+605 |     try {
+606 |       if (!existsSync(statePath)) return null;
+607 |       const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                                     ^
+ReferenceError: readFileSync is not defined
+      at loadMemoryContext (/app/workspace/.opencode/plugin/index.ts:607:32)
+      at <anonymous> (/app/workspace/.opencode/plugin/index.ts:816:31)
+      at experimental.chat.system.transform (/app/workspace/.opencode/plugin/index.ts:812:50)
+      at trigger (src/plugin/index.ts:68:13)
+

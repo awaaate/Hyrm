@@ -2657,25 +2657,27 @@
       "title": "Fix remaining empty catch blocks in task-router and agent-performance-profiler",
       "description": "Several empty catch blocks remain after the initial error handling cleanup. Fix empty catch blocks in: 1) tools/task-router.ts line 279 - registry load failure 2) tools/agent-performance-profiler.ts lines 196, 198 - silently swallowed errors. Add proper error logging using existing error-handler utilities.",
       "priority": "high",
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2026-01-03T14:36:15.777Z",
-      "updated_at": "2026-01-03T14:36:15.777Z",
+      "updated_at": "2026-01-03T14:39:55.838Z",
       "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
       "tags": [
         "bug",
         "error-handling",
         "quick-win"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "agent-sI3Oq6u4",
+      "claimed_at": "2026-01-03T14:39:55.838Z"
     },
     {
       "id": "task_1767450978364_n5l4uc",
       "title": "Remove deprecated code from _deprecated directory",
       "description": "The _deprecated/ directory contains ~1400 lines of unused code (session-analytics.ts, terminal-dashboard.ts). These files are not imported anywhere but add confusion. Verify no external dependencies, then delete the _deprecated/ directory.",
       "priority": "medium",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-03T14:36:18.364Z",
-      "updated_at": "2026-01-03T14:39:18.835Z",
+      "updated_at": "2026-01-03T14:39:49.102Z",
       "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
       "tags": [
         "cleanup",
@@ -2684,7 +2686,10 @@
       ],
       "complexity": "moderate",
       "assigned_to": "agent-sI3Oq6u4",
-      "claimed_at": "2026-01-03T14:39:18.835Z"
+      "claimed_at": "2026-01-03T14:39:18.835Z",
+      "completed_at": "2026-01-03T14:39:49.083Z",
+      "quality_score": 6.9,
+      "quality_notes": "Auto-assessed"
     },
     {
       "id": "task_1767450981450_8a6g5u",
@@ -2702,6 +2707,6 @@
       "complexity": "moderate"
     }
   ],
-  "completed_count": 128,
-  "last_updated": "2026-01-03T14:39:18.835Z"
+  "completed_count": 129,
+  "last_updated": "2026-01-03T14:39:55.838Z"
 }

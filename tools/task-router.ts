@@ -276,7 +276,10 @@ Begin working on the task now.`;
     let registry: AgentRegistry = { agents: [], last_updated: "" };
     try {
       registry = JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf-8'));
-    } catch {}
+    } catch (error) {
+      // Registry may not exist or be corrupted - use empty default
+      console.error(`[TaskRouter] Failed to load agent registry: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
 
     const workingAgents = (registry.agents || []).filter(
       (a: Agent) => a.status === 'working'

@@ -4069,11 +4069,51 @@
         "auto_generated": true,
         "heuristic_base_score": 7.3
       }
+    },
+    {
+      "task_id": "task_1767450978364_n5l4uc",
+      "task_title": "Remove deprecated code from _deprecated directory",
+      "assessed_at": "2026-01-03T14:39:49.096Z",
+      "assessed_by": "auto-assessment",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 7.187407112409972,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 6.815738911471713,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 6.053515198632896,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 6.969818389690107,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7.163183466165171,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 6.9,
+      "lessons_learned": "Auto-assessed based on task completion metrics",
+      "metadata": {
+        "duration_minutes": 4,
+        "auto_generated": true,
+        "heuristic_base_score": 7
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 106,
-    "avg_overall_score": 8.146226415094338
+    "total_assessed": 107,
+    "avg_overall_score": 8.134579439252335
   },
-  "last_updated": "2026-01-03T14:28:42.515Z"
+  "last_updated": "2026-01-03T14:39:49.100Z"
 }

@@ -193,9 +193,13 @@ function analyzeToolExecutions(): Record<string, ToolExecution> {
               tools[toolName].errorCount++;
             }
           }
-        } catch {}
+        } catch (parseError) {
+          // Skip malformed part files - common during concurrent writes
+        }
       }
-    } catch {}
+    } catch (dirError) {
+      console.error(`[Profiler] Failed to read parts directory: ${dirError instanceof Error ? dirError.message : 'Unknown error'}`);
+    }
   }
   
   // Also analyze our internal session log
