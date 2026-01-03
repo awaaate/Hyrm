@@ -16,6 +16,7 @@
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { formatToolsForRole } from "./shared/tool-registry";
+import { logWarning, getErrorMessage } from "./shared/error-handler";
 
 const MEMORY_DIR = join(process.cwd(), "memory");
 const STATE_PATH = join(MEMORY_DIR, "state.json");
@@ -95,7 +96,9 @@ function loadUnreadUserMessages(): number {
     try {
       const msg = JSON.parse(line);
       if (!msg.read) unread++;
-    } catch {}
+    } catch (error) {
+      logWarning("Failed to parse user message line", { error: getErrorMessage(error) });
+    }
   }
   return unread;
 }

@@ -29,6 +29,7 @@ import { join } from "path";
 import { c } from './shared/colors';
 import { truncate } from './shared/string-utils';
 import { MEMORY_DIR } from './shared/paths';
+import { logWarning, getErrorMessage } from './shared/error-handler';
 import type { Task, TaskStore } from './shared/types';
 
 const GIT_LOG_PATH = join(MEMORY_DIR, "git-activity.jsonl");
@@ -74,7 +75,9 @@ function git(args: string[], silent: boolean = false): { stdout: string; stderr:
 function logActivity(activity: GitActivity): void {
   try {
     appendFileSync(GIT_LOG_PATH, JSON.stringify(activity) + "\n");
-  } catch {}
+  } catch (error) {
+    logWarning("Failed to log git activity", { error: getErrorMessage(error) });
+  }
 }
 
 // Commands
@@ -342,7 +345,9 @@ function autoCommitTask(taskId: string): void {
     try {
       const store: TaskStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
       task = store.tasks.find((t: Task) => t.id === taskId) || null;
-    } catch {}
+    } catch (error) {
+      logWarning("Failed to read tasks for auto-commit", { taskId, error: getErrorMessage(error) });
+    }
   }
   
   if (!task) {
@@ -534,7 +539,9 @@ function showSummary(): void {
       const lines = readFileSync(GIT_LOG_PATH, "utf-8").trim().split("\n");
       const commits = lines.filter(Boolean).filter(l => JSON.parse(l).action === "commit").length;
       console.log(`${c.cyan}Agent Commits:${c.reset} ${commits} recorded`);
-    } catch {}
+    } catch (error) {
+      logWarning("Failed to count agent commits", { error: getErrorMessage(error) });
+    }
   }
   
   console.log();

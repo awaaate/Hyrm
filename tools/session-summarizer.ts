@@ -19,7 +19,7 @@
 
 import { existsSync, readFileSync, writeFileSync, readdirSync } from "fs";
 import { join } from "path";
-import { readJson, readJsonl, c, PATHS, MEMORY_DIR, SESSIONS_DIR } from "./shared";
+import { readJson, readJsonl, c, PATHS, MEMORY_DIR, SESSIONS_DIR, logWarning, getErrorMessage } from "./shared";
 import type { 
   SessionEvent, 
   SessionKnowledge, 
@@ -108,7 +108,9 @@ function readMessageParts(msgId: string): MessagePart[] {
     try {
       const part = JSON.parse(readFileSync(join(partDir, partFile), "utf-8")) as MessagePart;
       parts.push(part);
-    } catch {}
+    } catch (error) {
+      logWarning("Failed to parse message part file", { partFile, error: getErrorMessage(error) });
+    }
   }
   return parts;
 }

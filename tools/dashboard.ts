@@ -46,6 +46,8 @@ import {
   truncate,
   formatTimeAgo,
   PATHS,
+  logWarning,
+  getErrorMessage,
   type OpenCodeSession,
 } from "./shared";
 
@@ -202,7 +204,9 @@ function buildTimeline(limit: number = 100): TimelineEvent[] {
         }
       }
     }
-  } catch {}
+  } catch (error) {
+    logWarning("Failed to load OpenCode sessions for timeline", { error: getErrorMessage(error) });
+  }
 
   // Tasks
   for (const task of getAllTasks().slice(0, 15)) {
@@ -535,13 +539,17 @@ function renderLogs(): void {
           const lc = log.level === "ERROR" ? "red" : log.level === "WARN" ? "yellow" : "white";
           content += `{${lc}-fg}[${log.level || "INFO"}]{/${lc}-fg} {white-fg}${new Date(log.timestamp).toLocaleTimeString()}{/white-fg} ${log.message || ""}\n`;
         } catch {
+          // Malformed JSON line, display as raw text
           content += `{white-fg}${line}{/white-fg}\n`;
         }
       }
     } else {
       content += "{white-fg}No logs yet.{/white-fg}\n";
     }
-  } catch {}
+  } catch (error) {
+    logWarning("Failed to read log file", { error: getErrorMessage(error) });
+    content += "{red-fg}Error reading logs{/red-fg}\n";
+  }
 
   mainBox.setContent(content);
   mainBox.setLabel(" Logs ");
@@ -718,7 +726,9 @@ function startWatching(): void {
           if (timeout) clearTimeout(timeout);
           timeout = setTimeout(render, 100);
         }));
-      } catch {}
+      } catch (error) {
+        logWarning("Failed to watch file for changes", { file: f, error: getErrorMessage(error) });
+      }
     }
   }
 }

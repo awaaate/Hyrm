@@ -8,10 +8,11 @@
  * implementing their own data reading logic.
  */
 
-import { existsSync, readdirSync, readFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
 import { readJson, readJsonl } from "./json-utils";
+import { logWarning, logDebug, getErrorMessage } from "./error-handler";
 import { PATHS } from "./paths";
 import type {
   Agent,
@@ -626,7 +627,9 @@ function readOpenCodeJson<T>(path: string): T | null {
     if (existsSync(path)) {
       return JSON.parse(readFileSync(path, "utf-8"));
     }
-  } catch {}
+  } catch (error) {
+    logDebug("Failed to read OpenCode JSON", { path, error: getErrorMessage(error) });
+  }
   return null;
 }
 
@@ -679,7 +682,7 @@ export function getAllOpenCodeSessions(limit?: number): OpenCodeSession[] {
       for (const dir of dirs) {
         const dirPath = join(OPENCODE_PATHS.sessions, dir);
         try {
-          const stat = require("fs").statSync(dirPath);
+          const stat = statSync(dirPath);
           if (stat.isDirectory()) {
             const sessions = getOpenCodeSessionsForProject(dir);
             for (const session of sessions) {
@@ -688,9 +691,13 @@ export function getAllOpenCodeSessions(limit?: number): OpenCodeSession[] {
               }
             }
           }
-        } catch {}
+        } catch (error) {
+          logDebug("Failed to stat OpenCode session directory", { dirPath, error: getErrorMessage(error) });
+        }
       }
-    } catch {}
+    } catch (error) {
+      logDebug("Failed to read OpenCode sessions directory", { error: getErrorMessage(error) });
+    }
   }
 
   const sorted = allSessions.sort((a, b) => b.time.updated - a.time.updated);

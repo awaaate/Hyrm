@@ -863,3 +863,72 @@
 [2026-01-03T09:49:35+00:00] [INFO] Starting orchestrator agent (restart #17 this hour)...
 [2026-01-03T09:49:35+00:00] [OK] Orchestrator started with PID: 116396 (model: anthropic/claude-opus-4-5)
 [2026-01-03T09:49:40+00:00] [OK] Orchestrator confirmed running
+[2026-01-03T09:59:41+00:00] [WARN] Orchestrator not running - restarting...
+[2026-01-03T09:59:41+00:00] [INFO] Starting orchestrator agent (restart #18 this hour)...
+[2026-01-03T09:59:41+00:00] [OK] Orchestrator started with PID: 136860 (model: anthropic/claude-opus-4-5)
+[2026-01-03T09:59:46+00:00] [OK] Orchestrator confirmed running
+[2026-01-03T10:00:12+00:00] [WARN] Received shutdown signal
+[2026-01-03T10:00:12+00:00] [INFO] Stopping watchdog...
+[2026-01-03T10:00:12+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T10:00:12+00:00] [OK] Orchestrator stopped
+[2026-01-03T10:00:12+00:00] [OK] Watchdog stopped
+[2026-01-03T10:01:11+00:00] [INFO] =========================================
+[2026-01-03T10:01:11+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T10:01:11+00:00] [INFO] Check interval: 60s
+[2026-01-03T10:01:11+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T10:01:11+00:00] [INFO] Token limit: 150000
+[2026-01-03T10:01:11+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T10:01:11+00:00] [INFO] Watchdog PID: 137411
+[2026-01-03T10:01:11+00:00] [INFO] =========================================
+[2026-01-03T10:01:11+00:00] [INFO] Healthy leader exists: agent-1767433780257-wn6w5r (epoch 8), lease valid for 59s
+[2026-01-03T10:01:11+00:00] [INFO] Healthy leader already exists (agent-1767433780257-wn6w5r:epoch8). Skipping spawn.
+[2026-01-03T10:01:15+00:00] [WARN] Received shutdown signal
+[2026-01-03T10:01:15+00:00] [INFO] Stopping watchdog...
+[2026-01-03T10:01:15+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T10:01:15+00:00] [OK] Orchestrator stopped
+[2026-01-03T10:01:15+00:00] [OK] Watchdog stopped
+[2026-01-03T10:01:52+00:00] [INFO] =========================================
+[2026-01-03T10:01:52+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T10:01:52+00:00] [INFO] Check interval: 60s
+[2026-01-03T10:01:52+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T10:01:52+00:00] [INFO] Token limit: 150000
+[2026-01-03T10:01:52+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T10:01:52+00:00] [INFO] Watchdog PID: 137546
+[2026-01-03T10:01:52+00:00] [INFO] =========================================
+[2026-01-03T10:01:52+00:00] [INFO] Healthy leader exists: agent-1767433780257-wn6w5r (epoch 8), lease valid for 18s
+[2026-01-03T10:01:52+00:00] [INFO] Healthy leader already exists (agent-1767433780257-wn6w5r:epoch8). Skipping spawn.
+[2026-01-03T10:01:54+00:00] [WARN] Received shutdown signal
+[2026-01-03T10:01:54+00:00] [INFO] Stopping watchdog...
+[2026-01-03T10:01:54+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T10:01:54+00:00] [OK] Orchestrator stopped
+[2026-01-03T10:01:54+00:00] [OK] Watchdog stopped
+[2026-01-03T10:02:11+00:00] [INFO] =========================================
+[2026-01-03T10:02:11+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T10:02:11+00:00] [INFO] Check interval: 60s
+[2026-01-03T10:02:11+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T10:02:11+00:00] [INFO] Token limit: 150000
+[2026-01-03T10:02:11+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T10:02:11+00:00] [INFO] Watchdog PID: 137665
+[2026-01-03T10:02:11+00:00] [INFO] =========================================
+[2026-01-03T10:02:11+00:00] [DEBUG] No leader registered in state file
+[2026-01-03T10:02:12+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-03T10:02:13+00:00] [OK] Orchestrator started with PID: 137976 (model: anthropic/claude-opus-4-5)
+[2026-01-03T10:02:18+00:00] [OK] Orchestrator confirmed running
+[2026-01-03T10:03:18+00:00] [INFO] Healthy leader exists: agent-1767434551660-hz0w7l (epoch 1), lease valid for 163s
+[2026-01-03T10:03:18+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767434551660-hz0w7l:epoch1). Skipping respawn.
+[2026-01-03T10:04:18+00:00] [INFO] Healthy leader exists: agent-1767434551660-hz0w7l (epoch 1), lease valid for 102s
+[2026-01-03T10:04:18+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767434551660-hz0w7l:epoch1). Skipping respawn.
+[2026-01-03T10:05:19+00:00] [INFO] Healthy leader exists: agent-1767434551660-hz0w7l (epoch 1), lease valid for 42s
+[2026-01-03T10:05:19+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767434551660-hz0w7l:epoch1). Skipping respawn.
+[2026-01-03T10:06:19+00:00] [WARN] Leader lease expired 47s ago: agent-1767434551660-hz0w7l (epoch 1)
+[2026-01-03T10:06:19+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-03T10:06:19+00:00] [WARN] Leader lease expired 47s ago: agent-1767434551660-hz0w7l (epoch 1)
+[2026-01-03T10:06:19+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-03T10:06:19+00:00] [OK] Orchestrator started with PID: 139323 (model: anthropic/claude-opus-4-5)
+[2026-01-03T10:06:24+00:00] [OK] Orchestrator confirmed running
+[2026-01-03T10:10:53+00:00] [WARN] Received shutdown signal
+[2026-01-03T10:10:53+00:00] [INFO] Stopping watchdog...
+[2026-01-03T10:10:53+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T10:10:53+00:00] [OK] Orchestrator stopped
+[2026-01-03T10:10:53+00:00] [OK] Watchdog stopped
+[2026-01-03T10:10:58+00:00] [INFO] Healthy leader exists: agent-1767434786597-c7gbga (epoch 2), lease valid for 178s

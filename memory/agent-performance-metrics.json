@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-01-03T09:52:33.522Z",
+  "last_updated": "2026-01-03T10:10:08.345Z",
   "agents": {
     "agent-1767302507934-2c671j": {
       "agent_id": "agent-1767302507934-2c671j",
@@ -168,10 +168,11 @@
         8.5,
         8.6,
         8.2,
-        8.5
+        8.5,
+        7.6
       ],
-      "avg_quality": 8.42,
-      "last_activity": "2026-01-02T09:19:32.963Z",
+      "avg_quality": 8.28,
+      "last_activity": "2026-01-03T09:55:39.816Z",
       "first_seen": "2026-01-02T08:52:27.118Z"
     },
     "agent-1767345511461-pw5hd": {
@@ -234,10 +235,11 @@
       "total_duration_ms": 397606,
       "avg_duration_ms": 198803,
       "quality_scores": [
-        8.7
+        8.7,
+        8.3
       ],
-      "avg_quality": 8.7,
-      "last_activity": "2026-01-02T10:29:31.882Z",
+      "avg_quality": 8.5,
+      "last_activity": "2026-01-03T09:55:43.032Z",
       "first_seen": "2026-01-02T10:20:41.994Z"
     },
     "agent-1767349882378-7ghrlg": {
@@ -291,10 +293,12 @@
       "avg_duration_ms": 139931,
       "quality_scores": [
         7.8,
-        7.6
+        7.6,
+        8.2,
+        7.7
       ],
-      "avg_quality": 7.7,
-      "last_activity": "2026-01-02T12:20:53.944Z",
+      "avg_quality": 7.82,
+      "last_activity": "2026-01-03T09:55:58.024Z",
       "first_seen": "2026-01-02T12:01:25.314Z"
     },
     "agent-1767357200449-mdvyb": {
@@ -354,9 +358,11 @@
       "tasks_claimed": 1,
       "total_duration_ms": 118212,
       "avg_duration_ms": 118212,
-      "quality_scores": [],
-      "avg_quality": 0,
-      "last_activity": "2026-01-02T16:06:39.695Z",
+      "quality_scores": [
+        7.9
+      ],
+      "avg_quality": 7.9,
+      "last_activity": "2026-01-03T09:56:01.294Z",
       "first_seen": "2026-01-02T16:04:41.482Z"
     },
     "agent-1767380734154-mvw47": {
@@ -402,9 +408,11 @@
       "tasks_claimed": 1,
       "total_duration_ms": 10590697,
       "avg_duration_ms": 5295349,
-      "quality_scores": [],
-      "avg_quality": 0,
-      "last_activity": "2026-01-03T09:45:07.988Z",
+      "quality_scores": [
+        8.6
+      ],
+      "avg_quality": 8.6,
+      "last_activity": "2026-01-03T09:57:15.128Z",
       "first_seen": "2026-01-03T06:53:35.830Z"
     },
     "agent-1767423173812-5t8vph": {
@@ -431,13 +439,15 @@
     },
     "agent-1767423456035-2rzueq": {
       "agent_id": "agent-1767423456035-2rzueq",
-      "tasks_completed": 0,
+      "tasks_completed": 2,
       "tasks_claimed": 1,
-      "total_duration_ms": 0,
-      "avg_duration_ms": 0,
-      "quality_scores": [],
-      "avg_quality": 0,
-      "last_activity": "2026-01-03T06:57:38.365Z",
+      "total_duration_ms": 21637365,
+      "avg_duration_ms": 10818683,
+      "quality_scores": [
+        8.2
+      ],
+      "avg_quality": 8.2,
+      "last_activity": "2026-01-03T09:58:23.067Z",
       "first_seen": "2026-01-03T06:57:38.365Z"
     },
     "agent-1767423576529-lc6l8": {
@@ -491,6 +501,44 @@
       "avg_quality": 8.1,
       "last_activity": "2026-01-03T09:52:31.159Z",
       "first_seen": "2026-01-03T09:45:47.704Z"
+    },
+    "agent-1767434026236-t0030c": {
+      "agent_id": "agent-1767434026236-t0030c",
+      "tasks_completed": 2,
+      "tasks_claimed": 1,
+      "total_duration_ms": 153156,
+      "avg_duration_ms": 76578,
+      "quality_scores": [
+        8.5,
+        8.3
+      ],
+      "avg_quality": 8.4,
+      "last_activity": "2026-01-03T09:57:18.365Z",
+      "first_seen": "2026-01-03T09:53:46.540Z"
+    },
+    "agent-1767433780257-wn6w5r": {
+      "agent_id": "agent-1767433780257-wn6w5r",
+      "tasks_completed": 2,
+      "tasks_claimed": 1,
+      "total_duration_ms": 365496,
+      "avg_duration_ms": 182748,
+      "quality_scores": [
+        8.5
+      ],
+      "avg_quality": 8.5,
+      "last_activity": "2026-01-03T09:57:15.931Z",
+      "first_seen": "2026-01-03T09:53:55.840Z"
+    },
+    "agent-1767435008098-o8mo6o": {
+      "agent_id": "agent-1767435008098-o8mo6o",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-03T10:10:08.345Z",
+      "first_seen": "2026-01-03T10:10:08.345Z"
     }
   }
 }

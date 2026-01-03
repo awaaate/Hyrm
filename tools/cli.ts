@@ -28,6 +28,8 @@ import {
   truncate,
   formatTimeShort,
   PATHS,
+  logWarning,
+  getErrorMessage,
   MEMORY_DIR,
   SESSIONS_DIR,
   PRIORITY_ORDER,
@@ -803,13 +805,17 @@ function showRecovery(): void {
       if (existsSync(checkpointPath)) {
         try {
           checkpoint = JSON.parse(readFileSync(checkpointPath, "utf-8"));
-        } catch {}
+        } catch (error) {
+          logWarning("Failed to parse checkpoint file", { path: checkpointPath, error: getErrorMessage(error) });
+        }
       }
       
       if (existsSync(handoffPath)) {
         try {
           handoff = JSON.parse(readFileSync(handoffPath, "utf-8"));
-        } catch {}
+        } catch (error) {
+          logWarning("Failed to parse handoff file", { path: handoffPath, error: getErrorMessage(error) });
+        }
       }
       
       return { sessionId, checkpoint, handoff };

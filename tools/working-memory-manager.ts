@@ -25,6 +25,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSy
 import { join } from "path";
 import { readJson, writeJson, readJsonl } from './shared/json-utils';
 import { PATHS, MEMORY_DIR, getMemoryPath } from './shared/paths';
+import { logWarning, getErrorMessage } from './shared/error-handler';
 
 const WORKING_PATH = PATHS.working;
 const ARCHIVE_DIR = join(MEMORY_DIR, "working-archives");
@@ -164,7 +165,9 @@ function analyzeMemoryHealth(): MemoryHealth {
         health.totalSize += stat.size;
         const content = readFileSync(file, "utf-8");
         health.tokenEstimate += estimateTokens(content);
-      } catch {}
+      } catch (error) {
+        logWarning("Failed to read memory file for health check", { file, error: getErrorMessage(error) });
+      }
     }
   }
   
@@ -172,7 +175,9 @@ function analyzeMemoryHealth(): MemoryHealth {
   if (existsSync(ARCHIVE_DIR)) {
     try {
       health.archiveCount = readdirSync(ARCHIVE_DIR).filter(f => f.endsWith('.md')).length;
-    } catch {}
+    } catch (error) {
+      logWarning("Failed to count archives", { error: getErrorMessage(error) });
+    }
   }
   
   // Count sessions in sessions.jsonl
@@ -180,7 +185,9 @@ function analyzeMemoryHealth(): MemoryHealth {
     try {
       const content = readFileSync(PATHS.sessions, "utf-8");
       health.sessionCount = content.trim().split("\n").filter(l => l).length;
-    } catch {}
+    } catch (error) {
+      logWarning("Failed to count sessions", { error: getErrorMessage(error) });
+    }
   }
   
   // Count messages
@@ -188,7 +195,9 @@ function analyzeMemoryHealth(): MemoryHealth {
     try {
       const content = readFileSync(PATHS.messageBus, "utf-8");
       health.messageCount = content.trim().split("\n").filter(l => l).length;
-    } catch {}
+    } catch (error) {
+      logWarning("Failed to count messages", { error: getErrorMessage(error) });
+    }
   }
   
   // Count agents
@@ -196,7 +205,9 @@ function analyzeMemoryHealth(): MemoryHealth {
     try {
       const registry = JSON.parse(readFileSync(PATHS.agentRegistry, "utf-8"));
       health.agentCount = registry.agents?.length || 0;
-    } catch {}
+    } catch (error) {
+      logWarning("Failed to count agents", { error: getErrorMessage(error) });
+    }
   }
   
   // Calculate health score and recommendations

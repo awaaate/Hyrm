@@ -72,8 +72,26 @@
       "agents": [
         null
       ]
+    },
+    {
+      "filename": "messages-2026-01-03T10-07-32-758Z.jsonl",
+      "startDate": "2026-01-02T19:03:24.918Z",
+      "endDate": "2026-01-03T10:07:32.741Z",
+      "messageCount": 129,
+      "types": [
+        "task_completed",
+        "task_complete",
+        "session_spawned",
+        "task_claim",
+        "task_available",
+        "broadcast",
+        "heartbeat"
+      ],
+      "agents": [
+        null
+      ]
     }
   ],
-  "lastUpdated": "2026-01-02T18:56:58.108Z",
-  "totalMessages": 1086
+  "lastUpdated": "2026-01-03T10:07:32.760Z",
+  "totalMessages": 1215
 }

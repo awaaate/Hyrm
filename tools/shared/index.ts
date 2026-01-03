@@ -21,6 +21,44 @@ export {
   safeJsonParse,
 } from "./json-utils";
 
+// Error handling utilities
+export {
+  // Error classes
+  AppError,
+  JsonParseError,
+  FileIOError,
+  ValidationError,
+  AgentError,
+  TaskError,
+  // Error utilities
+  getErrorMessage,
+  createErrorContext,
+  // Logging
+  logError,
+  logWarning,
+  logDebug,
+  logInfo,
+  // JSON recovery
+  readJsonSafe,
+  writeJsonSafe,
+  // Schema validation
+  validateSchema,
+  validateCriticalFiles,
+  STATE_SCHEMA,
+  TASKS_SCHEMA,
+  AGENT_REGISTRY_SCHEMA,
+  // Convenience
+  trySafe,
+  trySafeAsync,
+  withErrorLogging,
+} from "./error-handler";
+
+export type {
+  JsonReadResult,
+  SchemaField,
+  Schema,
+} from "./error-handler";
+
 // ANSI colors and symbols
 export {
   c,

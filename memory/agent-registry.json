@@ -1,40 +1,27 @@
 {
   "agents": [
     {
-      "agent_id": "agent-1767433541786-00vj5",
-      "session_id": "session-1767433541786",
-      "started_at": "2026-01-03T09:45:41.786Z",
-      "last_heartbeat": "2026-01-03T09:51:41.809Z",
-      "status": "active",
-      "assigned_role": "cli-worker",
-      "pid": 105537
-    },
-    {
-      "agent_id": "agent-1767433547455-1a95rd",
-      "session_id": "session-1767433547455",
-      "started_at": "2026-01-03T09:45:47.456Z",
-      "last_heartbeat": "2026-01-03T09:49:47.478Z",
-      "status": "active",
-      "assigned_role": "cli-audit-worker",
-      "pid": 105651
-    },
-    {
-      "agent_id": "agent-1767433780257-wn6w5r",
-      "session_id": "session-1767433780257",
-      "started_at": "2026-01-03T09:49:40.260Z",
-      "last_heartbeat": "2026-01-03T09:52:40.270Z",
+      "agent_id": "agent-1767434786597-c7gbga",
+      "session_id": "session-1767434786597",
+      "started_at": "2026-01-03T10:06:26.598Z",
+      "last_heartbeat": "2026-01-03T10:10:38.111Z",
       "status": "working",
       "assigned_role": "orchestrator",
-      "pid": 116396,
-      "current_task": "Session 178 leader (epoch 8) - coordinator active"
+      "pid": 139323,
+      "current_task": "Session 180 leader (epoch 2) - monitoring error-handler-worker"
+    },
+    {
+      "agent_id": "agent-1767435008098-o8mo6o",
+      "session_id": "session-1767435008098",
+      "started_at": "2026-01-03T10:10:08.099Z",
+      "last_heartbeat": "2026-01-03T10:16:08.127Z",
+      "status": "active",
+      "assigned_role": "error-handler-worker",
+      "pid": 141647
     }
   ],
-  "leader": {
-    "agent_id": "agent-1767433780257-wn6w5r",
-    "epoch": 8,
-    "last_heartbeat": "2026-01-03T09:51:00.000Z",
-    "ttl_ms": 180000
-  },
-  "last_updated": "2026-01-03T09:52:40.270Z",
-  "lock_version": 10
+  "leader": null,
+  "version": 1,
+  "last_updated": "2026-01-03T10:16:08.127Z",
+  "lock_version": 9
 }

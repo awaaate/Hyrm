@@ -23,7 +23,7 @@
 
 import { existsSync, readFileSync, writeFileSync, appendFileSync, watch, FSWatcher } from "fs";
 import { createInterface, Interface as ReadlineInterface } from "readline";
-import { readJson, readJsonl, writeJson, c, formatTimeShort, PATHS, truncate, padRight, getAllOpenCodeSessions, getOpenCodeSessionStats, getQualityStore, getLeaderInfo } from "./shared";
+import { readJson, readJsonl, writeJson, c, formatTimeShort, PATHS, truncate, padRight, getAllOpenCodeSessions, getOpenCodeSessionStats, getQualityStore, getLeaderInfo, logWarning, getErrorMessage } from "./shared";
 import type { UserMessage, SystemState, QualityStore, Task, TaskStore, OpenCodeSession, LeaderInfo } from "./shared/types";
 
 // ANSI escape code prefix (for screen control)
@@ -216,12 +216,15 @@ function getRecentLogs(limit: number = 20): LogEntry[] {
           try {
             return JSON.parse(line) as LogEntry;
           } catch {
+            // Malformed log line, return as raw text
             return { message: line, level: "INFO", timestamp: new Date().toISOString() };
           }
         })
         .reverse();
     }
-  } catch {}
+  } catch (error) {
+    logWarning("Failed to load realtime logs", { error: getErrorMessage(error) });
+  }
   return [];
 }
 
