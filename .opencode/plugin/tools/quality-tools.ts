@@ -47,34 +47,49 @@ export function createQualityTools(getContext: () => QualityToolsContext) {
   return {
     quality_assess: tool({
       description:
-        "Assess a completed task's quality across multiple dimensions (completeness, code quality, documentation, efficiency, impact).",
+        `Assess a completed task's quality across multiple dimensions (completeness, code quality, documentation, efficiency, impact).
+
+Example usage:
+- quality_assess(task_id="task_123", completeness=9, code_quality=8, impact=7)
+- quality_assess(task_id="task_123", lessons_learned="Always validate input before processing")
+
+Scoring guide (1-10):
+- 9-10: Exceptional - exceeds expectations
+- 7-8: Good - meets all requirements
+- 5-6: Acceptable - meets minimum requirements  
+- 3-4: Below expectations - needs improvement
+- 1-2: Unacceptable - major issues
+
+Default scores are 7 if not provided. Weights: completeness(30%), code_quality(25%), documentation(15%), efficiency(15%), impact(15%).
+
+The overall score is saved to the task and agent metrics for trend tracking.`,
       args: {
         task_id: tool.schema
           .string()
-          .describe("ID of the completed task to assess"),
+          .describe("ID of the completed task to assess (must be status=completed)"),
         completeness: tool.schema
           .number()
-          .describe("Score 1-10: Did the task achieve its stated goal?")
+          .describe("Score 1-10: Did the task achieve its stated goal? (default: 7)")
           .optional(),
         code_quality: tool.schema
           .number()
-          .describe("Score 1-10: Is the code clean, tested, maintainable?")
+          .describe("Score 1-10: Is the code clean, tested, maintainable? (default: 7)")
           .optional(),
         documentation: tool.schema
           .number()
-          .describe("Score 1-10: Was work properly documented?")
+          .describe("Score 1-10: Was work properly documented? (default: 6)")
           .optional(),
         efficiency: tool.schema
           .number()
-          .describe("Score 1-10: Token usage, time efficiency")
+          .describe("Score 1-10: Token usage, time efficiency (default: 7)")
           .optional(),
         impact: tool.schema
           .number()
-          .describe("Score 1-10: Did this improve the system significantly?")
+          .describe("Score 1-10: Did this improve the system significantly? (default: 7)")
           .optional(),
         lessons_learned: tool.schema
           .string()
-          .describe("Key lesson from this task for future reference")
+          .describe("Key lesson from this task for knowledge base")
           .optional(),
       },
       async execute({
@@ -220,7 +235,20 @@ export function createQualityTools(getContext: () => QualityToolsContext) {
 
     quality_report: tool({
       description:
-        "Get quality assessment statistics and trends for all assessed tasks.",
+        `Get quality assessment statistics and trends for all assessed tasks.
+
+Example usage:
+- quality_report() - Get full quality metrics and trend analysis
+
+Returns:
+- stats: total_assessed, avg_overall_score, trend (improving/stable/declining)
+- recent_lessons: Last 5 lessons learned for context
+- unassessed_count: Number of completed tasks needing assessment
+
+Use this to:
+- Track quality trends over time
+- Identify areas needing improvement
+- Find unassessed tasks that need review`,
       args: {},
       async execute() {
         try {

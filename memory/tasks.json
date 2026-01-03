@@ -2288,8 +2288,34 @@
       ],
       "estimated_hours": 3,
       "complexity": "moderate"
+    },
+    {
+      "id": "task_1767432302745_8oi36d",
+      "title": "Improve prompts based on Anthropic prompting guides",
+      "description": "User request: Improve prompts for agents, tools, etc based on Anthropic blog guides.\n\nKey Anthropic Guidance Found:\n1. \"Building Effective Agents\" - Key principles: simplicity, transparency, well-documented tool interfaces\n2. \"Long Context Prompting\" - Use scratchpad for quotes, contextual examples improve recall\n3. \"Claude 2.1 Prompting\" - Add \"Here is the most relevant sentence\" to guide extraction (27% to 98% accuracy)\n4. \"Prompt Caching\" - Structure prompts for cache efficiency\n\nPrompts to Improve:\n- Orchestrator prompt (tools/generate-orchestrator-prompt.ts)\n- Worker prompt (tools/generate-worker-prompt.ts)\n- Plugin system prompt injection (.opencode/plugin/index.ts)\n- Tool definitions (.opencode/plugin/tools/*.ts)\n- Agent skills (.opencode/skill/*.md)\n\nFocus Areas per Anthropic:\n1. Maintain simplicity in agent design\n2. Prioritize transparency by showing planning steps\n3. Craft agent-computer interface (ACI) through thorough tool documentation\n4. Use routing for different task types\n5. Evaluator-optimizer pattern for iterative refinement\n6. Proper tool documentation with examples and edge cases",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-03T09:25:02.745Z",
+      "updated_at": "2026-01-03T09:39:12.556Z",
+      "created_by": "unknown",
+      "tags": [
+        "prompts",
+        "anthropic",
+        "improvement",
+        "user-request"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767432247589-hhlnve",
+      "claimed_at": "2026-01-03T09:25:31.868Z",
+      "completed_at": "2026-01-03T09:39:05.354Z",
+      "notes": [
+        "[2026-01-03T09:36:37.949Z] Applied Anthropic prompt engineering best practices to 10 files: 2 prompt generators, 4 plugin tool files, 4 skill files. Key improvements: scratchpad patterns for decision-making, context at start with instructions at end, tool descriptions with usage examples and edge cases, clearer workflow structures.",
+        "[2026-01-03T09:39:05.357Z] Completed by prompt-worker (agent-1767432364632-gom2eh). Applied Anthropic prompt engineering best practices: added scratchpad/thinking patterns, restructured prompts with context-first ordering, enhanced tool descriptions with examples, updated all 4 skill files."
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Anthropic prompting guides provide clear patterns for improving agent prompts: scratchpad thinking, context-first structure, tool descriptions with examples. Apply these patterns systematically across all agent interfaces."
     }
   ],
-  "completed_count": 103,
-  "last_updated": "2026-01-03T07:02:38.123Z"
+  "completed_count": 105,
+  "last_updated": "2026-01-03T09:39:05.357Z"
 }

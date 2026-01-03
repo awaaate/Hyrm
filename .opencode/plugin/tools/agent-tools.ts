@@ -37,12 +37,20 @@ export function createAgentTools(getContext: () => AgentToolsContext, sessionSta
   return {
     agent_register: tool({
       description:
-        "Register this agent in the multi-agent coordination system. Required for agent-to-agent communication.",
+        `Register this agent in the multi-agent coordination system. Required for agent-to-agent communication.
+
+Example usage:
+- agent_register(role="orchestrator") - Register as the main coordinator
+- agent_register(role="code-worker") - Register as a code worker
+- agent_register(role="analysis") - Register as an analysis agent
+
+IMPORTANT: Must be called before using agent_send, agent_messages, or agent_status.
+For orchestrators, also triggers leader election check.`,
       args: {
         role: tool.schema
           .string()
           .describe(
-            "Role of this agent (e.g., 'memory-worker', 'system-optimizer', 'general')"
+            "Role of this agent (e.g., 'orchestrator', 'code-worker', 'memory-worker', 'analysis')"
           )
           .optional(),
       },
@@ -96,7 +104,19 @@ export function createAgentTools(getContext: () => AgentToolsContext, sessionSta
 
     agent_status: tool({
       description:
-        "Get status of all active agents in the coordination system.",
+        `Get status of all active agents in the coordination system.
+
+Example usage:
+- agent_status() - Get all active agents and leader info
+
+Returns:
+- agents: List of {id, session, role, status, task, last_heartbeat}
+- leader: Current leader info (agent_id, epoch, last_heartbeat, ttl_ms)
+
+Use this to:
+- Check what workers are doing
+- Verify leader election status
+- Detect stale agents (last_heartbeat > 2 min ago)`,
       args: {},
       async execute() {
         try {
@@ -141,7 +161,21 @@ export function createAgentTools(getContext: () => AgentToolsContext, sessionSta
 
     agent_send: tool({
       description:
-        "Send message to other agents. Can be broadcast or direct message.",
+        `Send message to other agents. Can be broadcast or direct message.
+
+Example usage:
+- agent_send(type="broadcast", payload={status: "starting task X"})
+- agent_send(type="direct", to_agent="agent-123", payload={question: "..."})
+- agent_send(type="task_complete", payload={task_id: "...", summary: "..."})
+- agent_send(type="request_help", payload={blocker: "need API key", task_id: "..."})
+
+Message types:
+- broadcast: All agents receive
+- direct: Only to_agent receives
+- task_claim: Announce you're claiming a task
+- task_complete: Report task completion with results
+- task_available: Announce a new task is ready
+- request_help: Ask for assistance with a blocker`,
       args: {
         type: tool.schema
           .enum([
@@ -155,10 +189,10 @@ export function createAgentTools(getContext: () => AgentToolsContext, sessionSta
           .describe("Type of message"),
         payload: tool.schema
           .record(tool.schema.any(), tool.schema.any())
-          .describe("Message payload (arbitrary JSON)"),
+          .describe("Message payload (arbitrary JSON object with task details, status, etc.)"),
         to_agent: tool.schema
           .string()
-          .describe("Target agent ID (optional, for direct messages)")
+          .describe("Target agent ID (required for 'direct' type)")
           .optional(),
       },
       async execute({ type, payload, to_agent }) {
@@ -190,7 +224,19 @@ export function createAgentTools(getContext: () => AgentToolsContext, sessionSta
 
     agent_messages: tool({
       description:
-        "Read messages sent by other agents. Returns unread messages addressed to this agent or broadcasts.",
+        `Read messages sent by other agents. Returns unread messages addressed to this agent or broadcasts.
+
+Example usage:
+- agent_messages() - Get and mark all unread messages as read
+- agent_messages(mark_read=false) - Peek at messages without marking read
+
+Returns messages with: id, from, type, timestamp, payload
+
+Common patterns:
+- Orchestrator: Check for task_complete and request_help messages
+- Worker: Check for direct assignments and task_available broadcasts
+
+Note: Call regularly to stay coordinated with other agents.`,
       args: {
         mark_read: tool.schema
           .boolean()
@@ -265,12 +311,22 @@ export function createAgentTools(getContext: () => AgentToolsContext, sessionSta
 
     agent_set_handoff: tool({
       description:
-        "Control whether this agent hands off when session goes idle. Main/orchestrator agents should disable handoff to stay running continuously.",
+        `Control whether this agent hands off when session goes idle. Main/orchestrator agents should disable handoff to stay running continuously.
+
+Example usage:
+- agent_set_handoff(enabled=false) - CRITICAL for orchestrators! Prevents stopping
+- agent_set_handoff(enabled=true) - Workers should enable this to exit when done
+
+IMPORTANT for orchestrators:
+Call agent_set_handoff(enabled=false) IMMEDIATELY after starting.
+This is the most important action to ensure persistence.
+
+Persists state to disk so the setting survives restarts.`,
       args: {
         enabled: tool.schema
           .boolean()
           .describe(
-            "If true, agent will handoff on idle. If false, agent stays running (for main/orchestrator agents)."
+            "If true, agent will handoff on idle. If false, agent stays running (for orchestrators)."
           ),
       },
       async execute({ enabled }) {

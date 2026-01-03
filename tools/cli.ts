@@ -32,6 +32,11 @@ import {
   SESSIONS_DIR,
   PRIORITY_ORDER,
   STATUS_ORDER,
+  // Actions from shared
+  createTask as sharedCreateTask,
+  claimTask as sharedClaimTask,
+  completeTask as sharedCompleteTask,
+  sendUserMessage as sharedSendUserMessage,
 } from "./shared";
 import type { 
   ToolTiming, 
@@ -270,19 +275,9 @@ function showUserMessages(): void {
 }
 
 function sendUserMessage(message: string, urgent: boolean = false): void {
-  const newMsg = {
-    id: `umsg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-    from: process.env.USER || "user",
-    message: message,
-    timestamp: new Date().toISOString(),
-    read: false,
-    priority: urgent ? "urgent" : "normal",
-  };
-  
-  appendFileSync(PATHS.userMessages, JSON.stringify(newMsg) + "\n");
-  
+  const msg = sharedSendUserMessage(message, { priority: urgent ? "urgent" : "normal" });
   console.log(`\n${c.green}✓ Message sent!${c.reset}`);
-  console.log(`${c.dim}ID: ${newMsg.id}${c.reset}\n`);
+  console.log(`${c.dim}ID: ${msg.id}${c.reset}\n`);
 }
 
 function showQuality(): void {
@@ -338,141 +333,13 @@ function pruneMessages(olderThanHours: number = 24): void {
   console.log(`${c.dim}Kept ${kept.length} messages${c.reset}\n`);
 }
 
-function startMonitor(interval: number = 2000): void {
-  const render = () => {
-    console.clear();
-    
-    const state = readJson<SystemState>(PATHS.state, {} as SystemState);
-    const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
-    const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
-    const quality = readJson<QualityStore>(PATHS.qualityAssessments, { assessments: [], summary: { average_score: 0, trend: "stable", total_assessed: 0, last_updated: "" } });
-    const userMsgs = readJsonl<UserMessage>(PATHS.userMessages);
-    const agentMsgs = readJsonl<Message>(PATHS.messageBus);
-    
-    const now = Date.now();
-    const activeAgents = registry.agents?.filter((a: Agent) => 
-      now - new Date(a.last_heartbeat).getTime() < 2 * 60 * 1000
-    ) || [];
-    
-    const pendingTasks = tasks.tasks?.filter((t: Task) => 
-      t.status === "pending" || t.status === "in_progress"
-    ) || [];
-    
-    const unreadUserMsgs = userMsgs.filter((m: UserMessage) => !m.read);
-    const recentAgentMsgs = agentMsgs
-      .filter((m: Message) => m.type !== "heartbeat")
-      .slice(-5)
-      .reverse();
-    
-    console.log(`${c.bgBlue}${c.white}${c.bright}  OPENCODE LIVE MONITOR  ${c.reset} ${c.dim}${new Date().toLocaleTimeString()}${c.reset}\n`);
-    
-    // Status bar
-    console.log(
-      `${c.cyan}Session:${c.reset} ${c.bright}${state.session_count || 0}${c.reset} | ` +
-      `${c.cyan}Status:${c.reset} ${state.status === "orchestrator_active" ? c.green : c.yellow}${state.status || "?"}${c.reset} | ` +
-      `${c.cyan}Agents:${c.reset} ${c.bright}${activeAgents.length}${c.reset} | ` +
-      `${c.cyan}Tasks:${c.reset} ${c.bright}${pendingTasks.length}${c.reset} | ` +
-      `${c.cyan}Quality:${c.reset} ${c.bright}${quality.summary?.average_score?.toFixed(1) || "?"}${c.reset}/10`
-    );
-    
-    console.log(`\n${c.dim}${"─".repeat(80)}${c.reset}`);
-    
-    // Agents section
-    console.log(`\n${c.bright}${c.cyan}AGENTS${c.reset}`);
-    if (activeAgents.length === 0) {
-      console.log(`  ${c.dim}No active agents${c.reset}`);
-    } else {
-      for (const agent of activeAgents.slice(0, 5)) {
-        const icon = agent.status === "working" ? "⚙" : "◦";
-        console.log(
-          `  ${icon} ${truncate(agent.agent_id, 30)} ` +
-          `${c.dim}[${agent.assigned_role || "general"}]${c.reset} ` +
-          `${agent.status}`
-        );
-      }
-      if (activeAgents.length > 5) {
-        console.log(`  ${c.dim}...and ${activeAgents.length - 5} more${c.reset}`);
-      }
-    }
-    
-    // Tasks section
-    console.log(`\n${c.bright}${c.yellow}PENDING TASKS${c.reset}`);
-    if (pendingTasks.length === 0) {
-      console.log(`  ${c.dim}No pending tasks${c.reset}`);
-    } else {
-      for (const task of pendingTasks.slice(0, 5)) {
-        const pColor = task.priority === "critical" ? c.red : 
-                       task.priority === "high" ? c.yellow : c.cyan;
-        console.log(
-          `  ${pColor}[${task.priority[0].toUpperCase()}]${c.reset} ` +
-          `${task.status === "in_progress" ? ">" : " "} ` +
-          `${truncate(task.title, 50)}`
-        );
-      }
-    }
-    
-    // User messages section
-    console.log(`\n${c.bright}${c.green}USER MESSAGES${c.reset} ${c.dim}(${unreadUserMsgs.length} unread)${c.reset}`);
-    if (unreadUserMsgs.length === 0) {
-      console.log(`  ${c.dim}No unread messages${c.reset}`);
-    } else {
-      for (const msg of unreadUserMsgs.slice(-3).reverse()) {
-        console.log(
-          `  ${c.green}●${c.reset} ${c.bright}${msg.from}${c.reset}: ` +
-          `${truncate(msg.message, 50)}`
-        );
-      }
-    }
-    
-    // Agent messages section
-    console.log(`\n${c.bright}${c.magenta}RECENT ACTIVITY${c.reset}`);
-    if (recentAgentMsgs.length === 0) {
-      console.log(`  ${c.dim}No recent activity${c.reset}`);
-    } else {
-      for (const msg of recentAgentMsgs.slice(0, 3)) {
-        const from = msg.from_agent || msg.from || "?";
-        console.log(
-          `  ${c.blue}[${msg.type}]${c.reset} ` +
-          `${truncate(from, 25)} ` +
-          `${c.dim}${formatTimeShort(msg.timestamp)}${c.reset}`
-        );
-      }
-    }
-    
-    console.log(`\n${c.dim}${"─".repeat(80)}${c.reset}`);
-    console.log(`${c.dim}Press Ctrl+C to exit | Refresh: ${interval}ms${c.reset}`);
-  };
-  
-  render();
-  setInterval(render, interval);
-  
-  process.on("SIGINT", () => {
-    console.clear();
-    console.log(`${c.dim}Monitor stopped.${c.reset}`);
-    process.exit(0);
-  });
-}
+// startMonitor removed - now using tools/dashboard.ts
 
-// Task management functions
+// Task management functions - use shared actions
 function createTask(title: string, priority: string = "medium", description?: string): void {
-  const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
-  
-  const newTask = {
-    id: `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-    title,
-    description: description || "",
-    priority,
-    status: "pending",
-    created_at: new Date().toISOString(),
-    complexity: "moderate",
-    tags: [],
-  };
-  
-  tasks.tasks.push(newTask);
-  writeFileSync(PATHS.tasks, JSON.stringify(tasks, null, 2));
-  
+  const task = sharedCreateTask(title, priority as any, description);
   console.log(`\n${c.green}✓ Task created!${c.reset}`);
-  console.log(`${c.cyan}ID:${c.reset} ${newTask.id}`);
+  console.log(`${c.cyan}ID:${c.reset} ${task.id}`);
   console.log(`${c.cyan}Title:${c.reset} ${title}`);
   console.log(`${c.cyan}Priority:${c.reset} ${priority}\n`);
 }
@@ -491,15 +358,13 @@ function claimTask(taskId: string): void {
     console.log(`${c.dim}Assigned to: ${task.assigned_to || "unknown"}${c.reset}`);
   }
   
-  task.status = "in_progress";
-  task.assigned_to = `cli_${Date.now()}`;
-  task.claimed_at = new Date().toISOString();
-  
-  writeFileSync(PATHS.tasks, JSON.stringify(tasks, null, 2));
-  
-  console.log(`\n${c.green}✓ Task claimed!${c.reset}`);
-  console.log(`${c.cyan}Title:${c.reset} ${task.title}`);
-  console.log(`${c.cyan}Status:${c.reset} in_progress\n`);
+  if (sharedClaimTask(taskId, `cli_${Date.now()}`)) {
+    console.log(`\n${c.green}✓ Task claimed!${c.reset}`);
+    console.log(`${c.cyan}Title:${c.reset} ${task.title}`);
+    console.log(`${c.cyan}Status:${c.reset} in_progress\n`);
+  } else {
+    console.log(`${c.red}Error: Could not claim task${c.reset}`);
+  }
 }
 
 function completeTask(taskId: string, notes?: string): void {
@@ -511,16 +376,12 @@ function completeTask(taskId: string, notes?: string): void {
     process.exit(1);
   }
   
-  task.status = "completed";
-  task.completed_at = new Date().toISOString();
-  if (notes) {
-    task.notes = (task.notes || "") + "\n" + notes;
+  if (sharedCompleteTask(taskId, notes)) {
+    console.log(`\n${c.green}✓ Task completed!${c.reset}`);
+    console.log(`${c.cyan}Title:${c.reset} ${task.title}\n`);
+  } else {
+    console.log(`${c.red}Error: Could not complete task${c.reset}`);
   }
-  
-  writeFileSync(PATHS.tasks, JSON.stringify(tasks, null, 2));
-  
-  console.log(`\n${c.green}✓ Task completed!${c.reset}`);
-  console.log(`${c.cyan}Title:${c.reset} ${task.title}\n`);
 }
 
 function showConversations(): void {
@@ -1222,13 +1083,17 @@ switch (command) {
     break;
     
   case "monitor":
-    startMonitor(parseInt(args[1]) || 2000);
-    break;
-    
   case "dashboard":
   case "dash":
-    // Dashboard uses the integrated monitor
-    startMonitor(parseInt(args[1]) || 2000);
+    // Use the new interactive dashboard
+    import("child_process").then(({ spawn }) => {
+      const dashArgs = args.slice(1);
+      const child = spawn("bun", ["tools/dashboard.ts", ...dashArgs], {
+        stdio: "inherit",
+        cwd: process.cwd(),
+      });
+      child.on("exit", (code) => process.exit(code || 0));
+    });
     break;
     
   case "interactive":

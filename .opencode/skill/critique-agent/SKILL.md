@@ -6,221 +6,211 @@ license: MIT
 
 # Critique Agent Skill
 
-You are a CRITIQUE AGENT specialized in code review, debugging, and quality assessment. Your role is to provide detailed, actionable feedback on code, outputs, tasks, and system health.
+You are a CRITIQUE AGENT specialized in code review, debugging, and quality assessment.
 
-## HOW TO SPAWN A CRITIQUE AGENT
+## Quick Start
 
-Use the Task tool to spawn a critique agent:
+```bash
+# Review a file
+bun tools/critique-agent.ts code <file_path>
 
-```typescript
-// Example: Spawn a critique agent to review a specific file
-Task({
-  description: "Code review task",
-  subagent_type: "general",
-  prompt: `You are a CRITIQUE AGENT. Your job is to review code and provide detailed feedback.
+# Review completed task
+bun tools/critique-agent.ts task <task_id>
 
-FIRST: Load this skill with skill('critique-agent') for detailed guidance.
-THEN: Call agent_register(role='critique') to register in the system.
-
-YOUR TASK: Review the code in <file_path> and provide:
-1. Security analysis
-2. Quality assessment 
-3. Performance review
-4. Style feedback
-5. Overall score (1-10)
-
-Use the critique-agent CLI tool: bun tools/critique-agent.ts code <file_path>
-Save your critique to memory/critiques/
-Report via agent_send(type='direct', payload={critique: ...}) when done.
-You CAN handoff after completing the review.`
-})
+# System-wide review
+bun tools/critique-agent.ts system
 ```
 
-### Orchestrator Integration
+## Critique Methodology
 
-The orchestrator can spawn critique agents automatically after task completion:
+Before critiquing, use this analysis pattern:
+
+<scratchpad>
+1. What is the PURPOSE of this code/task?
+2. What are the REQUIREMENTS it should meet?
+3. What are potential RISKS (security, bugs, performance)?
+4. What is GOOD that should be preserved?
+5. What SPECIFIC improvements can I recommend?
+</scratchpad>
+
+## How to Spawn a Critique Agent
 
 ```typescript
-// When a task completes, spawn a critique agent
-agent_messages().then(messages => {
-  const completed = messages.filter(m => m.type === 'task_complete')
-  for (const task of completed) {
-    if (task.payload.files_modified) {
-      // Spawn critique agent for each modified file
-      Task({
-        description: `Critique ${task.payload.title}`,
-        subagent_type: "general",
-        prompt: `You are a CRITIQUE AGENT. Review the work from task ${task.payload.task_id}.
-        Files changed: ${task.payload.files_modified.join(', ')}
-        Run: bun tools/critique-agent.ts task ${task.payload.task_id}
-        Report findings to orchestrator. You CAN handoff when done.`
-      })
-    }
-  }
+// From orchestrator
+Task({
+  description: "Code review",
+  subagent_type: "general", 
+  prompt: `You are a CRITIQUE AGENT.
+
+1. agent_register(role='critique')
+2. skill('critique-agent')  -- Load this skill
+3. Run: bun tools/critique-agent.ts code <file_path>
+4. Report: agent_send(type='task_complete', payload={score, issues, file_path})
+5. You CAN handoff after completing.`
 })
 ```
 
 ## Core Responsibilities
 
-1. **Code Review** - Analyze code for security, quality, performance, and style issues
-2. **Output Analysis** - Review logs/outputs for errors, warnings, and patterns
-3. **Task Critique** - Evaluate completed tasks for quality and completeness
-4. **System Health** - Assess overall system state and suggest improvements
+1. **Code Review** - Security, quality, performance, style analysis
+2. **Output Analysis** - Logs/outputs for errors and patterns
+3. **Task Critique** - Quality and completeness assessment
+4. **System Health** - Overall state and improvement suggestions
 
-## Available Tools
-
-Use the critique-agent CLI tool for analysis:
+## CLI Commands
 
 ```bash
-# Code critique
+# Code critique (most common)
 bun tools/critique-agent.ts code <file>
 
-# Output/log analysis  
-bun tools/critique-agent.ts output <file>
-
-# Task critique
+# Task critique (after completion)
 bun tools/critique-agent.ts task <task_id>
 
-# System-wide critique
+# Output/log analysis
+bun tools/critique-agent.ts output <file>
+
+# System-wide review
 bun tools/critique-agent.ts system
 
-# Review text description
+# Review description
 bun tools/critique-agent.ts review "<description>"
 
-# List/view critiques
+# Manage critiques
 bun tools/critique-agent.ts list
 bun tools/critique-agent.ts view <id>
 bun tools/critique-agent.ts summary
 ```
 
-## Critique Categories
+## Issue Categories
 
-### Security Issues
-- Code injection risks (eval, innerHTML)
-- Hardcoded credentials
-- Insecure protocols (HTTP)
-- Permission/authorization issues
+### Security (Critical Priority)
+```
+- eval(), innerHTML, dangerouslySetInnerHTML
+- Hardcoded credentials, API keys
+- HTTP instead of HTTPS
+- Missing input validation
+- SQL injection, XSS risks
+```
 
-### Quality Issues
+### Quality (High Priority)
+```
 - Debug code left in (console.log)
 - Unresolved TODOs
-- TypeScript any usage
+- TypeScript 'any' usage
 - Empty catch blocks
+- Missing error handling
+```
 
-### Performance Issues
-- O(n^2) complexity patterns
-- Unoptimized loops
-- Memory inefficiencies
+### Performance (Medium Priority)
+```
+- O(n^2) nested loops
+- Unnecessary re-renders
+- Large bundle imports
+- Memory leaks
+- Blocking operations
+```
 
-### Style Issues
-- Long functions (>500 chars)
-- Deep nesting
-- Line length (>120)
-- File size (>500 lines)
+### Style (Low Priority)
+```
+- Functions > 50 lines
+- Deep nesting (> 4 levels)
+- Lines > 120 chars
+- Files > 500 lines
+- Inconsistent naming
+```
 
 ## Scoring System
 
-Critiques receive a score from 1-10:
-- **9-10**: Excellent - minimal or no issues
-- **7-8**: Good - minor issues only
-- **5-6**: Fair - several issues to address
-- **3-4**: Poor - significant problems
-- **1-2**: Critical - major issues requiring immediate attention
+| Score | Rating | Meaning |
+|-------|--------|---------|
+| 9-10 | Excellent | Minimal or no issues |
+| 7-8 | Good | Minor issues only |
+| 5-6 | Fair | Several issues to address |
+| 3-4 | Poor | Significant problems |
+| 1-2 | Critical | Major issues, needs immediate fix |
 
-Severity deductions:
-- Critical: -2 points
+**Deductions**:
+- Critical issue: -2 points
 - Error: -1.5 points
 - Warning: -0.5 points
 - Info: -0.1 points
 
-## Output Format
-
-All critiques are saved as markdown files in `memory/critiques/` with:
-- Timestamp and type
-- Overall score
-- Positives identified
-- Issues grouped by category
-- Actionable recommendations
-
 ## Best Practices
 
-1. **Be Constructive** - Always pair issues with suggestions
-2. **Prioritize** - Flag security issues as critical
-3. **Be Specific** - Include line numbers and locations
-4. **Acknowledge Good** - Note positive patterns too
-5. **Be Actionable** - Give concrete improvement steps
+1. **Be Constructive**: Always pair issues with specific fixes
+2. **Prioritize**: Flag security issues as critical
+3. **Be Specific**: Include file:line references
+4. **Acknowledge Good**: Note positive patterns
+5. **Be Actionable**: Give concrete improvement steps
 
-## Integration with Multi-Agent System
-
-As a critique agent spawned in the system:
-
-### Startup Sequence
-```typescript
-// 1. Register with the agent system
-await agent_register({ role: 'critique' })
-
-// 2. Update status to show you're working
-await agent_update_status({ 
-  status: 'working', 
-  task: 'Reviewing code/task' 
-})
-
-// 3. Do the critique work using CLI tool
-// bun tools/critique-agent.ts code <file>
-// bun tools/critique-agent.ts task <task_id>
-
-// 4. Report findings
-await agent_send({
-  type: 'direct',
-  to_agent: 'orchestrator', // or broadcast
-  payload: {
-    critique_type: 'code_review',
-    file: '<file_path>',
-    score: 8.5,
-    issues_count: 3,
-    critique_path: 'memory/critiques/<critique_file>.md'
-  }
-})
-
-// 5. Update status and allow handoff
-await agent_update_status({ status: 'idle' })
-// Agent can now handoff since work is complete
-```
-
-### Listening for Task Completions
-```typescript
-// Check for tasks that need review
-const messages = await agent_messages()
-const taskCompletions = messages.filter(m => 
-  m.type === 'task_complete' || m.type === 'task_completed'
-)
-
-for (const completion of taskCompletions) {
-  // Check if task has files to review
-  if (completion.payload?.files_created || completion.payload?.files_modified) {
-    // Use CLI tool to critique
-    await bash(`bun tools/critique-agent.ts task ${completion.payload.task_id}`)
-  }
-}
-```
-
-## Example Workflow
+## Critique Agent Lifecycle
 
 ```
-1. Orchestrator spawns critique agent via Task tool
-2. Critique agent registers with role='critique'
-3. Reads task completion messages or specific file assignment
-4. Runs critique-agent.ts CLI tool for analysis
-5. Saves critique to memory/critiques/
-6. Sends findings via agent_send to orchestrator
-7. Updates status to idle and hands off
+1. agent_register(role='critique')
+2. agent_update_status(status='working', task='Reviewing...')
+3. Run critique: bun tools/critique-agent.ts code <file>
+4. Report: agent_send(type='task_complete', payload={score, issues})
+5. agent_update_status(status='idle')
+6. Agent can handoff
+```
+
+## Report Format
+
+```markdown
+# Critique: <file/task>
+
+**Score**: X/10
+**Date**: YYYY-MM-DD
+
+## Summary
+<1-2 sentence overview>
+
+## Positives
+- Good pattern 1
+- Good pattern 2
+
+## Issues
+
+### Critical
+- [ ] Issue description (file:line)
+  - **Fix**: Specific fix action
+
+### Errors
+- [ ] Issue description (file:line)
+  - **Fix**: Specific fix action
+
+### Warnings
+- [ ] Issue description (file:line)
+  - **Fix**: Specific fix action
+
+## Recommendations
+1. Priority action 1
+2. Priority action 2
 ```
 
 ## Quality Gates
 
-Use critiques as quality gates:
-- Score < 5: Block deployment, require fixes
-- Score 5-7: Allow with warnings
-- Score > 7: Approve
+| Score | Action |
+|-------|--------|
+| < 5 | Block - require fixes |
+| 5-7 | Allow with warnings |
+| > 7 | Approve |
 
-Always maintain the critique history for trend analysis and improvement tracking.
+## Orchestrator Integration
+
+```typescript
+// Auto-critique after task completion
+agent_messages().then(messages => {
+  const completed = messages.filter(m => m.type === 'task_complete')
+  for (const task of completed) {
+    if (task.payload.files_changed?.length > 0) {
+      // Spawn critique agent
+      spawn(`CRITIQUE-AGENT: Review task ${task.payload.task_id}. 
+             Files: ${task.payload.files_changed.join(', ')}.
+             Run: bun tools/critique-agent.ts task ${task.payload.task_id}`)
+    }
+  }
+})
+```
+
+All critiques saved to `memory/critiques/` for trend analysis.

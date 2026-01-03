@@ -27,6 +27,8 @@ import {
 } from "fs";
 import { join } from "path";
 import { MultiAgentCoordinator } from "../../tools/multi-agent-coordinator";
+import { getModel, getModelFallback } from "../../tools/shared/models";
+import { formatToolsForRole, formatToolsCompact } from "../../tools/shared/tool-registry";
 
 // Import modular tools
 import { createAgentTools } from "./tools/agent-tools";
@@ -426,18 +428,21 @@ export const MemoryPlugin: Plugin = async (ctx) => {
 
   // Build memory context section
   const buildMemoryContextSection = (state: any) => {
-    return `**Session**: ${state.session_count || 0}
-**Status**: ${state.status || "unknown"}
-**Active Tasks**: ${state.active_tasks?.join(", ") || "none"}
-**Total Tokens**: ${state.total_tokens_used?.toLocaleString() || 0}
+    const achievements = state.recent_achievements?.slice(0, 3) || [];
+    const achievementsList = achievements.length > 0
+      ? achievements.map((a: string) => `  - ${a}`).join("\n")
+      : "  - None";
+    
+    return `<system_state>
+Session: ${state.session_count || 0}
+Status: ${state.status || "unknown"}
+Active Tasks: ${state.active_tasks?.join(", ") || "none"}
+Total Tokens: ${state.total_tokens_used?.toLocaleString() || 0}
+</system_state>
 
-**Recent Achievements**:
-${
-  state.recent_achievements
-    ?.slice(0, 3)
-    .map((a: string) => `- ${a}`)
-    .join("\n") || "- None"
-}`;
+<recent_achievements>
+${achievementsList}
+</recent_achievements>`;
   };
 
   // Build pending tasks section
@@ -461,10 +466,14 @@ ${
         .slice(0, maxItems);
 
       if (pending.length === 0) return null;
-      return `**Pending Tasks** (${pending.length}):
-${pending
-  .map((t: any) => `- [${t.priority.toUpperCase()}] ${t.title}`)
-  .join("\n")}`;
+      
+      const taskList = pending
+        .map((t: any) => `  - [${t.priority.toUpperCase()}] ${t.title} (ID: ${t.id})`)
+        .join("\n");
+      
+      return `<pending_tasks count="${pending.length}">
+${taskList}
+</pending_tasks>`;
     } catch {
       return null;
     }
@@ -485,16 +494,23 @@ ${pending
         .filter((m: any) => !m.read);
 
       if (messages.length === 0) return null;
-      return `**Unread User Messages** (${messages.length}):
-${messages
-  .slice(-maxItems)
-  .map(
-    (m: any) =>
-      `- ${m.from}: "${m.message.slice(0, 80)}${
-        m.message.length > 80 ? "..." : ""
-      }"`
-  )
-  .join("\n")}`;
+      
+      const msgList = messages
+        .slice(-maxItems)
+        .map((m: any) => {
+          const priority = m.priority || "normal";
+          const truncatedMsg = m.message.length > 100 
+            ? m.message.slice(0, 100) + "..." 
+            : m.message;
+          return `  - [${priority}] ${m.from}: "${truncatedMsg}" (id: ${m.id})`;
+        })
+        .join("\n");
+      
+      return `<unread_user_messages count="${messages.length}" priority="HIGH">
+ADDRESS THESE FIRST - User requests have highest priority!
+${msgList}
+Use user_messages_mark_read(id) after handling each message.
+</unread_user_messages>`;
     } catch {
       return null;
     }
@@ -506,7 +522,15 @@ ${messages
     try {
       const agents = coordinator.getActiveAgents();
       if (agents.length === 0) return null;
-      return `**Multi-Agent Mode**: ${agents.length} agent(s) active`;
+      
+      const agentList = agents
+        .map((a: any) => `  - ${a.agent_id} (${a.assigned_role || 'worker'}): ${a.status || 'active'}`)
+        .join("\n");
+      
+      return `<active_agents count="${agents.length}">
+${agentList}
+Use agent_status() for full details. Use agent_messages() to read their reports.
+</active_agents>`;
     } catch {
       return null;
     }
@@ -549,25 +573,30 @@ ${messages
 
   // Format summary as markdown for context injection
   const formatSummaryAsMarkdown = (summary: any) => {
-    return `## Compaction Context (Session ${summary.session})
+    const taskList = summary.active_tasks.length > 0
+      ? summary.active_tasks.map((t: any) => `  - ${t.title} (${t.status})`).join("\n")
+      : "  - None";
+    
+    const accomplishmentList = summary.accomplishments.length > 0
+      ? summary.accomplishments.map((a: string) => `  - ${a}`).join("\n")
+      : "  - None recorded";
+    
+    return `<compaction_context session="${summary.session}">
+<status>${summary.status}</status>
 
-**Status**: ${summary.status}
-**Active Tasks**: ${
-      summary.active_tasks.length > 0
-        ? summary.active_tasks
-            .map((t: any) => `${t.title} (${t.status})`)
-            .join(", ")
-        : "none"
-    }
+<active_tasks>
+${taskList}
+</active_tasks>
 
-**Recent Accomplishments**:
-${
-  summary.accomplishments.length > 0
-    ? summary.accomplishments.map((a: string) => `- ${a}`).join("\n")
-    : "- None recorded"
-}
+<recent_accomplishments>
+${accomplishmentList}
+</recent_accomplishments>
 
-Use memory_status(), task_list(), agent_status() for full context.`;
+<recovery_tools>
+Use memory_status(), task_list(), agent_status() for full context.
+Read memory/working.md for detailed session history.
+</recovery_tools>
+</compaction_context>`;
   };
 
   // Load memory context for system prompt injection (DYNAMIC)
@@ -674,17 +703,24 @@ Use memory_status(), task_list(), agent_status() for full context.`;
       sections.sort((a, b) => a.priority - b.priority);
       const mainContent = sections.map((s) => s.content).join("\n\n");
 
-      const roleInfo = detectedRole
-        ? `\n**Detected Role**: ${detectedRole}`
+      const roleTag = detectedRole
+        ? `<detected_role>${detectedRole}</detected_role>\n`
         : "";
 
-      return `## Memory System Context
-${roleInfo}
+      // Generate tools section dynamically based on role
+      const toolsSection = formatToolsForRole(detectedRole || "worker", true);
+
+      return `<memory_system_context>
+${roleTag}
 ${mainContent}
 
-Memory Tools: memory_status, memory_search, memory_update
-Agent Tools: agent_status, agent_send, agent_messages, agent_update_status
-Multi-Agent Mode Active: Check agent_status() to see other agents working in parallel`;
+${toolsSection}
+
+<multi_agent_note>
+You are part of a multi-agent system. Use agent_status() to see other agents.
+Coordinate work via agent_send() and agent_messages().
+</multi_agent_note>
+</memory_system_context>`;
     } catch (error) {
       console.error("[Memory] Failed to load context:", error);
       return null;
@@ -1301,8 +1337,11 @@ IMPORTANT: Only the leader should persist. If you're not the leader, exit gracef
 
       // Use Bun.spawn for background process - ctx.$ doesn't support shell redirects
       try {
+        // Use configured model (with fallback support)
+        const modelToUse = getModelFallback() || getModel();
+        
         const proc = Bun.spawn(
-          ["opencode", "run", "--model", "openai/gpt-5.1-high", respawnPrompt],
+          ["opencode", "run", "--model", modelToUse, respawnPrompt],
           {
             stdin: "ignore",
             stdout: "ignore",
@@ -1313,7 +1352,7 @@ IMPORTANT: Only the leader should persist. If you're not the leader, exit gracef
         // Unref so the parent process can exit
         proc.unref();
 
-        log("INFO", "Orchestrator re-spawn command sent", { pid: proc.pid });
+        log("INFO", "Orchestrator re-spawn command sent", { pid: proc.pid, model: modelToUse });
       } catch (e) {
         log("ERROR", "Failed to re-spawn orchestrator", { error: String(e) });
       }

@@ -21,7 +21,20 @@ export function createMemoryTools(getContext: () => MemoryToolsContext) {
   return {
     memory_status: tool({
       description:
-        "Get current memory system status, active tasks, and recent achievements. Use this instead of manually reading state.json.",
+        `Get current memory system status, active tasks, and recent achievements. Use this instead of manually reading state.json.
+
+Example usage:
+- memory_status() - Full status with metrics
+- memory_status(include_metrics=false) - Quick status check
+
+Returns:
+- session: Current session number
+- status: System status message
+- active_tasks: List of in-progress work
+- recent_achievements: Last 5 accomplishments
+- total_tokens (if metrics enabled): Token usage across sessions
+
+Use this at session start to understand context.`,
       args: {
         include_metrics: tool.schema
           .boolean()
@@ -67,11 +80,24 @@ export function createMemoryTools(getContext: () => MemoryToolsContext) {
 
     memory_search: tool({
       description:
-        "Search memory for specific information (working memory, knowledge base, session history). Use this instead of manually reading multiple files.",
+        `Search memory for specific information (working memory, knowledge base, session history). Use this instead of manually reading multiple files.
+
+Example usage:
+- memory_search(query="authentication") - Search all memory sources
+- memory_search(query="bug fix", scope="knowledge") - Search only knowledge base
+- memory_search(query="error handling", scope="working") - Search recent context
+
+Scopes:
+- working: Recent context in working.md (most relevant for current work)
+- knowledge: Extracted insights from past sessions
+- sessions: Historical session records
+- all: Search everywhere (default)
+
+Returns matched lines/entries with source attribution.`,
       args: {
         query: tool.schema
           .string()
-          .describe("Search query (keywords or phrase)"),
+          .describe("Search query (keywords or phrase to find)"),
         scope: tool.schema
           .enum(["working", "knowledge", "sessions", "all"])
           .describe(
@@ -145,7 +171,18 @@ export function createMemoryTools(getContext: () => MemoryToolsContext) {
 
     memory_update: tool({
       description:
-        "Update memory system state (add task, update status, record achievement). Use this instead of manually editing state.json.",
+        `Update memory system state (add task, update status, record achievement). Use this instead of manually editing state.json.
+
+Example usage:
+- memory_update(action="add_task", data="Implement user auth")
+- memory_update(action="complete_task", data="Implement user auth")
+- memory_update(action="update_status", data="Working on auth system refactor")
+- memory_update(action="add_achievement", data="Reduced API latency by 50%")
+
+Notes:
+- Achievements auto-prefixed with session number
+- Only last 5 achievements kept (FIFO)
+- Status visible to other agents via memory_status()`,
       args: {
         action: tool.schema
           .enum([

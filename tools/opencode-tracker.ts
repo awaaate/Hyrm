@@ -48,12 +48,15 @@ import {
   getOpenCodeToolCalls,
   getOpenCodeSessionStats,
   getOpenCodeToolUsageStats,
+  getOpenCodeAggregateTokenStats,
   searchOpenCodeSessions,
   // Re-export types
   type OpenCodeSession,
   type OpenCodeMessage,
   type OpenCodePart,
   type ToolCallInfo,
+  type OpenCodeSessionStatsResult,
+  type AggregateTokenStats,
 } from "./shared";
 
 // ============================================================================
@@ -98,6 +101,19 @@ function formatDuration(ms: number): string {
   if (ms < 1000) return `${ms}ms`;
   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
   return `${(ms / 60000).toFixed(1)}m`;
+}
+
+function formatTokens(count: number): string {
+  if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+  if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
+  return String(count);
+}
+
+function formatCost(cost: number): string {
+  if (cost === 0) return "$0.00";
+  if (cost < 0.01) return `$${cost.toFixed(4)}`;
+  if (cost < 1) return `$${cost.toFixed(3)}`;
+  return `$${cost.toFixed(2)}`;
 }
 
 // Interface for synced session data
@@ -218,10 +234,16 @@ async function cmdSessions(limit: number = 20, verbose: boolean = false) {
       `  ${c.cyan}Updated:${c.reset} ${timeAgo} ${c.dim}(${formatTime(session.time.updated)})${c.reset}`
     );
     
-    // NEW: Show tool count and duration
+    // Show tool count, duration, and tokens
+    const tokenInfo = stats.tokens.total > 0 
+      ? `  ${c.cyan}Tokens:${c.reset} ${formatTokens(stats.tokens.total)} (${formatTokens(stats.tokens.input)}in/${formatTokens(stats.tokens.output)}out)`
+      : "";
+    const costInfo = stats.cost > 0 ? ` ${c.dim}${formatCost(stats.cost)}${c.reset}` : "";
+    
     console.log(
       `  ${c.cyan}Tools:${c.reset} ${stats.toolCount} calls  ` +
-      `${c.cyan}Duration:${c.reset} ${formatDuration(stats.duration)}`
+      `${c.cyan}Duration:${c.reset} ${formatDuration(stats.duration)}` +
+      tokenInfo + costInfo
     );
     
     if (session.summary?.files) {
@@ -427,6 +449,20 @@ async function cmdView(sessionId: string) {
   console.log(`  ${c.cyan}Duration:${c.reset} ${formatDuration(stats.duration)}`);
   if (stats.topics.length > 0) {
     console.log(`  ${c.cyan}Topics:${c.reset} ${stats.topics.join(", ")}`);
+  }
+  
+  // Token summary
+  if (stats.tokens.total > 0) {
+    console.log(`\n${c.bold}Token Usage:${c.reset}`);
+    console.log(`  ${c.cyan}Total:${c.reset} ${formatTokens(stats.tokens.total)}`);
+    console.log(`  ${c.cyan}Input:${c.reset} ${formatTokens(stats.tokens.input)} | ${c.cyan}Output:${c.reset} ${formatTokens(stats.tokens.output)}`);
+    if (stats.tokens.reasoning > 0) {
+      console.log(`  ${c.cyan}Reasoning:${c.reset} ${formatTokens(stats.tokens.reasoning)}`);
+    }
+    console.log(`  ${c.cyan}Cache:${c.reset} ${formatTokens(stats.tokens.cacheRead)} read / ${formatTokens(stats.tokens.cacheWrite)} write`);
+    if (stats.cost > 0) {
+      console.log(`  ${c.cyan}Cost:${c.reset} ${formatCost(stats.cost)}`);
+    }
   }
 }
 
@@ -799,6 +835,27 @@ async function cmdStats() {
   console.log(`${c.cyan}Parts:${c.reset} ${totalParts}`);
   console.log(`${c.cyan}Tool Calls:${c.reset} ${totalToolCalls}`);
 
+  // Token statistics
+  console.log(`\n${c.bold}Token Usage:${c.reset}`);
+  const tokenStats = getOpenCodeAggregateTokenStats(sessions.length);
+  
+  console.log(`  ${c.cyan}Total Tokens:${c.reset} ${formatTokens(tokenStats.tokens.total)}`);
+  console.log(`    ${c.dim}Input:${c.reset}     ${formatTokens(tokenStats.tokens.input)}`);
+  console.log(`    ${c.dim}Output:${c.reset}    ${formatTokens(tokenStats.tokens.output)}`);
+  if (tokenStats.tokens.reasoning > 0) {
+    console.log(`    ${c.dim}Reasoning:${c.reset} ${formatTokens(tokenStats.tokens.reasoning)}`);
+  }
+  console.log(`    ${c.dim}Cache R:${c.reset}   ${formatTokens(tokenStats.tokens.cacheRead)}`);
+  console.log(`    ${c.dim}Cache W:${c.reset}   ${formatTokens(tokenStats.tokens.cacheWrite)}`);
+  
+  console.log(`  ${c.cyan}Total Cost:${c.reset} ${formatCost(tokenStats.cost)}`);
+  console.log(`  ${c.cyan}Sessions w/tokens:${c.reset} ${tokenStats.sessionsWithTokens}/${tokenStats.totalSessions}`);
+  
+  console.log(`  ${c.cyan}Avg per Session:${c.reset}`);
+  console.log(`    ${c.dim}Total:${c.reset}  ${formatTokens(tokenStats.averagePerSession.total)}`);
+  console.log(`    ${c.dim}Input:${c.reset}  ${formatTokens(tokenStats.averagePerSession.input)}`);
+  console.log(`    ${c.dim}Output:${c.reset} ${formatTokens(tokenStats.averagePerSession.output)}`);
+
   console.log(`\n${c.bold}Top Tools:${c.reset}`);
   const sortedTools = Object.entries(toolUsage)
     .sort((a, b) => b[1] - a[1])
@@ -1114,6 +1171,122 @@ async function cmdLearn(days: number = 7) {
 }
 
 /**
+ * Show detailed token usage for sessions
+ */
+async function cmdTokens(sessionIdOrLimit?: string) {
+  // If arg is a session ID, show tokens for that session
+  if (sessionIdOrLimit && sessionIdOrLimit.startsWith("ses_")) {
+    const sessionId = sessionIdOrLimit;
+    console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}`);
+    console.log(`${c.bold}${c.cyan}  TOKEN USAGE: ${sessionId}${c.reset}`);
+    console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}\n`);
+    
+    const session = getOpenCodeSessionById(sessionId);
+    if (!session) {
+      console.log(`${c.red}Session not found: ${sessionId}${c.reset}`);
+      return;
+    }
+    
+    console.log(`${c.cyan}Title:${c.reset} ${session.title}`);
+    console.log(`${c.cyan}Updated:${c.reset} ${formatTimeAgo(session.time.updated)}\n`);
+    
+    const stats = getOpenCodeSessionStats(sessionId);
+    
+    // Token breakdown table
+    console.log(`${c.bold}Token Breakdown:${c.reset}`);
+    console.log(`  ┌─────────────────┬────────────┬──────────┐`);
+    console.log(`  │ ${c.bold}Type${c.reset}            │ ${c.bold}Tokens${c.reset}     │ ${c.bold}%${c.reset}        │`);
+    console.log(`  ├─────────────────┼────────────┼──────────┤`);
+    
+    const total = stats.tokens.total || 1; // Avoid division by zero
+    const pct = (n: number) => ((n / total) * 100).toFixed(1).padStart(6) + "%";
+    
+    console.log(`  │ ${c.cyan}Input${c.reset}           │ ${formatTokens(stats.tokens.input).padStart(10)} │ ${pct(stats.tokens.input)} │`);
+    console.log(`  │ ${c.cyan}Output${c.reset}          │ ${formatTokens(stats.tokens.output).padStart(10)} │ ${pct(stats.tokens.output)} │`);
+    if (stats.tokens.reasoning > 0) {
+      console.log(`  │ ${c.cyan}Reasoning${c.reset}       │ ${formatTokens(stats.tokens.reasoning).padStart(10)} │ ${pct(stats.tokens.reasoning)} │`);
+    }
+    console.log(`  ├─────────────────┼────────────┼──────────┤`);
+    console.log(`  │ ${c.bold}Total${c.reset}           │ ${formatTokens(stats.tokens.total).padStart(10)} │  100.0% │`);
+    console.log(`  └─────────────────┴────────────┴──────────┘`);
+    
+    console.log(`\n${c.bold}Cache Usage:${c.reset}`);
+    console.log(`  ${c.cyan}Cache Read:${c.reset}  ${formatTokens(stats.tokens.cacheRead)}`);
+    console.log(`  ${c.cyan}Cache Write:${c.reset} ${formatTokens(stats.tokens.cacheWrite)}`);
+    
+    const cacheHitRate = stats.tokens.input > 0 
+      ? ((stats.tokens.cacheRead / (stats.tokens.input + stats.tokens.cacheRead)) * 100).toFixed(1)
+      : "0.0";
+    console.log(`  ${c.cyan}Cache Hit Rate:${c.reset} ${cacheHitRate}%`);
+    
+    if (stats.cost > 0) {
+      console.log(`\n${c.bold}Cost:${c.reset} ${formatCost(stats.cost)}`);
+    }
+    
+    return;
+  }
+  
+  // Otherwise show aggregate tokens for recent sessions
+  const limit = parseInt(sessionIdOrLimit || "20") || 20;
+  
+  console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}`);
+  console.log(`${c.bold}${c.cyan}  TOKEN USAGE SUMMARY (Last ${limit} Sessions)${c.reset}`);
+  console.log(`${c.bold}${c.cyan}═══════════════════════════════════════════════════════════════${c.reset}\n`);
+  
+  const sessions = getAllOpenCodeSessions(limit);
+  const aggregateStats = getOpenCodeAggregateTokenStats(limit);
+  
+  // Aggregate stats
+  console.log(`${c.bold}Aggregate Statistics:${c.reset}`);
+  console.log(`  ${c.cyan}Total Tokens:${c.reset} ${formatTokens(aggregateStats.tokens.total)}`);
+  console.log(`    Input:     ${formatTokens(aggregateStats.tokens.input)}`);
+  console.log(`    Output:    ${formatTokens(aggregateStats.tokens.output)}`);
+  if (aggregateStats.tokens.reasoning > 0) {
+    console.log(`    Reasoning: ${formatTokens(aggregateStats.tokens.reasoning)}`);
+  }
+  console.log(`  ${c.cyan}Cache Usage:${c.reset}`);
+  console.log(`    Read:      ${formatTokens(aggregateStats.tokens.cacheRead)}`);
+  console.log(`    Write:     ${formatTokens(aggregateStats.tokens.cacheWrite)}`);
+  console.log(`  ${c.cyan}Total Cost:${c.reset} ${formatCost(aggregateStats.cost)}`);
+  console.log(`  ${c.cyan}Sessions:${c.reset} ${aggregateStats.sessionsWithTokens}/${aggregateStats.totalSessions} have token data`);
+  console.log(`  ${c.cyan}Avg/Session:${c.reset} ${formatTokens(aggregateStats.averagePerSession.total)}`);
+  
+  // Per-session breakdown
+  console.log(`\n${c.bold}Per-Session Breakdown:${c.reset}\n`);
+  
+  // Header
+  console.log(
+    `  ${c.dim}${"Session".padEnd(20)}${c.reset} ` +
+    `${c.dim}${"Title".padEnd(25)}${c.reset} ` +
+    `${c.dim}${"Tokens".padStart(10)}${c.reset} ` +
+    `${c.dim}${"In".padStart(8)}${c.reset} ` +
+    `${c.dim}${"Out".padStart(8)}${c.reset} ` +
+    `${c.dim}${"Cost".padStart(8)}${c.reset}`
+  );
+  console.log(`  ${c.dim}${"─".repeat(85)}${c.reset}`);
+  
+  for (const session of sessions) {
+    const stats = getOpenCodeSessionStats(session.id);
+    
+    if (stats.tokens.total === 0) continue; // Skip sessions without token data
+    
+    const shortId = session.id.slice(-15);
+    const title = truncate(session.title, 23);
+    
+    console.log(
+      `  ${c.cyan}${shortId.padEnd(20)}${c.reset} ` +
+      `${title.padEnd(25)} ` +
+      `${formatTokens(stats.tokens.total).padStart(10)} ` +
+      `${formatTokens(stats.tokens.input).padStart(8)} ` +
+      `${formatTokens(stats.tokens.output).padStart(8)} ` +
+      `${formatCost(stats.cost).padStart(8)}`
+    );
+  }
+  
+  console.log(`\n${c.dim}Tip: Use 'tokens <sessionId>' for detailed session breakdown${c.reset}`);
+}
+
+/**
  * Show session tree - parent-child relationships
  * Visualizes which orchestrator spawned which workers
  */
@@ -1332,6 +1505,10 @@ async function main() {
       await cmdTree(parseInt(args[1]) || 50);
       break;
 
+    case "tokens":
+      await cmdTokens(args[1]);
+      break;
+
     case "help":
     case "--help":
     case "-h":
@@ -1342,10 +1519,11 @@ Track and log all OpenCode conversations with full traceability.
 
 ${c.cyan}Commands:${c.reset}
   ${c.bold}View & Inspect:${c.reset}
-  sessions [limit]     List all sessions with metadata, tool counts, duration
+  sessions [limit]     List all sessions with metadata, tool counts, tokens
   messages <sessionId> Show all messages for a session (compact)
   view <sessionId>     Full conversation view with all parts and tool I/O
   tools <sessionId>    Show all tool calls with inputs/outputs
+  tokens [limit|id]    Show token usage (aggregate or per-session)
   search <query>       Search across sessions (messages, tools, outputs)
 
   ${c.bold}Export & Sync:${c.reset}
@@ -1353,7 +1531,7 @@ ${c.cyan}Commands:${c.reset}
   sync                 Sync OpenCode sessions to memory system
 
   ${c.bold}Analysis:${c.reset}
-  stats                Show statistics across all sessions
+  stats                Show statistics across all sessions (incl. tokens)
   learn [days]         Extract learnings from recent sessions (default: 7 days)
   tree [limit]         Show parent-child session relationships (default: 50)
 
@@ -1361,7 +1539,7 @@ ${c.cyan}Commands:${c.reset}
   watch                Watch for new messages in real-time
 
 ${c.cyan}Examples:${c.reset}
-  ${c.dim}# List recent sessions with tool counts${c.reset}
+  ${c.dim}# List recent sessions with tool counts and tokens${c.reset}
   bun tools/opencode-tracker.ts sessions
 
   ${c.dim}# View full conversation with all tool calls${c.reset}
@@ -1369,6 +1547,12 @@ ${c.cyan}Examples:${c.reset}
 
   ${c.dim}# See all tool calls for a session${c.reset}
   bun tools/opencode-tracker.ts tools ses_xxx
+
+  ${c.dim}# Show token usage summary for recent sessions${c.reset}
+  bun tools/opencode-tracker.ts tokens
+
+  ${c.dim}# Show detailed token breakdown for a session${c.reset}
+  bun tools/opencode-tracker.ts tokens ses_xxx
 
   ${c.dim}# Search for error messages${c.reset}
   bun tools/opencode-tracker.ts search "error"

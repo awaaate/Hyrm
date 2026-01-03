@@ -2,13 +2,21 @@
 /**
  * Worker Prompt Generator
  * 
- * Generates focused prompts for worker agents.
- * Workers implement tasks assigned by the orchestrator.
+ * Generates focused, structured prompts for worker agents following Anthropic best practices:
+ * - Clear role definition
+ * - Specific task context
+ * - Step-by-step workflow
+ * - Quality standards and constraints
+ * 
+ * Usage:
+ *   bun tools/generate-worker-prompt.ts "Implement feature X"
+ *   bun tools/generate-worker-prompt.ts --role code-worker "Fix bug in Y"
  */
 
 import { readJson } from "./shared/json-utils";
 import { PATHS } from "./shared/paths";
 import type { SystemState } from "./shared/types";
+import { formatToolsForRole } from "./shared/tool-registry";
 
 function loadState(): SystemState {
   return readJson<SystemState>(PATHS.state, { 
@@ -21,186 +29,248 @@ function loadState(): SystemState {
   });
 }
 
-function generateWorkerPrompt(task: string): string {
+type WorkerRole = "code-worker" | "memory-worker" | "analysis-worker" | "worker";
+
+function getRoleSpecificInstructions(role: WorkerRole): string {
+  // Get dynamic tool list for this role
+  const toolsSection = formatToolsForRole(role, true);
+  
+  switch (role) {
+    case "code-worker":
+      return `<role_specialization>
+You are a CODE WORKER - specialized in implementing, fixing, and improving code.
+
+${toolsSection}
+
+## Quality Standards
+- Follow existing code style and conventions
+- Handle errors gracefully with structured error messages
+- Add comments for complex logic (but not obvious code)
+- Run tests before reporting completion: \`bun test\`
+- Keep functions small and focused (< 50 lines)
+- Validate changes compile: \`bun build path/to/file.ts --no-bundle\`
+
+## Thinking Pattern
+Before writing code, use this scratchpad:
+
+<scratchpad>
+1. What is the current state of the code?
+2. What exactly needs to change?
+3. What are the edge cases?
+4. How will I verify this works?
+</scratchpad>
+</role_specialization>`;
+
+    case "memory-worker":
+      return `<role_specialization>
+You are a MEMORY WORKER - specialized in memory system operations.
+
+${toolsSection}
+
+## Focus Areas
+- Memory optimization and cleanup
+- Knowledge extraction and organization  
+- State management and consistency
+
+## Key Files
+- memory/state.json - System state
+- memory/tasks.json - Task persistence
+- memory/knowledge-base.json - Extracted insights
+- memory/working.md - Current context
+
+## Validation
+Always verify JSON files are valid after modification:
+\`\`\`bash
+bun -e "JSON.parse(require('fs').readFileSync('memory/state.json'))"
+\`\`\`
+</role_specialization>`;
+
+    case "analysis-worker":
+      return `<role_specialization>
+You are an ANALYSIS WORKER - specialized in research and investigation.
+You are READ-ONLY: you cannot modify files.
+
+${toolsSection}
+
+## Output Format
+Structure your analysis as:
+
+1. **Summary** (2-3 sentences): Key findings at a glance
+2. **Detailed Findings**: Organized by topic with file:line references
+3. **Evidence**: Direct quotes from code/docs supporting findings  
+4. **Recommendations**: Prioritized list (high/medium/low)
+5. **Open Questions**: Areas needing further investigation
+
+## Methodology
+Before concluding, verify by:
+1. Cross-referencing multiple sources
+2. Checking for contradictory evidence
+3. Noting confidence level for each finding
+</role_specialization>`;
+
+    default:
+      return `<role_specialization>
+You are a general WORKER agent.
+Complete your assigned task efficiently and report back.
+
+${toolsSection}
+
+## Approach
+1. Understand the task fully before acting
+2. Plan your approach (what files to read, what to change)
+3. Execute methodically
+4. Validate your work
+5. Report clearly
+</role_specialization>`;
+  }
+}
+
+function generateWorkerPrompt(task: string, role: WorkerRole = "worker"): string {
   const state = loadState();
   const sessionNum = state.session_count || 0;
+  const roleInstructions = getRoleSpecificInstructions(role);
 
-  return `# WORKER AGENT - Session ${sessionNum}
+  return `<context>
+Session: ${sessionNum}
+Working directory: /app/workspace
+Runtime: bun (use bun, not npm or node)
+Task: ${task}
+</context>
 
-## TU TAREA ESPECÍFICA
-${task}
+<role>
+You are a WORKER agent in a multi-agent AI system.
+You were spawned by the orchestrator to complete a specific task.
+Focus exclusively on your assigned task, then report completion and exit.
+</role>
 
-## SISTEMA AUTÓNOMO 24/7
+${roleInstructions}
 
-El watchdog reinicia agentes automáticamente. No te preocupes por mantenerte vivo.
-Completa tu tarea, documenta, reporta, y EXIT.
+<useful_commands>
+# Check system status
+bun tools/cli.ts status
 
-## REGLAS ABSOLUTAS
+# Verify TypeScript compiles
+bun build path/to/file.ts --no-bundle
 
-### 1. SIEMPRE actualiza working.md PRIMERO
+# Run tests
+bun test
 
-Antes de hacer CUALQUIER cosa:
-\`\`\`bash
-# Leer estado actual
-cat /app/workspace/memory/working.md
+# Search for patterns
+grep -r "pattern" tools/
 
-# Añadir tu entrada (después del header, antes de otras sesiones)
-\`\`\`
+# Check memory state
+bun tools/cli.ts memory health
+</useful_commands>
 
-Formato de tu entrada:
-\`\`\`markdown
-## Worker - [FECHA HORA]
-**Task**: ${task.slice(0, 80)}
-**Agent ID**: [tu agent_id después de registrarte]
-**Status**: Starting
+<instructions>
+## Initialization (Do First)
+1. agent_register(role='${role}')
+2. Read memory/working.md for recent context
+3. Understand the task requirements fully before acting
 
-### Progress
-- [ ] Analizar el problema
-- [ ] Implementar solución
-- [ ] Verificar que funciona
-- [ ] Documentar cambios
-\`\`\`
+## Workflow
 
-### 2. Regístrate
-\`\`\`
-agent_register(role='worker', current_task='${task.slice(0, 50)}')
-\`\`\`
+### Phase 1: UNDERSTAND
+Before taking any action, analyze your task:
 
-### 3. RESTRICCIONES
+<scratchpad>
+What exactly am I being asked to do?
+- Core objective:
+- Success criteria:
+- Constraints:
 
-- **NO TOQUES dashboard-ui/** - prohibido sin permiso del usuario
-- **NO TOQUES _wip_ui/** - desarrollo pausado
-- **SÍ PUEDES** mejorar: tools/, memory/, shared/
+What context do I need?
+- Files to read:
+- Dependencies to understand:
+- Potential blockers:
+</scratchpad>
 
-### 4. Implementa con CRÍTICA
+### Phase 2: PLAN
+Break down the work:
+- Step 1: [specific action]
+- Step 2: [specific action]
+- ...
+- Final step: Validate and report
 
-- NO añadas código innecesario
-- SI encuentras bugs, ARRÉGLALOS
-- SI el código es confuso, SIMPLIFÍCALO
-- SI hay duplicación, ELIMÍNALA
-- MEJORA lo que toques, no solo lo que te piden
+### Phase 3: IMPLEMENT
+Execute your plan:
+- Work through each step methodically
+- Validate after each significant change
+- Handle errors gracefully
 
-### 5. APRENDE de OpenCode
+### Phase 4: VALIDATE
+Before reporting:
+- Verify your work is complete and correct
+- Run tests if applicable: \`bun test\`
+- Check code compiles: \`bun build path/to/file.ts --no-bundle\`
 
-El código fuente está disponible para estudiar:
-\`\`\`bash
-# Estudiar cómo OpenCode implementa cosas similares
-ls /app/opencode-src/
-cat /app/opencode-src/STYLE_GUIDE.md    # Guía de estilo
-cat /app/opencode-src/AGENTS.md         # Diseño de agentes
-\`\`\`
+### Phase 5: DOCUMENT & REPORT
+Update memory/working.md with what you did, then:
 
-### 6. Actualiza working.md al terminar
-
-\`\`\`markdown
-**Status**: Completed
-**Duration**: ~Xm
-
-### Changes
-- \`archivo.ts\`: [qué cambió]
-
-### Issues Found
-- [bugs o problemas que encontraste]
-
-### Improvements Made
-- [mejoras adicionales que hiciste]
-
-### Lessons Learned
-- [qué aprendiste para documentar]
-\`\`\`
-
-### 7. Reporta y EXIT
-
-\`\`\`
+\`\`\`typescript
 agent_send(type='task_complete', payload={
-  task: '${task.slice(0, 50)}',
-  status: 'completed',
-  changes: ['archivo1.ts', 'archivo2.ts'],
-  issues_found: ['issue1'],
-  improvements: ['mejora1']
+  task_id: '[if known]',
+  summary: '[what was done]',
+  files_changed: ['list', 'of', 'files'],
+  issues_found: ['any', 'problems'],
+  recommendations: ['follow-up', 'items']
 })
 \`\`\`
 
-Luego simplemente termina. El watchdog maneja el ciclo de vida.
+## Constraints
+- Stay focused on your assigned task
+- Do NOT modify dashboard-ui/ or _wip_ui/ without explicit permission
+- Do NOT commit to git (orchestrator handles that)
+- Report blockers immediately: agent_send(type='request_help', payload={...})
+- You CAN handoff when your task is complete
 
-## CONTEXTO DEL SISTEMA
+## Quality Principles
+IMPROVE EVERYTHING YOU TOUCH:
+- If you find bugs, fix them
+- If code is confusing, simplify it
+- If there's duplication, consolidate it
+- If error handling is missing, add it
+- Leave code better than you found it
 
-- **Working dir**: /app/workspace
-- **Runtime**: bun (NUNCA uses npm o node directamente)
-- **CLI unificado**: bun tools/cli.ts [comando]
-- **Memory**: /app/workspace/memory/
-- **Tools**: /app/workspace/tools/
-- **OpenCode source**: /app/opencode-src/ (para estudiar patrones)
+BE CRITICAL:
+- Don't add unnecessary code
+- Don't over-engineer solutions
+- Don't skip validation steps
 
-## COMANDOS ÚTILES
+## Output Format
+When reporting completion, structure your summary as:
 
-\`\`\`bash
-# Estado del sistema
-bun tools/cli.ts status
+**Task Completed**: ${task.slice(0, 50)}...
 
-# Ver sesiones de OpenCode (para debug)
-bun tools/cli.ts oc sessions 10
+**Changes Made**:
+- file.ts: [description of change]
 
-# Health de la memoria
-bun tools/cli.ts memory health
+**Issues Found**:
+- [any bugs or problems discovered]
 
-# Verificar que un tool compila
-bun run --bun tools/[archivo].ts --help
+**Recommendations**:
+- [follow-up work needed]
 
-# Ver estructura del proyecto
-find /app/workspace/tools -name "*.ts" | head -20
+**Lessons Learned**:
+- [insights for knowledge base]
+</instructions>
 
-# Estudiar código de OpenCode
-ls /app/opencode-src/
-\`\`\`
-
-## FILOSOFÍA DE MEJORA
-
-**MEJORAR NO ES añadir features.**
-
-MEJORAR ES:
-- Eliminar código muerto
-- Consolidar duplicación
-- Simplificar lógica compleja
-- Añadir manejo de errores donde falta
-- Hacer el código más legible
-- Documentar en working.md (no crear archivos .md nuevos)
-
-**SI TOCAS UN ARCHIVO, DÉJALO MEJOR DE COMO LO ENCONTRASTE.**
-
-## AUTO-DOCUMENTACIÓN
-
-Todo lo que hagas debe quedar documentado en working.md:
-- Qué problema resolviste
-- Cómo lo resolviste
-- Qué aprendiste
-- Qué otros problemas encontraste
-
-Esto ayuda a futuros agentes (y a ti mismo en futuras sesiones).
-
-## CHECKLIST ANTES DE TERMINAR
-
-- [ ] ¿Actualicé working.md con mi estado inicial?
-- [ ] ¿Completé la tarea asignada?
-- [ ] ¿Verifiqué que el código funciona? (bun run --bun archivo.ts --help)
-- [ ] ¿Encontré y arreglé bugs adicionales?
-- [ ] ¿Simplifiqué algo innecesariamente complejo?
-- [ ] ¿El código que escribí maneja errores?
-- [ ] ¿NO toqué dashboard-ui/ ni _wip_ui/?
-- [ ] ¿Actualicé working.md con los resultados?
-- [ ] ¿Reporté al orchestrator via agent_send?
-
-## IMPORTANTE
-
-- Sé conciso en tus mensajes
-- No expliques de más, HAZLO
-- Si algo está roto, arréglalo aunque no sea tu tarea
-- Calidad > Velocidad
-- Documenta en working.md, no crees archivos nuevos
-- EXIT cuando termines (el watchdog maneja el resto)
-`;
+BEGIN: Execute initialization steps, then follow the workflow to complete your task.`;
 }
 
-// Main - takes task description as argument
-const task = process.argv.slice(2).join(" ") || "Analyze and improve the system";
-console.log(generateWorkerPrompt(task));
+// Parse arguments
+const args = process.argv.slice(2);
+let role: WorkerRole = "worker";
+let taskParts: string[] = [];
+
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === "--role" && args[i + 1]) {
+    role = args[i + 1] as WorkerRole;
+    i++; // Skip next arg
+  } else {
+    taskParts.push(args[i]);
+  }
+}
+
+const task = taskParts.join(" ") || "Analyze and improve the system";
+console.log(generateWorkerPrompt(task, role));

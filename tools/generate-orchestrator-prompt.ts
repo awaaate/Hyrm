@@ -2,11 +2,11 @@
 /**
  * Dynamic Orchestrator Prompt Generator
  * 
- * Generates a customized prompt for the orchestrator based on:
- * - Current system state
- * - Pending tasks
- * - Recent achievements
- * - Active agents
+ * Generates a structured prompt for the orchestrator following Anthropic best practices:
+ * - Clear role definition with XML tags
+ * - Explicit context about current system state
+ * - Step-by-step instructions
+ * - Constraints and output format
  * 
  * Usage:
  *   bun tools/generate-orchestrator-prompt.ts > /tmp/orchestrator-prompt.txt
@@ -15,11 +15,13 @@
 
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
+import { formatToolsForRole } from "./shared/tool-registry";
 
 const MEMORY_DIR = join(process.cwd(), "memory");
 const STATE_PATH = join(MEMORY_DIR, "state.json");
 const TASKS_PATH = join(MEMORY_DIR, "tasks.json");
 const REGISTRY_PATH = join(MEMORY_DIR, "agent-registry.json");
+const USER_MESSAGES_PATH = join(MEMORY_DIR, "user-messages.jsonl");
 
 interface Task {
   id: string;
@@ -35,6 +37,14 @@ interface State {
   status: string;
   active_tasks: string[];
   recent_achievements: string[];
+}
+
+interface Agent {
+  agent_id: string;
+  assigned_role: string;
+  status: string;
+  current_task?: string;
+  last_heartbeat: string;
 }
 
 function loadState(): State {
@@ -65,144 +75,177 @@ function loadPendingTasks(): Task[] {
     });
 }
 
-function loadActiveAgents(): number {
-  if (!existsSync(REGISTRY_PATH)) return 0;
+function loadActiveAgents(): Agent[] {
+  if (!existsSync(REGISTRY_PATH)) return [];
   const registry = JSON.parse(readFileSync(REGISTRY_PATH, "utf-8"));
   const now = Date.now();
   const fiveMinutesAgo = now - 5 * 60 * 1000;
-  return (registry.agents || []).filter((a: any) => {
+  return (registry.agents || []).filter((a: Agent) => {
     const lastHB = new Date(a.last_heartbeat).getTime();
     return lastHB > fiveMinutesAgo;
-  }).length;
+  });
+}
+
+function loadUnreadUserMessages(): number {
+  if (!existsSync(USER_MESSAGES_PATH)) return 0;
+  const content = readFileSync(USER_MESSAGES_PATH, "utf-8");
+  const lines = content.trim().split("\n").filter(Boolean);
+  let unread = 0;
+  for (const line of lines) {
+    try {
+      const msg = JSON.parse(line);
+      if (!msg.read) unread++;
+    } catch {}
+  }
+  return unread;
 }
 
 function generatePrompt(): string {
   const state = loadState();
   const pendingTasks = loadPendingTasks();
   const activeAgents = loadActiveAgents();
+  const unreadMessages = loadUnreadUserMessages();
 
   // Format pending tasks
   let taskSection = "";
   if (pendingTasks.length > 0) {
+    const taskList = pendingTasks
+      .slice(0, 5)
+      .map((t, i) => `  ${i + 1}. [${t.priority.toUpperCase()}] ${t.title} (ID: ${t.id})`)
+      .join("\n");
     taskSection = `
-## PENDING TASKS (${pendingTasks.length} total):
-${pendingTasks
-  .slice(0, 5)
-  .map(
-    (t, i) =>
-      `${i + 1}. [${t.priority.toUpperCase()}] ${t.title}${
-        t.description ? ` - ${t.description}` : ""
-      }
-   ID: ${t.id}`
-  )
-  .join("\n")}
-${pendingTasks.length > 5 ? `\n... and ${pendingTasks.length - 5} more tasks` : ""}
-
-Use task_claim(task_id) to start working on a task.
-`;
+<pending_tasks count="${pendingTasks.length}">
+${taskList}
+${pendingTasks.length > 5 ? `  ... and ${pendingTasks.length - 5} more` : ""}
+</pending_tasks>`;
   } else {
     taskSection = `
-## NO PENDING TASKS
-Create new tasks with task_create or explore improvements to the system.
-`;
+<pending_tasks count="0">
+No pending tasks. Consider creating improvement tasks or checking for user requests.
+</pending_tasks>`;
   }
 
-  // Format recent achievements
-  const achievementsSection =
-    state.recent_achievements?.length > 0
-      ? `
-## RECENT ACHIEVEMENTS:
-${state.recent_achievements.slice(0, 3).map((a) => `- ${a}`).join("\n")}
-`
-      : "";
+  // Format active agents
+  let agentSection = "";
+  if (activeAgents.length > 0) {
+    const agentList = activeAgents
+      .map((a) => `  - ${a.agent_id} (${a.assigned_role}): ${a.status}${a.current_task ? ` - ${a.current_task}` : ""}`)
+      .join("\n");
+    agentSection = `
+<active_agents count="${activeAgents.length}">
+${agentList}
+</active_agents>`;
+  }
 
-  const prompt = `
-You are the MAIN ORCHESTRATOR AGENT resuming work (auto-restarted by watchdog).
+  // Format achievements
+  let achievementSection = "";
+  if (state.recent_achievements?.length > 0) {
+    const achievementList = state.recent_achievements
+      .slice(0, 3)
+      .map((a) => `  - ${a}`)
+      .join("\n");
+    achievementSection = `
+<recent_achievements>
+${achievementList}
+</recent_achievements>`;
+  }
 
-## IMMEDIATE FIRST ACTIONS (Do these NOW):
-1. Call agent_set_handoff with enabled=false - YOU MUST NEVER STOP
-2. Call agent_register with role='orchestrator'
-3. Call memory_status to see current state
-4. Read memory/working.md for context from previous sessions
-5. Check user_messages_read for any unread user requests
-6. Load skill('agent-orchestrator') for orchestration guidance
+  const prompt = `<context>
+## System State
+Session: ${state.session_count}
+Status: ${state.status || "unknown"}
+Unread user messages: ${unreadMessages}
+Active agents: ${activeAgents.length}
+Pending tasks: ${pendingTasks.length}
+${taskSection}
+${agentSection}
+${achievementSection}
+</context>
 
-## CONTEXT:
-- Session count: ${state.session_count}
-- You were auto-restarted by the watchdog system
-- Check active_tasks in memory_status for pending work
-${activeAgents > 0 ? `- ${activeAgents} agent(s) currently active - check agent_status()` : ""}
-${taskSection}${achievementsSection}
-## AVAILABLE SKILLS (Load with skill tool):
-- **agent-orchestrator**: Orchestration patterns and mission guidance
-- **memory-manager**: Memory system management and optimization
-- **multi-agent-patterns**: Collaboration patterns (Task Decomposition, Result Aggregation, Peer Review, Consensus, Checkpoint, Pipeline)
+<role>
+You are the ORCHESTRATOR - the persistent coordinator of a multi-agent AI system.
+You were auto-restarted by the watchdog.
+</role>
 
-## LEADER ELECTION & SAFETY:
-You are part of a single-leader orchestrator model.
+<leader_election>
+You are part of a single-leader orchestrator model:
+- Leader lease stored in memory/orchestrator-state.json
+- agent_register(role='orchestrator') triggers leader election
+- agent_status() returns leader info in the 'leader' field
+- If you are NOT the leader, exit gracefully and let the actual leader run
+- If leader lease is expired, you may become the new leader
+</leader_election>
 
-- The leader lease is stored in `memory/orchestrator-state.json` with fields { leader_id, leader_epoch, last_heartbeat, ttl_ms }.
-- When you call agent_register(role='orchestrator'), the underlying coordinator will attempt to acquire or refresh this lease for you; only the recorded leader_id should behave as the main orchestrator.
-- Call agent_status() to inspect current agents; its response includes a `leader` field with the current lease (when available).
-- If agent_status().leader?.agent_id is not your agent id and the lease is still healthy, treat yourself as a follower: do not spawn new workers or coordinate tasks; exit quickly and let the leader run.
-- If the lease is missing or expired, your process may become leader. Once leader, monitor for stale orchestrators (role='orchestrator' with a different agent_id and old last_heartbeat) and prefer to let them exit or be cleaned up.
+<spawning_workers>
+To spawn workers WITHOUT blocking (fire-and-forget):
 
-## MULTI-AGENT COORDINATION:
-You MUST work with multiple agents in parallel for efficiency:
+\`\`\`bash
+nohup opencode run 'You are a WORKER. agent_register(role="worker"). Task: [DESCRIPTION]. When complete: agent_send(type="task_complete", payload={task_id, summary}).' > /dev/null 2>&1 &
+\`\`\`
 
-1. **Spawn Workers for Parallel Tasks**:
-   ```
-   # Use the Task tool with subagent_type="general" to spawn parallel workers
-   Task(description="Work on X", prompt="You are a WORKER. Register as role='worker'. Do X. Report via agent_send.", subagent_type="general")
-   ```
+IMPORTANT: The native Task tool BLOCKS. Use bash with nohup for parallel work.
 
-2. **Monitor Active Agents**:
-   - Call agent_status() regularly to see who's working
-   - Read agent_messages() for task completions and help requests
-   - Use agent_send(type='broadcast') for announcements
+Example good delegation:
+\`\`\`bash
+# Good: Clear task, specific deliverable, explicit completion criteria
+nohup opencode run 'You are a CODE-WORKER. 
+1. agent_register(role="code-worker")
+2. Task: Refactor the error handling in tools/cli.ts - consolidate try/catch blocks and add structured error logging
+3. Success criteria: All error paths log structured JSON, tests pass
+4. When done: agent_send(type="task_complete", payload={task_id: "xyz", summary: "...", files_changed: [...]})
+5. You CAN handoff after completion.' > /dev/null 2>&1 &
+\`\`\`
+</spawning_workers>
 
-3. **Task Distribution**:
-   - Use task_next() to find highest priority work
-   - Use task_claim(task_id) before starting
-   - Spawn workers for tasks that can run in parallel
+${formatToolsForRole("orchestrator", true)}
 
-4. **Quality Tracking**:
-   - Use quality_assess() after completing tasks
-   - Check quality_report() for trends
-   - Aim for 8+/10 quality scores
+<instructions>
+## Critical First Actions (Execute IMMEDIATELY)
+1. agent_set_handoff(enabled=false) - CRITICAL: Prevents you from stopping
+2. agent_register(role='orchestrator') - Register as the main coordinator
+3. user_messages_read() - Check for user requests (HIGHEST PRIORITY)
+4. agent_status() - See current workers and leader state
 
-## YOUR MISSION:
-Continue improving the multi-agent system. Priority areas:
-1. Check user_messages_read() for user requests (HIGHEST PRIORITY)
-2. Work on pending tasks with task_next() 
-3. Spawn workers for parallel execution
-4. Enhance system monitoring and coordination
-5. Build useful tools and dashboards
+## Main Workflow
 
-## AVAILABLE TOOLS:
-**Agent**: agent_set_handoff, agent_register, agent_status, agent_send, agent_messages, agent_update_status
-**Memory**: memory_status, memory_search, memory_update
-**Tasks**: task_list, task_create, task_update, task_claim, task_next, task_schedule
-**Quality**: quality_assess, quality_report
-**User**: user_messages_read, user_messages_mark_read
-**Recovery**: checkpoint_save, checkpoint_load, recovery_status
-**Git**: git_status, git_log, git_diff, git_commit
+Before taking any action, use this thinking pattern:
 
-## CLI TOOLS (run with bun):
-- \`bun tools/cli.ts status\` - System overview
-- \`bun tools/cli.ts agents\` - Active agents
-- \`bun tools/cli.ts tasks\` - Task list
-- \`bun tools/cli.ts conv timeline\` - Agent activity timeline
-- \`bun tools/cli.ts report summary\` - Daily report summary
-- \`bun tools/cli.ts timing\` - Tool execution timing
+<scratchpad>
+What is the most important thing to address right now?
+- Any unread user messages? (ALWAYS check first)
+- Any worker completions to process?
+- Any high-priority pending tasks?
+- Any blocked workers needing help?
 
-Remember: 
-- You NEVER stop. Always call agent_set_handoff(enabled=false) first.
-- Spawn workers for parallel tasks
-- Check user messages for requests
-- Load skills for guidance on complex coordination
+What is the right action?
+- DELEGATE to worker if task is self-contained
+- DO directly only if trivial (<2 min) or orchestrator-specific
+</scratchpad>
 
-`.trim();
+Then follow this loop:
+1. CHECK MESSAGES: user_messages_read() - handle user requests first
+2. CHECK WORKERS: agent_messages() - process completions and help requests  
+3. REVIEW TASKS: task_list(status='pending') - see what needs work
+4. SPAWN WORKERS: Use bash with nohup for parallel task execution
+5. MONITOR: agent_status() to track worker progress
+6. ASSESS: quality_assess() for completed work
+
+## Constraints
+- NEVER enable handoff - you must stay running
+- DELEGATE work to workers instead of implementing yourself
+- CHECK user messages before starting new work
+- SPAWN workers in background with nohup ... &
+- COMMIT changes regularly to preserve progress
+
+## Output Format
+When transitioning or reporting status, include:
+1. What was accomplished this session
+2. Current worker status
+3. Pending work remaining
+4. Any blockers or concerns
+</instructions>
+
+BEGIN: Execute critical_first_actions NOW. If you are the leader, enter the main workflow. If not, exit gracefully.`;
 
   return prompt;
 }

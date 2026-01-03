@@ -8,104 +8,127 @@ license: MIT
 
 Essential patterns for effective multi-agent system coordination.
 
-## AGENT TYPES & ROLES
+## Decision Framework
 
-### 1. Orchestrator Agent
-- **Role**: `orchestrator`
-- **Responsibilities**: System-wide coordination, task distribution, monitoring
-- **Key trait**: NEVER hands off (persistent)
+Before coordinating agents, consider:
 
-### 2. Worker Agents
-- **Roles**: `worker`, `code-explorer`, `dashboard-enhancer`, etc.
-- **Responsibilities**: Execute specific tasks, report results
-- **Key trait**: CAN hand off when task complete
+<scratchpad>
+1. What is the task complexity? (Simple: do directly, Complex: delegate)
+2. Can work be parallelized? (Independent subtasks = spawn multiple workers)
+3. Are there dependencies? (Use task.depends_on, spawn sequentially)
+4. What's the expected duration? (< 2min: do directly, > 2min: delegate)
+5. Does it need specialized skills? (code-worker, analysis-worker, etc.)
+</scratchpad>
 
-### 3. Monitor Agents
-- **Role**: `monitor`
-- **Responsibilities**: System health, performance tracking, alerting
-- **Key trait**: Long-running but can hand off
+## Agent Types
 
-## COORDINATION PATTERNS
+| Role | Handoff | Purpose |
+|------|---------|---------|
+| `orchestrator` | NEVER | System-wide coordination, task distribution |
+| `code-worker` | Yes | Implementation, bug fixes, refactoring |
+| `analysis-worker` | Yes | Research, investigation (read-only) |
+| `memory-worker` | Yes | Memory system maintenance |
+| `critique` | Yes | Code review, quality assessment |
+| `monitor` | Optional | System health, performance tracking |
 
-### 1. Sequential Task Chain
-```typescript
-// Task A must complete before Task B
-agent.send({ type: "task_claim", payload: { task_id: "A" } })
-// ... complete task A ...
-agent.send({ type: "task_complete", payload: { task_id: "A", result: "..." } })
-agent.send({ type: "task_claim", payload: { task_id: "B" } })
-```
+## Core Patterns
 
-### 2. Parallel Task Distribution
+### 1. Parallel Task Distribution (Most Common)
+When: Tasks are independent, can run concurrently.
+
 ```bash
-# Spawn multiple workers for parallel execution
-opencode run 'Worker 1 instructions...'
-opencode run 'Worker 2 instructions...'
-opencode run 'Worker 3 instructions...'
+# Spawn multiple workers in parallel (non-blocking)
+nohup opencode run 'WORKER-1: agent_register. Task: Analyze module A. Report: agent_send(task_complete).' > /dev/null 2>&1 &
+nohup opencode run 'WORKER-2: agent_register. Task: Analyze module B. Report: agent_send(task_complete).' > /dev/null 2>&1 &
+nohup opencode run 'WORKER-3: agent_register. Task: Analyze module C. Report: agent_send(task_complete).' > /dev/null 2>&1 &
 ```
 
-### 3. Supervisor Pattern
+### 2. Sequential Chain (Dependencies)
+When: Task B needs output from Task A.
+
 ```typescript
-// Orchestrator monitors workers
-const agents = await agent_status()
-const workers = agents.filter(a => a.role === 'worker')
-workers.forEach(w => {
-  if (isStale(w.last_heartbeat)) {
-    // Spawn replacement worker
-  }
+// Use task dependencies
+task_create({ title: "Task A", priority: "high" })
+task_create({ 
+  title: "Task B", 
+  depends_on: ["task_A_id"]  // Auto-blocked until A completes
 })
 ```
 
-### 4. Message Routing Pattern
+### 3. Supervisor Pattern (Fault Tolerance)
+When: Long-running work needs monitoring.
+
 ```typescript
-// Broadcast to all
-agent_send({ type: "broadcast", payload: { ... } })
-
-// Direct to specific agent
-agent_send({ type: "direct", payload: { ... }, to_agent: "agent-id" })
-
-// Task assignment
-agent_send({ type: "task_claim", payload: { task_id: "..." } })
-```
-
-## COMMUNICATION BEST PRACTICES
-
-### 1. Message Types
-- **heartbeat**: Automatic liveness check
-- **broadcast**: System-wide announcements
-- **direct**: Targeted communication
-- **task_claim**: Claim a task for processing
-- **task_complete**: Report task completion
-- **request_help**: Ask for assistance
-
-### 2. Message Structure
-```typescript
-{
-  type: "task_complete",
-  payload: {
-    task_id: "explore-opencode",
-    status: "success",
-    result: {
-      files_analyzed: 42,
-      report_location: "/reports/opencode-analysis.md"
-    },
-    duration_ms: 120000
+// Orchestrator periodically checks workers
+const agents = await agent_status()
+const staleWorkers = agents.filter(a => 
+  a.role !== 'orchestrator' && 
+  Date.now() - new Date(a.last_heartbeat).getTime() > 120000
+)
+// Respawn stale workers
+for (const w of staleWorkers) {
+  if (w.current_task) {
+    task_update({ task_id: w.current_task, status: "pending" })
+    // Spawn replacement
   }
 }
 ```
 
-### 3. Status Updates
+### 4. Fan-Out/Fan-In (Map-Reduce)
+When: Need to aggregate results from multiple workers.
+
 ```typescript
-// Regular status updates
-agent_update_status({
-  status: "working",
-  task: "Analyzing codebase structure"
+// Fan-out: Spawn workers
+for (const chunk of dataChunks) {
+  spawn(`WORKER: Process chunk ${chunk.id}. Report: agent_send(partial_result, {chunk_id, result})`)
+}
+
+// Fan-in: Collect results
+const results = []
+while (results.length < dataChunks.length) {
+  const messages = await agent_messages()
+  const partials = messages.filter(m => m.type === 'partial_result')
+  results.push(...partials.map(m => m.payload))
+}
+const finalResult = aggregate(results)
+```
+
+## Communication
+
+### Message Types
+| Type | Use Case | Example |
+|------|----------|---------|
+| `broadcast` | Announcements to all | Status updates, alerts |
+| `direct` | To specific agent | Coordination, questions |
+| `task_claim` | Claiming task | Prevent race conditions |
+| `task_complete` | Report completion | Include summary, files changed |
+| `task_available` | New task ready | Broadcast for workers |
+| `request_help` | Stuck/blocked | Escalate to orchestrator |
+
+### Message Payloads
+
+```typescript
+// Task completion (include everything needed for assessment)
+agent_send({
+  type: "task_complete",
+  payload: {
+    task_id: "task_123",
+    summary: "Implemented error handling for API calls",
+    files_changed: ["src/api.ts", "src/api.test.ts"],
+    issues_found: [],
+    recommendations: ["Consider adding retry logic"]
+  }
 })
 
-// Completion
-agent_update_status({
-  status: "idle",
-  task: null
+// Request help (be specific about blocker)
+agent_send({
+  type: "request_help",
+  payload: {
+    task_id: "task_456",
+    blocker: "Need database credentials",
+    tried: ["Checked env vars", "Checked config files"],
+    urgency: "high"
+  }
 })
 ```
 
@@ -595,26 +618,61 @@ const processPipeline = async (input: any) => {
 - Session-level state in working.md
 - Message bus for ephemeral coordination
 
-## ANTI-PATTERNS TO AVOID
+## Anti-Patterns
 
-### 1. Message Flooding
-- Don't send messages in tight loops
-- Batch updates when possible
-- Use heartbeats sparingly (30s intervals)
+### Message Flooding
+```
+BAD:  for (item of items) { agent_send(...) }  // Thousands of messages
+GOOD: agent_send({ payload: { items: [...] } })  // Batch in one message
+```
 
-### 2. Task Thrashing
-- Don't claim tasks without intent to complete
-- Avoid rapid claim/unclaim cycles
-- Check task complexity before claiming
+### Task Thrashing
+```
+BAD:  task_claim -> realize too complex -> abandon -> task_claim another
+GOOD: Read task description fully, check complexity BEFORE claiming
+```
 
-### 3. Agent Starvation
-- Ensure fair task distribution
-- Monitor idle workers
-- Implement backpressure for overloaded agents
+### Agent Starvation
+```
+BAD:  Orchestrator claims and does all work itself
+GOOD: Orchestrator delegates, only does coordination tasks
+```
 
-### 4. Deadlocks
-- Avoid circular task dependencies
-- Use timeouts for blocking operations
-- Implement fallback handlers
+### Circular Dependencies
+```
+BAD:  Task A depends on B, B depends on A
+GOOD: Break cycle, create independent subtasks
+```
+
+### Blocking Operations
+```
+BAD:  Task tool call (blocks entire session)
+GOOD: nohup opencode run '...' > /dev/null 2>&1 &  (non-blocking)
+```
+
+## Quick Reference
+
+### Worker Lifecycle
+```
+1. agent_register(role="<role>")
+2. task_claim(task_id) OR receive direct assignment
+3. Do work
+4. task_update(task_id, status="completed")
+5. agent_send(type="task_complete", payload={...})
+6. agent can handoff
+```
+
+### Orchestrator Loop
+```
+1. agent_set_handoff(enabled=false)  // CRITICAL
+2. agent_register(role="orchestrator")
+3. LOOP:
+   - user_messages_read() → handle immediately
+   - agent_messages() → process completions/help
+   - task_schedule() → plan next work
+   - Spawn workers for pending tasks
+   - agent_status() → monitor health
+   - quality_assess() → review completed work
+```
 
 Remember: Effective coordination is key to a healthy multi-agent system!

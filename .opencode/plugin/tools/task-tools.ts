@@ -159,7 +159,15 @@ export function createTaskTools(getContext: () => TaskToolsContext) {
   return {
     task_list: tool({
       description:
-        "List persistent tasks from the task manager. Use this to see pending work across sessions.",
+        `List persistent tasks from the task manager. Use this to see pending work across sessions.
+
+Example usage:
+- task_list() - Get all pending tasks
+- task_list(status="in_progress") - See what workers are doing
+- task_list(status="blocked") - Find tasks waiting on dependencies
+- task_list(status="all") - Overview of entire task backlog
+
+Returns: Array of tasks sorted by priority (critical > high > medium > low).`,
       args: {
         status: tool.schema
           .enum(["pending", "in_progress", "completed", "blocked", "all"])
@@ -209,7 +217,16 @@ export function createTaskTools(getContext: () => TaskToolsContext) {
 
     task_create: tool({
       description:
-        "Create a new persistent task that survives across sessions.",
+        `Create a new persistent task that survives across sessions.
+
+Example usage:
+- task_create(title="Fix login bug", priority="high", tags=["bug", "auth"])
+- task_create(title="Add tests", depends_on=["task_abc"], complexity="moderate")
+
+Notes:
+- High/critical priority tasks are auto-broadcast to workers via message bus
+- Tasks with unmet dependencies start in "blocked" status
+- Use estimated_hours for better scheduling recommendations`,
       args: {
         title: tool.schema.string().describe("Task title"),
         description: tool.schema
@@ -333,7 +350,17 @@ export function createTaskTools(getContext: () => TaskToolsContext) {
     }),
 
     task_update: tool({
-      description: "Update a task's status, assign it, or add notes.",
+      description: `Update a task's status, assign it, or add notes.
+
+Example usage:
+- task_update(task_id="task_123", status="completed") - Mark done
+- task_update(task_id="task_123", notes="Blocked on API response") - Add context
+- task_update(task_id="task_123", status="blocked") - Flag as blocked
+
+Side effects:
+- Completing a task auto-unblocks dependent tasks
+- Broadcasts task_completed message for dashboard updates
+- Updates agent performance metrics if task was assigned`,
       args: {
         task_id: tool.schema
           .string()
@@ -481,7 +508,16 @@ export function createTaskTools(getContext: () => TaskToolsContext) {
     }),
 
     task_next: tool({
-      description: "Get the next available high-priority task to work on. Respects task dependencies.",
+      description: `Get the next available high-priority task to work on. Respects task dependencies.
+
+Example usage:
+- task_next() - Returns the highest priority task that can be started now
+
+Behavior:
+- Only returns tasks with all dependencies satisfied
+- Uses priority aging: older tasks gradually increase in priority
+- Returns null if no tasks available (check blocked_count for waiting tasks)
+- Includes effective_priority and hours_waiting for context`,
       args: {},
       async execute() {
         try {
@@ -559,7 +595,21 @@ export function createTaskTools(getContext: () => TaskToolsContext) {
 
     task_claim: tool({
       description:
-        "Claim a pending task for this agent. Atomically assigns the task to prevent conflicts with other agents.",
+        `Claim a pending task for this agent. Atomically assigns the task to prevent conflicts with other agents.
+
+Example usage:
+- task_claim(task_id="task_123_abc") - Claim and start working on task
+
+Behavior:
+- Atomic operation: prevents race conditions with other agents
+- Sets status to "in_progress" and assigns to current agent
+- Broadcasts task_claim message so orchestrator can track
+- Fails if already claimed or completed (check current_assignee in response)
+
+Edge cases:
+- If task not found: returns success=false
+- If already claimed by another agent: returns current_assignee
+- If task completed: returns success=false`,
       args: {
         task_id: tool.schema
           .string()
@@ -664,7 +714,15 @@ export function createTaskTools(getContext: () => TaskToolsContext) {
      */
     task_spawn: tool({
       description:
-        "Spawn a subagent with full memory context integration. Creates a persistent task, injects memory context into the subagent, and tracks the spawned session. Use this instead of the raw Task tool for better coordination.",
+        `Spawn a subagent with full memory context integration. Creates a persistent task, injects memory context into the subagent, and tracks the spawned session.
+
+Example usage:
+- task_spawn(title="Analyze codebase", prompt="...", subagent_type="explore")
+- task_spawn(title="Fix auth bug", prompt="...", priority="high", inject_context=true)
+
+Returns enhanced_prompt which you should pass to the Task tool.
+
+Note: This creates the task record but you still need to call the Task tool with the enhanced_prompt to actually spawn the subagent. Use this instead of raw Task tool for better coordination.`,
       args: {
         title: tool.schema.string().describe("Short task title (3-5 words)"),
         prompt: tool.schema.string().describe("Detailed task prompt for the subagent"),
@@ -794,7 +852,19 @@ ${prompt}
 
     task_schedule: tool({
       description:
-        "Get smart scheduling recommendations for pending tasks. Shows effective priorities with aging, estimated workload, and suggested execution order.",
+        `Get smart scheduling recommendations for pending tasks. Shows effective priorities with aging, estimated workload, and suggested execution order.
+
+Example usage:
+- task_schedule() - Get top 5 recommended tasks
+- task_schedule(limit=10) - Get top 10 for planning
+
+Returns:
+- schedule: Tasks ordered by urgency_score (considers priority + waiting time + complexity)
+- summary: Quick overview with recommendation on what to start first
+- blocked_tasks: Tasks waiting on dependencies
+- in_progress: Currently active tasks
+
+Use this for planning work distribution across workers.`,
       args: {
         limit: tool.schema
           .number()

@@ -33,6 +33,7 @@ STATUS_FILE="memory/.watchdog-status.json"
 RESTART_COUNT_FILE="memory/.restart-count.json"
 CONFIG_FILE="memory/.watchdog.conf"
 TOKEN_TRACKING_FILE="memory/.token-usage.json"
+RATE_LIMIT_FILE="memory/.rate-limit-status.json"
 
 # Timing configuration
 CHECK_INTERVAL=30           # seconds between health checks
@@ -58,8 +59,10 @@ SESSION_TIMEOUT=0           # max session duration in seconds (0 = unlimited)
 IDLE_TIMEOUT=0              # restart if idle for this many seconds (0 = disabled)
 
 # Model configuration
-MODEL="openai/gpt-5.1-high"   # default model to use
-MODEL_FALLBACK=""           # fallback model if primary fails (empty = disabled)
+# Priority: environment variable > config file > default
+MODEL="${OPENCODE_MODEL:-anthropic/claude-opus-4-5}"   # default model to use
+MODEL_FALLBACK="${OPENCODE_MODEL_FALLBACK:-anthropic/claude-sonnet}"  # fallback model
+RATE_LIMIT_COOLDOWN="${OPENCODE_RATE_LIMIT_COOLDOWN:-300}"  # seconds to wait when rate limited
 
 # Memory limits
 MEMORY_LIMIT_MB=0           # max memory usage in MB (0 = unlimited)
@@ -130,8 +133,10 @@ IDLE_TIMEOUT=0              # restart if idle for this many seconds (0 = disable
 # ==============================================================================
 # MODEL CONFIGURATION
 # ==============================================================================
-MODEL="openai/gpt-5.1-high"   # primary model to use
-MODEL_FALLBACK=""                   # fallback model if primary fails
+# Use environment variables OPENCODE_MODEL and OPENCODE_MODEL_FALLBACK to override
+MODEL="anthropic/claude-opus-4-5"   # primary model to use
+MODEL_FALLBACK="anthropic/claude-sonnet"  # fallback model if primary fails
+RATE_LIMIT_COOLDOWN=300      # seconds to wait when rate limited
 
 # ==============================================================================
 # MEMORY LIMITS
@@ -350,6 +355,99 @@ check_token_limits() {
     fi
     
     return 0
+}
+
+# ==============================================================================
+# RATE LIMIT DETECTION
+# ==============================================================================
+
+# Check if we're currently rate limited by checking recent logs
+check_rate_limit_status() {
+    # Check the startup log for recent 429 errors
+    if [[ -f "$STARTUP_LOGFILE" ]]; then
+        local recent_429s
+        recent_429s=$(tail -50 "$STARTUP_LOGFILE" 2>/dev/null | grep -c "429 error\|usage_limit_reached\|rate limit" 2>/dev/null || echo "0")
+        recent_429s="${recent_429s//[^0-9]/}"  # Remove non-numeric chars
+        recent_429s="${recent_429s:-0}"  # Default to 0 if empty
+        
+        if [[ "$recent_429s" -gt 3 ]]; then
+            # Extract resets_in_seconds from last 429 error if available
+            local reset_time
+            reset_time=$(tail -20 "$STARTUP_LOGFILE" 2>/dev/null | grep -o '"resets_in_seconds":[0-9]*' | tail -1 | cut -d':' -f2 || echo "0")
+            reset_time="${reset_time//[^0-9]/}"  # Remove non-numeric chars
+            reset_time="${reset_time:-0}"  # Default to 0 if empty
+            
+            if [[ "$reset_time" -gt 0 ]]; then
+                log "Rate limit detected! API resets in ${reset_time}s" "WARN"
+                # Store rate limit status
+                cat > "$RATE_LIMIT_FILE" << EOF
+{
+    "rate_limited": true,
+    "detected_at": "$(date -Iseconds)",
+    "resets_in_seconds": $reset_time,
+    "retry_after": "$(date -d "+${reset_time} seconds" -Iseconds 2>/dev/null || date -Iseconds)"
+}
+EOF
+                return 1  # Rate limited
+            fi
+        fi
+    fi
+    
+    # Check stored rate limit file
+    if [[ -f "$RATE_LIMIT_FILE" ]]; then
+        local stored_retry
+        stored_retry=$(jq -r '.retry_after // ""' "$RATE_LIMIT_FILE" 2>/dev/null || echo "")
+        if [[ -n "$stored_retry" ]]; then
+            local retry_epoch
+            retry_epoch=$(date -d "$stored_retry" +%s 2>/dev/null || echo "0")
+            local now_epoch
+            now_epoch=$(date +%s)
+            
+            if [[ $retry_epoch -gt $now_epoch ]]; then
+                local wait_secs=$((retry_epoch - now_epoch))
+                log "Still rate limited. Wait ${wait_secs}s more." "WARN"
+                return 1
+            else
+                # Rate limit expired, clear it
+                rm -f "$RATE_LIMIT_FILE"
+            fi
+        fi
+    fi
+    
+    return 0  # Not rate limited
+}
+
+# Wait for rate limit to clear if needed
+wait_for_rate_limit() {
+    if ! check_rate_limit_status; then
+        local wait_time=$RATE_LIMIT_COOLDOWN
+        
+        # Try to get actual wait time from status file
+        if [[ -f "$RATE_LIMIT_FILE" ]]; then
+            local stored_retry
+            stored_retry=$(jq -r '.retry_after // ""' "$RATE_LIMIT_FILE" 2>/dev/null || echo "")
+            if [[ -n "$stored_retry" ]]; then
+                local retry_epoch
+                retry_epoch=$(date -d "$stored_retry" +%s 2>/dev/null || echo "0")
+                local now_epoch
+                now_epoch=$(date +%s)
+                
+                if [[ $retry_epoch -gt $now_epoch ]]; then
+                    wait_time=$((retry_epoch - now_epoch))
+                    # Cap at reasonable maximum
+                    if [[ $wait_time -gt 1800 ]]; then
+                        wait_time=1800
+                    fi
+                fi
+            fi
+        fi
+        
+        log "Waiting ${wait_time}s for rate limit to clear..." "WARN"
+        update_status "rate_limited" "Waiting for rate limit cooldown" 0
+        sleep "$wait_time"
+        rm -f "$RATE_LIMIT_FILE"
+        log "Rate limit cooldown complete" "INFO"
+    fi
 }
 
 # ==============================================================================
@@ -596,33 +694,47 @@ generate_prompt() {
     
     # Use quoted heredoc to prevent variable expansion issues and allow literal backticks
     cat << 'PROMPT_EOF'
-You are the MAIN ORCHESTRATOR AGENT (auto-restarted by watchdog v3.0).
+<role>
+You are the ORCHESTRATOR - the persistent coordinator of a multi-agent AI system.
+You were auto-restarted by watchdog v3.0. Your job: delegate work, monitor progress, maintain the system.
+</role>
 
-## YOUR ROLE: ORCHESTRATE, DO NOT IMPLEMENT
-You are a COORDINATOR only. Your job is to:
-1. Check for user messages and pending tasks
-2. Spawn worker agents (via terminal) to do the actual work
-3. Exit quickly so the watchdog can restart you with fresh context
+<critical_first_actions>
+Execute IMMEDIATELY in this order:
+1. agent_set_handoff(enabled=false) - PREVENTS YOU FROM STOPPING
+2. agent_register(role='orchestrator') - Register as coordinator
+3. user_messages_read() - CHECK FOR USER REQUESTS (highest priority!)
+4. task_list(status='pending') - See what needs workers
+</critical_first_actions>
 
-## CRITICAL RULES:
-- NEVER implement tasks yourself
-- ALWAYS spawn workers via terminal: opencode run "You are a worker. Your task: ..."
-- Keep your session SHORT (under 5 minutes)
-- Exit after spawning workers for any pending work
+<core_principle>
+DELEGATE, DON'T IMPLEMENT. Your job is to:
+- Coordinate work, not do it yourself
+- Spawn worker agents for actual tasks
+- Monitor progress and handle completions
+- Keep sessions focused and efficient
+</core_principle>
 
-## IMMEDIATE ACTIONS:
-1. Call agent_set_handoff with enabled=false
-2. Call agent_register with role='orchestrator'
-3. Call user_messages_read to check for user requests
-4. Call task_list with status='pending' to see what needs workers
+<spawning_workers>
+Spawn workers using bash (NON-BLOCKING):
 
-## HOW TO SPAWN WORKERS (via terminal):
 ```bash
-# Spawn a worker for a task (non-blocking)
-opencode run "You are a WORKER agent. Call agent_register(role='worker'). Your task: [DESCRIBE TASK]. When done, call agent_send(type='task_complete', payload={...}) and exit."
+nohup opencode run '<worker_prompt>' > /dev/null 2>&1 &
 ```
 
-## CONTEXT:
+Worker prompt template:
+```
+You are a WORKER agent. 
+1. agent_register(role='worker')
+2. Task: [SPECIFIC TASK DESCRIPTION]
+3. When complete: agent_send(type='task_complete', payload={task_id, summary})
+4. Then exit normally (handoff enabled)
+```
+
+IMPORTANT: Always use nohup ... & for fire-and-forget spawning.
+</spawning_workers>
+
+<context>
 PROMPT_EOF
     
     # Output context variables (outside quoted heredoc)
@@ -652,32 +764,40 @@ MSG_EOF
 
     # Add pending tasks
     cat << 'TASK_EOF'
-## PENDING TASKS:
+</context>
+
+<pending_tasks>
 TASK_EOF
     echo "$pending_tasks"
     echo ""
     cat << 'TASK_EOF'
-## WORKFLOW:
-1. If there are unread user messages -> spawn workers to handle them
-2. If there are pending tasks -> spawn workers for each task
-3. If nothing to do -> just exit (watchdog will restart you later)
+</pending_tasks>
 
-## SPAWNING WORKERS:
-For each task or user request, spawn a dedicated worker:
-```bash
-opencode run "You are a WORKER. Register as worker. Task: [X]. Report completion via agent_send."
-```
+<workflow>
+1. USER MESSAGES FIRST: If unread messages exist, spawn workers to handle them
+2. PENDING TASKS: Spawn workers for high-priority pending tasks
+3. MONITOR: Check agent_status() and agent_messages() for completions
+4. IDLE: If nothing to do, exit gracefully (watchdog restarts you)
+</workflow>
 
-## AVAILABLE TOOLS:
-- User messages: user_messages_read, user_messages_mark_read
-- Agent: agent_set_handoff, agent_register, agent_status
-- Tasks: task_list, task_claim, task_update
+<available_tools>
+Agent: agent_set_handoff(enabled), agent_register(role), agent_status(), agent_send(type, payload), agent_messages()
+Memory: memory_status(), memory_search(query), memory_update(status/achievement)
+Tasks: task_list(status), task_create(title, priority), task_update(task_id, status), task_claim(task_id), task_next()
+Quality: quality_assess(task_id, score), quality_report()
+User: user_messages_read(), user_messages_mark_read(id)
+Git: git_status(), git_diff(), git_log(), git_commit(message)
+Recovery: checkpoint_save(description), checkpoint_load(id), recovery_status()
+</available_tools>
 
-## IMPORTANT:
-- You are NOT a worker - you are a coordinator
-- Keep your session under 5 minutes
-- Spawn workers and exit
-- The watchdog will restart you to check for new work
+<constraints>
+- You are the COORDINATOR, not a worker - DELEGATE everything
+- Keep sessions focused (under 10 minutes ideally)
+- Spawn workers for actual work, then monitor
+- The watchdog restarts you automatically if you exit
+</constraints>
+
+BEGIN: Execute critical_first_actions NOW, then follow the workflow.
 TASK_EOF
 }
 
@@ -702,6 +822,11 @@ start_orchestrator() {
             sleep 300  # Default 5 minutes
         fi
         return 1
+    fi
+    
+    # Check for rate limits before starting
+    if ! check_rate_limit_status; then
+        wait_for_rate_limit
     fi
     
     # Calculate and apply backoff if enabled
@@ -730,8 +855,18 @@ start_orchestrator() {
     
     # Determine which model to use
     local use_model="$MODEL"
-    if [[ -n "$MODEL_FALLBACK" && $restart_count -gt 3 ]]; then
-        log "Using fallback model after multiple restarts: $MODEL_FALLBACK" "WARN"
+    local use_fallback="false"
+    
+    # Use fallback ONLY if rate limited (restarts are normal behavior)
+    if [[ -n "$MODEL_FALLBACK" ]]; then
+        # Check if we recently had rate limits
+        if [[ -f "$RATE_LIMIT_FILE" ]]; then
+            use_fallback="true"
+            log "Using fallback model due to recent rate limits" "WARN"
+        fi
+    fi
+    
+    if [[ "$use_fallback" == "true" && -n "$MODEL_FALLBACK" ]]; then
         use_model="$MODEL_FALLBACK"
     fi
     
@@ -977,6 +1112,22 @@ run_watchdog() {
         # Increment counters
         token_check_counter=$((token_check_counter + CHECK_INTERVAL))
         memory_check_counter=$((memory_check_counter + CHECK_INTERVAL))
+        
+        # Check for rate limits before checking/restarting orchestrator
+        # This prevents rapid restart loops during API rate limiting
+        if ! check_rate_limit_status; then
+            log "Rate limit detected during health check - waiting for cooldown" "WARN"
+            # Stop current orchestrator if running (it's probably stuck in retry loop)
+            if is_orchestrator_running; then
+                log "Stopping orchestrator stuck in rate limit retry loop" "WARN"
+                stop_orchestrator
+            fi
+            wait_for_rate_limit
+            start_orchestrator || true
+            token_check_counter=0
+            memory_check_counter=0
+            continue
+        fi
         
         # Check if orchestrator is running
         if ! is_orchestrator_running; then

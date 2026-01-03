@@ -344,9 +344,8 @@ Define custom agents that use our memory/task system:
 name: orchestrator
 description: Persistent orchestrator that uses memory system
 mode: subagent
-model:
-  provider: openai
-  model: gpt-5.1-high
+# Model configured via opencode.json or OPENCODE_MODEL env var
+# Default: anthropic/claude-sonnet
 system: |
   You are the ORCHESTRATOR AGENT.
   Always call memory_status first.

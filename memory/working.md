@@ -1,6 +1,88 @@
 # Working Memory
 
-## Current Session: 186
+## Current Session: 176
+
+---
+
+## Session 176 - PROMPT IMPROVEMENT (2026-01-03)
+
+**Worker**: agent-1767432364632-gom2eh (prompt-worker)
+**Status**: COMPLETED
+**Task**: task_1767432302745_8oi36d
+
+### Summary
+
+Applied Anthropic prompt engineering best practices across agent prompts, tool descriptions, and skills.
+
+### Changes Made
+
+**1. tools/generate-orchestrator-prompt.ts**
+- Restructured: context at start, instructions at end (Anthropic long context best practice)
+- Added scratchpad/thinking pattern for decision-making
+- Added example of good worker delegation
+- Clearer workflow with explicit decision framework
+
+**2. tools/generate-worker-prompt.ts**
+- Added scratchpad pattern for each worker type
+- Enhanced role_specialization sections with:
+  - Code worker: Explicit validation steps, thinking pattern
+  - Memory worker: Key files table, JSON validation command
+  - Analysis worker: Structured output format, methodology section
+- Moved context to top, instructions to end
+- Added phase-based workflow (UNDERSTAND → PLAN → IMPLEMENT → VALIDATE → REPORT)
+
+**3. .opencode/plugin/tools/task-tools.ts**
+- Added usage examples to all 7 tool descriptions
+- Added behavior notes and edge cases
+- Added side effects documentation
+
+**4. .opencode/plugin/tools/agent-tools.ts**
+- Added usage examples to all 6 tool descriptions
+- Added message type documentation
+- Added IMPORTANT notes (especially for agent_set_handoff)
+
+**5. .opencode/plugin/tools/memory-tools.ts**
+- Added usage examples to all 3 tool descriptions
+- Added scope explanations
+- Added notes on behavior
+
+**6. .opencode/plugin/tools/quality-tools.ts**
+- Added scoring guide (1-10 scale explained)
+- Added weight information
+- Added example usage
+
+**7. .opencode/skill/agent-orchestrator/SKILL.md**
+- Added decision framework with scratchpad pattern
+- Clearer workflow loop
+- Worker templates for common cases
+- Quick reference for available tools
+
+**8. .opencode/skill/memory-manager/SKILL.md**
+- Added quick reference scratchpad
+- Core files table with purpose/format/frequency
+- Improved pruning strategies with concrete thresholds
+- Added validation commands and troubleshooting
+
+**9. .opencode/skill/critique-agent/SKILL.md**
+- Added critique methodology scratchpad
+- Clearer issue categories table
+- Scoring table
+- Concise report format template
+
+**10. .opencode/skill/multi-agent-patterns/SKILL.md**
+- Added decision framework for when to parallelize
+- Agent types table with handoff behavior
+- Improved core patterns section
+- Added anti-patterns with good/bad examples
+- Quick reference for worker/orchestrator lifecycles
+
+### Anthropic Best Practices Applied
+
+1. **Scratchpad patterns**: Added explicit thinking patterns before actions
+2. **Long context**: Put context at start, instructions at end
+3. **Tool descriptions**: Added examples, edge cases, behavior notes
+4. **XML tags**: Consistent use for structure
+5. **Specificity**: Concrete examples instead of abstract guidelines
 
 ---
 
@@ -446,4 +528,38 @@ const finalState = actions.some(a => a.includes('Closed')) ? 'CLOSED' : issueInf
      - Confirm only one orchestrator maintains an active leader lease at a time.
      - Verify that non-leaders demote/exit promptly.
      - Check that CLI/monitor dashboards accurately reflect leader id/epoch and stale-orchestrator cleanup events.
+
+
+## Session 176 - AUTO-STOP (2026-01-03)
+
+**Status**: Session ended
+**Duration**: 3 minutes
+**Tool Calls**: 37
+**Session ID**: ses_47d4b4858ffeecXcp7tfgi6u8O
+
+**What Happened**: Session idle detected - agent stopped working
+
+**CRITICAL: YOU ARE A NEW AGENT - READ THIS FIRST**
+
+You are a fresh instance of the AI. The previous agent is gone. You have:
+- Auto-injected memory context (150 tokens in system prompt)
+- Real-time logging enabled (check memory/realtime.log)
+- Session lifecycle tracking via OpenCode hooks
+- Custom memory tools: memory_status(), memory_search(), memory_update()
+
+**Next Agent MUST**:
+1. **DO NOT** manually read state.json - use memory_status() tool instead
+2. Read working.md (this file) to understand what previous agent did
+3. Check active_tasks in state.json via memory_status()
+4. Continue with priority tasks OR ask user for direction
+5. Update this section when work is complete
+6. Check realtime.log for detailed activity history
+
+**Available Infrastructure**:
+- Plugin: .opencode/plugin/index.ts (auto-boot, context injection, logging)
+- Log file: memory/realtime.log (real-time structured logging)
+- State: memory/state.json (session counter, tasks, achievements)
+- Knowledge: memory/knowledge-base.json (extracted insights)
+
+---
 

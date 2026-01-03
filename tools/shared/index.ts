@@ -87,6 +87,39 @@ export {
   getConfigValue,
 } from "./config";
 
+// Model configuration
+export {
+  DEFAULT_MODEL,
+  DEFAULT_MODEL_FALLBACK,
+  DEFAULT_RATE_LIMIT_COOLDOWN,
+  getModelConfig,
+  clearModelConfigCache,
+  getModel,
+  getModelFallback,
+  getRateLimitCooldown,
+  isOpenAIModel,
+  isAnthropicModel,
+} from "./models";
+
+// Tool registry - dynamic tool documentation
+export {
+  getToolRegistry,
+  getToolsByCategory,
+  getToolsForRole,
+  formatToolsAsXml,
+  formatToolsCompact,
+  formatToolsForRole,
+  saveRegistryToFile,
+  clearRegistryCache,
+} from "./tool-registry";
+
+export type {
+  ToolParam,
+  ToolDefinition,
+  ToolCategory,
+  ToolRegistry,
+} from "./tool-registry";
+
 // Data fetchers - centralized data access
 export {
   // Agent functions
@@ -136,6 +169,7 @@ export {
   getOpenCodeToolCalls,
   getOpenCodeSessionStats,
   getOpenCodeToolUsageStats,
+  getOpenCodeAggregateTokenStats,
   searchOpenCodeSessions,
 } from "./data-fetchers";
 
@@ -144,8 +178,22 @@ export type {
   OpenCodeSession,
   OpenCodeMessage,
   OpenCodePart,
+  OpenCodeTokens,
+  OpenCodeSessionStatsResult,
+  AggregateTokenStats,
   ToolCallInfo,
 } from "./data-fetchers";
+
+// Actions - write operations
+export {
+  createTask,
+  claimTask,
+  completeTask,
+  cancelTask,
+  updateTaskPriority,
+  sendUserMessage,
+  markMessageRead,
+} from "./actions";
 
 // Type exports
 export type {

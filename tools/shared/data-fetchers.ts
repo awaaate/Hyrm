@@ -475,6 +475,19 @@ export interface OpenCodeMessage {
 }
 
 /**
+ * OpenCode token usage info (from step-finish parts).
+ */
+export interface OpenCodeTokens {
+  input: number;
+  output: number;
+  reasoning: number;
+  cache: {
+    read: number;
+    write: number;
+  };
+}
+
+/**
  * OpenCode part type (text, tool call, etc).
  */
 export interface OpenCodePart {
@@ -490,6 +503,10 @@ export interface OpenCodePart {
   args?: any;
   result?: any;
   time?: { created?: number; completed?: number };
+  // Token info (present on step-finish parts)
+  tokens?: OpenCodeTokens;
+  cost?: number;
+  reason?: string;
 }
 
 /**
@@ -667,19 +684,41 @@ export function getOpenCodeToolCalls(sessionId: string): ToolCallInfo[] {
 }
 
 /**
- * Get session statistics (tool count, duration, topics).
+ * Session statistics including token usage.
  */
-export function getOpenCodeSessionStats(sessionId: string): {
+export interface OpenCodeSessionStatsResult {
   toolCount: number;
   duration: number;
   messageCount: number;
   topics: string[];
-} {
+  tokens: {
+    input: number;
+    output: number;
+    reasoning: number;
+    cacheRead: number;
+    cacheWrite: number;
+    total: number;
+  };
+  cost: number;
+}
+
+/**
+ * Get session statistics (tool count, duration, topics, tokens).
+ */
+export function getOpenCodeSessionStats(sessionId: string): OpenCodeSessionStatsResult {
   const messages = getOpenCodeMessagesForSession(sessionId);
   let toolCount = 0;
   const topics: string[] = [];
   let firstTime = Infinity;
   let lastTime = 0;
+  
+  // Token tracking
+  let inputTokens = 0;
+  let outputTokens = 0;
+  let reasoningTokens = 0;
+  let cacheRead = 0;
+  let cacheWrite = 0;
+  let totalCost = 0;
 
   for (const msg of messages) {
     if (msg.time.created < firstTime) firstTime = msg.time.created;
@@ -693,6 +732,16 @@ export function getOpenCodeSessionStats(sessionId: string): {
       if ((part.type === "tool-invocation" || part.type === "tool") && toolName) {
         toolCount++;
       }
+      
+      // Collect token info from step-finish parts
+      if (part.type === "step-finish" && part.tokens) {
+        inputTokens += part.tokens.input || 0;
+        outputTokens += part.tokens.output || 0;
+        reasoningTokens += part.tokens.reasoning || 0;
+        cacheRead += part.tokens.cache?.read || 0;
+        cacheWrite += part.tokens.cache?.write || 0;
+        totalCost += part.cost || 0;
+      }
     }
   }
 
@@ -701,6 +750,15 @@ export function getOpenCodeSessionStats(sessionId: string): {
     duration: lastTime > firstTime ? lastTime - firstTime : 0,
     messageCount: messages.length,
     topics: [...new Set(topics)].slice(0, 5),
+    tokens: {
+      input: inputTokens,
+      output: outputTokens,
+      reasoning: reasoningTokens,
+      cacheRead,
+      cacheWrite,
+      total: inputTokens + outputTokens + reasoningTokens,
+    },
+    cost: totalCost,
   };
 }
 
@@ -725,6 +783,77 @@ export function getOpenCodeToolUsageStats(limit: number = 50): Record<string, nu
   }
 
   return toolUsage;
+}
+
+/**
+ * Aggregate token statistics across multiple sessions.
+ */
+export interface AggregateTokenStats {
+  totalSessions: number;
+  sessionsWithTokens: number;
+  tokens: {
+    input: number;
+    output: number;
+    reasoning: number;
+    cacheRead: number;
+    cacheWrite: number;
+    total: number;
+  };
+  cost: number;
+  averagePerSession: {
+    input: number;
+    output: number;
+    total: number;
+  };
+}
+
+/**
+ * Get aggregate token usage across sessions.
+ */
+export function getOpenCodeAggregateTokenStats(limit: number = 100): AggregateTokenStats {
+  const sessions = getAllOpenCodeSessions(limit);
+  
+  let totalInput = 0;
+  let totalOutput = 0;
+  let totalReasoning = 0;
+  let totalCacheRead = 0;
+  let totalCacheWrite = 0;
+  let totalCost = 0;
+  let sessionsWithTokens = 0;
+  
+  for (const session of sessions) {
+    const stats = getOpenCodeSessionStats(session.id);
+    if (stats.tokens.total > 0) {
+      sessionsWithTokens++;
+      totalInput += stats.tokens.input;
+      totalOutput += stats.tokens.output;
+      totalReasoning += stats.tokens.reasoning;
+      totalCacheRead += stats.tokens.cacheRead;
+      totalCacheWrite += stats.tokens.cacheWrite;
+      totalCost += stats.cost;
+    }
+  }
+  
+  const total = totalInput + totalOutput + totalReasoning;
+  
+  return {
+    totalSessions: sessions.length,
+    sessionsWithTokens,
+    tokens: {
+      input: totalInput,
+      output: totalOutput,
+      reasoning: totalReasoning,
+      cacheRead: totalCacheRead,
+      cacheWrite: totalCacheWrite,
+      total,
+    },
+    cost: totalCost,
+    averagePerSession: {
+      input: sessionsWithTokens > 0 ? Math.round(totalInput / sessionsWithTokens) : 0,
+      output: sessionsWithTokens > 0 ? Math.round(totalOutput / sessionsWithTokens) : 0,
+      total: sessionsWithTokens > 0 ? Math.round(total / sessionsWithTokens) : 0,
+    },
+  };
 }
 
 /**

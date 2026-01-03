@@ -276,15 +276,23 @@ function previewSystemMessage() {
   if (config.sections.memory_context?.enabled) {
     if (existsSync(STATE_PATH)) {
       const state = JSON.parse(readFileSync(STATE_PATH, "utf-8"));
+      const achievements = state.recent_achievements?.slice(0, 3) || [];
+      const achievementsList = achievements.length > 0
+        ? achievements.map((a: string) => `  - ${a}`).join("\n")
+        : "  - None";
+      
       sections.push({
         priority: config.sections.memory_context.priority,
-        content: `**Session**: ${state.session_count || 0}
-**Status**: ${state.status || "unknown"}
-**Active Tasks**: ${state.active_tasks?.join(", ") || "none"}
-**Total Tokens**: ${state.total_tokens_used?.toLocaleString() || 0}
+        content: `<system_state>
+Session: ${state.session_count || 0}
+Status: ${state.status || "unknown"}
+Active Tasks: ${state.active_tasks?.join(", ") || "none"}
+Total Tokens: ${state.total_tokens_used?.toLocaleString() || 0}
+</system_state>
 
-**Recent Achievements**:
-${state.recent_achievements?.slice(0, 3).map((a: string) => `- ${a}`).join("\n") || "- None"}`
+<recent_achievements>
+${achievementsList}
+</recent_achievements>`
       });
     }
   }
@@ -301,10 +309,15 @@ ${state.recent_achievements?.slice(0, 3).map((a: string) => `- ${a}`).join("\n")
       .slice(0, config.sections.pending_tasks.max_items || 5);
     
     if (pending.length > 0) {
+      const taskList = pending
+        .map((t: Task) => `  - [${t.priority.toUpperCase()}] ${t.title} (ID: ${t.id})`)
+        .join("\n");
+      
       sections.push({
         priority: config.sections.pending_tasks.priority,
-        content: `**Pending Tasks** (${pending.length}):
-${pending.map((t: Task) => `- [${t.priority.toUpperCase()}] ${t.title}`).join("\n")}`
+        content: `<pending_tasks count="${pending.length}">
+${taskList}
+</pending_tasks>`
       });
     }
   }
@@ -321,10 +334,23 @@ ${pending.map((t: Task) => `- [${t.priority.toUpperCase()}] ${t.title}`).join("\
     
     if (messages.length > 0) {
       const maxItems = config.sections.user_messages.max_items || 5;
+      const msgList = messages
+        .slice(-maxItems)
+        .map((m: UserMessageEntry) => {
+          const truncatedMsg = m.message.length > 100 
+            ? m.message.slice(0, 100) + "..." 
+            : m.message;
+          return `  - ${m.from}: "${truncatedMsg}" (id: ${m.id})`;
+        })
+        .join("\n");
+      
       sections.push({
         priority: config.sections.user_messages.priority,
-        content: `**Unread User Messages** (${messages.length}):
-${messages.slice(-maxItems).map((m: UserMessageEntry) => `- ${m.from}: "${m.message.slice(0, 80)}${m.message.length > 80 ? "..." : ""}"`).join("\n")}`
+        content: `<unread_user_messages count="${messages.length}" priority="HIGH">
+ADDRESS THESE FIRST - User requests have highest priority!
+${msgList}
+Use user_messages_mark_read(id) after handling each message.
+</unread_user_messages>`
       });
     }
   }
@@ -333,7 +359,9 @@ ${messages.slice(-maxItems).map((m: UserMessageEntry) => `- ${m.from}: "${m.mess
   if (config.sections.custom_instructions?.enabled && config.sections.custom_instructions.content?.length > 0) {
     sections.push({
       priority: config.sections.custom_instructions.priority,
-      content: config.sections.custom_instructions.content.join("\n")
+      content: `<custom_instructions>
+${config.sections.custom_instructions.content.join("\n")}
+</custom_instructions>`
     });
   }
   
@@ -342,7 +370,9 @@ ${messages.slice(-maxItems).map((m: UserMessageEntry) => `- ${m.from}: "${m.mess
     if (custom.enabled) {
       sections.push({
         priority: custom.priority,
-        content: `**${custom.title}**:\n${custom.content}`
+        content: `<custom_section title="${custom.title}">
+${custom.content}
+</custom_section>`
       });
     }
   }
@@ -350,12 +380,21 @@ ${messages.slice(-maxItems).map((m: UserMessageEntry) => `- ${m.from}: "${m.mess
   // Sort and print
   sections.sort((a, b) => a.priority - b.priority);
   
-  console.log("## Memory System Context\n");
+  console.log("<memory_system_context>");
   console.log(sections.map(s => s.content).join("\n\n"));
-  console.log("\n");
-  console.log("Memory Tools: memory_status, memory_search, memory_update");
-  console.log("Agent Tools: agent_status, agent_send, agent_messages, agent_update_status");
-  console.log("Multi-Agent Mode Active: Check agent_status() to see other agents working in parallel");
+  console.log(`
+<available_tools>
+Memory: memory_status, memory_search, memory_update
+Agent: agent_status, agent_send, agent_messages, agent_register
+Tasks: task_list, task_create, task_update, task_claim
+User: user_messages_read, user_messages_mark_read
+</available_tools>
+
+<multi_agent_note>
+You are part of a multi-agent system. Use agent_status() to see other agents.
+Coordinate work via agent_send() and agent_messages().
+</multi_agent_note>
+</memory_system_context>`);
   console.log("\n");
 }
 
