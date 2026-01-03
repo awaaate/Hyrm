@@ -12,6 +12,7 @@
 import { tool } from "@opencode-ai/plugin";
 import { existsSync, readFileSync, writeFileSync, appendFileSync } from "fs";
 import { join } from "path";
+import { withFileLock } from "./file-lock";
 
 // Agent performance metrics types
 interface AgentPerformanceMetrics {
@@ -33,86 +34,94 @@ interface AgentMetricsStore {
 }
 
 // Update agent performance metrics when a task is completed
-function updateAgentMetrics(
+async function updateAgentMetrics(
   memoryDir: string,
   agentId: string,
   taskDurationMs: number,
   qualityScore?: number
-): void {
+): Promise<void> {
   const metricsPath = join(memoryDir, "agent-performance-metrics.json");
-  let store: AgentMetricsStore;
 
-  try {
-    store = existsSync(metricsPath)
-      ? JSON.parse(readFileSync(metricsPath, "utf-8"))
-      : { version: "1.0", last_updated: "", agents: {} };
-  } catch {
-    store = { version: "1.0", last_updated: "", agents: {} };
-  }
+  await withFileLock(metricsPath, "task-tools:metrics", async () => {
+    let store: AgentMetricsStore;
 
-  // Initialize agent entry if doesn't exist
-  if (!store.agents[agentId]) {
-    store.agents[agentId] = {
-      agent_id: agentId,
-      tasks_completed: 0,
-      tasks_claimed: 0,
-      total_duration_ms: 0,
-      avg_duration_ms: 0,
-      quality_scores: [],
-      avg_quality: 0,
-      last_activity: new Date().toISOString(),
-      first_seen: new Date().toISOString(),
-    };
-  }
+    try {
+      store = existsSync(metricsPath)
+        ? JSON.parse(readFileSync(metricsPath, "utf-8"))
+        : { version: "1.0", last_updated: "", agents: {} };
+    } catch {
+      store = { version: "1.0", last_updated: "", agents: {} };
+    }
 
-  const agent = store.agents[agentId];
-  agent.tasks_completed++;
-  agent.total_duration_ms += taskDurationMs;
-  agent.avg_duration_ms = Math.round(agent.total_duration_ms / agent.tasks_completed);
-  agent.last_activity = new Date().toISOString();
+    // Initialize agent entry if doesn't exist
+    if (!store.agents[agentId]) {
+      store.agents[agentId] = {
+        agent_id: agentId,
+        tasks_completed: 0,
+        tasks_claimed: 0,
+        total_duration_ms: 0,
+        avg_duration_ms: 0,
+        quality_scores: [],
+        avg_quality: 0,
+        last_activity: new Date().toISOString(),
+        first_seen: new Date().toISOString(),
+      };
+    }
 
-  if (qualityScore !== undefined && qualityScore > 0) {
-    agent.quality_scores.push(qualityScore);
-    agent.avg_quality = Number(
-      (agent.quality_scores.reduce((a, b) => a + b, 0) / agent.quality_scores.length).toFixed(2)
+    const agent = store.agents[agentId];
+    agent.tasks_completed++;
+    agent.total_duration_ms += taskDurationMs;
+    agent.avg_duration_ms = Math.round(
+      agent.total_duration_ms / agent.tasks_completed
     );
-  }
+    agent.last_activity = new Date().toISOString();
 
-  store.last_updated = new Date().toISOString();
-  writeFileSync(metricsPath, JSON.stringify(store, null, 2));
+    if (qualityScore !== undefined && qualityScore > 0) {
+      agent.quality_scores.push(qualityScore);
+      agent.avg_quality = Number(
+        (agent.quality_scores.reduce((a, b) => a + b, 0) / agent.quality_scores.length).toFixed(2)
+      );
+    }
+
+    store.last_updated = new Date().toISOString();
+    writeFileSync(metricsPath, JSON.stringify(store, null, 2));
+  });
 }
 
 // Record task claim for metrics
-function recordTaskClaim(memoryDir: string, agentId: string): void {
+async function recordTaskClaim(memoryDir: string, agentId: string): Promise<void> {
   const metricsPath = join(memoryDir, "agent-performance-metrics.json");
-  let store: AgentMetricsStore;
 
-  try {
-    store = existsSync(metricsPath)
-      ? JSON.parse(readFileSync(metricsPath, "utf-8"))
-      : { version: "1.0", last_updated: "", agents: {} };
-  } catch {
-    store = { version: "1.0", last_updated: "", agents: {} };
-  }
+  await withFileLock(metricsPath, "task-tools:metrics", async () => {
+    let store: AgentMetricsStore;
 
-  if (!store.agents[agentId]) {
-    store.agents[agentId] = {
-      agent_id: agentId,
-      tasks_completed: 0,
-      tasks_claimed: 0,
-      total_duration_ms: 0,
-      avg_duration_ms: 0,
-      quality_scores: [],
-      avg_quality: 0,
-      last_activity: new Date().toISOString(),
-      first_seen: new Date().toISOString(),
-    };
-  }
+    try {
+      store = existsSync(metricsPath)
+        ? JSON.parse(readFileSync(metricsPath, "utf-8"))
+        : { version: "1.0", last_updated: "", agents: {} };
+    } catch {
+      store = { version: "1.0", last_updated: "", agents: {} };
+    }
 
-  store.agents[agentId].tasks_claimed++;
-  store.agents[agentId].last_activity = new Date().toISOString();
-  store.last_updated = new Date().toISOString();
-  writeFileSync(metricsPath, JSON.stringify(store, null, 2));
+    if (!store.agents[agentId]) {
+      store.agents[agentId] = {
+        agent_id: agentId,
+        tasks_completed: 0,
+        tasks_claimed: 0,
+        total_duration_ms: 0,
+        avg_duration_ms: 0,
+        quality_scores: [],
+        avg_quality: 0,
+        last_activity: new Date().toISOString(),
+        first_seen: new Date().toISOString(),
+      };
+    }
+
+    store.agents[agentId].tasks_claimed++;
+    store.agents[agentId].last_activity = new Date().toISOString();
+    store.last_updated = new Date().toISOString();
+    writeFileSync(metricsPath, JSON.stringify(store, null, 2));
+  });
 }
 
 export interface TaskToolsContext {
@@ -266,47 +275,60 @@ Notes:
         try {
           const ctx = getContext();
           const tasksPath = getTasksPath();
-          const store = existsSync(tasksPath)
-            ? JSON.parse(readFileSync(tasksPath, "utf-8"))
-            : {
-                version: "1.0",
-                tasks: [],
-                completed_count: 0,
-                last_updated: "",
+          let task: any;
+
+          await withFileLock(
+            tasksPath,
+            ctx.agentId || ctx.currentSessionId || "task-tools:tasks",
+            async () => {
+              const store = existsSync(tasksPath)
+                ? JSON.parse(readFileSync(tasksPath, "utf-8"))
+                : {
+                    version: "1.0",
+                    tasks: [],
+                    completed_count: 0,
+                    last_updated: "",
+                  };
+
+              // Validate dependencies exist
+              const validDeps = depends_on.filter((depId: string) =>
+                store.tasks.some((t: any) => t.id === depId)
+              );
+
+              // Check if dependencies are blocked (not completed)
+              const blockedDeps = validDeps.filter((depId: string) => {
+                const dep = store.tasks.find((t: any) => t.id === depId);
+                return dep && dep.status !== "completed";
+              });
+
+              const newTask = {
+                id: `task_${Date.now()}_${Math.random()
+                  .toString(36)
+                  .slice(2, 8)}`,
+                title,
+                description,
+                priority,
+                status: blockedDeps.length > 0 ? "blocked" : "pending",
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                created_by: ctx.currentSessionId || "unknown",
+                tags,
+                depends_on: validDeps.length > 0 ? validDeps : undefined,
+                blocked_by: blockedDeps.length > 0 ? blockedDeps : undefined,
+                estimated_hours: estimated_hours,
+                complexity: complexity,
               };
 
-          // Validate dependencies exist
-          const validDeps = depends_on.filter((depId: string) => 
-            store.tasks.some((t: any) => t.id === depId)
+              store.tasks.push(newTask);
+              store.last_updated = new Date().toISOString();
+              writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+              task = newTask;
+            }
           );
 
-          // Check if dependencies are blocked (not completed)
-          const blockedDeps = validDeps.filter((depId: string) => {
-            const dep = store.tasks.find((t: any) => t.id === depId);
-            return dep && dep.status !== "completed";
-          });
-
-          const task = {
-            id: `task_${Date.now()}_${Math.random()
-              .toString(36)
-              .slice(2, 8)}`,
-            title,
-            description,
-            priority,
-            status: blockedDeps.length > 0 ? "blocked" : "pending",
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            created_by: ctx.currentSessionId || "unknown",
-            tags,
-            depends_on: validDeps.length > 0 ? validDeps : undefined,
-            blocked_by: blockedDeps.length > 0 ? blockedDeps : undefined,
-            estimated_hours: estimated_hours,
-            complexity: complexity,
-          };
-
-          store.tasks.push(task);
-          store.last_updated = new Date().toISOString();
-          writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+          if (!task) {
+            throw new Error("Failed to create task under file lock");
+          }
 
           ctx.log("INFO", `Task created: ${task.id}`, { title, priority });
 
@@ -417,8 +439,8 @@ Side effects:
                 const completedAt = Date.now();
                 const durationMs = completedAt - claimedAt;
                 
-                // Update agent performance metrics
-                updateAgentMetrics(ctx.memoryDir, task.assigned_to, durationMs);
+                // Update agent performance metrics (with file locking)
+                await updateAgentMetrics(ctx.memoryDir, task.assigned_to, durationMs);
                 ctx.log("INFO", `Updated metrics for agent ${task.assigned_to}`, {
                   duration_ms: durationMs,
                   duration_formatted: `${Math.round(durationMs / 60000)} min`,
@@ -488,7 +510,14 @@ Side effects:
 
           task.updated_at = new Date().toISOString();
           store.last_updated = new Date().toISOString();
-          writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+
+          await withFileLock(
+            tasksPath,
+            ctx.agentId || ctx.currentSessionId || "task-tools:tasks",
+            async () => {
+              writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+            }
+          );
 
           ctx.log("INFO", `Task updated: ${task_id}`, { status, assign_to });
 
@@ -660,14 +689,21 @@ Edge cases:
           task.claimed_at = new Date().toISOString();
           task.updated_at = new Date().toISOString();
           store.last_updated = new Date().toISOString();
-          writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+
+          await withFileLock(
+            tasksPath,
+            ctx.agentId || ctx.currentSessionId || "task-tools:tasks",
+            async () => {
+              writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+            }
+          );
 
           ctx.log("INFO", `Task claimed: ${task_id}`, {
             assigned_to: task.assigned_to,
           });
 
-          // Record claim in agent performance metrics
-          recordTaskClaim(ctx.memoryDir, task.assigned_to);
+          // Record claim in agent performance metrics (with file locking)
+          await recordTaskClaim(ctx.memoryDir, task.assigned_to);
 
           // Broadcast task_claim message
           try {
@@ -767,7 +803,14 @@ Note: This creates the task record but you still need to call the Task tool with
 
           store.tasks.push(task);
           store.last_updated = new Date().toISOString();
-          writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+
+          await withFileLock(
+            tasksPath,
+            ctx.agentId || ctx.currentSessionId || "task-tools:tasks",
+            async () => {
+              writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+            }
+          );
 
           ctx.log("INFO", `Spawned task created: ${taskId}`, { title, priority, subagent_type });
 

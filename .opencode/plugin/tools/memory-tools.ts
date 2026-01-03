@@ -10,6 +10,7 @@
 import { tool } from "@opencode-ai/plugin";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
+import { withFileLock } from "./file-lock";
 
 export interface MemoryToolsContext {
   memoryDir: string;
@@ -201,40 +202,52 @@ Notes:
       async execute({ action, data }) {
         try {
           const ctx = getContext();
-          const state = existsSync(ctx.statePath)
-            ? JSON.parse(readFileSync(ctx.statePath, "utf-8"))
-            : { session_count: 0, active_tasks: [], recent_achievements: [] };
+          let updatedState: any = null;
 
-          switch (action) {
-            case "add_task":
-              if (!state.active_tasks) state.active_tasks = [];
-              if (!state.active_tasks.includes(data)) {
-                state.active_tasks.push(data);
-              }
-              break;
+          await withFileLock(ctx.statePath, "memory-tools", async () => {
+            const state = existsSync(ctx.statePath)
+              ? JSON.parse(readFileSync(ctx.statePath, "utf-8"))
+              : { session_count: 0, active_tasks: [], recent_achievements: [] };
 
-            case "complete_task":
-              if (state.active_tasks) {
-                state.active_tasks = state.active_tasks.filter(
-                  (t: string) => t !== data
-                );
-              }
-              break;
+            switch (action) {
+              case "add_task":
+                if (!state.active_tasks) state.active_tasks = [];
+                if (!state.active_tasks.includes(data)) {
+                  state.active_tasks.push(data);
+                }
+                break;
 
-            case "update_status":
-              state.status = data;
-              break;
+              case "complete_task":
+                if (state.active_tasks) {
+                  state.active_tasks = state.active_tasks.filter(
+                    (t: string) => t !== data
+                  );
+                }
+                break;
 
-            case "add_achievement":
-              if (!state.recent_achievements) state.recent_achievements = [];
-              const achievement = `Session ${state.session_count}: ${data}`;
-              state.recent_achievements.unshift(achievement);
-              state.recent_achievements = state.recent_achievements.slice(0, 5);
-              break;
-          }
+              case "update_status":
+                state.status = data;
+                break;
 
-          state.last_updated = new Date().toISOString();
-          writeFileSync(ctx.statePath, JSON.stringify(state, null, 2));
+              case "add_achievement":
+                if (!state.recent_achievements) state.recent_achievements = [];
+                const achievement = `Session ${state.session_count}: ${data}`;
+                state.recent_achievements.unshift(achievement);
+                state.recent_achievements = state.recent_achievements.slice(0, 5);
+                break;
+            }
+
+            state.last_updated = new Date().toISOString();
+            writeFileSync(ctx.statePath, JSON.stringify(state, null, 2));
+            updatedState = state;
+          });
+
+          const state = updatedState || {
+            session_count: 0,
+            status: "unknown",
+            active_tasks: [],
+            recent_achievements: [],
+          };
 
           return JSON.stringify({
             success: true,

@@ -310,8 +310,8 @@ function renderTimeline(): void {
       const end = i === selectedIndex ? "{/inverse}" : "";
       const ago = formatTimeAgo(new Date(e.timestamp).toISOString());
       
-      content += `${sel}{${e.color}-fg}${e.icon}{/${e.color}-fg} {white-fg}${ago.padEnd(5)}{/white-fg} ${truncate(e.title, 50)}${end}\n`;
-      if (e.details) content += `      {white-fg}${truncate(e.details, 55)}{/white-fg}\n`;
+      content += `${sel}{${e.color}-fg}${e.icon}{/${e.color}-fg} {white-fg}${ago.padEnd(5)}{/white-fg} ${e.title}${end}\n`;
+      if (e.details) content += `      {white-fg}${truncate(e.details, 80)}{/white-fg}\n`;
     }
   }
 
@@ -352,8 +352,8 @@ function renderAgents(): void {
         const isActive = now - new Date(a.last_heartbeat).getTime() < 120000;
         const icon = a.status === "working" ? "{yellow-fg}*{/yellow-fg}" : isActive ? "{green-fg}o{/green-fg}" : "{white-fg}o{/white-fg}";
 
-        content += `${sel}  ${icon} ${truncate(a.agent_id, 30)} [${a.assigned_role || "general"}] ${a.status}${end}\n`;
-        if (a.current_task) content += `      {white-fg}${truncate(a.current_task, 50)}{/white-fg}\n`;
+        content += `${sel}  ${icon} ${a.agent_id} [${a.assigned_role || "general"}] ${a.status}${end}\n`;
+        if (a.current_task) content += `      {white-fg}${a.current_task}{/white-fg}\n`;
         idx++;
       }
       content += "\n";
@@ -380,7 +380,7 @@ function renderTasks(): void {
     const sel = idx === selectedIndex ? "{inverse}" : "";
     const end = idx === selectedIndex ? "{/inverse}" : "";
     const pc = t.priority === "critical" ? "red" : t.priority === "high" ? "yellow" : "cyan";
-    content += `${sel}  {${pc}-fg}[${t.priority[0].toUpperCase()}]{/${pc}-fg} ${truncate(t.title, 45)}${end}\n`;
+    content += `${sel}  {${pc}-fg}[${t.priority[0].toUpperCase()}]{/${pc}-fg} ${t.title}${end}\n`;
     idx++;
   }
 
@@ -389,13 +389,13 @@ function renderTasks(): void {
     const sel = idx === selectedIndex ? "{inverse}" : "";
     const end = idx === selectedIndex ? "{/inverse}" : "";
     const pc = t.priority === "critical" ? "red" : t.priority === "high" ? "yellow" : "cyan";
-    content += `${sel}  {${pc}-fg}[${t.priority[0].toUpperCase()}]{/${pc}-fg} ${truncate(t.title, 45)}${end}\n`;
+    content += `${sel}  {${pc}-fg}[${t.priority[0].toUpperCase()}]{/${pc}-fg} ${t.title}${end}\n`;
     idx++;
   }
 
   content += `\n{bold}{green-fg}COMPLETED{/green-fg}{/bold} (${byStatus.completed.length})\n`;
   for (const t of byStatus.completed.slice(-5).reverse()) {
-    content += `  {green-fg}[*]{/green-fg} ${truncate(t.title, 45)} {white-fg}${t.completed_at ? formatTimeAgo(t.completed_at) : ""}{/white-fg}\n`;
+    content += `  {green-fg}[*]{/green-fg} ${t.title} {white-fg}${t.completed_at ? formatTimeAgo(t.completed_at) : ""}{/white-fg}\n`;
   }
 
   mainBox.setContent(content);
@@ -416,7 +416,7 @@ function renderSessions(): void {
       const recent = Date.now() - s.time.updated < 3600000;
       const col = recent ? "green" : "white";
 
-      content += `${sel}{${col}-fg}*{/${col}-fg} {bold}${truncate(s.title, 38)}{/bold}${end}\n`;
+      content += `${sel}{${col}-fg}*{/${col}-fg} {bold}${s.title}{/bold}${end}\n`;
       content += `    {white-fg}${s.id.slice(-12)} | ${ago} | T:${stats.toolCount} | ${formatTokens(stats.tokens.total)}{/white-fg}\n`;
     }
   } catch (e) {
@@ -431,19 +431,23 @@ function renderSessionDetail(): void {
   if (!viewingSession) return;
 
   const stats = getOpenCodeSessionStats(viewingSession.id);
-  let content = `{bold}{magenta-fg}SESSION: ${truncate(viewingSession.title, 45)}{/magenta-fg}{/bold}\n`;
-  content += `${"─".repeat(65)}\n`;
-  content += `ID: ${viewingSession.id.slice(-16)} | Dir: ${truncate(viewingSession.directory, 40)}\n`;
-  content += `Tokens: ${formatTokens(stats.tokens.total)} (in:${formatTokens(stats.tokens.input)} out:${formatTokens(stats.tokens.output)})\n\n`;
+  let content = `{bold}{magenta-fg}SESSION: ${viewingSession.title}{/magenta-fg}{/bold}\n`;
+  content += `{white-fg}${"─".repeat(65)}{/white-fg}\n`;
+  content += `{white-fg}ID: ${viewingSession.id} | Dir: ${viewingSession.directory}{/white-fg}\n`;
+  content += `{white-fg}Tokens: ${formatTokens(stats.tokens.total)} (in:${formatTokens(stats.tokens.input)} out:${formatTokens(stats.tokens.output)}){/white-fg}\n\n`;
 
   const messages = getOpenCodeMessagesForSession(viewingSession.id);
   let toolCount = 0;
 
   for (let i = 0; i < messages.length; i++) {
     const msg = messages[i];
-    const roleIcon = msg.role === "user" ? "USER" : "ASSISTANT";
+    const isUser = msg.role === "user";
+    const roleColor = isUser ? "blue" : "green";
+    const roleIcon = isUser ? "USER" : "ASSISTANT";
+    const timeAgo = formatTimeAgo(new Date(msg.time.created).toISOString());
 
-    content += `{bold}[${roleIcon}]{/bold} [${i + 1}/${messages.length}] ${formatTime(msg.time.created)}\n`;
+    // Message header with color
+    content += `{${roleColor}-fg}{bold}[${ roleIcon}]{/bold}{/${roleColor}-fg} {white-fg}[${i + 1}/${messages.length}] ${timeAgo}{/white-fg}\n`;
 
     // Get parts for this message
     const parts = getOpenCodePartsForMessage(msg.id);
@@ -453,43 +457,39 @@ function renderSessionDetail(): void {
         const text = part.text.length > 500 ? part.text.slice(0, 500) + "..." : part.text;
         const lines = text.split("\n").slice(0, 10);
         for (const line of lines) {
-          content += `  ${truncate(line, 70)}\n`;
+          content += `    ${line}\n`;
         }
         if (text.split("\n").length > 10) {
-          content += `  ... (${text.split("\n").length - 10} more lines)\n`;
+          content += `    {white-fg}... (${text.split("\n").length - 10} more lines){/white-fg}\n`;
         }
       } else if (part.type === "tool" || part.type === "tool-invocation") {
         toolCount++;
         const toolName = part.tool || part.toolName || "unknown";
-        // state is an object: { status: string, input?: any, output?: any }
         const status = part.state?.status || "completed";
+        const statusColor = status === "completed" ? "green" : status === "error" ? "red" : "yellow";
 
-        content += `  +-- TOOL: ${toolName}\n`;
+        content += `    {yellow-fg}[TOOL]{/yellow-fg} ${toolName} {${statusColor}-fg}(${status}){/${statusColor}-fg}\n`;
         
         // Show args (truncated) - get from part.args or part.state.input
         const args = part.args || part.state?.input;
         if (args) {
           const argsStr = typeof args === "string" ? args : JSON.stringify(args);
-          content += `  |  Input: ${truncate(argsStr, 55)}\n`;
+          content += `      {white-fg}> ${argsStr.slice(0, 200)}${argsStr.length > 200 ? "..." : ""}{/white-fg}\n`;
         }
-        
-        content += `  |  Status: ${status}\n`;
         
         // Show output (truncated) - get from part.result or part.state.output
         const output = part.result || part.state?.output;
         if (output !== undefined && output !== null) {
           const outStr = typeof output === "string" ? output : JSON.stringify(output);
-          content += `  |  Output: ${truncate(outStr, 55)}\n`;
+          content += `      {white-fg}< ${outStr.slice(0, 200)}${outStr.length > 200 ? "..." : ""}{/white-fg}\n`;
         }
-        
-        content += `  +${"─".repeat(30)}\n`;
       }
     }
     content += "\n";
   }
 
   // Summary
-  content += `${"─".repeat(65)}\n`;
+  content += `{white-fg}${"─".repeat(65)}{/white-fg}\n`;
   content += `{bold}Summary:{/bold} Messages: ${messages.length} | Tools: ${toolCount} | Tokens: ${formatTokens(stats.tokens.total)}\n`;
 
   mainBox.setContent(content);
