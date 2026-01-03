@@ -331,6 +331,38 @@ export interface Checkpoint {
 }
 
 // ============================================================================
+// Leader Election Types
+// ============================================================================
+
+/**
+ * Leader state for orchestrator leader election.
+ * Stored in orchestrator-state.json.
+ */
+export interface LeaderState {
+  leader_id: string | null;
+  leader_epoch: number;
+  last_heartbeat: string;
+  ttl_ms: number;
+}
+
+/**
+ * Leader status for display purposes.
+ */
+export type LeaderHealthStatus = "fresh" | "stale" | "unknown";
+
+/**
+ * Extended leader info for CLI display.
+ */
+export interface LeaderInfo {
+  leader_id: string | null;
+  leader_epoch: number;
+  last_heartbeat: string;
+  ttl_ms: number;
+  health: LeaderHealthStatus;
+  age_ms: number;
+}
+
+// ============================================================================
 // Configuration Types
 // ============================================================================
 
@@ -355,6 +387,9 @@ export interface SystemMessageConfig {
  * Generic key-value record.
  */
 export type JsonRecord = Record<string, unknown>;
+
+// Re-export leader types for convenience
+export type { LeaderState, LeaderHealthStatus, LeaderInfo };
 
 /**
  * Result type for operations that can fail.

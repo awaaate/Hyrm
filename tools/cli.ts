@@ -37,6 +37,10 @@ import {
   claimTask as sharedClaimTask,
   completeTask as sharedCompleteTask,
   sendUserMessage as sharedSendUserMessage,
+  // Leader info
+  getLeaderInfo,
+  // Data fetchers
+  getQualityStore,
 } from "./shared";
 import type { 
   ToolTiming, 
@@ -47,7 +51,8 @@ import type {
   SystemState, 
   Message, 
   UserMessage, 
-  QualityStore 
+  QualityStore,
+  LeaderInfo,
 } from "./shared/types";
 
 function box(title: string, content: string): string {
@@ -70,7 +75,7 @@ function showStatus(): void {
   const state = readJson<SystemState>(PATHS.state, {} as SystemState);
   const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
   const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
-  const quality = readJson<QualityStore>(PATHS.qualityAssessments, { assessments: [], summary: { average_score: 0, trend: "stable", total_assessed: 0, last_updated: "" } });
+  const quality = getQualityStore();
   const userMsgs = readJsonl<UserMessage>(PATHS.userMessages);
   
   // Active agents (heartbeat within 2 min)
@@ -101,10 +106,37 @@ ${c.dim}Last updated: ${new Date().toLocaleTimeString()}${c.reset}
 
 function showAgents(): void {
   const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
+  const leaderInfo = getLeaderInfo();
   const now = Date.now();
   
   console.log(`\n${c.bright}${c.cyan}ACTIVE AGENTS${c.reset}\n`);
   console.log(`${c.dim}${"─".repeat(80)}${c.reset}`);
+  
+  // Show leader status section
+  const leaderHealthColor = leaderInfo.health === "fresh" ? c.green : 
+                            leaderInfo.health === "stale" ? c.red : c.dim;
+  const leaderHealthIcon = leaderInfo.health === "fresh" ? "●" : 
+                           leaderInfo.health === "stale" ? "○" : "?";
+  
+  console.log(`\n${c.bright}${c.magenta}LEADER STATUS${c.reset}`);
+  if (leaderInfo.leader_id) {
+    console.log(
+      `  ${leaderHealthColor}${leaderHealthIcon}${c.reset} ` +
+      `${c.bright}${truncate(leaderInfo.leader_id, 35)}${c.reset} ` +
+      `${c.cyan}epoch ${leaderInfo.leader_epoch}${c.reset} ` +
+      `${leaderHealthColor}(${leaderInfo.health})${c.reset}`
+    );
+    if (leaderInfo.last_heartbeat) {
+      console.log(
+        `    ${c.dim}Heartbeat: ${formatTimeShort(leaderInfo.last_heartbeat)} ago ` +
+        `(TTL: ${Math.round(leaderInfo.ttl_ms / 1000)}s)${c.reset}`
+      );
+    }
+  } else {
+    console.log(`  ${c.dim}No leader elected${c.reset}`);
+  }
+  
+  console.log(`\n${c.dim}${"─".repeat(80)}${c.reset}`);
   
   if (!registry.agents || registry.agents.length === 0) {
     console.log(`${c.dim}No agents registered.${c.reset}\n`);
@@ -131,8 +163,12 @@ function showAgents(): void {
       const color = isAgentActive ? c.reset : c.dim;
       const statusIcon = agent.status === "working" ? "⚙" : agent.status === "blocked" ? "⛔" : "◦";
       
+      // Check if this agent is the leader
+      const isCurrentLeader = agent.agent_id === leaderInfo.leader_id && leaderInfo.health === "fresh";
+      const leaderTag = isCurrentLeader ? `${c.magenta}[LEADER]${c.reset} ` : "";
+      
       console.log(
-        `  ${color}${statusIcon} ${truncate(agent.agent_id, 35)} ` +
+        `  ${color}${statusIcon} ${leaderTag}${truncate(agent.agent_id, 30)} ` +
         `[${agent.assigned_role || "general"}] ` +
         `${agent.status} ` +
         `(${formatTimeShort(agent.last_heartbeat)} ago)${c.reset}`
@@ -281,7 +317,7 @@ function sendUserMessage(message: string, urgent: boolean = false): void {
 }
 
 function showQuality(): void {
-  const quality = readJson<QualityStore>(PATHS.qualityAssessments, { assessments: [], summary: { average_score: 0, trend: "stable", total_assessed: 0, last_updated: "" } });
+  const quality = getQualityStore();
   
   console.log(`\n${c.bright}${c.blue}QUALITY METRICS${c.reset}\n`);
   console.log(`${c.dim}${"─".repeat(80)}${c.reset}\n`);

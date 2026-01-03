@@ -1899,3 +1899,73 @@
 2026-01-03T09:38:45.793Z [INFO] [agent-1767433125465-w735d] File locked: /app/workspace/memory/orchestrator-state.json
 2026-01-03T09:38:45.794Z [INFO] [agent-1767433125465-w735d] File unlocked: /app/workspace/memory/orchestrator-state.json
 2026-01-03T09:39:03.506Z [INFO] [agent-1767433125465-w735d] Status updated: working - Leader (epoch 6): Processing prompt-worker completion, monitoring leader-impl-worker
+2026-01-03T09:39:45.482Z [INFO] [agent-1767433125465-w735d] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:39:45.486Z [INFO] [agent-1767433125465-w735d] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:39:48.483Z [INFO] [agent-1767423659871-5cdl3g] Message sent: heartbeat (broadcast)
+2026-01-03T09:40:48.845Z [INFO] [agent-1767433248844-ajnct] Agent registered: agent-1767433248844-ajnct (role: orchestrator)
+2026-01-03T09:40:48.846Z [INFO] [agent-1767433248844-ajnct] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:40:48.846Z [WARN] [agent-1767433248844-ajnct] Detected existing healthy orchestrator leader agent-1767433125465-w735d (epoch 6). This agent (agent-1767433248844-ajnct) should self-demote and NOT act as orchestrator. Use isOrchestratorLeader() to check before spawning workers or respawning.
+2026-01-03T09:40:48.847Z [INFO] [agent-1767433248844-ajnct] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:40:48.847Z [INFO] [agent-1767433248844-ajnct] Message sent: heartbeat (broadcast)
+2026-01-03T09:40:49.148Z [INFO] [agent-1767433248844-ajnct] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:40:49.149Z [INFO] [agent-1767433248844-ajnct] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:41:06.519Z [INFO] [agent-1767433248844-ajnct] Status updated: idle - Detected existing leader (agent-1767433125465-w735d, epoch 6). Exiting gracefully.
+2026-01-03T09:42:25.828Z [ERROR] [agent-1767433345826-5vf67q] Registration attempt 1 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:25.829Z [ERROR] [agent-1767433345826-5vf67q] Registration attempt 2 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:25.833Z [ERROR] [agent-1767433345826-5vf67q] Registration attempt 3 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:25.835Z [ERROR] [agent-1767433345826-5vf67q] Registration attempt 4 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:25.836Z [ERROR] [agent-1767433345826-5vf67q] Registration attempt 5 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:25.837Z [ERROR] [agent-1767433345826-5vf67q] Failed to register agent after max retries
+2026-01-03T09:42:31.692Z [ERROR] [agent-1767433351691-av3zlc] Registration attempt 1 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:31.694Z [ERROR] [agent-1767433351691-av3zlc] Registration attempt 2 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:31.697Z [ERROR] [agent-1767433351691-av3zlc] Registration attempt 3 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:31.698Z [ERROR] [agent-1767433351691-av3zlc] Registration attempt 4 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:31.699Z [ERROR] [agent-1767433351691-av3zlc] Registration attempt 5 failed: SyntaxError: JSON Parse error: Unexpected EOF
+2026-01-03T09:42:31.700Z [ERROR] [agent-1767433351691-av3zlc] Failed to register agent after max retries
+2026-01-03T09:42:41.217Z [INFO] [agent-1767433361217-1co749] Agent registered: agent-1767433361217-1co749 (role: orchestrator)
+2026-01-03T09:42:41.218Z [INFO] [agent-1767433361217-1co749] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:42:41.218Z [WARN] [agent-1767433361217-1co749] Detected existing healthy orchestrator leader agent-1767433125465-w735d (epoch 6). This agent (agent-1767433361217-1co749) should self-demote and NOT act as orchestrator. Use isOrchestratorLeader() to check before spawning workers or respawning.
+2026-01-03T09:42:41.219Z [INFO] [agent-1767433361217-1co749] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:42:41.219Z [INFO] [agent-1767433361217-1co749] Message sent: heartbeat (broadcast)
+2026-01-03T09:42:44.486Z [INFO] [agent-1767433361217-1co749] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:42:44.487Z [INFO] [agent-1767433361217-1co749] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:43:19.642Z [INFO] [agent-1767433361217-1co749] Status updated: active - Orchestrator initialization - checking worker status
+2026-01-03T09:44:48.516Z [INFO] [agent-1767423659871-5cdl3g] Message sent: heartbeat (broadcast)
+2026-01-03T09:45:41.786Z [INFO] [agent-1767433541786-00vj5] Agent registered: agent-1767433541786-00vj5 (role: cli-worker)
+2026-01-03T09:45:41.787Z [INFO] [agent-1767433541786-00vj5] Message sent: heartbeat (broadcast)
+2026-01-03T09:45:47.457Z [INFO] [agent-1767433547455-1a95rd] Agent registered: agent-1767433547455-1a95rd (role: cli-audit-worker)
+2026-01-03T09:45:47.464Z [INFO] [agent-1767433547455-1a95rd] Message sent: heartbeat (broadcast)
+2026-01-03T09:45:55.750Z [INFO] [agent-1767433361217-1co749] Status updated: working - Session 177 orchestrator - spawned 2 workers for CLI tasks
+2026-01-03T09:46:16.469Z [INFO] [agent-1767433361217-1co749] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:46:16.471Z [INFO] [agent-1767433361217-1co749] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:46:25.548Z [INFO] [agent-1767433361217-1co749] Message sent: broadcast (broadcast)
+2026-01-03T09:47:32.358Z [INFO] [agent-1767433652355-gmf69] Agent registered: agent-1767433652355-gmf69 (role: orchestrator)
+2026-01-03T09:47:32.361Z [INFO] [agent-1767433652355-gmf69] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:47:32.364Z [WARN] [agent-1767433652355-gmf69] Detected existing healthy orchestrator leader agent-1767433361217-1co749 (epoch 7). This agent (agent-1767433652355-gmf69) should self-demote and NOT act as orchestrator. Use isOrchestratorLeader() to check before spawning workers or respawning.
+2026-01-03T09:47:32.367Z [INFO] [agent-1767433652355-gmf69] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:47:32.371Z [INFO] [agent-1767433652355-gmf69] Message sent: heartbeat (broadcast)
+2026-01-03T09:47:32.538Z [INFO] [agent-1767433652355-gmf69] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:47:32.539Z [INFO] [agent-1767433652355-gmf69] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:48:34.914Z [INFO] [agent-1767433714911-d7g6xf] Agent registered: agent-1767433714911-d7g6xf (role: orchestrator)
+2026-01-03T09:48:34.916Z [INFO] [agent-1767433714911-d7g6xf] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:48:34.917Z [WARN] [agent-1767433714911-d7g6xf] Detected existing healthy orchestrator leader agent-1767433361217-1co749 (epoch 7). This agent (agent-1767433714911-d7g6xf) should self-demote and NOT act as orchestrator. Use isOrchestratorLeader() to check before spawning workers or respawning.
+2026-01-03T09:48:34.918Z [INFO] [agent-1767433714911-d7g6xf] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:48:34.920Z [INFO] [agent-1767433714911-d7g6xf] Message sent: heartbeat (broadcast)
+2026-01-03T09:48:35.210Z [INFO] [agent-1767433714911-d7g6xf] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:48:35.211Z [INFO] [agent-1767433714911-d7g6xf] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:49:40.262Z [INFO] [agent-1767433780257-wn6w5r] Agent registered: agent-1767433780257-wn6w5r (role: orchestrator)
+2026-01-03T09:49:40.264Z [INFO] [agent-1767433780257-wn6w5r] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:49:40.265Z [WARN] [agent-1767433780257-wn6w5r] Detected existing healthy orchestrator leader agent-1767433361217-1co749 (epoch 7). This agent (agent-1767433780257-wn6w5r) should self-demote and NOT act as orchestrator. Use isOrchestratorLeader() to check before spawning workers or respawning.
+2026-01-03T09:49:40.265Z [INFO] [agent-1767433780257-wn6w5r] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:49:40.266Z [INFO] [agent-1767433780257-wn6w5r] Message sent: heartbeat (broadcast)
+2026-01-03T09:49:40.620Z [INFO] [agent-1767433780257-wn6w5r] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:49:40.621Z [INFO] [agent-1767433780257-wn6w5r] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:49:48.534Z [INFO] [agent-1767423659871-5cdl3g] Message sent: heartbeat (broadcast)
+2026-01-03T09:50:15.569Z [INFO] [agent-1767433780257-wn6w5r] Status updated: working - Session 178 leader (epoch 8) - cleaning up stale orchestrators and monitoring workers
+2026-01-03T09:50:34.206Z [INFO] [agent-1767433780257-wn6w5r] Message sent: broadcast (broadcast)
+2026-01-03T09:50:41.805Z [INFO] [agent-1767433541786-00vj5] Message sent: heartbeat (broadcast)
+2026-01-03T09:50:47.486Z [INFO] [agent-1767433547455-1a95rd] Message sent: heartbeat (broadcast)
+2026-01-03T09:51:04.678Z [INFO] [agent-1767433547455-1a95rd] Message sent: task_complete (broadcast)
+2026-01-03T09:51:32.976Z [INFO] [agent-1767433541786-00vj5] Message sent: task_complete (broadcast)
+2026-01-03T09:52:10.904Z [INFO] [agent-1767433780257-wn6w5r] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-03T09:52:10.907Z [INFO] [agent-1767433780257-wn6w5r] File unlocked: /app/workspace/memory/orchestrator-state.json

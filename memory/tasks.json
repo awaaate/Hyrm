@@ -2124,9 +2124,9 @@
       "title": "Audit and debug CLI dashboard & multi-agent monitor outputs",
       "description": "Review tools/cli.ts monitor/watch, tools/realtime-monitor.ts, and terminal-dashboard data layer to ensure OpenCode sessions, messages, and metrics are displayed correctly (no formatting errors, no empty panels). Align outputs with tools/opencode-tracker.ts and avoid UI-only tweaks; focus on data correctness, robustness, and clear error reporting.",
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-03T06:42:51.222Z",
-      "updated_at": "2026-01-03T06:59:24.464Z",
+      "updated_at": "2026-01-03T09:52:31.156Z",
       "created_by": "unknown",
       "tags": [
         "cli",
@@ -2137,20 +2137,25 @@
       ],
       "estimated_hours": 3,
       "complexity": "moderate",
-      "assigned_to": "agent-1767423494522-3a1e0r",
-      "claimed_at": "2026-01-03T06:44:28.679Z",
+      "assigned_to": "agent-1767433547455-1a95rd",
+      "claimed_at": "2026-01-03T09:45:47.703Z",
       "notes": [
-        "[2026-01-03T06:59:24.464Z] Current orchestrator instance resuming CLI dashboard & monitor audit; previous orchestrator agent-1767422633466-ypcjdc is superseded."
-      ]
+        "[2026-01-03T06:59:24.464Z] Current orchestrator instance resuming CLI dashboard & monitor audit; previous orchestrator agent-1767422633466-ypcjdc is superseded.",
+        "[2026-01-03T09:45:09.514Z] Reset from stale worker. Original worker agent-1767423494522-3a1e0r is no longer active.",
+        "[2026-01-03T09:52:22.366Z] Completed by cli-audit-worker. Fixed quality score display bug, normalized data format between quality-assessments.json and code expectations. Files changed: tools/shared/data-fetchers.ts, tools/cli.ts, tools/realtime-monitor.ts, _wip_ui/terminal-dashboard/data.ts"
+      ],
+      "completed_at": "2026-01-03T09:52:22.365Z",
+      "quality_score": 8.1,
+      "quality_notes": "Normalize data format between JSON storage and code expectations early; use shared data-fetcher functions to centralize format handling."
     },
     {
       "id": "task_1767422728098_488s1n",
       "title": "Implement orchestrator leader election and stale-agent cleanup",
       "description": "Implement the single-leader orchestrator model with heartbeat-based lease, leader epoch and fencing tokens, stale-orchestrator detection, and self-shutdown, based on the design from task_1767422564433_bk0h88. Integrate with agent_status, agent_set_handoff, and existing monitoring so that only one orchestrator acts as leader at a time while others stay idle or shut down safely.",
       "priority": "critical",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-03T06:45:28.098Z",
-      "updated_at": "2026-01-03T07:00:02.424Z",
+      "updated_at": "2026-01-03T09:44:50.246Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2165,9 +2170,13 @@
       "assigned_to": "agent-1767423576529-lc6l8",
       "notes": [
         "[2026-01-03T06:45:49.780Z] Worker started; implementing orchestrator leader election + stale-agent cleanup.",
-        "[2026-01-03T06:59:24.014Z] Requeued by orchestrator agent-1767423494522-3a1e0r because previous leader-impl-worker is no longer active in agent_status; ready for a fresh leader-impl-worker to claim."
+        "[2026-01-03T06:59:24.014Z] Requeued by orchestrator agent-1767423494522-3a1e0r because previous leader-impl-worker is no longer active in agent_status; ready for a fresh leader-impl-worker to claim.",
+        "[2026-01-03T09:44:47.379Z] Leader election implementation completed by agent-1767424446228-4p78mk at commit ef10060. Implementation includes: MultiAgentCoordinator with leader lease management, orchestrator-state.json for durable leader tracking, isOrchestratorLeader() API, stale orchestrator detection, and plugin integration for leader-aware respawn."
       ],
-      "claimed_at": "2026-01-03T07:00:02.424Z"
+      "claimed_at": "2026-01-03T07:00:02.424Z",
+      "completed_at": "2026-01-03T09:44:47.374Z",
+      "quality_score": 8.3,
+      "quality_notes": "Leader election with epoch-based leasing and heartbeat refresh is essential for multi-orchestrator systems. File-based state with TTL provides simple but effective coordination."
     },
     {
       "id": "task_1767423071616_2xmg77",
@@ -2176,7 +2185,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T06:51:11.616Z",
-      "updated_at": "2026-01-03T06:58:34.368Z",
+      "updated_at": "2026-01-03T09:45:07.990Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2186,16 +2195,14 @@
       "depends_on": [
         "task_1767422728098_488s1n"
       ],
-      "blocked_by": [
-        "task_1767422728098_488s1n"
-      ],
       "estimated_hours": 2,
       "complexity": "moderate",
       "assigned_to": "agent-1767423215783-oj3a6j",
       "claimed_at": "2026-01-03T06:53:35.829Z",
-      "completed_at": "2026-01-03T06:58:34.368Z",
+      "completed_at": "2026-01-03T09:45:07.987Z",
       "notes": [
-        "[2026-01-03T06:58:34.368Z] Leader-election validation: implementation of the Session 188 single-leader design is not yet present; multiple orchestrators remain active with no leader lease, and CLI/monitoring do not surface leader state. See Session 189 in memory/working.md for full findings and recommendations."
+        "[2026-01-03T06:58:34.368Z] Leader-election validation: implementation of the Session 188 single-leader design is not yet present; multiple orchestrators remain active with no leader lease, and CLI/monitoring do not surface leader state. See Session 189 in memory/working.md for full findings and recommendations.",
+        "[2026-01-03T09:45:07.990Z] Validation completed by agent-1767423215783-oj3a6j (see msg-1767423514368). Findings documented in Session 189 of working.md."
       ]
     },
     {
@@ -2203,9 +2210,9 @@
       "title": "Integrate leader election state into CLI dashboard/monitor",
       "description": "Update CLI monitoring tools (tools/cli.ts monitor/watch, tools/realtime-monitor.ts, and any supporting trackers) to surface the new single-leader orchestrator state. Show which orchestrator is leader, follower counts, and stale-orchestrator detections based on the leader-election implementation from task_1767422728098_488s1n and the design in Session 188 (memory/working.md). Focus on data correctness and robust error handling if leader state is missing or inconsistent; avoid cosmetic-only UI tweaks.",
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-03T06:54:30.940Z",
-      "updated_at": "2026-01-03T06:55:14.859Z",
+      "updated_at": "2026-01-03T09:52:33.520Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2215,20 +2222,26 @@
       ],
       "estimated_hours": 3,
       "complexity": "moderate",
-      "assigned_to": "agent-1767423314532-41ys2",
-      "claimed_at": "2026-01-03T06:55:14.859Z",
+      "assigned_to": "agent-1767433541786-00vj5",
+      "claimed_at": "2026-01-03T09:45:42.041Z",
       "notes": [
-        "[2026-01-03T06:54:45.209Z] Releasing claim from orchestrator; task should be picked up by a dedicated worker spawned via opencode run."
-      ]
+        "[2026-01-03T06:54:45.209Z] Releasing claim from orchestrator; task should be picked up by a dedicated worker spawned via opencode run.",
+        "[2026-01-03T09:45:10.664Z] Reset from stale worker. Original worker agent-1767423314532-41ys2 is no longer active.",
+        "[2026-01-03T09:51:40.380Z] Integrated leader election state into CLI dashboard/monitor. Changes: 1) Added LeaderState, LeaderHealthStatus, LeaderInfo types to shared/types.ts, 2) Added getLeaderInfo(), getLeaderState(), hasActiveLeader(), isLeader() to shared/data-fetchers.ts, 3) Updated cli.ts showAgents() with leader status section and [LEADER] tag, 4) Updated realtime-monitor.ts with renderLeaderSection(), leader in status bar, [L] tag on agents, and orchestrator-state.json in file watchers.",
+        "[2026-01-03T09:52:25.054Z] Completed by cli-worker. Added leader election state display to CLI dashboard/monitor. Added LeaderState/LeaderInfo types, getLeaderInfo() helper, leader section in CLI agents command, leader info in realtime-monitor status bar with [L] tags."
+      ],
+      "completed_at": "2026-01-03T09:52:25.052Z",
+      "quality_score": 8.3,
+      "quality_notes": "Leader election state visibility in CLI is crucial for operator observability; adding file watchers for orchestrator-state.json enables real-time updates."
     },
     {
       "id": "task_1767423420053_426y6d",
       "title": "Backfill quality assessments for unassessed tasks",
       "description": "Use quality_report and task_list to identify tasks without assessments, then create or update quality_assess entries so overall quality stats accurately reflect recent work.",
       "priority": "medium",
-      "status": "in_progress",
+      "status": "pending",
       "created_at": "2026-01-03T06:57:00.053Z",
-      "updated_at": "2026-01-03T06:57:38.364Z",
+      "updated_at": "2026-01-03T09:45:11.729Z",
       "created_by": "unknown",
       "tags": [
         "quality",
@@ -2237,16 +2250,19 @@
       "estimated_hours": 1,
       "complexity": "simple",
       "assigned_to": "agent-1767423456035-2rzueq",
-      "claimed_at": "2026-01-03T06:57:38.364Z"
+      "claimed_at": "2026-01-03T06:57:38.364Z",
+      "notes": [
+        "[2026-01-03T09:45:11.729Z] Reset from stale worker. Original worker agent-1767423456035-2rzueq is no longer active."
+      ]
     },
     {
       "id": "task_1767423756900_wguutv",
       "title": "Harden orchestrator startup and watchdog behavior for single-leader model",
       "description": "After the orchestrator leader election and stale-agent cleanup implementation (task_1767422728098_488s1n) lands, refine orchestrator startup and watchdog behavior so that new processes prefer reusing an existing healthy leader instead of spawning parallel orchestrators. Implement self-shutdown or idle behavior for non-leader orchestrators that start when a healthy leader lease exists, and tighten stale-orchestrator cleanup to minimize multi-leader windows, following Session 189 follow-up recommendation #4 in memory/working.md.",
       "priority": "high",
-      "status": "blocked",
+      "status": "pending",
       "created_at": "2026-01-03T07:02:36.900Z",
-      "updated_at": "2026-01-03T07:02:36.900Z",
+      "updated_at": "2026-01-03T09:44:47.379Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2257,9 +2273,6 @@
       "depends_on": [
         "task_1767422728098_488s1n"
       ],
-      "blocked_by": [
-        "task_1767422728098_488s1n"
-      ],
       "estimated_hours": 4,
       "complexity": "moderate"
     },
@@ -2268,9 +2281,9 @@
       "title": "Re-run leader election validation after implementation and CLI integration",
       "description": "Once the single-leader orchestrator model is implemented (task_1767422728098_488s1n) and leader state is surfaced in CLI/monitoring (task_1767423270940_xmgxle), perform a second end-to-end validation of leader election and stale-orchestrator cleanup as described in Session 189. Confirm only one orchestrator holds the leader lease at a time, non-leaders self-demote or exit, and CLI/monitoring views accurately reflect leader id/epoch and cleanup events. Document findings in memory/working.md and update task quality assessments if needed.",
       "priority": "high",
-      "status": "blocked",
+      "status": "pending",
       "created_at": "2026-01-03T07:02:38.123Z",
-      "updated_at": "2026-01-03T07:02:38.123Z",
+      "updated_at": "2026-01-03T09:51:40.380Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2279,10 +2292,6 @@
         "monitoring"
       ],
       "depends_on": [
-        "task_1767422728098_488s1n",
-        "task_1767423270940_xmgxle"
-      ],
-      "blocked_by": [
         "task_1767422728098_488s1n",
         "task_1767423270940_xmgxle"
       ],
@@ -2316,6 +2325,6 @@
       "quality_notes": "Anthropic prompting guides provide clear patterns for improving agent prompts: scratchpad thinking, context-first structure, tool descriptions with examples. Apply these patterns systematically across all agent interfaces."
     }
   ],
-  "completed_count": 105,
-  "last_updated": "2026-01-03T09:39:05.357Z"
+  "completed_count": 110,
+  "last_updated": "2026-01-03T09:52:25.054Z"
 }

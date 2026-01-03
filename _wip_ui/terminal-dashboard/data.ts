@@ -145,10 +145,28 @@ export function getUnreadUserMessages(): UserMessageData[] {
 }
 
 export function getQuality(): QualityData {
-  return readJson<QualityData>(PATHS.qualityAssessments, {
-    assessments: [],
-    summary: {},
-  });
+  // Read the raw file to handle both old and new formats
+  const raw = readJson<{
+    assessments?: QualityData["assessments"];
+    summary?: QualityData["summary"];
+    aggregate_stats?: {
+      total_assessed?: number;
+      avg_overall_score?: number;
+    };
+    last_updated?: string;
+  }>(PATHS.qualityAssessments, { assessments: [] });
+  
+  // Normalize: prefer summary if present, otherwise convert aggregate_stats
+  const summary: QualityData["summary"] = raw.summary || {
+    average_score: raw.aggregate_stats?.avg_overall_score,
+    count: raw.aggregate_stats?.total_assessed,
+    trend: "stable",
+  };
+  
+  return {
+    assessments: raw.assessments || [],
+    summary,
+  };
 }
 
 export function getRecentLogs(limit: number = 50): any[] {

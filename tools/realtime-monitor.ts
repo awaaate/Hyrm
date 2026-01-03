@@ -23,8 +23,8 @@
 
 import { existsSync, readFileSync, writeFileSync, appendFileSync, watch, FSWatcher } from "fs";
 import { createInterface, Interface as ReadlineInterface } from "readline";
-import { readJson, readJsonl, writeJson, c, formatTimeShort, PATHS, truncate, padRight, getAllOpenCodeSessions, getOpenCodeSessionStats } from "./shared";
-import type { UserMessage, SystemState, QualityStore, Task, TaskStore, OpenCodeSession } from "./shared/types";
+import { readJson, readJsonl, writeJson, c, formatTimeShort, PATHS, truncate, padRight, getAllOpenCodeSessions, getOpenCodeSessionStats, getQualityStore, getLeaderInfo } from "./shared";
+import type { UserMessage, SystemState, QualityStore, Task, TaskStore, OpenCodeSession, LeaderInfo } from "./shared/types";
 
 // ANSI escape code prefix (for screen control)
 const ESC = "\x1b";
@@ -201,8 +201,8 @@ function getState(): Partial<SystemState> {
   return readJson<Partial<SystemState>>(PATHS.state, {});
 }
 
-function getQuality(): Partial<QualityStore> {
-  return readJson<Partial<QualityStore>>(PATHS.qualityAssessments, { summary: {} as Partial<QualityStore["summary"]> });
+function getQuality(): QualityStore {
+  return getQualityStore();
 }
 
 function getRecentLogs(limit: number = 20): LogEntry[] {
@@ -245,16 +245,26 @@ function renderStatusBar(): void {
   const tasks = getTasks();
   const quality = getQuality();
   const userMsgs = getUserMessages();
+  const leaderInfo = getLeaderInfo();
 
   const pendingTasks = tasks.filter((t) => t.status === "pending" || t.status === "in_progress").length;
   const unreadMsgs = userMsgs.filter((m) => !m.read).length;
 
   const statusColor = getStatusColor(state.status || "unknown");
+  
+  // Leader status for status bar
+  const leaderHealthColor = leaderInfo.health === "fresh" ? c.green : 
+                            leaderInfo.health === "stale" ? c.red : c.dim;
+  const leaderHealthIcon = leaderInfo.health === "fresh" ? "●" : 
+                           leaderInfo.health === "stale" ? "○" : "?";
+  const leaderDisplay = leaderInfo.leader_id 
+    ? `${leaderHealthColor}${leaderHealthIcon}${c.reset} ${c.bright}E${leaderInfo.leader_epoch}${c.reset}`
+    : `${c.dim}none${c.reset}`;
 
   console.log(
     `${c.cyan}Session:${c.reset} ${c.bright}${state.session_count || "?"}${c.reset} ` +
     `${c.dim}|${c.reset} ` +
-    `${c.cyan}Status:${c.reset} ${statusColor}${state.status || "unknown"}${c.reset} ` +
+    `${c.cyan}Leader:${c.reset} ${leaderDisplay} ` +
     `${c.dim}|${c.reset} ` +
     `${c.cyan}Agents:${c.reset} ${c.bright}${agents.length}${c.reset} ` +
     `${c.dim}|${c.reset} ` +
@@ -279,8 +289,38 @@ function renderDivider(title?: string): void {
   }
 }
 
+function renderLeaderSection(): void {
+  const leaderInfo = getLeaderInfo();
+  
+  renderDivider("LEADER");
+  
+  const healthColor = leaderInfo.health === "fresh" ? c.green : 
+                      leaderInfo.health === "stale" ? c.red : c.dim;
+  const healthIcon = leaderInfo.health === "fresh" ? sym.bullet : 
+                     leaderInfo.health === "stale" ? sym.circle : "?";
+  
+  if (leaderInfo.leader_id) {
+    console.log(
+      `  ${healthColor}${healthIcon}${c.reset} ` +
+      `${c.bright}${truncate(leaderInfo.leader_id, 30)}${c.reset} ` +
+      `${c.cyan}epoch ${leaderInfo.leader_epoch}${c.reset} ` +
+      `${healthColor}(${leaderInfo.health})${c.reset}`
+    );
+    if (leaderInfo.last_heartbeat) {
+      const ttlSec = Math.round(leaderInfo.ttl_ms / 1000);
+      console.log(
+        `    ${c.dim}HB: ${formatTimeShort(leaderInfo.last_heartbeat)} ago | TTL: ${ttlSec}s${c.reset}`
+      );
+    }
+  } else {
+    console.log(`  ${c.dim}No leader elected${c.reset}`);
+  }
+  console.log();
+}
+
 function renderAgentSection(detailed: boolean = false): void {
   const agents = getActiveAgents();
+  const leaderInfo = getLeaderInfo();
 
   renderDivider(`AGENTS (${agents.length})`);
 
@@ -306,11 +346,15 @@ function renderAgentSection(detailed: boolean = false): void {
       const statusColor = getStatusColor(agent.status);
       const icon = getStatusIcon(agent.status);
       const timeAgo = formatTimeShort(agent.last_heartbeat);
-      const agentId = truncate(agent.agent_id, 35);
+      
+      // Check if this agent is the leader
+      const isCurrentLeader = agent.agent_id === leaderInfo.leader_id && leaderInfo.health === "fresh";
+      const leaderTag = isCurrentLeader ? `${c.magenta}[L]${c.reset} ` : "";
+      const agentId = truncate(agent.agent_id, isCurrentLeader ? 31 : 35);
 
       console.log(
         `  ${statusColor}${icon}${c.reset} ` +
-        `${c.bright}${agentId}${c.reset} ` +
+        `${leaderTag}${c.bright}${agentId}${c.reset} ` +
         `${statusColor}${agent.status}${c.reset} ` +
         `${c.dim}(${timeAgo})${c.reset}`
       );
@@ -750,12 +794,14 @@ function render(): void {
 
   switch (mode) {
     case "dashboard":
+      renderLeaderSection();
       renderAgentSection(false);
       renderTaskSection(false, 5);
       renderMessageSection(5);
       break;
 
     case "agents":
+      renderLeaderSection();
       renderAgentSection(true);
       break;
 
@@ -776,6 +822,7 @@ function render(): void {
       break;
 
     case "all":
+      renderLeaderSection();
       renderAgentSection(true);
       renderTaskSection(true, 5);
       renderUserMessageSection();
@@ -793,6 +840,7 @@ function startWatching(): void {
   const filesToWatch = [
     PATHS.state,
     PATHS.agentRegistry,
+    PATHS.orchestratorState,
     PATHS.messageBus,
     PATHS.tasks,
     PATHS.qualityAssessments,

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-01-03T09:39:12.559Z",
+  "last_updated": "2026-01-03T09:52:33.522Z",
   "agents": {
     "agent-1767302507934-2c671j": {
       "agent_id": "agent-1767302507934-2c671j",
@@ -398,13 +398,13 @@
     },
     "agent-1767423215783-oj3a6j": {
       "agent_id": "agent-1767423215783-oj3a6j",
-      "tasks_completed": 1,
+      "tasks_completed": 2,
       "tasks_claimed": 1,
-      "total_duration_ms": 298539,
-      "avg_duration_ms": 298539,
+      "total_duration_ms": 10590697,
+      "avg_duration_ms": 5295349,
       "quality_scores": [],
       "avg_quality": 0,
-      "last_activity": "2026-01-03T06:58:34.368Z",
+      "last_activity": "2026-01-03T09:45:07.988Z",
       "first_seen": "2026-01-03T06:53:35.830Z"
     },
     "agent-1767423173812-5t8vph": {
@@ -442,13 +442,15 @@
     },
     "agent-1767423576529-lc6l8": {
       "agent_id": "agent-1767423576529-lc6l8",
-      "tasks_completed": 0,
+      "tasks_completed": 1,
       "tasks_claimed": 1,
-      "total_duration_ms": 0,
-      "avg_duration_ms": 0,
-      "quality_scores": [],
-      "avg_quality": 0,
-      "last_activity": "2026-01-03T07:00:02.425Z",
+      "total_duration_ms": 9884950,
+      "avg_duration_ms": 9884950,
+      "quality_scores": [
+        8.3
+      ],
+      "avg_quality": 8.3,
+      "last_activity": "2026-01-03T09:44:50.249Z",
       "first_seen": "2026-01-03T07:00:02.425Z"
     },
     "agent-1767432247589-hhlnve": {
@@ -463,6 +465,32 @@
       "avg_quality": 8.5,
       "last_activity": "2026-01-03T09:39:12.559Z",
       "first_seen": "2026-01-03T09:25:31.871Z"
+    },
+    "agent-1767433541786-00vj5": {
+      "agent_id": "agent-1767433541786-00vj5",
+      "tasks_completed": 2,
+      "tasks_claimed": 1,
+      "total_duration_ms": 761347,
+      "avg_duration_ms": 380674,
+      "quality_scores": [
+        8.3
+      ],
+      "avg_quality": 8.3,
+      "last_activity": "2026-01-03T09:52:33.522Z",
+      "first_seen": "2026-01-03T09:45:42.042Z"
+    },
+    "agent-1767433547455-1a95rd": {
+      "agent_id": "agent-1767433547455-1a95rd",
+      "tasks_completed": 1,
+      "tasks_claimed": 1,
+      "total_duration_ms": 394662,
+      "avg_duration_ms": 394662,
+      "quality_scores": [
+        8.1
+      ],
+      "avg_quality": 8.1,
+      "last_activity": "2026-01-03T09:52:31.159Z",
+      "first_seen": "2026-01-03T09:45:47.704Z"
     }
   }
 }

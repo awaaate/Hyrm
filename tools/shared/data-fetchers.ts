@@ -23,6 +23,9 @@ import type {
   QualityStore,
   SystemState,
   SessionEvent,
+  LeaderState,
+  LeaderInfo,
+  LeaderHealthStatus,
 } from "./types";
 
 // ============================================================================
@@ -119,6 +122,84 @@ export function isAgentAlive(agentId: string, maxAgeMs: number = STALENESS.AGENT
   
   const lastHB = new Date(agent.last_heartbeat).getTime();
   return Date.now() - lastHB < maxAgeMs;
+}
+
+// ============================================================================
+// Leader Election Functions
+// ============================================================================
+
+/**
+ * Default leader state when orchestrator-state.json is missing.
+ */
+const DEFAULT_LEADER_STATE: LeaderState = {
+  leader_id: null,
+  leader_epoch: 0,
+  last_heartbeat: "",
+  ttl_ms: 180000, // 3 minutes default TTL
+};
+
+/**
+ * Get raw leader state from orchestrator-state.json.
+ * 
+ * @returns LeaderState object or default if file missing
+ */
+export function getLeaderState(): LeaderState {
+  return readJson<LeaderState>(PATHS.orchestratorState, DEFAULT_LEADER_STATE);
+}
+
+/**
+ * Get leader info with health status for display.
+ * 
+ * @returns LeaderInfo with health status and age
+ */
+export function getLeaderInfo(): LeaderInfo {
+  const state = getLeaderState();
+  const now = Date.now();
+  
+  let age_ms = 0;
+  let health: LeaderHealthStatus = "unknown";
+  
+  if (state.leader_id && state.last_heartbeat) {
+    const heartbeatTime = new Date(state.last_heartbeat).getTime();
+    age_ms = now - heartbeatTime;
+    
+    // Fresh if heartbeat within TTL, stale if beyond
+    if (age_ms < state.ttl_ms) {
+      health = "fresh";
+    } else {
+      health = "stale";
+    }
+  }
+  
+  return {
+    leader_id: state.leader_id,
+    leader_epoch: state.leader_epoch,
+    last_heartbeat: state.last_heartbeat,
+    ttl_ms: state.ttl_ms,
+    health,
+    age_ms,
+  };
+}
+
+/**
+ * Check if there is an active leader.
+ * 
+ * @returns True if leader exists and heartbeat is fresh
+ */
+export function hasActiveLeader(): boolean {
+  const info = getLeaderInfo();
+  return info.health === "fresh";
+}
+
+/**
+ * Check if a specific agent is the leader.
+ * 
+ * @param agentId - Agent identifier to check
+ * @returns True if this agent is the current leader
+ */
+export function isLeader(agentId: string): boolean {
+  const info = getLeaderInfo();
+  return info.leader_id === agentId && info.health === "fresh";
 }
 
 // ============================================================================
@@ -285,15 +366,29 @@ export function getUserMessages(limit?: number, unreadOnly: boolean = false): Us
  * @returns Quality store with assessments and summary
  */
 export function getQualityStore(): QualityStore {
-  return readJson<QualityStore>(PATHS.qualityAssessments, {
-    assessments: [],
-    summary: {
-      average_score: 0,
-      trend: "stable",
-      total_assessed: 0,
-      last_updated: "",
-    },
-  });
+  // Read the raw file to handle both old and new formats
+  const raw = readJson<{
+    assessments?: QualityStore["assessments"];
+    summary?: QualityStore["summary"];
+    aggregate_stats?: {
+      total_assessed?: number;
+      avg_overall_score?: number;
+    };
+    last_updated?: string;
+  }>(PATHS.qualityAssessments, { assessments: [] });
+  
+  // Normalize: prefer summary if present, otherwise convert aggregate_stats
+  const summary: QualityStore["summary"] = raw.summary || {
+    average_score: raw.aggregate_stats?.avg_overall_score ?? 0,
+    trend: "stable",
+    total_assessed: raw.aggregate_stats?.total_assessed ?? 0,
+    last_updated: raw.last_updated || "",
+  };
+  
+  return {
+    assessments: raw.assessments || [],
+    summary,
+  };
 }
 
 /**

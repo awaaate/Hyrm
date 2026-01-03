@@ -1,6 +1,6 @@
 {
-  "leader_id": "agent-1767433125465-w735d",
-  "leader_epoch": 6,
-  "last_heartbeat": "2026-01-03T09:38:45.473Z",
+  "leader_id": "agent-1767433780257-wn6w5r",
+  "leader_epoch": 8,
+  "last_heartbeat": "2026-01-03T09:51:45.000Z",
   "ttl_ms": 180000
 }

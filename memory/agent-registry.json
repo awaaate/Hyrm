@@ -1,75 +1,40 @@
 {
-  "version": "1.0.0",
   "agents": [
     {
-      "agent_id": "agent-1767423659871-5cdl3g",
-      "session_id": "session-1767423659871",
-      "started_at": "2026-01-03T07:00:59.872Z",
-      "last_heartbeat": "2026-01-03T09:38:48.481Z",
-      "status": "idle",
-      "assigned_role": "leader-impl-worker",
-      "pid": 38349,
-      "current_task": "Implement orchestrator leader election and stale-agent cleanup (task_1767422728098_488s1n)"
-    },
-    {
-      "agent_id": "agent-1767432364632-gom2eh",
-      "session_id": "session-1767432364632",
-      "started_at": "2026-01-03T09:26:04.633Z",
-      "last_heartbeat": "2026-01-03T09:37:04.677Z",
+      "agent_id": "agent-1767433541786-00vj5",
+      "session_id": "session-1767433541786",
+      "started_at": "2026-01-03T09:45:41.786Z",
+      "last_heartbeat": "2026-01-03T09:51:41.809Z",
       "status": "active",
-      "assigned_role": "prompt-worker",
-      "pid": 86453
+      "assigned_role": "cli-worker",
+      "pid": 105537
     },
     {
-      "agent_id": "agent-1767432865122-asn00q",
-      "session_id": "session-1767432865122",
-      "started_at": "2026-01-03T09:34:25.124Z",
-      "last_heartbeat": "2026-01-03T09:34:38.122Z",
-      "status": "idle",
-      "assigned_role": "orchestrator",
-      "pid": 96723,
-      "current_task": "Detected existing leader (agent-1767432733367-2ficr, epoch 4). Exiting gracefully."
+      "agent_id": "agent-1767433547455-1a95rd",
+      "session_id": "session-1767433547455",
+      "started_at": "2026-01-03T09:45:47.456Z",
+      "last_heartbeat": "2026-01-03T09:49:47.478Z",
+      "status": "active",
+      "assigned_role": "cli-audit-worker",
+      "pid": 105651
     },
     {
-      "agent_id": "agent-1767432927642-j9g15v",
-      "session_id": "session-1767432927642",
-      "started_at": "2026-01-03T09:35:27.642Z",
-      "last_heartbeat": "2026-01-03T09:35:37.294Z",
+      "agent_id": "agent-1767433780257-wn6w5r",
+      "session_id": "session-1767433780257",
+      "started_at": "2026-01-03T09:49:40.260Z",
+      "last_heartbeat": "2026-01-03T09:52:40.270Z",
       "status": "working",
       "assigned_role": "orchestrator",
-      "pid": 97851,
-      "current_task": "Leader (epoch 5): Coordinating leader-impl-worker and prompt-worker"
-    },
-    {
-      "agent_id": "agent-1767432994172-atz8dtq",
-      "session_id": "session-1767432994172",
-      "started_at": "2026-01-03T09:36:34.173Z",
-      "last_heartbeat": "2026-01-03T09:36:42.503Z",
-      "status": "idle",
-      "assigned_role": "orchestrator",
-      "pid": 99488,
-      "current_task": "Detected existing leader (agent-1767432927642-j9g15v, epoch 5). Exiting gracefully."
-    },
-    {
-      "agent_id": "agent-1767433057899-dr8ze",
-      "session_id": "session-1767433057899",
-      "started_at": "2026-01-03T09:37:37.900Z",
-      "last_heartbeat": "2026-01-03T09:37:47.943Z",
-      "status": "active",
-      "assigned_role": "orchestrator",
-      "pid": 100513
-    },
-    {
-      "agent_id": "agent-1767433125465-w735d",
-      "session_id": "session-1767433125465",
-      "started_at": "2026-01-03T09:38:45.466Z",
-      "last_heartbeat": "2026-01-03T09:39:03.506Z",
-      "status": "working",
-      "assigned_role": "orchestrator",
-      "pid": 100972,
-      "current_task": "Leader (epoch 6): Processing prompt-worker completion, monitoring leader-impl-worker"
+      "pid": 116396,
+      "current_task": "Session 178 leader (epoch 8) - coordinator active"
     }
   ],
-  "last_updated": "2026-01-03T09:39:03.506Z",
-  "lock_version": 441
+  "leader": {
+    "agent_id": "agent-1767433780257-wn6w5r",
+    "epoch": 8,
+    "last_heartbeat": "2026-01-03T09:51:00.000Z",
+    "ttl_ms": 180000
+  },
+  "last_updated": "2026-01-03T09:52:40.270Z",
+  "lock_version": 10
 }

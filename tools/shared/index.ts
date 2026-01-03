@@ -129,6 +129,11 @@ export {
   getAgentsByRole,
   getAgentById,
   isAgentAlive,
+  // Leader election functions
+  getLeaderState,
+  getLeaderInfo,
+  hasActiveLeader,
+  isLeader,
   // Task functions
   getAllTasks,
   getTasksByStatus,
@@ -209,6 +214,10 @@ export type {
   AgentRegistry,
   HealthStatus,
   AgentHealthCheck,
+  // Leader types
+  LeaderState,
+  LeaderHealthStatus,
+  LeaderInfo,
   // Message types
   MessageType,
   Message,
