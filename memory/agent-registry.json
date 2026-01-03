@@ -4,7 +4,7 @@
       "agent_id": "agent-1767450772105-d66vhu",
       "session_id": "session-1767450772105",
       "started_at": "2026-01-03T14:32:52.106Z",
-      "last_heartbeat": "2026-01-03T14:39:52.140Z",
+      "last_heartbeat": "2026-01-03T14:41:52.143Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 211305,
@@ -13,6 +13,6 @@
   ],
   "leader": null,
   "version": 1,
-  "last_updated": "2026-01-03T14:39:52.140Z",
+  "last_updated": "2026-01-03T14:41:52.143Z",
   "lock_version": 39
 }

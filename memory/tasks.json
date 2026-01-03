@@ -2657,9 +2657,9 @@
       "title": "Fix remaining empty catch blocks in task-router and agent-performance-profiler",
       "description": "Several empty catch blocks remain after the initial error handling cleanup. Fix empty catch blocks in: 1) tools/task-router.ts line 279 - registry load failure 2) tools/agent-performance-profiler.ts lines 196, 198 - silently swallowed errors. Add proper error logging using existing error-handler utilities.",
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-03T14:36:15.777Z",
-      "updated_at": "2026-01-03T14:39:55.838Z",
+      "updated_at": "2026-01-03T14:40:43.139Z",
       "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
       "tags": [
         "bug",
@@ -2668,7 +2668,10 @@
       ],
       "complexity": "moderate",
       "assigned_to": "agent-sI3Oq6u4",
-      "claimed_at": "2026-01-03T14:39:55.838Z"
+      "claimed_at": "2026-01-03T14:39:55.838Z",
+      "completed_at": "2026-01-03T14:40:43.120Z",
+      "quality_score": 6.9,
+      "quality_notes": "Auto-assessed"
     },
     {
       "id": "task_1767450978364_n5l4uc",
@@ -2696,17 +2699,19 @@
       "title": "Migrate git-integration.ts to use shared readJson utility",
       "description": "git-integration.ts has 4 duplicated JSON.parse(readFileSync(...)) patterns for reading tasks.json. Replace with the centralized readJson() utility from tools/shared/json-utils.ts for consistency and better error handling.",
       "priority": "medium",
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2026-01-03T14:36:21.450Z",
-      "updated_at": "2026-01-03T14:36:21.450Z",
+      "updated_at": "2026-01-03T14:40:49.087Z",
       "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
       "tags": [
         "refactor",
         "code-quality"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "agent-sI3Oq6u4",
+      "claimed_at": "2026-01-03T14:40:49.087Z"
     }
   ],
-  "completed_count": 129,
-  "last_updated": "2026-01-03T14:39:55.838Z"
+  "completed_count": 130,
+  "last_updated": "2026-01-03T14:40:49.087Z"
 }

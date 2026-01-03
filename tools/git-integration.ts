@@ -30,6 +30,7 @@ import { c } from './shared/colors';
 import { truncate } from './shared/string-utils';
 import { MEMORY_DIR } from './shared/paths';
 import { logWarning, getErrorMessage } from './shared/error-handler';
+import { readJson } from './shared/json-utils';
 import type { Task, TaskStore } from './shared/types';
 
 const GIT_LOG_PATH = join(MEMORY_DIR, "git-activity.jsonl");
@@ -407,16 +408,8 @@ function createCommit(message: string, agentId?: string, taskId?: string): void 
 function autoCommitTask(taskId: string): void {
   // Load task info from tasks.json
   const tasksPath = join(MEMORY_DIR, "tasks.json");
-  let task: Task | null = null;
-  
-  if (existsSync(tasksPath)) {
-    try {
-      const store: TaskStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
-      task = store.tasks.find((t: Task) => t.id === taskId) || null;
-    } catch (error) {
-      logWarning("Failed to read tasks for auto-commit", { taskId, error: getErrorMessage(error) });
-    }
-  }
+  const store = readJson<TaskStore>(tasksPath, { tasks: [] });
+  const task = store.tasks.find((t: Task) => t.id === taskId) || null;
   
   if (!task) {
     console.log(`${c.yellow}Warning: Task ${taskId} not found, using generic message${c.reset}`);
@@ -687,17 +680,8 @@ function createIssueFromTask(taskId: string): void {
   
   // Load task info
   const tasksPath = join(MEMORY_DIR, "tasks.json");
-  let task: Task | null = null;
-  
-  if (existsSync(tasksPath)) {
-    try {
-      const store: TaskStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
-      task = store.tasks.find((t: Task) => t.id === taskId) || null;
-    } catch (error) {
-      console.log(`${c.red}Error reading tasks: ${getErrorMessage(error)}${c.reset}`);
-      return;
-    }
-  }
+  const store = readJson<TaskStore>(tasksPath, { tasks: [] });
+  const task = store.tasks.find((t: Task) => t.id === taskId) || null;
   
   if (!task) {
     console.log(`${c.red}Task ${taskId} not found${c.reset}`);
@@ -752,17 +736,8 @@ function createBranchForTask(taskId: string, branchName?: string): void {
   
   // Load task info
   const tasksPath = join(MEMORY_DIR, "tasks.json");
-  let task: Task | null = null;
-  
-  if (existsSync(tasksPath)) {
-    try {
-      const store: TaskStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
-      task = store.tasks.find((t: Task) => t.id === taskId) || null;
-    } catch (error) {
-      console.log(`${c.red}Error reading tasks: ${getErrorMessage(error)}${c.reset}`);
-      return;
-    }
-  }
+  const store = readJson<TaskStore>(tasksPath, { tasks: [] });
+  const task = store.tasks.find((t: Task) => t.id === taskId) || null;
   
   // Generate branch name from task if not provided
   if (!branchName) {
@@ -868,17 +843,8 @@ function createPRForTask(taskId: string, baseBranch: string = "main"): void {
   
   // Load task info
   const tasksPath = join(MEMORY_DIR, "tasks.json");
-  let task: Task | null = null;
-  
-  if (existsSync(tasksPath)) {
-    try {
-      const store: TaskStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
-      task = store.tasks.find((t: Task) => t.id === taskId) || null;
-    } catch (error) {
-      console.log(`${c.red}Error reading tasks: ${getErrorMessage(error)}${c.reset}`);
-      return;
-    }
-  }
+  const store = readJson<TaskStore>(tasksPath, { tasks: [] });
+  const task = store.tasks.find((t: Task) => t.id === taskId) || null;
   
   // Get current branch
   const currentBranch = git(["branch", "--show-current"]).stdout;
