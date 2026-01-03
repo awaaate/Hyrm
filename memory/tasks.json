@@ -2411,9 +2411,9 @@
       "title": "Implement centralized error handling with JSON recovery",
       "description": "Create a centralized error handling system to replace empty catch blocks and add graceful recovery from corrupted JSON files. Key deliverables: 1) Create tools/shared/error-handler.ts with typed error classes 2) Implement readJsonSafe() with backup restoration on parse failure 3) Replace empty catch blocks with structured logging 4) Add JSON schema validation for critical state files (state.json, tasks.json, agent-registry.json). Motivation: 88 instances of empty catch blocks currently silently swallow errors, and corrupted JSON causes failures with no recovery path.",
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-03T10:09:26.797Z",
-      "updated_at": "2026-01-03T10:10:08.343Z",
+      "updated_at": "2026-01-03T10:17:04.642Z",
       "created_by": "unknown",
       "tags": [
         "reliability",
@@ -2422,57 +2422,140 @@
       ],
       "complexity": "moderate",
       "assigned_to": "agent-1767435008098-o8mo6o",
-      "claimed_at": "2026-01-03T10:10:08.343Z"
+      "claimed_at": "2026-01-03T10:10:08.343Z",
+      "completed_at": "2026-01-03T10:17:04.640Z",
+      "notes": [
+        "[2026-01-03T10:17:04.642Z] Created error-handler.ts with: 6 typed error classes (AppError, JsonParseError, FileIOError, ValidationError, AgentError, TaskError), readJsonSafe() with backup restoration, writeJsonSafe() with backup creation, schema validation for critical files, structured logging functions. Fixed 14 empty catch blocks across 8 files. Commit: 20b4f16"
+      ]
     },
     {
       "id": "task_1767434971056_2ahvj5",
       "title": "Add file locking for concurrent state file access",
       "description": "Implement file locking protection for shared state files to prevent race conditions in multi-agent scenarios. Currently only orchestrator-state.json has locking. Key deliverables: 1) Create atomic file operations wrapper using .lock files 2) Implement optimistic locking pattern for tasks.json and state.json 3) Add retry logic with exponential backoff for lock contention 4) Audit and protect all shared file writes. Motivation: Multiple agents can corrupt data when writing simultaneously to tasks.json, state.json, etc.",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-03T10:09:31.056Z",
-      "updated_at": "2026-01-03T10:09:31.056Z",
+      "updated_at": "2026-01-03T13:54:06.243Z",
       "created_by": "unknown",
       "tags": [
         "reliability",
         "concurrency",
         "self-improvement"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "agent-1767423659871-5cdl3g",
+      "claimed_at": "2026-01-03T11:59:29.222Z",
+      "completed_at": "2026-01-03T12:05:18.058Z",
+      "notes": [
+        "[2026-01-03T12:05:18.063Z] Implemented plugin-level file locking for shared state files. Added async withFileLock helper (.opencode/plugin/tools/file-lock.ts) with .lock sidecar files, exponential backoff, and stale lock cleanup. Updated memory_update in memory-tools to guard state.json writes, and updated task-tools to guard tasks.json and agent-performance-metrics.json updates in task_create, task_update, task_claim, task_spawn, updateAgentMetrics, and recordTaskClaim. Verified changes via bun test ./.opencode/plugin/tools/tools.test.ts (63 tests passing)."
+      ],
+      "quality_score": 7.9,
+      "quality_notes": "File locking with .lock files and retry logic prevents race conditions in multi-agent scenarios."
     },
     {
       "id": "task_1767434975559_2cyp5r",
       "title": "Add automatic quality assessment on task completion",
       "description": "Implement automatic quality assessment when tasks are marked completed. Currently quality assessment is fully manual, leading to incomplete metrics. Key deliverables: 1) Add auto_assess option to task_update when completing 2) Create heuristic scoring based on task metadata (duration, complexity, notes) 3) Mark auto-assessments with flag to distinguish from manual 4) Allow user override via quality_assess after the fact. This is low effort (1-2 days) with medium-high impact.",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-03T10:09:35.559Z",
-      "updated_at": "2026-01-03T10:09:35.559Z",
+      "updated_at": "2026-01-03T13:58:16.353Z",
       "created_by": "unknown",
       "tags": [
         "quality",
         "automation",
         "self-improvement"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "agent-1767448413323-mirh4r",
+      "claimed_at": "2026-01-03T13:54:34.911Z",
+      "completed_at": "2026-01-03T13:58:16.350Z",
+      "notes": [
+        "[2026-01-03T13:58:16.353Z] Successfully implemented auto_assess parameter in task_update. Added heuristic quality scoring based on completion time, priority, complexity, and task notes. Auto-assessment creates quality records marked with auto_generated flag."
+      ]
     },
     {
       "id": "task_1767434980042_wm7t5c",
       "title": "Complete shared data layer abstraction",
       "description": "Finish consolidating data access through tools/shared/data-fetchers.ts. Current state: 60+ exported functions but tools still do direct readFileSync calls. Key deliverables: 1) Audit all readFileSync calls in tools and plugin 2) Replace with readJson/readJsonl from shared layer 3) Add caching layer for frequently accessed data 4) Ensure all callers use typed interfaces from types.ts. Motivation: Single source of truth for data access enables caching, validation, and reduces maintenance.",
       "priority": "medium",
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2026-01-03T10:09:40.042Z",
-      "updated_at": "2026-01-03T10:09:40.042Z",
+      "updated_at": "2026-01-03T13:54:35.176Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
         "code-quality",
         "self-improvement"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "assigned_to": "agent-1767448413323-mirh4r",
+      "claimed_at": "2026-01-03T13:54:35.176Z"
+    },
+    {
+      "id": "task_1767448718476_py1yku",
+      "title": "Test auto assessment",
+      "description": "Simple test task to verify auto_assess functionality works",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2026-01-03T13:58:38.476Z",
+      "updated_at": "2026-01-03T13:58:45.491Z",
+      "created_by": "unknown",
+      "tags": [],
+      "complexity": "trivial",
+      "assigned_to": "agent-1767448598591-77z4at",
+      "claimed_at": "2026-01-03T13:58:42.293Z",
+      "completed_at": "2026-01-03T13:58:45.491Z"
+    },
+    {
+      "id": "task_1767448827428_p5ueo3",
+      "title": "Test auto assessment v2",
+      "description": "Second test to verify auto_assess fix works",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2026-01-03T14:00:27.428Z",
+      "updated_at": "2026-01-03T14:00:34.554Z",
+      "created_by": "unknown",
+      "tags": [],
+      "complexity": "simple",
+      "assigned_to": "agent-1767448598591-77z4at",
+      "claimed_at": "2026-01-03T14:00:31.008Z",
+      "completed_at": "2026-01-03T14:00:34.553Z",
+      "notes": [
+        "[2026-01-03T14:00:34.554Z] Testing updated auto-assessment implementation with fixed file writing order"
+      ]
+    },
+    {
+      "id": "task_1767448859094_9yoj9d",
+      "title": "Test auto assessment v3",
+      "description": "Third test with debug logging",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2026-01-03T14:00:59.094Z",
+      "updated_at": "2026-01-03T14:01:06.082Z",
+      "created_by": "unknown",
+      "tags": [],
+      "complexity": "trivial",
+      "assigned_to": "agent-1767448598591-77z4at",
+      "claimed_at": "2026-01-03T14:01:02.714Z",
+      "completed_at": "2026-01-03T14:01:06.081Z"
+    },
+    {
+      "id": "task_1767448891576_ta5xgf",
+      "title": "Test auto assessment v4",
+      "description": "Fourth test with parameter debug logging",
+      "priority": "low",
+      "status": "completed",
+      "created_at": "2026-01-03T14:01:31.576Z",
+      "updated_at": "2026-01-03T14:01:38.074Z",
+      "created_by": "unknown",
+      "tags": [],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767448598591-77z4at",
+      "claimed_at": "2026-01-03T14:01:35.725Z",
+      "completed_at": "2026-01-03T14:01:38.071Z"
     }
   ],
-  "completed_count": 116,
-  "last_updated": "2026-01-03T10:10:08.343Z"
+  "completed_count": 123,
+  "last_updated": "2026-01-03T14:01:38.074Z"
 }

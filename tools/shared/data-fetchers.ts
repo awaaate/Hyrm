@@ -48,6 +48,108 @@ export const STALENESS = {
 } as const;
 
 // ============================================================================
+// Simple In-Memory Cache
+// ============================================================================
+
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+  ttl: number; // Time to live in milliseconds
+}
+
+class SimpleCache {
+  private cache = new Map<string, CacheEntry<any>>();
+  private readonly defaultTtl = 30 * 1000; // 30 seconds default TTL
+
+  get<T>(key: string): T | null {
+    const entry = this.cache.get(key);
+    if (!entry) return null;
+    
+    const now = Date.now();
+    if (now - entry.timestamp > entry.ttl) {
+      this.cache.delete(key);
+      return null;
+    }
+    
+    return entry.data;
+  }
+
+  set<T>(key: string, data: T, ttl?: number): void {
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+      ttl: ttl ?? this.defaultTtl,
+    });
+  }
+
+  delete(key: string): void {
+    this.cache.delete(key);
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+
+  size(): number {
+    return this.cache.size;
+  }
+}
+
+/**
+ * Global cache instance for frequently accessed files.
+ */
+const cache = new SimpleCache();
+
+/**
+ * Read JSON with caching for frequently accessed files.
+ * 
+ * @param path - File path to read
+ * @param defaultValue - Default value if file doesn't exist
+ * @param ttl - Cache TTL in milliseconds (default: 30 seconds)
+ * @returns Parsed JSON data
+ */
+export function readJsonWithCache<T>(
+  path: string,
+  defaultValue: T,
+  ttl?: number
+): T {
+  // Check cache first for performance-critical files
+  const isCacheable = path.includes('state.json') || path.includes('tasks.json');
+  if (isCacheable) {
+    const cached = cache.get<T>(path);
+    if (cached !== null) {
+      return cached;
+    }
+  }
+  
+  // Read from disk
+  const data = readJson<T>(path, defaultValue);
+  
+  // Cache if applicable
+  if (isCacheable) {
+    cache.set(path, data, ttl);
+  }
+  
+  return data;
+}
+
+/**
+ * Clear cache for a specific file (use when file is modified).
+ * 
+ * @param path - File path to clear from cache
+ */
+export function clearCache(path: string): void {
+  cache.delete(path);
+}
+
+/**
+ * Clear all cached data.
+ */
+export function clearAllCache(): void {
+  cache.clear();
+}
+
+// ============================================================================
 // Agent Functions
 // ============================================================================
 
@@ -213,7 +315,7 @@ export function isLeader(agentId: string): boolean {
  * @returns Array of all tasks
  */
 export function getAllTasks(): Task[] {
-  const store = readJson<TaskStore>(PATHS.tasks, { 
+  const store = readJsonWithCache<TaskStore>(PATHS.tasks, { 
     version: "1.0",
     tasks: [], 
     completed_count: 0, 
@@ -423,7 +525,7 @@ export function getQualityForTask(taskId: string) {
  * @returns System state object
  */
 export function getSystemState(): SystemState {
-  return readJson<SystemState>(PATHS.state, {
+  return readJsonWithCache<SystemState>(PATHS.state, {
     session_count: 0,
     status: "unknown",
     last_updated: "",

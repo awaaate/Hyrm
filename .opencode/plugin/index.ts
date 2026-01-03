@@ -18,7 +18,6 @@
 import { type Plugin } from "@opencode-ai/plugin";
 import {
   existsSync,
-  readFileSync,
   writeFileSync,
   appendFileSync,
   mkdirSync,

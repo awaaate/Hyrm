@@ -932,3 +932,110 @@
 [2026-01-03T10:10:53+00:00] [OK] Orchestrator stopped
 [2026-01-03T10:10:53+00:00] [OK] Watchdog stopped
 [2026-01-03T10:10:58+00:00] [INFO] Healthy leader exists: agent-1767434786597-c7gbga (epoch 2), lease valid for 178s
+[2026-01-03T13:35:54+00:00] [WARN] Leader lease expired 12148s ago: agent-1767434786597-c7gbga (epoch 2)
+[2026-01-03T13:35:57+00:00] [INFO] =========================================
+[2026-01-03T13:35:57+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T13:35:57+00:00] [INFO] Check interval: 60s
+[2026-01-03T13:35:57+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T13:35:57+00:00] [INFO] Token limit: 150000
+[2026-01-03T13:35:57+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T13:35:57+00:00] [INFO] Watchdog PID: 160125
+[2026-01-03T13:35:57+00:00] [INFO] =========================================
+[2026-01-03T13:35:58+00:00] [WARN] Leader lease expired 12151s ago: agent-1767434786597-c7gbga (epoch 2)
+[2026-01-03T13:35:58+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-03T13:35:58+00:00] [OK] Orchestrator started with PID: 160212 (model: anthropic/claude-opus-4-5)
+[2026-01-03T13:36:03+00:00] [OK] Orchestrator confirmed running
+[2026-01-03T13:36:35+00:00] [WARN] Received shutdown signal
+[2026-01-03T13:36:35+00:00] [INFO] Stopping watchdog...
+[2026-01-03T13:36:35+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T13:36:36+00:00] [OK] Orchestrator stopped
+[2026-01-03T13:36:36+00:00] [OK] Watchdog stopped
+[2026-01-03T13:39:16+00:00] [INFO] =========================================
+[2026-01-03T13:39:16+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T13:39:16+00:00] [INFO] Check interval: 60s
+[2026-01-03T13:39:16+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T13:39:16+00:00] [INFO] Token limit: 150000
+[2026-01-03T13:39:16+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T13:39:16+00:00] [INFO] Watchdog PID: 160843
+[2026-01-03T13:39:16+00:00] [INFO] =========================================
+[2026-01-03T13:39:16+00:00] [INFO] Healthy leader exists: agent-1767447367150-wc5shf (epoch 3), lease valid for 20s
+[2026-01-03T13:39:16+00:00] [INFO] Healthy leader already exists (agent-1767447367150-wc5shf:epoch3). Skipping spawn.
+[2026-01-03T13:39:38+00:00] [WARN] Received shutdown signal
+[2026-01-03T13:39:38+00:00] [INFO] Stopping watchdog...
+[2026-01-03T13:39:38+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T13:39:38+00:00] [OK] Orchestrator stopped
+[2026-01-03T13:39:39+00:00] [OK] Watchdog stopped
+[2026-01-03T13:39:40+00:00] [INFO] =========================================
+[2026-01-03T13:39:40+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T13:39:40+00:00] [INFO] Check interval: 60s
+[2026-01-03T13:39:40+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T13:39:40+00:00] [INFO] Token limit: 150000
+[2026-01-03T13:39:40+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T13:39:40+00:00] [INFO] Watchdog PID: 160964
+[2026-01-03T13:39:40+00:00] [INFO] =========================================
+[2026-01-03T13:39:40+00:00] [WARN] Leader lease expired 33s ago: agent-1767447367150-wc5shf (epoch 3)
+[2026-01-03T13:39:40+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-03T13:39:40+00:00] [OK] Orchestrator started with PID: 161052 (model: anthropic/claude-opus-4-5)
+[2026-01-03T13:39:45+00:00] [OK] Orchestrator confirmed running
+[2026-01-03T13:40:27+00:00] [WARN] Received shutdown signal
+[2026-01-03T13:40:27+00:00] [INFO] Stopping watchdog...
+[2026-01-03T13:40:27+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T13:40:28+00:00] [OK] Orchestrator stopped
+[2026-01-03T13:40:28+00:00] [OK] Watchdog stopped
+[2026-01-03T13:40:31+00:00] [INFO] =========================================
+[2026-01-03T13:40:31+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T13:40:31+00:00] [INFO] Check interval: 60s
+[2026-01-03T13:40:31+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T13:40:31+00:00] [INFO] Token limit: 150000
+[2026-01-03T13:40:31+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T13:40:31+00:00] [INFO] Watchdog PID: 161658
+[2026-01-03T13:40:31+00:00] [INFO] =========================================
+[2026-01-03T13:40:31+00:00] [INFO] Healthy leader exists: agent-1767447588099-fzwgf8 (epoch 4), lease valid for 166s
+[2026-01-03T13:40:31+00:00] [INFO] Healthy leader already exists (agent-1767447588099-fzwgf8:epoch4). Skipping spawn.
+[2026-01-03T13:40:35+00:00] [WARN] Received shutdown signal
+[2026-01-03T13:40:35+00:00] [INFO] Stopping watchdog...
+[2026-01-03T13:40:35+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T13:40:35+00:00] [OK] Orchestrator stopped
+[2026-01-03T13:40:35+00:00] [OK] Watchdog stopped
+[2026-01-03T13:41:56+00:00] [INFO] =========================================
+[2026-01-03T13:41:56+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T13:41:56+00:00] [INFO] Check interval: 60s
+[2026-01-03T13:41:56+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T13:41:56+00:00] [INFO] Token limit: 150000
+[2026-01-03T13:41:56+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T13:41:56+00:00] [INFO] Watchdog PID: 161972
+[2026-01-03T13:41:56+00:00] [INFO] =========================================
+[2026-01-03T13:41:56+00:00] [INFO] Healthy leader exists: agent-1767447588099-fzwgf8 (epoch 4), lease valid for 81s
+[2026-01-03T13:41:56+00:00] [INFO] Healthy leader already exists (agent-1767447588099-fzwgf8:epoch4). Skipping spawn.
+[2026-01-03T13:41:59+00:00] [WARN] Received shutdown signal
+[2026-01-03T13:41:59+00:00] [INFO] Stopping watchdog...
+[2026-01-03T13:41:59+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T13:41:59+00:00] [OK] Orchestrator stopped
+[2026-01-03T13:41:59+00:00] [OK] Watchdog stopped
+[2026-01-03T13:43:01+00:00] [INFO] =========================================
+[2026-01-03T13:43:01+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T13:43:01+00:00] [INFO] Check interval: 60s
+[2026-01-03T13:43:01+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T13:43:01+00:00] [INFO] Token limit: 150000
+[2026-01-03T13:43:01+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T13:43:01+00:00] [INFO] Watchdog PID: 162170
+[2026-01-03T13:43:01+00:00] [INFO] =========================================
+[2026-01-03T13:43:01+00:00] [INFO] Healthy leader exists: agent-1767447588099-fzwgf8 (epoch 4), lease valid for 16s
+[2026-01-03T13:43:01+00:00] [INFO] Healthy leader already exists (agent-1767447588099-fzwgf8:epoch4). Skipping spawn.
+[2026-01-03T13:43:06+00:00] [WARN] Received shutdown signal
+[2026-01-03T13:43:06+00:00] [INFO] Stopping watchdog...
+[2026-01-03T13:43:06+00:00] [INFO] Stopping orchestrator...
+[2026-01-03T13:43:06+00:00] [OK] Orchestrator stopped
+[2026-01-03T13:43:06+00:00] [OK] Watchdog stopped
+[2026-01-03T13:53:22+00:00] [INFO] =========================================
+[2026-01-03T13:53:22+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-03T13:53:22+00:00] [INFO] Check interval: 60s
+[2026-01-03T13:53:22+00:00] [INFO] Max restarts/hour: 20
+[2026-01-03T13:53:22+00:00] [INFO] Token limit: 150000
+[2026-01-03T13:53:22+00:00] [INFO] Model: anthropic/claude-opus-4-5
+[2026-01-03T13:53:22+00:00] [INFO] Watchdog PID: 162481
+[2026-01-03T13:53:22+00:00] [INFO] =========================================
+[2026-01-03T13:53:22+00:00] [WARN] Leader lease expired 634s ago: agent-1767447588099-fzwgf8 (epoch 4)
+[2026-01-03T13:53:22+00:00] [INFO] Starting orchestrator agent (restart #3 this hour)...
+[2026-01-03T13:53:22+00:00] [OK] Orchestrator started with PID: 162569 (model: anthropic/claude-opus-4-5)
+[2026-01-03T13:53:27+00:00] [OK] Orchestrator confirmed running

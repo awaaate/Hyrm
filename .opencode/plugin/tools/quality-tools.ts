@@ -7,15 +7,16 @@
  */
 
 import { tool } from "@opencode-ai/plugin";
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync } from "fs";
 import { join } from "path";
+import { readJson, writeJson } from "../../../tools/shared/json-utils";
 
 // Update agent quality metrics
 function updateAgentQualityMetrics(memoryDir: string, agentId: string, qualityScore: number): void {
   const metricsPath = join(memoryDir, "agent-performance-metrics.json");
   try {
     const store = existsSync(metricsPath)
-      ? JSON.parse(readFileSync(metricsPath, "utf-8"))
+      ? readJson(metricsPath, {})
       : { version: "1.0", last_updated: "", agents: {} };
 
     if (store.agents[agentId]) {
@@ -113,7 +114,7 @@ The overall score is saved to the task and agent metrics for trend tracking.`,
             });
           }
 
-          const tasksStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
+          const tasksStore = readJson(tasksPath, { tasks: [] });
           const task = tasksStore.tasks.find((t: any) => t.id === task_id);
 
           if (!task) {
@@ -168,7 +169,7 @@ The overall score is saved to the task and agent metrics for trend tracking.`,
 
           // Load or create quality store
           const qualityStore = existsSync(qualityPath)
-            ? JSON.parse(readFileSync(qualityPath, "utf-8"))
+            ? readJson(qualityPath, {})
             : {
                 version: "1.0",
                 assessments: [],
@@ -197,13 +198,13 @@ The overall score is saved to the task and agent metrics for trend tracking.`,
               allScores.length,
           };
           qualityStore.last_updated = new Date().toISOString();
-          writeFileSync(qualityPath, JSON.stringify(qualityStore, null, 2));
+          writeJson(qualityPath, qualityStore);
 
           // Update task with quality score
           task.quality_score = assessment.overall_score;
           task.quality_notes = lessons_learned;
           task.updated_at = new Date().toISOString();
-          writeFileSync(tasksPath, JSON.stringify(tasksStore, null, 2));
+          writeJson(tasksPath, tasksStore);
 
           ctx.log("INFO", `Quality assessed: ${task_id}`, {
             score: assessment.overall_score,
@@ -265,7 +266,7 @@ Use this to:
             });
           }
 
-          const store = JSON.parse(readFileSync(qualityPath, "utf-8"));
+          const store = readJson(qualityPath, {});
           const assessments = store.assessments || [];
 
           // Calculate trends (recent vs older)
@@ -303,7 +304,7 @@ Use this to:
           // Get unassessed tasks count
           let unassessedCount = 0;
           if (existsSync(tasksPath)) {
-            const tasks = JSON.parse(readFileSync(tasksPath, "utf-8"));
+            const tasks = readJson(tasksPath, { tasks: [] });
             const assessedIds = new Set(
               assessments.map((a: any) => a.task_id)
             );

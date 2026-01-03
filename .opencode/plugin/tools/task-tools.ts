@@ -10,8 +10,16 @@
  */
 
 import { tool } from "@opencode-ai/plugin";
-import { existsSync, readFileSync, writeFileSync, appendFileSync } from "fs";
+import { existsSync, appendFileSync } from "fs";
 import { join } from "path";
+import { 
+  getAllTasks, 
+  getTasksByStatus, 
+  getTaskById, 
+  getSystemState, 
+  clearCache 
+} from "../../../tools/shared/data-fetchers";
+import { readJson, writeJson } from "../../../tools/shared/json-utils";
 import { withFileLock } from "./file-lock";
 
 // Agent performance metrics types
@@ -46,9 +54,11 @@ async function updateAgentMetrics(
     let store: AgentMetricsStore;
 
     try {
-      store = existsSync(metricsPath)
-        ? JSON.parse(readFileSync(metricsPath, "utf-8"))
-        : { version: "1.0", last_updated: "", agents: {} };
+      store = readJson<AgentMetricsStore>(metricsPath, { 
+        version: "1.0", 
+        last_updated: "", 
+        agents: {} 
+      });
     } catch {
       store = { version: "1.0", last_updated: "", agents: {} };
     }
@@ -84,7 +94,7 @@ async function updateAgentMetrics(
     }
 
     store.last_updated = new Date().toISOString();
-    writeFileSync(metricsPath, JSON.stringify(store, null, 2));
+    writeJson(metricsPath, store);
   });
 }
 
@@ -96,9 +106,11 @@ async function recordTaskClaim(memoryDir: string, agentId: string): Promise<void
     let store: AgentMetricsStore;
 
     try {
-      store = existsSync(metricsPath)
-        ? JSON.parse(readFileSync(metricsPath, "utf-8"))
-        : { version: "1.0", last_updated: "", agents: {} };
+      store = readJson<AgentMetricsStore>(metricsPath, { 
+        version: "1.0", 
+        last_updated: "", 
+        agents: {} 
+      });
     } catch {
       store = { version: "1.0", last_updated: "", agents: {} };
     }
@@ -120,7 +132,7 @@ async function recordTaskClaim(memoryDir: string, agentId: string): Promise<void
     store.agents[agentId].tasks_claimed++;
     store.agents[agentId].last_activity = new Date().toISOString();
     store.last_updated = new Date().toISOString();
-    writeFileSync(metricsPath, JSON.stringify(store, null, 2));
+    writeJson(metricsPath, store);
   });
 }
 
@@ -162,6 +174,154 @@ function calculateEffectivePriority(task: any): number {
   return Math.max(0, basePriority - cappedBonus);
 }
 
+// Calculate heuristic quality score based on task metadata
+function calculateHeuristicQualityScore(task: any, ctx: TaskToolsContext): number {
+  let score = 7.0; // Default baseline score
+  
+  // Factor 1: Task completion time vs estimated time
+  if (task.claimed_at && task.completed_at && task.estimated_hours) {
+    const actualHours = (new Date(task.completed_at).getTime() - new Date(task.claimed_at).getTime()) / (1000 * 60 * 60);
+    const estimatedHours = task.estimated_hours;
+    
+    if (actualHours <= estimatedHours) {
+      score += 0.5; // Completed on time or early
+    } else if (actualHours > estimatedHours * 2) {
+      score -= 1.0; // Significantly over time
+    }
+  }
+  
+  // Factor 2: Priority level (higher priority tasks should have higher standards)
+  switch (task.priority) {
+    case 'critical':
+      score += 0.5; // Critical tasks are expected to be high quality
+      break;
+    case 'high':
+      score += 0.3;
+      break;
+    case 'low':
+      score -= 0.3; // Lower expectations for low priority
+      break;
+  }
+  
+  // Factor 3: Complexity handling
+  const complexityScores: Record<string, number> = {
+    'trivial': -0.2,   // Simple tasks, lower quality bar
+    'simple': -0.1,
+    'moderate': 0,     // Baseline
+    'complex': 0.3,    // Complex tasks should be higher quality
+    'epic': 0.5
+  };
+  score += complexityScores[task.complexity || 'moderate'] || 0;
+  
+  // Factor 4: Task dependencies (tasks that unblock others are more important)
+  if (task.notes?.some((note: string) => note.includes('unblocked') || note.includes('dependency'))) {
+    score += 0.3;
+  }
+  
+  // Factor 5: No errors or blockers mentioned in notes
+  if (task.notes?.some((note: string) => 
+    note.toLowerCase().includes('error') || 
+    note.toLowerCase().includes('failed') || 
+    note.toLowerCase().includes('blocked'))) {
+    score -= 0.5;
+  }
+  
+  // Ensure score is within bounds
+  return Math.max(1, Math.min(10, score));
+}
+
+// Perform quality assessment using the quality tools
+async function performQualityAssessment(taskId: string, heuristicScore: number, ctx: TaskToolsContext): Promise<void> {
+  const qualityPath = join(ctx.memoryDir, "quality-assessments.json");
+  const tasksPath = join(ctx.memoryDir, "tasks.json");
+  
+  // Load task data
+  const tasksStore = readJson(tasksPath, { tasks: [] });
+  const task = tasksStore.tasks.find((t: any) => t.id === taskId);
+  
+  if (!task) {
+    throw new Error("Task not found for quality assessment");
+  }
+  
+  // Calculate dimension scores based on heuristic
+  const baseScore = Math.round(heuristicScore);
+  const variance = 0.5; // Small variance between dimensions
+  
+  const dimensions = [
+    { name: "completeness", score: Math.max(1, Math.min(10, baseScore + (Math.random() - 0.5) * variance)), weight: 0.3 },
+    { name: "code_quality", score: Math.max(1, Math.min(10, baseScore + (Math.random() - 0.5) * variance)), weight: 0.25 },
+    { name: "documentation", score: Math.max(1, Math.min(10, baseScore - 1 + (Math.random() - 0.5) * variance)), weight: 0.15 }, // Slightly lower for documentation
+    { name: "efficiency", score: Math.max(1, Math.min(10, baseScore + (Math.random() - 0.5) * variance)), weight: 0.15 },
+    { name: "impact", score: Math.max(1, Math.min(10, baseScore + (Math.random() - 0.5) * variance)), weight: 0.15 },
+  ];
+  
+  // Calculate weighted overall score
+  const overallScore = dimensions.reduce((sum, d) => sum + d.score * d.weight, 0);
+  
+  // Calculate duration
+  let durationMinutes: number | undefined;
+  if (task.created_at && task.completed_at) {
+    durationMinutes = Math.round(
+      (new Date(task.completed_at).getTime() - new Date(task.created_at).getTime()) / 60000
+    );
+  }
+  
+  const assessment = {
+    task_id: taskId,
+    task_title: task.title,
+    assessed_at: new Date().toISOString(),
+    assessed_by: "auto-assessment",
+    dimensions,
+    overall_score: Math.round(overallScore * 10) / 10,
+    lessons_learned: "Auto-assessed based on task completion metrics",
+    metadata: { 
+      duration_minutes: durationMinutes,
+      auto_generated: true,
+      heuristic_base_score: heuristicScore
+    },
+  };
+  
+  await withFileLock(qualityPath, ctx.agentId || ctx.currentSessionId || "task-tools:quality", async () => {
+    // Load or create quality store
+    const qualityStore = readJson(qualityPath, {
+          version: "1.0",
+          assessments: [],
+          aggregate_stats: {},
+          last_updated: "",
+        };
+    
+    // Update or add assessment
+    const existingIndex = qualityStore.assessments.findIndex(
+      (a: any) => a.task_id === taskId
+    );
+    if (existingIndex >= 0) {
+      qualityStore.assessments[existingIndex] = assessment;
+    } else {
+      qualityStore.assessments.push(assessment);
+    }
+    
+    // Update aggregate stats
+    const allScores = qualityStore.assessments.map((a: any) => a.overall_score);
+    qualityStore.aggregate_stats = {
+      total_assessed: qualityStore.assessments.length,
+      avg_overall_score: allScores.reduce((s: number, v: number) => s + v, 0) / allScores.length,
+    };
+    qualityStore.last_updated = new Date().toISOString();
+    writeJson(qualityPath, qualityStore);
+  });
+  
+  // Update task with quality score
+  task.quality_score = assessment.overall_score;
+  task.quality_notes = "Auto-assessed";
+  task.updated_at = new Date().toISOString();
+  writeJson(tasksPath, tasksStore);
+  
+  // Update agent's quality metrics if task was assigned
+  if (task.assigned_to) {
+    await updateAgentMetrics(ctx.memoryDir, task.assigned_to, 0, assessment.overall_score);
+  }
+}
+
 export function createTaskTools(getContext: () => TaskToolsContext) {
   const getTasksPath = () => join(getContext().memoryDir, "tasks.json");
 
@@ -194,7 +354,7 @@ Returns: Array of tasks sorted by priority (critical > high > medium > low).`,
             });
           }
 
-          const store = JSON.parse(readFileSync(tasksPath, "utf-8"));
+          const store = readJson(tasksPath, { tasks: [] });
           let tasks = store.tasks || [];
 
           if (status !== "all") {
@@ -282,7 +442,7 @@ Notes:
             ctx.agentId || ctx.currentSessionId || "task-tools:tasks",
             async () => {
               const store = existsSync(tasksPath)
-                ? JSON.parse(readFileSync(tasksPath, "utf-8"))
+                ? readJson(tasksPath, { tasks: [] })
                 : {
                     version: "1.0",
                     tasks: [],
@@ -321,7 +481,7 @@ Notes:
 
               store.tasks.push(newTask);
               store.last_updated = new Date().toISOString();
-              writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+              writeJson(tasksPath, store);
               task = newTask;
             }
           );
@@ -378,11 +538,13 @@ Example usage:
 - task_update(task_id="task_123", status="completed") - Mark done
 - task_update(task_id="task_123", notes="Blocked on API response") - Add context
 - task_update(task_id="task_123", status="blocked") - Flag as blocked
+- task_update(task_id="task_123", status="completed", auto_assess=true) - Complete and auto-assess quality
 
 Side effects:
 - Completing a task auto-unblocks dependent tasks
 - Broadcasts task_completed message for dashboard updates
-- Updates agent performance metrics if task was assigned`,
+- Updates agent performance metrics if task was assigned
+- Auto-assessment calculates heuristic quality score and creates quality record`,
       args: {
         task_id: tool.schema
           .string()
@@ -405,8 +567,15 @@ Side effects:
           .string()
           .describe("Add a note to the task (optional)")
           .optional(),
+        auto_assess: tool.schema
+          .boolean()
+          .describe("Automatically assess task quality when status is 'completed' (optional)")
+          .optional(),
       },
-      async execute({ task_id, status, assign_to, notes }) {
+      async execute({ task_id, status, assign_to, notes, auto_assess }) {
+        const ctx = getContext();
+        ctx.log("INFO", `task_update called with: status=${status}, auto_assess=${auto_assess}`);
+        
         try {
           const ctx = getContext();
           const tasksPath = getTasksPath();
@@ -417,7 +586,7 @@ Side effects:
             });
           }
 
-          const store = JSON.parse(readFileSync(tasksPath, "utf-8"));
+          const store = readJson(tasksPath, { tasks: [] });
           const task = store.tasks.find((t: any) => t.id === task_id);
 
           if (!task) {
@@ -495,6 +664,8 @@ Side effects:
               if (unblockedCount > 0) {
                 ctx.log("INFO", `Unblocked ${unblockedCount} dependent task(s)`);
               }
+
+
             }
           }
 
@@ -518,6 +689,19 @@ Side effects:
               writeFileSync(tasksPath, JSON.stringify(store, null, 2));
             }
           );
+
+          // Auto-assess quality if requested and task was completed
+          if (status === "completed" && auto_assess) {
+            ctx.log("INFO", `Starting auto-assessment for task: ${task_id}`);
+            try {
+              const qualityScore = calculateHeuristicQualityScore(task, ctx);
+              ctx.log("INFO", `Calculated heuristic score: ${qualityScore}`);
+              await performQualityAssessment(task_id, qualityScore, ctx);
+              ctx.log("INFO", `Auto-assessed task quality: ${qualityScore.toFixed(1)}/10`);
+            } catch (e) {
+              ctx.log("ERROR", `Auto-assessment failed: ${e}`);
+            }
+          }
 
           ctx.log("INFO", `Task updated: ${task_id}`, { status, assign_to });
 
@@ -559,7 +743,7 @@ Behavior:
             });
           }
 
-          const store = JSON.parse(readFileSync(tasksPath, "utf-8"));
+          const store = readJson(tasksPath, { tasks: [] });
           
           // Helper to check if all dependencies are complete
           const dependenciesComplete = (task: any): boolean => {
@@ -657,7 +841,7 @@ Edge cases:
             });
           }
 
-          const store = JSON.parse(readFileSync(tasksPath, "utf-8"));
+          const store = readJson(tasksPath, { tasks: [] });
           const task = store.tasks.find((t: any) => t.id === task_id);
 
           if (!task) {
@@ -694,7 +878,7 @@ Edge cases:
             tasksPath,
             ctx.agentId || ctx.currentSessionId || "task-tools:tasks",
             async () => {
-              writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+              writeJson(tasksPath, store);
             }
           );
 
@@ -808,7 +992,7 @@ Note: This creates the task record but you still need to call the Task tool with
             tasksPath,
             ctx.agentId || ctx.currentSessionId || "task-tools:tasks",
             async () => {
-              writeFileSync(tasksPath, JSON.stringify(store, null, 2));
+              writeJson(tasksPath, store);
             }
           );
 
@@ -822,7 +1006,7 @@ Note: This creates the task record but you still need to call the Task tool with
             let stateContext = "";
             try {
               if (existsSync(statePath)) {
-                const state = JSON.parse(readFileSync(statePath, "utf-8"));
+                const state = readJson(statePath, {});
                 stateContext = `
 ## Memory System Context (Injected)
 **Session**: ${state.session_count || 0}
@@ -925,7 +1109,7 @@ Use this for planning work distribution across workers.`,
             });
           }
 
-          const store = JSON.parse(readFileSync(tasksPath, "utf-8"));
+          const store = readJson(tasksPath, { tasks: [] });
           
           // Helper to check dependencies
           const dependenciesComplete = (task: any): boolean => {

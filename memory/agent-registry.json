@@ -1,27 +1,36 @@
 {
   "agents": [
     {
-      "agent_id": "agent-1767434786597-c7gbga",
-      "session_id": "session-1767434786597",
-      "started_at": "2026-01-03T10:06:26.598Z",
-      "last_heartbeat": "2026-01-03T10:10:38.111Z",
+      "agent_id": "agent-1767448413323-mirh4r",
+      "session_id": "session-1767448413323",
+      "started_at": "2026-01-03T13:53:33.324Z",
+      "last_heartbeat": "2026-01-03T14:01:33.372Z",
       "status": "working",
       "assigned_role": "orchestrator",
-      "pid": 139323,
-      "current_task": "Session 180 leader (epoch 2) - monitoring error-handler-worker"
+      "pid": 162569,
+      "current_task": "Monitoring 2 spawned workers for auto-quality and data-layer tasks"
     },
     {
-      "agent_id": "agent-1767435008098-o8mo6o",
-      "session_id": "session-1767435008098",
-      "started_at": "2026-01-03T10:10:08.099Z",
-      "last_heartbeat": "2026-01-03T10:16:08.127Z",
+      "agent_id": "agent-1767448598591-77z4at",
+      "session_id": "session-1767448598591",
+      "started_at": "2026-01-03T13:56:38.592Z",
+      "last_heartbeat": "2026-01-03T14:01:38.617Z",
       "status": "active",
-      "assigned_role": "error-handler-worker",
-      "pid": 141647
+      "assigned_role": "code-worker",
+      "pid": 166073
+    },
+    {
+      "agent_id": "agent-1767448633370-7e7bjw",
+      "session_id": "session-1767448633370",
+      "started_at": "2026-01-03T13:57:13.371Z",
+      "last_heartbeat": "2026-01-03T14:01:13.391Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 167408
     }
   ],
   "leader": null,
   "version": 1,
-  "last_updated": "2026-01-03T10:16:08.127Z",
-  "lock_version": 9
+  "last_updated": "2026-01-03T14:01:38.617Z",
+  "lock_version": 20
 }

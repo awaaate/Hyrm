@@ -8,8 +8,9 @@
  */
 
 import { tool } from "@opencode-ai/plugin";
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync } from "fs";
 import { join } from "path";
+import { readJson, writeJson } from "../../../tools/shared/json-utils";
 import { withFileLock } from "./file-lock";
 
 export interface MemoryToolsContext {
@@ -48,12 +49,12 @@ Use this at session start to understand context.`,
         try {
           const ctx = getContext();
           const state = existsSync(ctx.statePath)
-            ? JSON.parse(readFileSync(ctx.statePath, "utf-8"))
+              ? readJson(ctx.statePath, {})
             : { session_count: 0, status: "unknown", active_tasks: [] };
 
           const metrics =
             include_metrics && existsSync(ctx.metricsPath)
-              ? JSON.parse(readFileSync(ctx.metricsPath, "utf-8"))
+              ? readJson(ctx.metricsPath, {})
               : null;
 
           return JSON.stringify({
@@ -138,7 +139,7 @@ Returns matched lines/entries with source attribution.`,
           if (scope === "knowledge" || scope === "all") {
             const kbPath = join(ctx.memoryDir, "knowledge-base.json");
             if (existsSync(kbPath)) {
-              const kb = JSON.parse(readFileSync(kbPath, "utf-8"));
+              const kb = readJson(kbPath, { learnings: [] });
               const relevant = kb
                 .filter((entry: any) => {
                   const text = JSON.stringify(entry).toLowerCase();
@@ -206,7 +207,7 @@ Notes:
 
           await withFileLock(ctx.statePath, "memory-tools", async () => {
             const state = existsSync(ctx.statePath)
-              ? JSON.parse(readFileSync(ctx.statePath, "utf-8"))
+            ? readJson(ctx.statePath, {})
               : { session_count: 0, active_tasks: [], recent_achievements: [] };
 
             switch (action) {
@@ -238,7 +239,7 @@ Notes:
             }
 
             state.last_updated = new Date().toISOString();
-            writeFileSync(ctx.statePath, JSON.stringify(state, null, 2));
+            writeJson(ctx.statePath, state);
             updatedState = state;
           });
 
