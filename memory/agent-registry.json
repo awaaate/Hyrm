@@ -4,33 +4,25 @@
       "agent_id": "agent-1767448413323-mirh4r",
       "session_id": "session-1767448413323",
       "started_at": "2026-01-03T13:53:33.324Z",
-      "last_heartbeat": "2026-01-03T14:01:33.372Z",
+      "last_heartbeat": "2026-01-03T14:06:33.389Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 162569,
-      "current_task": "Monitoring 2 spawned workers for auto-quality and data-layer tasks"
+      "current_task": "Monitoring 3 workers for user-requested tasks: README, git integration, agent cleanup"
     },
     {
-      "agent_id": "agent-1767448598591-77z4at",
-      "session_id": "session-1767448598591",
-      "started_at": "2026-01-03T13:56:38.592Z",
-      "last_heartbeat": "2026-01-03T14:01:38.617Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 166073
-    },
-    {
-      "agent_id": "agent-1767448633370-7e7bjw",
-      "session_id": "session-1767448633370",
-      "started_at": "2026-01-03T13:57:13.371Z",
-      "last_heartbeat": "2026-01-03T14:01:13.391Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 167408
+      "agent_id": "agent-1767449438319-onify",
+      "session_id": "session-1767449438319",
+      "started_at": "2026-01-03T14:10:38.320Z",
+      "last_heartbeat": "2026-01-03T14:12:38.340Z",
+      "status": "working",
+      "assigned_role": "orchestrator",
+      "pid": 194187,
+      "current_task": "Investigating working.md usage across agents per user request"
     }
   ],
   "leader": null,
   "version": 1,
-  "last_updated": "2026-01-03T14:01:38.617Z",
-  "lock_version": 20
+  "last_updated": "2026-01-03T14:12:38.340Z",
+  "lock_version": 24
 }

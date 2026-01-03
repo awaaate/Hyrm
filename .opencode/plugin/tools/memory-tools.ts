@@ -8,7 +8,7 @@
  */
 
 import { tool } from "@opencode-ai/plugin";
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { readJson, writeJson } from "../../../tools/shared/json-utils";
 import { withFileLock } from "./file-lock";

@@ -25,6 +25,7 @@ import {
   unlinkSync,
 } from "fs";
 import { join } from "path";
+import { readJson, writeJson, readJsonl } from "../../tools/shared/json-utils";
 import { MultiAgentCoordinator } from "../../tools/multi-agent-coordinator";
 import { getModel, getModelFallback } from "../../tools/shared/models";
 import { formatToolsForRole, formatToolsCompact } from "../../tools/shared/tool-registry";

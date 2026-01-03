@@ -10,7 +10,7 @@
  */
 
 import { tool } from "@opencode-ai/plugin";
-import { existsSync, appendFileSync } from "fs";
+import { existsSync, appendFileSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { 
   getAllTasks, 
@@ -288,7 +288,7 @@ async function performQualityAssessment(taskId: string, heuristicScore: number, 
           assessments: [],
           aggregate_stats: {},
           last_updated: "",
-        };
+        });
     
     // Update or add assessment
     const existingIndex = qualityStore.assessments.findIndex(

@@ -2459,7 +2459,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-03T10:09:35.559Z",
-      "updated_at": "2026-01-03T13:58:16.353Z",
+      "updated_at": "2026-01-03T14:05:04.297Z",
       "created_by": "unknown",
       "tags": [
         "quality",
@@ -2472,16 +2472,18 @@
       "completed_at": "2026-01-03T13:58:16.350Z",
       "notes": [
         "[2026-01-03T13:58:16.353Z] Successfully implemented auto_assess parameter in task_update. Added heuristic quality scoring based on completion time, priority, complexity, and task notes. Auto-assessment creates quality records marked with auto_generated flag."
-      ]
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Auto-assessment enables quality tracking without manual intervention - key for autonomous improvement."
     },
     {
       "id": "task_1767434980042_wm7t5c",
       "title": "Complete shared data layer abstraction",
       "description": "Finish consolidating data access through tools/shared/data-fetchers.ts. Current state: 60+ exported functions but tools still do direct readFileSync calls. Key deliverables: 1) Audit all readFileSync calls in tools and plugin 2) Replace with readJson/readJsonl from shared layer 3) Add caching layer for frequently accessed data 4) Ensure all callers use typed interfaces from types.ts. Motivation: Single source of truth for data access enables caching, validation, and reduces maintenance.",
       "priority": "medium",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-03T10:09:40.042Z",
-      "updated_at": "2026-01-03T13:54:35.176Z",
+      "updated_at": "2026-01-03T14:05:06.444Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -2490,7 +2492,13 @@
       ],
       "complexity": "moderate",
       "assigned_to": "agent-1767448413323-mirh4r",
-      "claimed_at": "2026-01-03T13:54:35.176Z"
+      "claimed_at": "2026-01-03T13:54:35.176Z",
+      "completed_at": "2026-01-03T14:05:01.607Z",
+      "notes": [
+        "[2026-01-03T14:05:01.612Z] [2026-01-03T14:04:00.000Z] Completed by worker agent-1767448633370-7e7bjw. Added caching layer to data-fetchers.ts, replaced 50+ direct readFileSync/writeFileSync calls across plugin tools with centralized json-utils."
+      ],
+      "quality_score": 7.9,
+      "quality_notes": "Centralized data access with caching improves both code consistency and performance."
     },
     {
       "id": "task_1767448718476_py1yku",
@@ -2554,8 +2562,72 @@
       "assigned_to": "agent-1767448598591-77z4at",
       "claimed_at": "2026-01-03T14:01:35.725Z",
       "completed_at": "2026-01-03T14:01:38.071Z"
+    },
+    {
+      "id": "task_1767449124099_qwnrk9",
+      "title": "Create README.md for autonomous self-improving agent",
+      "description": "Create a comprehensive README.md for the repository explaining this is an autonomous self-improving agent system. Include: project overview, architecture, how to start the system, key features (multi-agent coordination, persistent memory, task management, quality assessment), and how the self-improvement loop works.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-03T14:05:24.100Z",
+      "updated_at": "2026-01-03T14:05:24.100Z",
+      "created_by": "unknown",
+      "tags": [
+        "documentation",
+        "user-request"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "task_1767449126995_ie797j",
+      "title": "Improve git integration with gh CLI and auto-issue creation",
+      "description": "Enhance git-integration.ts to: 1) Use gh CLI for GitHub operations 2) Auto-create GitHub issues from tasks using task_create hook 3) Link branches to issues 4) Consider creating branches per task. This enables better project management visibility on GitHub.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-03T14:05:26.996Z",
+      "updated_at": "2026-01-03T14:05:26.996Z",
+      "created_by": "unknown",
+      "tags": [
+        "git",
+        "gh-cli",
+        "automation",
+        "user-request"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "task_1767449130409_uyousb",
+      "title": "Improve agent registry auto-cleanup",
+      "description": "Enhance the agent cleanup mechanism in agent-tools.ts and related files: 1) Make stale agent detection more aggressive 2) Clean up agents that haven't sent heartbeat in 2 minutes 3) Add periodic cleanup on orchestrator heartbeat 4) Consider adding a watchdog-style health check for agents.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-03T14:05:30.409Z",
+      "updated_at": "2026-01-03T14:05:30.409Z",
+      "created_by": "unknown",
+      "tags": [
+        "agent-system",
+        "cleanup",
+        "user-request"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "task_1767449532262_smsyvq",
+      "title": "Fix memory_search tool - readFileSync not defined",
+      "description": "The memory_search tool in .opencode/plugin/tools/memory-tools.ts is broken. When called with scope=\"working\", it throws \"ReferenceError: readFileSync is not defined\". The import for readFileSync may be missing or the function is using a different pattern than expected. Fix the import and verify the tool works correctly.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-03T14:12:12.262Z",
+      "updated_at": "2026-01-03T14:12:12.262Z",
+      "created_by": "unknown",
+      "tags": [
+        "bug",
+        "memory-tools",
+        "plugin"
+      ],
+      "complexity": "moderate"
     }
   ],
-  "completed_count": 123,
-  "last_updated": "2026-01-03T14:01:38.074Z"
+  "completed_count": 124,
+  "last_updated": "2026-01-03T14:12:12.262Z"
 }
