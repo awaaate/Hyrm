@@ -9,7 +9,9 @@
 # Usage: bash tools/lib/orchestrator-heartbeat.sh
 #        (called from heartbeat-service.sh)
 
-set -euo pipefail
+set -uo pipefail
+# Note: We use -u but not -e here because we want to handle errors gracefully
+# and log them without immediately exiting the loop
 
 # Paths
 cd /app/workspace
@@ -202,7 +204,17 @@ BUNEOF
   log_heartbeat "INFO" "Heartbeat cycle complete (agent: $orchestrator_agent)"
 }
 
-# Main entry point
-log_heartbeat "INFO" "Heartbeat service starting"
-perform_heartbeat
-log_heartbeat "INFO" "Heartbeat service complete"
+# Main entry point with error handling
+{
+  log_heartbeat "INFO" "Heartbeat service starting"
+  
+  # Execute heartbeat with error handling
+  if perform_heartbeat; then
+    log_heartbeat "INFO" "Heartbeat service complete (success)"
+  else
+    log_heartbeat "WARN" "Heartbeat service completed with errors (will retry next cycle)"
+  fi
+} 2>&1 || {
+  # Catch any unhandled errors
+  log_heartbeat "ERROR" "Heartbeat service failed with unhandled error"
+}

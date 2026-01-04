@@ -49,18 +49,31 @@ start_heartbeat_service() {
   
   # Start the heartbeat loop in the background
   # Use nohup so it survives session termination
-  # Use >>/dev/null to avoid hanging on output buffering
+  # Redirect to /dev/null initially to avoid stdout hanging issues, but log to file
   nohup bash -c '
     cd /app/workspace
+    # Redirect output to heartbeat log
+    exec >> logs/heartbeat-service.log 2>&1
     while true; do
       # Run heartbeat every 60 seconds
-      bash tools/lib/orchestrator-heartbeat.sh || true
+      # Use || true to ensure loop continues even if heartbeat fails
+      bash tools/lib/orchestrator-heartbeat.sh 2>&1 || true
       sleep 60
     done
-  ' >> "$HEARTBEAT_LOG" 2>&1 &
+  ' > /dev/null 2>&1 &
   
   local bg_pid=$!
   echo "$bg_pid" > "$HEARTBEAT_PIDFILE"
+  
+  # Wait a moment to verify process started (give nohup time to process)
+  sleep 1
+  
+  # Check if the bash wrapper is still running
+  if ! kill -0 "$bg_pid" 2>/dev/null; then
+    log_heartbeat_svc "ERROR" "Failed to start heartbeat service (process died immediately)"
+    rm -f "$HEARTBEAT_PIDFILE"
+    return 1
+  fi
   
   log_heartbeat_svc "INFO" "Heartbeat service started (PID: $bg_pid)"
   return 0
