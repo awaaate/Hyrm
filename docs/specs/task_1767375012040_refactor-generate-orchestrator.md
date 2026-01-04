@@ -3,10 +3,12 @@
 **Task ID**: `task_1767375012040_lkmp1n`  
 **Priority**: high  
 **Status**: completed  
+**Complexity**: simple  
 **GitHub Issue**: pending  
 **Branch**: `not created`  
-**Estimated Time**: TBD  
-**Assigned To**: unassigned
+**Estimated Time**: TBD hours  
+**Assigned To**: unassigned  
+**Tags**: refactoring, type-safety
 
 ---
 
@@ -14,33 +16,56 @@
 
 Replace all 10 uses of `any` in generate-orchestrator-prompt.ts with proper types from shared/types.ts.
 
+**Additional Context**:
+- [2026-01-02T17:32:57.650Z] Worker completed. Commit: 95a2c33
+
 ## Goals
 
-- TODO: Define goals
+- Complete high-priority work to unblock downstream tasks
+- Implement straightforward change with good test coverage
+- Verify changes with tests and ensure no regressions
 
 ---
 
 ## Implementation Plan
 
-- TODO: Add implementation phases
+**Phase 1: Analysis**
+  - Review task requirements and acceptance criteria
+  - Identify dependencies and related systems
+  - Plan approach and document assumptions
 
----
+**Phase 2: Implementation**
+  - Implement primary changes
+  - Write tests for new functionality
+  - Handle edge cases and error scenarios
 
-## Technical Details
+**Phase 3: Integration & Validation**
+  - Integrate with existing systems
+  - Run full test suite
+  - Code review and address feedback
 
-- TODO: Add technical notes
+**Phase 4: Verification & Documentation**
+  - Verify changes in target environment
+  - Update documentation and comments
+  - Create PR/commit with clear messages
 
 ---
 
 ## Success Criteria
 
-- [ ] TODO: Define success criteria
+[ ] Code changes are clean, well-commented, and follow style guide
+[ ] All tests pass (unit, integration, e2e if applicable)
+[ ] No regressions in existing functionality
+[ ] Feature complete and tested
+[ ] Documentation updated
 
 ---
 
 ## Notes
 
-- TODO: Add links and context
+- Update this spec as requirements become clearer
+- Reference task ID in commits: task_1767375012040_lkmp1n
+- Keep implementation phases realistic and reviewable
 
 ---
 
@@ -49,4 +74,4 @@ Replace all 10 uses of `any` in generate-orchestrator-prompt.ts with proper type
 | Date | Event |
 |------|-------|
 | 2026-01-02T17:30:12.040Z | Task created |
-| 2026-01-04T10:30:53.583Z | Spec generated |
+| 2026-01-04T19:43:41.385Z | Spec generated |

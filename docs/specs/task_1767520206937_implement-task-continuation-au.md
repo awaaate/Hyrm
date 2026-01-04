@@ -3,10 +3,12 @@
 **Task ID**: `task_1767520206937_xbfnbz`  
 **Priority**: high  
 **Status**: completed  
+**Complexity**: moderate  
 **GitHub Issue**: pending  
 **Branch**: `not created`  
-**Estimated Time**: 2  
-**Assigned To**: agent-1767521220322-6ggubp
+**Estimated Time**: 2 hours  
+**Assigned To**: agent-1767521220322-6ggubp  
+**Tags**: enhancement, plugin, autonomy
 
 ---
 
@@ -23,33 +25,56 @@ Implementation:
 Reference: oh-my-opencode/src/hooks/todo-continuation-enforcer.ts
 Simpler: check tasks.json and modify respawn prompt accordingly
 
+**Additional Context**:
+- [2026-01-04T10:08:47.501Z] Implemented Task Continuation system in .opencode/plugin/index.ts handleSessionIdle function. Features: 1) Detects when non-orchestrator sessions go idle with pending tasks, 2) Auto-spawns code-worker to claim and work on next priority task, 3) Rate limiting: max 1 continuation every 5 minutes (stored in .last-task-continuation.json), 4) Only triggers for normal worker sessions (orchestrator handles its own continuation), 5) Logs all continuation events to realtime.log. Worker spawned with proper prompt including task details and completion instructions.
+
 ## Goals
 
-- TODO: Define goals
+- Complete high-priority work to unblock downstream tasks
+- Design and implement solution with appropriate abstraction
+- Verify changes with tests and ensure no regressions
 
 ---
 
 ## Implementation Plan
 
-- TODO: Add implementation phases
+**Phase 1: Analysis**
+  - Review task requirements and acceptance criteria
+  - Identify dependencies and related systems
+  - Plan approach and document assumptions
 
----
+**Phase 2: Implementation**
+  - Implement primary changes
+  - Write tests for new functionality
+  - Handle edge cases and error scenarios
 
-## Technical Details
+**Phase 3: Integration & Validation**
+  - Integrate with existing systems
+  - Run full test suite
+  - Code review and address feedback
 
-- TODO: Add technical notes
+**Phase 4: Verification & Documentation**
+  - Verify changes in target environment
+  - Update documentation and comments
+  - Create PR/commit with clear messages
 
 ---
 
 ## Success Criteria
 
-- [ ] TODO: Define success criteria
+[ ] Code changes are clean, well-commented, and follow style guide
+[ ] All tests pass (unit, integration, e2e if applicable)
+[ ] No regressions in existing functionality
+[ ] Feature complete and tested
+[ ] Documentation updated
 
 ---
 
 ## Notes
 
-- TODO: Add links and context
+- Update this spec as requirements become clearer
+- Reference task ID in commits: task_1767520206937_xbfnbz
+- Keep implementation phases realistic and reviewable
 
 ---
 
@@ -58,4 +83,4 @@ Simpler: check tasks.json and modify respawn prompt accordingly
 | Date | Event |
 |------|-------|
 | 2026-01-04T09:50:06.937Z | Task created |
-| 2026-01-04T10:30:53.599Z | Spec generated |
+| 2026-01-04T19:43:41.413Z | Spec generated |

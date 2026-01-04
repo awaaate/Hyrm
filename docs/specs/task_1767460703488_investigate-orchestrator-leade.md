@@ -3,10 +3,12 @@
 **Task ID**: `task_1767460703488_zvj1xx`  
 **Priority**: critical  
 **Status**: completed  
+**Complexity**: moderate  
 **GitHub Issue**: pending  
 **Branch**: `not created`  
-**Estimated Time**: TBD  
-**Assigned To**: agent-1767460906093-ieg80k
+**Estimated Time**: TBD hours  
+**Assigned To**: agent-1767460906093-ieg80k  
+**Tags**: orchestrator, watchdog, stability, leader-election
 
 ---
 
@@ -19,33 +21,56 @@ Success criteria:
 - Lease is renewed continuously (no ‘lease expired’ warnings during normal operation)
 - Add minimal diagnostic logging for shutdown reason and last heartbeat timestamp
 
+**Additional Context**:
+- [2026-01-04] Fixed in commit 174d07e - added releaseLeaderLease() to prevent infinite spawn loop
+
 ## Goals
 
-- TODO: Define goals
+- Resolve critical issue immediately to restore system stability
+- Design and implement solution with appropriate abstraction
+- Verify changes with tests and ensure no regressions
 
 ---
 
 ## Implementation Plan
 
-- TODO: Add implementation phases
+**Phase 1: Analysis**
+  - Review task requirements and acceptance criteria
+  - Identify dependencies and related systems
+  - Plan approach and document assumptions
 
----
+**Phase 2: Implementation**
+  - Implement primary changes
+  - Write tests for new functionality
+  - Handle edge cases and error scenarios
 
-## Technical Details
+**Phase 3: Integration & Validation**
+  - Integrate with existing systems
+  - Run full test suite
+  - Code review and address feedback
 
-- TODO: Add technical notes
+**Phase 4: Verification & Documentation**
+  - Verify changes in target environment
+  - Update documentation and comments
+  - Create PR/commit with clear messages
 
 ---
 
 ## Success Criteria
 
-- [ ] TODO: Define success criteria
+[ ] Code changes are clean, well-commented, and follow style guide
+[ ] All tests pass (unit, integration, e2e if applicable)
+[ ] No regressions in existing functionality
+[ ] Fix verified in production-like environment
+[ ] Root cause documented
 
 ---
 
 ## Notes
 
-- TODO: Add links and context
+- Update this spec as requirements become clearer
+- Reference task ID in commits: task_1767460703488_zvj1xx
+- Keep implementation phases realistic and reviewable
 
 ---
 
@@ -54,4 +79,4 @@ Success criteria:
 | Date | Event |
 |------|-------|
 | 2026-01-03T17:18:23.488Z | Task created |
-| 2026-01-04T10:30:53.596Z | Spec generated |
+| 2026-01-04T19:43:41.409Z | Spec generated |

@@ -1,81 +1,110 @@
-# Task: Create Spec System for All Tasks
+# Task: Create spec system - auto-generate spec.md for every task linked to GitHub issue
 
 **Task ID**: `task_1767520578520_78t9d5`  
-**Priority**: Critical  
-**Estimated Time**: 2-3 hours  
-**Status**: Pending  
-**Depends On**: `task_1767520273725_sckp83` (Auto GitHub issues), `task_1767520395465_2o5xy7` (Tools reorganization)
+**Priority**: critical  
+**Status**: completed  
+**Complexity**: moderate  
+**GitHub Issue**: pending  
+**Branch**: `not created`  
+**Estimated Time**: 3 hours  
+**Assigned To**: agent-1767522331796-kulwo4  
+**Tags**: critical, automation, documentation, github
 
 ---
 
 ## Problem Statement
 
-1. **Tasks lack detailed specifications** - Only title and brief description
-2. **No standard format** - Each task documented differently
-3. **Not linked to GitHub** - Specs exist locally but not synced with issues
-4. **Hard to track** - No clear place to find task details
+Create automated spec system for all tasks.
+
+See full specification: docs/specs/task_1767520578520_spec-system.md
+
+Summary:
+1. Every task gets docs/specs/task_<id>_<slug>.md
+2. Spec content = GitHub issue body (synced)
+3. Auto-generate on task creation
+4. Template for consistent format
+5. CLI commands: spec, spec:view, spec:sync
+
+Depends on: GitHub auto-issue task, Tools reorganization
+
+**Additional Context**:
+- [2026-01-04T10:32:32.581Z] Successfully implemented complete spec system:
+
+✅ Core Integration:
+- Auto-generation on task creation in task-tools.ts
+- Spec files stored in docs/specs/task_<id>_<slug>.md
+- spec_file field added to Task interface
+- GitHub issues use spec content as body
+- Bidirectional sync with GitHub
+
+✅ CLI Tool (tools/spec-cli.ts):
+- generate: Create/regenerate specs
+- view: Display spec content
+- sync: Update GitHub issue with spec
+- list: Show all specs with status
+- backfill: Generate specs for all tasks
+
+✅ Results:
+- 133 existing tasks backfilled with specs
+- Auto-generated README.md index
+- Comprehensive documentation in SPEC_SYSTEM_IMPLEMENTATION.md
+- All changes committed (164 files, 9292 insertions)
+
+✅ Testing:
+- Spec generation verified
+- View command tested
+- List command tested
+- Backfill completed successfully
+
+The spec system is fully operational and integrated into the task creation workflow.
 
 ## Goals
 
-1. Every task gets a spec file: `docs/specs/task_<id>_<slug>.md`
-2. Spec content is the same as GitHub issue body
-3. Bidirectional sync: local spec ↔ GitHub issue
-4. Template for consistent spec format
-5. Auto-generate spec on task creation
-
----
-
-## Spec Template
-
-```markdown
-# Task: <Title>
-
-**Task ID**: `<task_id>`  
-**Priority**: <priority>  
-**Status**: <status>  
-**GitHub Issue**: #<issue_number> (auto-linked)  
-**Branch**: `task/<short_id>-<slug>` (if created)  
-**Estimated Time**: <hours>  
-**Assigned To**: <agent_id or "unassigned">
-
----
-
-## Problem Statement
-
-<What problem does this solve? Why is it needed?>
-
-## Goals
-
-<Bulleted list of what success looks like>
+- Resolve critical issue immediately to restore system stability
+- Design and implement solution with appropriate abstraction
+- Verify changes with tests and ensure no regressions
 
 ---
 
 ## Implementation Plan
 
-### Phase 1: <Name>
-<Steps>
+**Phase 1: Analysis**
+  - Review task requirements and acceptance criteria
+  - Identify dependencies and related systems
+  - Plan approach and document assumptions
 
-### Phase 2: <Name>
-<Steps>
+**Phase 2: Implementation**
+  - Implement primary changes
+  - Write tests for new functionality
+  - Handle edge cases and error scenarios
 
----
+**Phase 3: Integration & Validation**
+  - Integrate with existing systems
+  - Run full test suite
+  - Code review and address feedback
 
-## Technical Details
-
-<Code snippets, file paths, API changes, etc.>
+**Phase 4: Verification & Documentation**
+  - Verify changes in target environment
+  - Update documentation and comments
+  - Create PR/commit with clear messages
 
 ---
 
 ## Success Criteria
 
-- [ ] <Criterion 1>
-- [ ] <Criterion 2>
+[ ] Code changes are clean, well-commented, and follow style guide
+[ ] All tests pass (unit, integration, e2e if applicable)
+[ ] No regressions in existing functionality
+[ ] Fix verified in production-like environment
+[ ] Root cause documented
 
 ---
 
 ## Notes
 
-<Additional context, links, references>
+- Update this spec as requirements become clearer
+- Reference task ID in commits: task_1767520578520_78t9d5
+- Keep implementation phases realistic and reviewable
 
 ---
 
@@ -83,216 +112,5 @@
 
 | Date | Event |
 |------|-------|
-| <created_at> | Task created |
-| <date> | Spec created |
-| <date> | GitHub issue #N created |
-| <date> | Assigned to <agent> |
-| <date> | Status changed to <status> |
-```
-
----
-
-## Implementation Plan
-
-### Phase 1: Spec Template & Generator (1 hour)
-
-Create `tools/lib/spec-generator.ts`:
-
-```typescript
-interface SpecOptions {
-  task: Task;
-  githubIssue?: { number: number; url: string };
-  branch?: string;
-}
-
-function generateSpec(options: SpecOptions): string {
-  const { task, githubIssue, branch } = options;
-  const slug = slugify(task.title);
-  
-  return `# Task: ${task.title}
-
-**Task ID**: \`${task.id}\`
-**Priority**: ${task.priority}
-**Status**: ${task.status}
-**GitHub Issue**: ${githubIssue ? `#${githubIssue.number}` : 'pending'}
-**Branch**: ${branch || 'not created'}
-**Estimated Time**: ${task.estimated_hours || 'TBD'}
-
----
-
-## Problem Statement
-
-${task.description || 'TODO: Add problem statement'}
-
-## Goals
-
-- TODO: Define goals
-
----
-
-## Implementation Plan
-
-TODO: Add implementation phases
-
----
-
-## Success Criteria
-
-- [ ] TODO: Define success criteria
-
----
-
-## History
-
-| Date | Event |
-|------|-------|
-| ${task.created_at} | Task created |
-| ${new Date().toISOString()} | Spec generated |
-`;
-}
-
-function getSpecPath(taskId: string, title: string): string {
-  const slug = slugify(title).slice(0, 30);
-  return `docs/specs/task_${taskId.split('_')[1]}_${slug}.md`;
-}
-```
-
-### Phase 2: Integrate with Task Manager (30 min)
-
-Modify `task-manager.ts` `create()` method:
-
-```typescript
-create(options: CreateOptions): Task {
-  const task = /* existing creation logic */;
-  
-  // Auto-generate spec file
-  const specPath = getSpecPath(task.id, task.title);
-  const specContent = generateSpec({ task });
-  writeFileSync(specPath, specContent);
-  
-  // Store spec path in task
-  task.spec_file = specPath;
-  
-  this.saveStore();
-  return task;
-}
-```
-
-### Phase 3: GitHub Issue Sync (1 hour)
-
-When creating GitHub issue, use spec content as body:
-
-```typescript
-async createGitHubIssue(taskId: string): Promise<GitHubResult> {
-  const task = this.getById(taskId);
-  
-  // Read spec file if exists, otherwise generate
-  let body: string;
-  if (task.spec_file && existsSync(task.spec_file)) {
-    body = readFileSync(task.spec_file, 'utf-8');
-  } else {
-    body = generateSpec({ task });
-  }
-  
-  const result = await gh('issue', 'create', 
-    '--title', task.title,
-    '--body', body,
-    '--label', task.priority
-  );
-  
-  if (result.success) {
-    // Update spec with issue link
-    updateSpecWithIssue(task.spec_file, result.issueNumber, result.issueUrl);
-    
-    // Store in task
-    task.github_issue = { number: result.issueNumber, url: result.issueUrl };
-    this.saveStore();
-  }
-  
-  return result;
-}
-```
-
-### Phase 4: CLI Commands (30 min)
-
-Add to task CLI:
-
-```bash
-# Generate/regenerate spec for existing task
-bun tools/cli/task.ts spec <task_id>
-
-# View spec
-bun tools/cli/task.ts spec:view <task_id>
-
-# Sync spec to GitHub issue (update issue body)
-bun tools/cli/task.ts spec:sync <task_id>
-```
-
-### Phase 5: Backfill Existing Tasks (30 min)
-
-Create migration script:
-
-```typescript
-// tools/migrations/backfill-specs.ts
-const tm = new TaskManager();
-const tasks = tm.list('all');
-
-for (const task of tasks) {
-  if (!task.spec_file || !existsSync(task.spec_file)) {
-    const specPath = getSpecPath(task.id, task.title);
-    const spec = generateSpec({ task });
-    writeFileSync(specPath, spec);
-    tm.update(task.id, { spec_file: specPath });
-    console.log(`Generated spec: ${specPath}`);
-  }
-}
-```
-
----
-
-## File Structure
-
-```
-docs/
-├── specs/
-│   ├── README.md                           # Index of all specs
-│   ├── task_1767520395465_tools-reorg.md   # Example spec
-│   ├── task_1767520578520_spec-system.md   # This spec
-│   └── ...
-│
-tools/
-├── lib/
-│   └── spec-generator.ts                   # Spec generation logic
-│
-└── cli/
-    └── task.ts                             # spec, spec:view, spec:sync commands
-```
-
----
-
-## Success Criteria
-
-- [ ] Every new task auto-generates a spec file in `docs/specs/`
-- [ ] Spec path stored in task object (`task.spec_file`)
-- [ ] GitHub issues use spec content as body
-- [ ] `bun tools/cli/task.ts spec <id>` generates/views spec
-- [ ] Existing tasks backfilled with specs
-- [ ] `docs/specs/README.md` auto-generated index
-
----
-
-## Integration Points
-
-1. **Task Creation** → Auto-generate spec
-2. **GitHub Issue Creation** → Use spec as issue body
-3. **Task Update** → Option to sync changes to spec/issue
-4. **Agent Workflow** → Read spec before starting work
-
----
-
-## Future Enhancements
-
-- Spec versioning (track changes over time)
-- PR templates that reference spec
-- Auto-close issue when task completed
-- Spec diff when updating GitHub issue
+| 2026-01-04T09:56:18.520Z | Task created |
+| 2026-01-04T19:43:41.415Z | Spec generated |

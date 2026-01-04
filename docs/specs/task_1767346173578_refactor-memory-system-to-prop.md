@@ -3,10 +3,12 @@
 **Task ID**: `task_1767346173578_rcafqh`  
 **Priority**: high  
 **Status**: completed  
+**Complexity**: complex  
 **GitHub Issue**: pending  
 **Branch**: `not created`  
-**Estimated Time**: 4  
-**Assigned To**: agent-1767345914840-613n7n
+**Estimated Time**: 4 hours  
+**Assigned To**: agent-1767345914840-613n7n  
+**Tags**: memory-system, refactor, user-feedback, critical
 
 ---
 
@@ -42,33 +44,65 @@ SOLUTION NEEDED:
 4. Consolidate duplicated tools
 5. Create clear documentation on what's active vs deprecated
 
+**Additional Context**:
+- [2026-01-02T09:32:39.163Z] Implemented automatic session knowledge extraction: 1) Added session.end hook to auto-extract learnings from tool timing data 2) Created extractSessionKnowledge function that analyzes tool usage patterns, errors, and slow tools 3) Added summarize-current command to session-summarizer for quiet auto-summarization 4) Added Memory System Architecture section to AGENTS.md documenting active vs deprecated tools
+
 ## Goals
 
-- TODO: Define goals
+- Complete high-priority work to unblock downstream tasks
+- Design comprehensive solution with proper error handling and documentation
+- Improve code quality, maintainability, or performance
+- Verify changes with tests and ensure no regressions
 
 ---
 
 ## Implementation Plan
 
-- TODO: Add implementation phases
+**Phase 1: Analysis**
+  - Review task requirements and acceptance criteria
+  - Identify dependencies and related systems
+  - Plan approach and document assumptions
 
----
+**Phase 2: Design & Specification**
+  - Create detailed design document or architecture notes
+  - Validate approach with team/orchestrator
+  - Prepare for incremental implementation
 
-## Technical Details
+**Phase 3: Implementation**
+  - Implement primary changes
+  - Write tests for new functionality
+  - Handle edge cases and error scenarios
 
-- TODO: Add technical notes
+**Phase 4: Integration & Validation**
+  - Integrate with existing systems
+  - Run full test suite
+  - Code review and address feedback
+
+**Phase 5: Verification & Documentation**
+  - Verify changes in target environment
+  - Update documentation and comments
+  - Create PR/commit with clear messages
 
 ---
 
 ## Success Criteria
 
-- [ ] TODO: Define success criteria
+[ ] Code changes are clean, well-commented, and follow style guide
+[ ] All tests pass (unit, integration, e2e if applicable)
+[ ] No regressions in existing functionality
+[ ] Feature complete and tested
+[ ] Documentation updated
+[ ] Design reviewed and approved
+[ ] Performance benchmarked if applicable
+[ ] Error handling and logging comprehensive
 
 ---
 
 ## Notes
 
-- TODO: Add links and context
+- Update this spec as requirements become clearer
+- Reference task ID in commits: task_1767346173578_rcafqh
+- Keep implementation phases realistic and reviewable
 
 ---
 
@@ -77,4 +111,4 @@ SOLUTION NEEDED:
 | Date | Event |
 |------|-------|
 | 2026-01-02T09:29:33.578Z | Task created |
-| 2026-01-04T10:30:53.573Z | Spec generated |
+| 2026-01-04T19:43:41.367Z | Spec generated |

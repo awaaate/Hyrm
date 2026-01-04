@@ -3,10 +3,12 @@
 **Task ID**: `task_1767379006347_zrm7k0`  
 **Priority**: critical  
 **Status**: completed  
+**Complexity**: moderate  
 **GitHub Issue**: pending  
 **Branch**: `not created`  
-**Estimated Time**: TBD  
-**Assigned To**: unassigned
+**Estimated Time**: TBD hours  
+**Assigned To**: unassigned  
+**Tags**: bug, plugin, race-condition
 
 ---
 
@@ -34,33 +36,57 @@ Changes needed in .opencode/plugin/index.ts:
 
 This is a HIGH priority bug that causes 4x log duplication.
 
+**Additional Context**:
+- [2026-01-02T18:38:31.325Z] Implemented directory-based locking. Each plugin instance now creates its own file in memory/.plugin-instances/{INSTANCE_ID}.lock. This is atomic and prevents race conditions. The smallest INSTANCE_ID alphabetically wins the election after 150ms delay.
+
 ## Goals
 
-- TODO: Define goals
+- Resolve critical issue immediately to restore system stability
+- Design and implement solution with appropriate abstraction
+- Fix root cause and add regression test
+- Verify changes with tests and ensure no regressions
 
 ---
 
 ## Implementation Plan
 
-- TODO: Add implementation phases
+**Phase 1: Analysis**
+  - Review task requirements and acceptance criteria
+  - Identify dependencies and related systems
+  - Plan approach and document assumptions
 
----
+**Phase 2: Implementation**
+  - Implement primary changes
+  - Write tests for new functionality
+  - Handle edge cases and error scenarios
 
-## Technical Details
+**Phase 3: Integration & Validation**
+  - Integrate with existing systems
+  - Run full test suite
+  - Code review and address feedback
 
-- TODO: Add technical notes
+**Phase 4: Verification & Documentation**
+  - Verify changes in target environment
+  - Update documentation and comments
+  - Create PR/commit with clear messages
 
 ---
 
 ## Success Criteria
 
-- [ ] TODO: Define success criteria
+[ ] Code changes are clean, well-commented, and follow style guide
+[ ] All tests pass (unit, integration, e2e if applicable)
+[ ] No regressions in existing functionality
+[ ] Fix verified in production-like environment
+[ ] Root cause documented
 
 ---
 
 ## Notes
 
-- TODO: Add links and context
+- Update this spec as requirements become clearer
+- Reference task ID in commits: task_1767379006347_zrm7k0
+- Keep implementation phases realistic and reviewable
 
 ---
 
@@ -69,4 +95,4 @@ This is a HIGH priority bug that causes 4x log duplication.
 | Date | Event |
 |------|-------|
 | 2026-01-02T18:36:46.350Z | Task created |
-| 2026-01-04T10:30:53.586Z | Spec generated |
+| 2026-01-04T19:43:41.390Z | Spec generated |

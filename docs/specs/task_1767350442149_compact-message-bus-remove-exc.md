@@ -3,10 +3,12 @@
 **Task ID**: `task_1767350442149_qnozk0`  
 **Priority**: medium  
 **Status**: completed  
+**Complexity**: simple  
 **GitHub Issue**: pending  
 **Branch**: `not created`  
-**Estimated Time**: 1  
-**Assigned To**: agent-1767350313896-8mgpde
+**Estimated Time**: 1 hours  
+**Assigned To**: agent-1767350313896-8mgpde  
+**Tags**: optimization, memory
 
 ---
 
@@ -14,33 +16,54 @@
 
 The message-bus.jsonl contains many heartbeat messages that clutter coordination. Create a scheduled cleanup that: 1) Keeps only latest heartbeat per agent, 2) Archives messages older than 1 hour, 3) Runs automatically on session start. Use tools/message-bus-manager.ts as foundation.
 
+**Additional Context**:
+- [2026-01-02T10:46:51.612Z] Reduced heartbeat spam: lowered thresholds in message-bus-manager, reduced heartbeat frequency to 60s, only send to message bus every 5 min. Result: 51% message reduction.
+
 ## Goals
 
-- TODO: Define goals
+- Implement medium-priority feature to improve system
+- Implement straightforward change with good test coverage
+- Verify changes with tests and ensure no regressions
 
 ---
 
 ## Implementation Plan
 
-- TODO: Add implementation phases
+**Phase 1: Analysis**
+  - Review task requirements and acceptance criteria
+  - Identify dependencies and related systems
+  - Plan approach and document assumptions
 
----
+**Phase 2: Implementation**
+  - Implement primary changes
+  - Write tests for new functionality
+  - Handle edge cases and error scenarios
 
-## Technical Details
+**Phase 3: Integration & Validation**
+  - Integrate with existing systems
+  - Run full test suite
+  - Code review and address feedback
 
-- TODO: Add technical notes
+**Phase 4: Verification & Documentation**
+  - Verify changes in target environment
+  - Update documentation and comments
+  - Create PR/commit with clear messages
 
 ---
 
 ## Success Criteria
 
-- [ ] TODO: Define success criteria
+[ ] Code changes are clean, well-commented, and follow style guide
+[ ] All tests pass (unit, integration, e2e if applicable)
+[ ] No regressions in existing functionality
 
 ---
 
 ## Notes
 
-- TODO: Add links and context
+- Update this spec as requirements become clearer
+- Reference task ID in commits: task_1767350442149_qnozk0
+- Keep implementation phases realistic and reviewable
 
 ---
 
@@ -49,4 +72,4 @@ The message-bus.jsonl contains many heartbeat messages that clutter coordination
 | Date | Event |
 |------|-------|
 | 2026-01-02T10:40:42.149Z | Task created |
-| 2026-01-04T10:30:53.577Z | Spec generated |
+| 2026-01-04T19:43:41.373Z | Spec generated |

@@ -3,44 +3,65 @@
 **Task ID**: `task_1767216535944_0l8dxb`  
 **Priority**: medium  
 **Status**: completed  
+**Complexity**: unknown  
 **GitHub Issue**: pending  
 **Branch**: `not created`  
-**Estimated Time**: TBD  
+**Estimated Time**: TBD hours  
 **Assigned To**: unassigned
 
 ---
 
 ## Problem Statement
 
-TODO: Add problem statement
+No description provided. This task needs context added via `task_update(task_id, description=...)`.
+
+**Additional Context**:
+- [Session 52] Migrated 14 tools to modern tool() helper pattern with Zod schemas
 
 ## Goals
 
-- TODO: Define goals
+- Implement medium-priority feature to improve system
+- Verify changes with tests and ensure no regressions
 
 ---
 
 ## Implementation Plan
 
-- TODO: Add implementation phases
+**Phase 1: Analysis**
+  - Review task requirements and acceptance criteria
+  - Identify dependencies and related systems
+  - Plan approach and document assumptions
 
----
+**Phase 2: Implementation**
+  - Implement primary changes
+  - Write tests for new functionality
+  - Handle edge cases and error scenarios
 
-## Technical Details
+**Phase 3: Integration & Validation**
+  - Integrate with existing systems
+  - Run full test suite
+  - Code review and address feedback
 
-- TODO: Add technical notes
+**Phase 4: Verification & Documentation**
+  - Verify changes in target environment
+  - Update documentation and comments
+  - Create PR/commit with clear messages
 
 ---
 
 ## Success Criteria
 
-- [ ] TODO: Define success criteria
+[ ] Code changes are clean, well-commented, and follow style guide
+[ ] All tests pass (unit, integration, e2e if applicable)
+[ ] No regressions in existing functionality
 
 ---
 
 ## Notes
 
-- TODO: Add links and context
+- Update this spec as requirements become clearer
+- Reference task ID in commits: task_1767216535944_0l8dxb
+- Keep implementation phases realistic and reviewable
 
 ---
 
@@ -49,4 +70,4 @@ TODO: Add problem statement
 | Date | Event |
 |------|-------|
 | 2025-12-31T21:28:55.944Z | Task created |
-| 2026-01-04T10:30:53.558Z | Spec generated |
+| 2026-01-04T19:43:41.334Z | Spec generated |
