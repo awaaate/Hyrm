@@ -1,0 +1,10 @@
+{
+  "recorded_at": "2026-01-04T19:29:14+00:00",
+  "kind": "crash",
+  "pid": 470079,
+  "exit_code": 0,
+  "reason": "health_check: not running",
+  "startup_log": "logs/watchdog-startup.log",
+  "failure_snippet": "logs/orchestrator-failures/crash-20260104T192914Z-pid470079.tail.log",
+  "stderr_log": "logs/orchestrator-failures/orchestrator-stderr-20260104T192408Z.log"
+}

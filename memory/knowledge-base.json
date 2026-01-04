@@ -1,8 +1,59 @@
 [
   {
+    "session_id": "ses_4758101c8ffefgru3QUCGrYvb4",
+    "timestamp": 1767555137127,
+    "messages": 1,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47585a473ffepsmndqUw6EwrKj",
+    "timestamp": 1767555122281,
+    "messages": 67,
+    "decisions": [],
+    "discoveries": [
+      "ESLint doesn't understand TypeScript syntax by default."
+    ],
+    "code_created": [
+      ".eslintrc.json",
+      "eslint.config.js",
+      ".git/hooks/pre-commit",
+      "tools/hooks/pre-commit",
+      "tools/hooks/README.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "a comprehensive TypeScript import linting system that prevents commits with missing imports (like the `readFileSync` bug"
+    ]
+  },
+  {
+    "session_id": "ses_475866915ffeN0YC6NwC2DH9ov",
+    "timestamp": 1767554986031,
+    "messages": 55,
+    "decisions": [],
+    "discoveries": [
+      "there are existing test files and one test is currently failing."
+    ],
+    "code_created": [
+      "test.ts",
+      "TEST_FRAMEWORK.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
     "session_id": "ses_475887038ffe1IuYqMv66ldnme",
-    "timestamp": 1767554650106,
-    "messages": 2,
+    "timestamp": 1767554898952,
+    "messages": 57,
     "decisions": [],
     "discoveries": [],
     "code_created": [],

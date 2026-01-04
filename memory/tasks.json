@@ -3377,9 +3377,9 @@
       "title": "Reduce orchestrator start failures observed in watchdog.log",
       "description": "logs/watchdog.log contains repeated `[ERROR] Orchestrator failed to start!` and restart storms (including too many restarts/hour). After fixing plugin/prompt issues, harden watchdog startup diagnostics: include last N lines of orchestrator stderr, surface exit codes, and add backoff/jitter to prevent restart thundering-herd.",
       "priority": "high",
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2026-01-04T17:33:47.432Z",
-      "updated_at": "2026-01-04T19:27:21.238Z",
+      "updated_at": "2026-01-04T19:32:37.886Z",
       "created_by": "unknown",
       "tags": [
         "reliability",
@@ -3391,16 +3391,18 @@
       "notes": [
         "[2026-01-04T17:47:10.107Z] Worker spawned via spawn-worker.sh (PID 444876). Investigate frequent orchestrator start failures in logs/watchdog.log; correlate with prompt-generator and plugin errors.",
         "[2026-01-04T19:27:21.238Z] Reset from stale in_progress (idle for 40+ minutes with no assignee). Ready for fresh worker."
-      ]
+      ],
+      "assigned_to": "agent-1767555140085-8fqkx",
+      "claimed_at": "2026-01-04T19:32:37.886Z"
     },
     {
       "id": "task_1767554768950_bgvplx",
       "title": "Implement test automation framework for plugin tools",
       "description": "Replace ad-hoc POC test tasks (v1/v2/v3/v4 pattern) with proper integration test framework. Should cover: agent registration, task creation/completion, quality assessment, memory operations. Use jest or vitest with proper setup/teardown.",
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-04T19:26:08.950Z",
-      "updated_at": "2026-01-04T19:26:26.852Z",
+      "updated_at": "2026-01-04T19:32:34.754Z",
       "created_by": "unknown",
       "tags": [
         "testing",
@@ -3413,19 +3415,24 @@
       "github_issue_number": 4,
       "github_issue_url": "https://github.com/awaaate/Hyrm/issues/4",
       "notes": [
-        "[2026-01-04T19:26:10.926Z] Created GitHub issue #4"
+        "[2026-01-04T19:26:10.926Z] Created GitHub issue #4",
+        "[2026-01-04T19:29:42.446Z] Completed all requirements: replaced POC tests with professional framework, 206 tests passing, comprehensive documentation, npm scripts added. Commits: 76fa8d5, a470104\"",
+        "[2026-01-04T19:32:34.754Z] Test automation framework successfully replaced POC pattern with 206 comprehensive tests (100% pass). Unified test runner, npm scripts, and documentation complete. Framework ready for CI/CD integration."
       ],
       "assigned_to": "agent-1767554786459-5cyyg6",
-      "claimed_at": "2026-01-04T19:26:26.851Z"
+      "claimed_at": "2026-01-04T19:26:26.851Z",
+      "completed_at": "2026-01-04T19:32:34.753Z",
+      "quality_score": 9.2,
+      "quality_notes": "Professional test automation framework with Bun's built-in testing replaced ad-hoc POC pattern. Key learning: Comprehensive test coverage (206 tests) catches edge cases early. Pre-commit hooks with linting prevent runtime failures."
     },
     {
       "id": "task_1767554770108_en729x",
       "title": "Add TypeScript import linting to catch missing imports before runtime",
       "description": "Configure ESLint with import rules to catch missing imports (readFileSync, etc.) before runtime. Add to pre-commit hook. Prevent repeats of task_1767449532262_smsyvq (memory_search readFileSync bug).",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-04T19:26:10.108Z",
-      "updated_at": "2026-01-04T19:26:11.821Z",
+      "updated_at": "2026-01-04T19:32:35.323Z",
       "created_by": "unknown",
       "tags": [
         "linting",
@@ -3438,8 +3445,13 @@
       "github_issue_number": 5,
       "github_issue_url": "https://github.com/awaaate/Hyrm/issues/5",
       "notes": [
-        "[2026-01-04T19:26:11.821Z] Created GitHub issue #5"
-      ]
+        "[2026-01-04T19:26:11.821Z] Created GitHub issue #5",
+        "[2026-01-04T19:31:54.515Z] Successfully implemented ESLint import linting system. Created eslint.config.js with import rules, pre-commit hook that validates staged files, and comprehensive documentation. The system catches missing imports like the readFileSync bug that occurred in task_1767449532262_smsyvq. All dependencies installed, hook tested and working.\"",
+        "[2026-01-04T19:32:35.323Z] ESLint import linting configured with pre-commit hook. Catches missing imports (readFileSync, etc.) before runtime. Ready for local dev use and GitHub Actions CI integration."
+      ],
+      "completed_at": "2026-01-04T19:32:35.323Z",
+      "quality_score": 8.5,
+      "quality_notes": "ESLint with import plugin correctly catches missing imports at CI time. Pre-commit hook setup prevents bad commits. Future: GitHub Actions CI job would enforce on all PRs."
     },
     {
       "id": "task_1767554771394_g0k7ch",
@@ -3478,6 +3490,6 @@
       "spec_file": "docs/specs/task_1767554772790_evaluate-and-monitor-realtimel.md"
     }
   ],
-  "completed_count": 146,
-  "last_updated": "2026-01-04T19:27:21.238Z"
+  "completed_count": 150,
+  "last_updated": "2026-01-04T19:32:37.886Z"
 }
