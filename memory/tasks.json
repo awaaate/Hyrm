@@ -3518,7 +3518,7 @@
       "priority": "critical",
       "status": "completed",
       "created_at": "2026-01-04T19:41:45.974Z",
-      "updated_at": "2026-01-04T19:45:47.896Z",
+      "updated_at": "2026-01-04T19:46:54.404Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -3529,7 +3529,7 @@
       "estimated_hours": 2,
       "complexity": "complex",
       "spec_file": "docs/specs/task_1767555705974_fix-orchestrator-leader-heartb.md",
-      "completed_at": "2026-01-04T19:45:46.099Z",
+      "completed_at": "2026-01-04T19:46:54.403Z",
       "notes": [
         "[2026-01-04T19:45:46.100Z] Worker solution: Implemented background heartbeat service (tools/heartbeat-service.sh) with orchestrator-heartbeat.sh. Service runs independently via nohup, decoupled from OpenCode session lifecycle. Heartbeats executing every 60 seconds as evidenced by realtime log entries. This solves the critical issue of leader leases expiring when sessions idle.\""
       ],
@@ -3566,9 +3566,9 @@
       "title": "Verify realtime.log rotation is working and archives are preserved",
       "description": "Session 185 implemented realtime.log rotation (keeping last 5000 lines, archiving rest). Verify: (1) Rotation is actually executing on schedule, (2) Archives exist in memory/realtime-archives/, (3) Total archived size is reasonable, (4) Rotation isn't causing data loss. Check cron/automation for rotation trigger and ensure archives aren't accumulating unbounded.",
       "priority": "low",
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2026-01-04T19:41:49.057Z",
-      "updated_at": "2026-01-04T19:41:49.064Z",
+      "updated_at": "2026-01-04T19:51:53.801Z",
       "created_by": "unknown",
       "tags": [
         "monitoring",
@@ -3577,9 +3577,11 @@
       ],
       "estimated_hours": 0.5,
       "complexity": "simple",
-      "spec_file": "docs/specs/task_1767555709057_verify-realtimelog-rotation-is.md"
+      "spec_file": "docs/specs/task_1767555709057_verify-realtimelog-rotation-is.md",
+      "assigned_to": "agent-1767556297888-n6td1ig",
+      "claimed_at": "2026-01-04T19:51:53.801Z"
     }
   ],
-  "completed_count": 157,
-  "last_updated": "2026-01-04T19:45:46.100Z"
+  "completed_count": 158,
+  "last_updated": "2026-01-04T19:51:53.801Z"
 }

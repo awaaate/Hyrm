@@ -1,10 +1,77 @@
 [
   {
-    "session_id": "ses_475799505ffeM2aLvrVtC0uvBl",
-    "timestamp": 1767555623744,
+    "session_id": "ses_4756f6512ffeOS6pdFLCjUypPf",
+    "timestamp": 1767556291383,
     "messages": 2,
     "decisions": [],
     "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47575b66cffeAr8VH8msPYo2jm",
+    "timestamp": 1767556137523,
+    "messages": 50,
+    "decisions": [
+      "ensure the heartbeat service is started **before** the orchestrator and kept alive **independently of the orchestrator**."
+    ],
+    "discoveries": [
+      "when a session idles (after 5-8 minutes), the session context is killed which kills any active `setI",
+      "likely that the `nohup bash -c '.",
+      "`setsid` is creating a new session, but the shell is still exiting.",
+      "with my approach - `nohup setsid bash script` creates the setsid process which then starts bash, but"
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [
+      "**the heartbeat service infrastructure is already in place and working** based on the logs showing it's updating leases"
+    ],
+    "techniques": [],
+    "solutions": [
+      "ensure the heartbeat service is started **before** the orchestrator and kept alive **independently of the orchestrator**."
+    ]
+  },
+  {
+    "session_id": "ses_475781aedffekZSvfzEVxei6L4",
+    "timestamp": 1767555871700,
+    "messages": 37,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_475781d44ffeYbQVJVXGJtCdk5",
+    "timestamp": 1767556033156,
+    "messages": 54,
+    "decisions": [
+      "create a **background shell script loop** that runs independently of the OpenCode session lifecycle."
+    ],
+    "discoveries": [],
+    "code_created": [
+      "tools/lib/orchestrator-heartbeat.sh",
+      "tools/heartbeat-service.sh",
+      "docs/HEARTBEAT_SERVICE.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_475799505ffeM2aLvrVtC0uvBl",
+    "timestamp": 1767556015022,
+    "messages": 77,
+    "decisions": [],
+    "discoveries": [
+      "clear now: **Orchestrators are running out of work (going idle) within 5-8 minutes, triggering respa"
+    ],
     "code_created": [],
     "problems_solved": [],
     "key_insights": [],

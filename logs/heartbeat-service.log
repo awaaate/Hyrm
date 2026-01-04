@@ -1,3 +1,10 @@
 [2026-01-04T19:43:30Z] [INFO] Heartbeat service started (PID: 559289)
 [2026-01-04T19:44:49Z] [INFO] Stopping heartbeat service (PID: 559289)
 [2026-01-04T19:44:50Z] [INFO] Heartbeat service stopped
+bash: /tmp/tmp.R8QnpDUPDe: No such file or directory
+[2026-01-04T19:46:29Z] [ERROR] Failed to start heartbeat service (process died immediately)
+bash: /tmp/tmp.pfcENwJ121: No such file or directory
+[2026-01-04T19:46:33Z] [ERROR] Failed to start heartbeat service (process died immediately)
+[2026-01-04T19:46:53Z] [INFO] Heartbeat service started (PID: 629847)
+[2026-01-04T19:48:07Z] [INFO] Stopping heartbeat service (PID: 629847)
+[2026-01-04T19:48:08Z] [INFO] Heartbeat service stopped

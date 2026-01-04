@@ -35,3 +35,17 @@
 [2026-01-04T19:40:22+00:00] [INFO] Starting orchestrator agent (restart #5 this hour)...
 [2026-01-04T19:40:22+00:00] [OK] Orchestrator started with PID: 545699 (model: anthropic/claude-haiku-4-5)
 [2026-01-04T19:40:27+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T19:47:29+00:00] [INFO] Healthy leader exists: agent-1767555629988-l36c6n (epoch 8), lease valid for 172s
+[2026-01-04T19:47:29+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767555629988-l36c6n:epoch8). Skipping respawn.
+[2026-01-04T19:48:29+00:00] [INFO] Healthy leader exists: agent-1767555629988-l36c6n (epoch 8), lease valid for 172s
+[2026-01-04T19:48:29+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767555629988-l36c6n:epoch8). Skipping respawn.
+[2026-01-04T19:49:29+00:00] [INFO] Healthy leader exists: agent-1767555629988-l36c6n (epoch 8), lease valid for 112s
+[2026-01-04T19:49:29+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767555629988-l36c6n:epoch8). Skipping respawn.
+[2026-01-04T19:50:29+00:00] [INFO] Healthy leader exists: agent-1767555629988-l36c6n (epoch 8), lease valid for 52s
+[2026-01-04T19:50:29+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767555629988-l36c6n:epoch8). Skipping respawn.
+[2026-01-04T19:51:30+00:00] [WARN] Leader lease expired 38s ago: agent-1767555629988-l36c6n (epoch 8)
+[2026-01-04T19:51:30+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-04T19:51:30+00:00] [WARN] Leader lease expired 38s ago: agent-1767555629988-l36c6n (epoch 8)
+[2026-01-04T19:51:30+00:00] [INFO] Starting orchestrator agent (restart #6 this hour)...
+[2026-01-04T19:51:30+00:00] [OK] Orchestrator started with PID: 637837 (model: anthropic/claude-haiku-4-5)
+[2026-01-04T19:51:35+00:00] [OK] Orchestrator confirmed running
