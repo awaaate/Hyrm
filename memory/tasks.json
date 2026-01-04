@@ -3391,8 +3391,90 @@
       "notes": [
         "[2026-01-04T17:47:10.107Z] Worker spawned via spawn-worker.sh (PID 444876). Investigate frequent orchestrator start failures in logs/watchdog.log; correlate with prompt-generator and plugin errors."
       ]
+    },
+    {
+      "id": "task_1767554768950_bgvplx",
+      "title": "Implement test automation framework for plugin tools",
+      "description": "Replace ad-hoc POC test tasks (v1/v2/v3/v4 pattern) with proper integration test framework. Should cover: agent registration, task creation/completion, quality assessment, memory operations. Use jest or vitest with proper setup/teardown.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-04T19:26:08.950Z",
+      "updated_at": "2026-01-04T19:26:10.926Z",
+      "created_by": "unknown",
+      "tags": [
+        "testing",
+        "automation",
+        "quality"
+      ],
+      "estimated_hours": 8,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767554768950_implement-test-automation-fram.md",
+      "github_issue_number": 4,
+      "github_issue_url": "https://github.com/awaaate/Hyrm/issues/4",
+      "notes": [
+        "[2026-01-04T19:26:10.926Z] Created GitHub issue #4"
+      ]
+    },
+    {
+      "id": "task_1767554770108_en729x",
+      "title": "Add TypeScript import linting to catch missing imports before runtime",
+      "description": "Configure ESLint with import rules to catch missing imports (readFileSync, etc.) before runtime. Add to pre-commit hook. Prevent repeats of task_1767449532262_smsyvq (memory_search readFileSync bug).",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-04T19:26:10.108Z",
+      "updated_at": "2026-01-04T19:26:11.821Z",
+      "created_by": "unknown",
+      "tags": [
+        "linting",
+        "quality",
+        "automation"
+      ],
+      "estimated_hours": 3,
+      "complexity": "simple",
+      "spec_file": "docs/specs/task_1767554770108_add-typescript-import-linting-.md",
+      "github_issue_number": 5,
+      "github_issue_url": "https://github.com/awaaate/Hyrm/issues/5",
+      "notes": [
+        "[2026-01-04T19:26:11.821Z] Created GitHub issue #5"
+      ]
+    },
+    {
+      "id": "task_1767554771394_g0k7ch",
+      "title": "Document leader lease timeout tuning guidelines",
+      "description": "Session 189 found leader-lease churn with tight heartbeats; document current timeout values (180s ttl in orchestrator-state.json) and recommendations for exponential backoff in leader election logic. Add to AGENTS.md or new LEADER_ELECTION.md doc.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-04T19:26:11.394Z",
+      "updated_at": "2026-01-04T19:26:11.396Z",
+      "created_by": "unknown",
+      "tags": [
+        "documentation",
+        "leader-election",
+        "resilience"
+      ],
+      "estimated_hours": 2,
+      "complexity": "simple",
+      "spec_file": "docs/specs/task_1767554771394_document-leader-lease-timeout-.md"
+    },
+    {
+      "id": "task_1767554772790_oq3oip",
+      "title": "Evaluate and monitor realtime.log rotation effectiveness",
+      "description": "Realtime.log is currently 5.2M; rotation was implemented in Session 185. Monitor growth over next 1-2 weeks; if it exceeds 10M, consider more aggressive rotation (keep last 2500 lines instead of 5000) or rate-limiting verbose event logging.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-04T19:26:12.790Z",
+      "updated_at": "2026-01-04T19:26:12.801Z",
+      "created_by": "unknown",
+      "tags": [
+        "monitoring",
+        "performance",
+        "logging"
+      ],
+      "estimated_hours": 1,
+      "complexity": "simple",
+      "spec_file": "docs/specs/task_1767554772790_evaluate-and-monitor-realtimel.md"
     }
   ],
   "completed_count": 146,
-  "last_updated": "2026-01-04T17:47:32.645Z"
+  "last_updated": "2026-01-04T19:26:12.801Z"
 }
