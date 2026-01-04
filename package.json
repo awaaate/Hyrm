@@ -1,6 +1,14 @@
 {
+  "scripts": {
+    "test": "bun test.ts",
+    "test:watch": "bun --watch test.ts",
+    "test:suite": "bun test.ts --suite"
+  },
   "dependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/blessed": "^0.1.27",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.11.0",
     "eslint": "^9.39.2",
