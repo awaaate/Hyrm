@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-01-04T10:27:38.332Z",
+  "last_updated": "2026-01-04T11:29:31.567Z",
   "agents": {
     "agent-1767302507934-2c671j": {
       "agent_id": "agent-1767302507934-2c671j",
@@ -687,14 +687,38 @@
     },
     "agent-1767522331796-kulwo4": {
       "agent_id": "agent-1767522331796-kulwo4",
+      "tasks_completed": 2,
+      "tasks_claimed": 1,
+      "total_duration_ms": 294255,
+      "avg_duration_ms": 147128,
+      "quality_scores": [
+        7.8
+      ],
+      "avg_quality": 7.8,
+      "last_activity": "2026-01-04T10:32:32.589Z",
+      "first_seen": "2026-01-04T10:27:38.332Z"
+    },
+    "agent-1767524856892-kwo3oj": {
+      "agent_id": "agent-1767524856892-kwo3oj",
       "tasks_completed": 0,
       "tasks_claimed": 1,
       "total_duration_ms": 0,
       "avg_duration_ms": 0,
       "quality_scores": [],
       "avg_quality": 0,
-      "last_activity": "2026-01-04T10:27:38.332Z",
-      "first_seen": "2026-01-04T10:27:38.332Z"
+      "last_activity": "2026-01-04T11:10:01.204Z",
+      "first_seen": "2026-01-04T11:10:01.204Z"
+    },
+    "agent-1767526034089-vlxe3v": {
+      "agent_id": "agent-1767526034089-vlxe3v",
+      "tasks_completed": 0,
+      "tasks_claimed": 1,
+      "total_duration_ms": 0,
+      "avg_duration_ms": 0,
+      "quality_scores": [],
+      "avg_quality": 0,
+      "last_activity": "2026-01-04T11:29:31.567Z",
+      "first_seen": "2026-01-04T11:29:31.567Z"
     }
   }
 }

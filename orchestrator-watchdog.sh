@@ -36,6 +36,13 @@ TOKEN_TRACKING_FILE="memory/.token-usage.json"
 RATE_LIMIT_FILE="memory/.rate-limit-status.json"
 ORCHESTRATOR_STATE_FILE="memory/orchestrator-state.json"
 
+# Diagnostics
+STOP_REQUEST_FILE="memory/.orchestrator-stop-requested.json"
+LAST_EXIT_FILE="memory/.orchestrator-last-exit.json"
+LAST_FAILURE_FILE="memory/.orchestrator-last-failure.json"
+CRASH_LOOP_FILE="memory/.orchestrator-crash-loop.json"
+FAILURE_LOG_DIR="logs/orchestrator-failures"
+
 # Leader election configuration
 LEADER_TTL_MS=180000           # Default leader TTL: 3 minutes (matches plugin)
 LEADER_GRACE_PERIOD_MS=30000   # Grace period before considering leader dead
@@ -450,53 +457,58 @@ get_leader_info() {
 
 # Check if we're currently rate limited by checking recent logs
 check_rate_limit_status() {
-    # Check the startup log for recent 429 errors
+    # First check stored rate limit file (uses absolute timestamps)
+    if [[ -f "$RATE_LIMIT_FILE" ]]; then
+        local resets_at_epoch
+        resets_at_epoch=$(jq -r '.resets_at_epoch // 0' "$RATE_LIMIT_FILE" 2>/dev/null || echo "0")
+        local now_epoch
+        now_epoch=$(date +%s)
+        
+        if [[ "$resets_at_epoch" -gt 0 ]] && [[ "$resets_at_epoch" -gt "$now_epoch" ]]; then
+            local wait_secs=$((resets_at_epoch - now_epoch))
+            log "Still rate limited. Wait ${wait_secs}s more (resets at $(date -d @$resets_at_epoch '+%H:%M:%S'))" "WARN"
+            return 1
+        else
+            # Rate limit expired, clear it
+            log "Rate limit expired, clearing status file" "DEBUG"
+            rm -f "$RATE_LIMIT_FILE"
+        fi
+    fi
+    
+    # Check the startup log for recent 429 errors (only last 20 lines for recency)
     if [[ -f "$STARTUP_LOGFILE" ]]; then
         local recent_429s
-        recent_429s=$(tail -50 "$STARTUP_LOGFILE" 2>/dev/null | grep -c "429 error\|usage_limit_reached\|rate limit" 2>/dev/null || echo "0")
+        recent_429s=$(tail -20 "$STARTUP_LOGFILE" 2>/dev/null | grep -c "429 error\|usage_limit_reached" 2>/dev/null || echo "0")
         recent_429s="${recent_429s//[^0-9]/}"  # Remove non-numeric chars
         recent_429s="${recent_429s:-0}"  # Default to 0 if empty
         
         if [[ "$recent_429s" -gt 3 ]]; then
-            # Extract resets_in_seconds from last 429 error if available
-            local reset_time
-            reset_time=$(tail -20 "$STARTUP_LOGFILE" 2>/dev/null | grep -o '"resets_in_seconds":[0-9]*' | tail -1 | cut -d':' -f2 || echo "0")
-            reset_time="${reset_time//[^0-9]/}"  # Remove non-numeric chars
-            reset_time="${reset_time:-0}"  # Default to 0 if empty
+            # Extract PRIMARY rate limit resets_at (not secondary/weekly)
+            # Format: "primary":{"used_percent":100,"window_minutes":300,"resets_at":1767538897}
+            local resets_at_epoch
+            resets_at_epoch=$(tail -20 "$STARTUP_LOGFILE" 2>/dev/null | grep -o '"primary":{[^}]*"resets_at":[0-9]*' | tail -1 | grep -o '"resets_at":[0-9]*' | cut -d':' -f2 || echo "0")
+            resets_at_epoch="${resets_at_epoch//[^0-9]/}"
+            resets_at_epoch="${resets_at_epoch:-0}"
             
-            if [[ "$reset_time" -gt 0 ]]; then
-                log "Rate limit detected! API resets in ${reset_time}s" "WARN"
-                # Store rate limit status
+            local now_epoch
+            now_epoch=$(date +%s)
+            
+            # Only set rate limit if resets_at is in the future
+            if [[ "$resets_at_epoch" -gt "$now_epoch" ]]; then
+                local wait_secs=$((resets_at_epoch - now_epoch))
+                log "Rate limit detected! API resets in ${wait_secs}s (at $(date -d @$resets_at_epoch '+%H:%M:%S'))" "WARN"
+                # Store rate limit status with absolute epoch timestamp
                 cat > "$RATE_LIMIT_FILE" << EOF
 {
     "rate_limited": true,
     "detected_at": "$(date -Iseconds)",
-    "resets_in_seconds": $reset_time,
-    "retry_after": "$(date -d "+${reset_time} seconds" -Iseconds 2>/dev/null || date -Iseconds)"
+    "resets_at_epoch": $resets_at_epoch,
+    "resets_at": "$(date -d @$resets_at_epoch -Iseconds 2>/dev/null || date -Iseconds)"
 }
 EOF
                 return 1  # Rate limited
-            fi
-        fi
-    fi
-    
-    # Check stored rate limit file
-    if [[ -f "$RATE_LIMIT_FILE" ]]; then
-        local stored_retry
-        stored_retry=$(jq -r '.retry_after // ""' "$RATE_LIMIT_FILE" 2>/dev/null || echo "")
-        if [[ -n "$stored_retry" ]]; then
-            local retry_epoch
-            retry_epoch=$(date -d "$stored_retry" +%s 2>/dev/null || echo "0")
-            local now_epoch
-            now_epoch=$(date +%s)
-            
-            if [[ $retry_epoch -gt $now_epoch ]]; then
-                local wait_secs=$((retry_epoch - now_epoch))
-                log "Still rate limited. Wait ${wait_secs}s more." "WARN"
-                return 1
             else
-                # Rate limit expired, clear it
-                rm -f "$RATE_LIMIT_FILE"
+                log "Found 429 errors but primary reset time already passed (was $(date -d @$resets_at_epoch '+%H:%M:%S'))" "DEBUG"
             fi
         fi
     fi
@@ -509,22 +521,19 @@ wait_for_rate_limit() {
     if ! check_rate_limit_status; then
         local wait_time=$RATE_LIMIT_COOLDOWN
         
-        # Try to get actual wait time from status file
+        # Try to get actual wait time from status file (using absolute epoch)
         if [[ -f "$RATE_LIMIT_FILE" ]]; then
-            local stored_retry
-            stored_retry=$(jq -r '.retry_after // ""' "$RATE_LIMIT_FILE" 2>/dev/null || echo "")
-            if [[ -n "$stored_retry" ]]; then
-                local retry_epoch
-                retry_epoch=$(date -d "$stored_retry" +%s 2>/dev/null || echo "0")
-                local now_epoch
-                now_epoch=$(date +%s)
-                
-                if [[ $retry_epoch -gt $now_epoch ]]; then
-                    wait_time=$((retry_epoch - now_epoch))
-                    # Cap at reasonable maximum
-                    if [[ $wait_time -gt 1800 ]]; then
-                        wait_time=1800
-                    fi
+            local resets_at_epoch
+            resets_at_epoch=$(jq -r '.resets_at_epoch // 0' "$RATE_LIMIT_FILE" 2>/dev/null || echo "0")
+            local now_epoch
+            now_epoch=$(date +%s)
+            
+            if [[ "$resets_at_epoch" -gt "$now_epoch" ]]; then
+                wait_time=$((resets_at_epoch - now_epoch))
+                # Cap at reasonable maximum (30 minutes)
+                if [[ $wait_time -gt 1800 ]]; then
+                    log "Wait time ${wait_time}s exceeds 30min cap, using 1800s" "WARN"
+                    wait_time=1800
                 fi
             fi
         fi
@@ -782,138 +791,70 @@ DO NOT sit idle - always be improving the system."
 # PROMPT GENERATION
 # ==============================================================================
 
-# Generate orchestrator prompt dynamically from queue
+# Centralized prompt generator path
+PROMPT_GENERATOR="tools/lib/prompt-generator.ts"
+
+# Generate orchestrator prompt using centralized system
 generate_prompt() {
-    # Try to use the TypeScript prompt generator first
-    if command -v bun &> /dev/null && [[ -f "tools/generate-orchestrator-prompt.ts" ]]; then
+    # Use the TypeScript prompt generator (centralized prompts)
+    if command -v bun &> /dev/null && [[ -f "$PROMPT_GENERATOR" ]]; then
         local ts_prompt
-        ts_prompt=$(bun tools/generate-orchestrator-prompt.ts 2>/dev/null || true)
+        ts_prompt=$(bun "$PROMPT_GENERATOR" orchestrator 2>/dev/null || true)
         if [[ -n "$ts_prompt" ]] && [[ "$ts_prompt" != "" ]]; then
             echo "$ts_prompt"
             return 0
         fi
     fi
     
-    # Dynamic prompt based on user messages queue
+    # Fallback: minimal prompt if generator fails
+    log "Warning: prompt-generator.ts failed, using fallback prompt" "WARN"
+    
     local session_count=$(get_session_count)
-    local unread_messages=$(get_unread_user_messages)
     local pending_tasks=$(get_pending_tasks)
-    local has_messages="false"
     
-    if [[ -n "$unread_messages" ]] && [[ "$unread_messages" != "" ]]; then
-        has_messages="true"
-    fi
-    
-    # Use quoted heredoc to prevent variable expansion issues and allow literal backticks
-    cat << 'PROMPT_EOF'
-<role>
+    cat << EOF
 You are the ORCHESTRATOR - the persistent coordinator of a multi-agent AI system.
-You were auto-restarted by watchdog v3.0. Your job: delegate work, monitor progress, maintain the system.
-</role>
 
-<critical_first_actions>
-Execute IMMEDIATELY in this order:
-1. agent_set_handoff(enabled=false) - PREVENTS YOU FROM STOPPING
-2. agent_register(role='orchestrator') - Register as coordinator
-3. user_messages_read() - CHECK FOR USER REQUESTS (highest priority!)
-4. task_list(status='pending') - See what needs workers
-</critical_first_actions>
+## CRITICAL: AUTONOMOUS OPERATION
+This is a FULLY AUTONOMOUS system. There is NO human operator.
+- NEVER ask questions - no one will answer
+- NEVER wait for confirmation - proceed with best judgment
+- NEVER say "let me know if..." - no one is listening
+- If uncertain, write doubts to memory/working.md for future sessions
+- READ memory/working.md first - it has context from previous sessions
+- Make decisions and ACT. Wrong action > no action.
 
-<core_principle>
-DELEGATE, DON'T IMPLEMENT. Your job is to:
-- Coordinate work, not do it yourself
-- Spawn worker agents for actual tasks
-- Monitor progress and handle completions
-- Keep sessions focused and efficient
-</core_principle>
+## IMMEDIATE ACTIONS (in order):
+1. Read memory/working.md for context from previous sessions
+2. agent_set_handoff(enabled=false) - PREVENTS YOU FROM STOPPING
+3. agent_register(role='orchestrator') - Register and check leader election
+4. agent_status() - Check the 'leader' field to verify you are the leader
+5. IF leader: Continue with normal operations
+6. IF NOT leader: Exit gracefully
 
-<spawning_workers>
-Spawn workers using spawn-worker.sh (handles quoting safely):
+## CONTEXT:
+- Session count: ${session_count}
+- Model: ${MODEL}
 
-```bash
-# Option 1: By task ID (RECOMMENDED)
-./spawn-worker.sh --task task_1234567890_abcdef
+## PENDING TASKS:
+${pending_tasks}
 
-# Option 2: With custom prompt
-./spawn-worker.sh "You are a WORKER. Task: [DESCRIPTION]"
-```
+## WORKFLOW:
+1. Check pending tasks with task_list(status='pending')
+2. Spawn workers for tasks: ./spawn-worker.sh --task <task_id>
+3. Monitor with agent_status() and agent_messages()
+4. If no tasks: analyze logs and create improvement tasks
+5. Update memory/working.md with your decisions and any open questions
+6. Exit when done - watchdog will restart you
 
-IMPORTANT: 
-- Use spawn-worker.sh instead of raw nohup opencode run
-- It handles shell quoting issues with apostrophes and special characters
-- The --task option auto-generates worker prompts from task metadata
-</spawning_workers>
+## CONSTRAINTS:
+- DELEGATE work to workers, don't do it yourself
+- Keep sessions focused (under 10 minutes)
+- Use spawn-worker.sh for spawning workers (handles quoting safely)
+- Write open questions to working.md, NEVER ask in output
 
-<context>
-PROMPT_EOF
-    
-    # Output context variables (outside quoted heredoc)
-    echo "- Session count: $session_count"
-    echo "- Model: $MODEL"
-    echo "- Token limit: $TOKEN_LIMIT_TOTAL"
-    echo ""
-
-    # Add unread messages section if any
-    if [[ "$has_messages" == "true" ]]; then
-        cat << 'MSG_EOF'
-## UNREAD USER MESSAGES (PRIORITY - Address these first!):
-MSG_EOF
-        echo "$unread_messages"
-        echo ""
-        cat << 'MSG_EOF'
-After processing each message, use user_messages_mark_read to mark it as handled.
-
-MSG_EOF
-    else
-        cat << 'MSG_EOF'
-## USER MESSAGES:
-No unread messages. Use user_messages_read to check for new requests periodically.
-
-MSG_EOF
-    fi
-
-    # Add pending tasks
-    cat << 'TASK_EOF'
-</context>
-
-<pending_tasks>
-TASK_EOF
-    echo "$pending_tasks"
-    echo ""
-    cat << 'TASK_EOF'
-</pending_tasks>
-
-<workflow>
-1. USER MESSAGES FIRST: If unread messages exist, spawn workers to handle them
-2. PENDING TASKS: Spawn workers for high-priority pending tasks
-3. MONITOR: Check agent_status() and agent_messages() for completions
-4. NO TASKS? GENERATE IMPROVEMENT TASKS:
-   - Run: cat logs/watchdog.log | tail -100 - analyze for errors/patterns
-   - Run: cat memory/coordination.log | tail -100 - check agent health
-   - Run: grep -r "TODO\|FIXME" tools/ plugins/ --include="*.ts" | head -20
-   - Create tasks with task_create() for any issues found
-5. After creating/spawning tasks, exit gracefully - watchdog will restart you to check progress
-</workflow>
-
-<available_tools>
-Agent: agent_set_handoff(enabled), agent_register(role), agent_status(), agent_send(type, payload), agent_messages()
-Memory: memory_status(), memory_search(query), memory_update(status/achievement)
-Tasks: task_list(status), task_create(title, priority), task_update(task_id, status), task_claim(task_id), task_next()
-Quality: quality_assess(task_id, score), quality_report()
-User: user_messages_read(), user_messages_mark_read(id)
-Git: git_status(), git_diff(), git_log(), git_commit(message)
-Recovery: checkpoint_save(description), checkpoint_load(id), recovery_status()
-</available_tools>
-
-<constraints>
-- You are the COORDINATOR, not a worker - DELEGATE everything
-- Keep sessions focused (under 10 minutes ideally)
-- Spawn workers for actual work, then monitor
-- The watchdog restarts you automatically if you exit
-</constraints>
-
-BEGIN: Execute critical_first_actions NOW, then follow the workflow.
-TASK_EOF
+BEGIN: Read memory/working.md, then execute immediate actions NOW.
+EOF
 }
 
 # ==============================================================================

@@ -1,9 +1,19 @@
 /**
- * User Message Tools
+ * Priority Signal Tools (legacy name: user-message-tools)
  * 
- * Provides tools for user-to-agent messaging:
- * - user_messages_read: Read messages from users
- * - user_messages_mark_read: Mark messages as read
+ * NOTE: This is an AUTONOMOUS system - there is no direct human interaction.
+ * These tools handle priority signals that may come from:
+ * - External monitoring systems
+ * - Scheduled tasks
+ * - Error handlers
+ * - Other automated processes
+ * 
+ * Agents should treat these as priority work items, NOT as conversations.
+ * Never ask questions. Never wait for responses. Process and act.
+ * 
+ * Tools:
+ * - user_messages_read: Read priority signals from the queue
+ * - user_messages_mark_read: Mark signals as processed
  */
 
 import { tool } from "@opencode-ai/plugin";
@@ -22,7 +32,7 @@ export function createUserMessageTools(getContext: () => UserMessageToolsContext
   return {
     user_messages_read: tool({
       description:
-        "Read messages sent by users to the agent system. Returns unread messages by default.",
+        "Read priority signals from the system queue. Returns unprocessed signals by default. These are NOT conversations - process them and take action.",
       args: {
         include_read: tool.schema
           .boolean()
@@ -41,7 +51,7 @@ export function createUserMessageTools(getContext: () => UserMessageToolsContext
               success: true,
               message_count: 0,
               messages: [],
-              hint: "No user messages. Users can send messages via: bun tools/user-message.ts send 'message'",
+              hint: "No priority signals in queue. Signals can be added via: bun tools/user-message.ts send 'priority task'",
             });
           }
 
@@ -87,7 +97,7 @@ export function createUserMessageTools(getContext: () => UserMessageToolsContext
 
     user_messages_mark_read: tool({
       description:
-        "Mark user messages as read after processing them.",
+        "Mark priority signals as processed after handling them.",
       args: {
         message_id: tool.schema
           .string()

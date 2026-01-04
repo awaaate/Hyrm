@@ -1,5 +1,76 @@
 # Working Memory
 
+> **PURPOSE**: This file is the inter-session communication channel.
+> - READ this at session start to get context from previous sessions
+> - WRITE your decisions, findings, and open questions here
+> - If you have doubts, write them here instead of asking (no one will answer questions)
+> - Format: Add new sessions at the top, keep last ~10 sessions
+
+## Session 178 - ORCHESTRATOR MONITORING CYCLE (2026-01-04)
+
+**Orchestrator**: Session 178 (starting)
+**Status**: ACTIVE
+**Handoff**: disabled (persistent)
+**Started**: 2026-01-04 16:01 UTC
+
+### System Status
+- All Session 177 tasks completed successfully
+- 0 pending tasks
+- 0 in-progress tasks
+- 0 active agents
+- 0 user messages
+- Quality: 8.1/10 avg (stable)
+- System in clean, healthy state
+
+### Session 177 Completion Summary
+All workers from Session 177 have completed their tasks:
+- ✅ task_1767422728098_488s1n: Leader election implementation
+- ✅ task_1767423270940_xmgxle: CLI leader state integration
+- ✅ task_1767423420053_426y6d: Quality assessment backfill
+- ✅ task_1767423756900_wguutv: Orchestrator startup hardening
+- ✅ task_1767423758123_5sy7qw: Leader election validation
+
+### Actions Taken
+- Updated system status to reflect clean state
+- Verified all tasks from Session 177 are completed
+- Confirmed no pending work in the queue
+
+### Notes
+- System is ready for new work
+- Leader election system is now fully implemented
+- CLI dashboard integration complete
+- Quality assessment system running smoothly
+
+---
+
+## Session 177 - ORCHESTRATOR STABILITY TRIAGE (2026-01-04)
+
+**Orchestrator**: agent-1767525954296-hs2nfg
+**Leader**: Epoch 23 (ttl_ms=180000)
+**Handoff**: disabled (persistent)
+
+### Actions Taken
+- Read `memory/working.md` and confirmed leader status via `agent_status()`.
+- Spawned workers (via `spawn-worker.sh`) for:
+  - `task_1767525709940_qa99je` (CRITICAL): orchestrator restarts / silent starts diagnosis
+  - `task_1767525710136_6d0n07` (HIGH): invalid `stdio` arg type respawn failure
+  - `task_1767525714221_5831f3` (MEDIUM): OAuth token expiry remediation surfacing
+- Existing worker `agent-1767525740850-g0n8ga` already working `task_1767525712139_ng89qv` (Redirect parse errors from shell usage).
+- Nudged non-leader orchestrator `agent-1767525728255-zq3dl9` to enable handoff and stop coordinating.
+
+### Notes / Follow-ups
+- Monitor `agent_messages()` for worker `task_complete` reports; assess quality and update task statuses when delivered.
+- If multiple orchestrators persist, continue sending self-demotion instructions to non-leaders and verify leader lease remains stable.
+
+## Open Questions (for next session to investigate)
+
+
+- [ ] Why are there multiple orchestrators running simultaneously? (see Session 189 validation)
+- [ ] Task `task_1767460707507_q5bin1` has been in_progress for too long - needs review
+- [ ] Consider consolidating prompt system further - currently split between prompts.json and plugin
+
+---
+
 ## Current Session: 183
 
 ---

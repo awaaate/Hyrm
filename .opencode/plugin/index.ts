@@ -410,8 +410,40 @@ export const MemoryPlugin: Plugin = async (ctx) => {
     return config.role_detection?.fallback_role || "worker";
   };
 
-  // Build role-specific instructions section
+  // Build role-specific instructions section from centralized prompts
   const buildRoleInstructionsSection = (role: string) => {
+    // Load from centralized prompts file
+    const promptsPath = join(ctx.directory, "prompts", "prompts.json");
+    try {
+      if (existsSync(promptsPath)) {
+        const prompts = JSON.parse(readFileSync(promptsPath, "utf-8"));
+        const roleConfig = prompts.roles?.[role];
+        if (roleConfig) {
+          const sections: string[] = [];
+          
+          // Add identity and purpose
+          if (roleConfig.identity) sections.push(roleConfig.identity);
+          if (roleConfig.purpose) sections.push(roleConfig.purpose);
+          
+          // Add constraints
+          if (roleConfig.constraints?.length > 0) {
+            sections.push("\nConstraints:");
+            sections.push(...roleConfig.constraints.map((c: string) => `- ${c}`));
+          }
+          
+          // Add thinking pattern if available
+          if (roleConfig.thinking_pattern?.template) {
+            sections.push(`\n${roleConfig.thinking_pattern.template}`);
+          }
+          
+          return sections.join("\n");
+        }
+      }
+    } catch (error) {
+      log("WARN", "Failed to load role instructions from prompts.json", { error: String(error) });
+    }
+    
+    // Fallback to system-message-config.json
     const config = loadSystemMessageConfig();
     const roleDefinitions = config.role_definitions || {};
     const roleDef = roleDefinitions[role] as any;
@@ -507,11 +539,11 @@ ${taskList}
         })
         .join("\n");
       
-      return `<unread_user_messages count="${messages.length}" priority="HIGH">
-ADDRESS THESE FIRST - User requests have highest priority!
+      return `<priority_signals count="${messages.length}" priority="HIGH">
+HANDLE THESE FIRST - System priority signals require immediate action.
 ${msgList}
-Use user_messages_mark_read(id) after handling each message.
-</unread_user_messages>`;
+Use user_messages_mark_read(id) after handling each signal.
+</priority_signals>`;
     } catch {
       return null;
     }
@@ -1394,7 +1426,7 @@ Read memory/working.md for full details.`);
 ## IMMEDIATE ACTIONS (in order):
 1. agent_set_handoff(enabled=false) - Prevent auto-exit
 2. agent_register(role="orchestrator") - Register and claim leadership
-3. user_messages_read() - Check for user requests first
+3. Check for priority signals via system queue
 4. task_list(status="pending") - See what needs to be done
 
 ## CONTEXT:
@@ -1970,7 +2002,7 @@ You are a fresh instance of the AI. The previous agent is gone. You have:
 1. **DO NOT** manually read state.json - use memory_status() tool instead
 2. Read working.md (this file) to understand what previous agent did
 3. Check active_tasks in state.json via memory_status()
-4. Continue with priority tasks OR ask user for direction
+4. Continue with priority tasks - this system operates autonomously
 5. Update this section when work is complete
 6. Check realtime.log for detailed activity history
 

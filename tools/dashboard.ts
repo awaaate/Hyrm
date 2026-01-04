@@ -133,6 +133,21 @@ const statusBar = grid.set(11, 0, 1, 12, blessed.box, {
 });
 
 // ============================================================================
+// HELPERS
+// ============================================================================
+
+/**
+ * Escape curly braces to prevent blessed from interpreting them as style tags.
+ * Blessed uses {color-fg} syntax for styling, so raw { } in content causes errors.
+ */
+function escapeBlessedTags(str: string): string {
+  if (!str) return "";
+  // Replace { with \{ and } with \} to escape them
+  // But blessed doesn't actually support escaping, so we just remove them or replace with alternatives
+  return str.replace(/\{/g, "(").replace(/\}/g, ")");
+}
+
+// ============================================================================
 // DATA BUILDING
 // ============================================================================
 
@@ -310,8 +325,9 @@ function renderTimeline(): void {
       const end = i === selectedIndex ? "{/inverse}" : "";
       const ago = formatTimeAgo(new Date(e.timestamp).toISOString());
       
-      content += `${sel}{${e.color}-fg}${e.icon}{/${e.color}-fg} {white-fg}${ago.padEnd(5)}{/white-fg} ${e.title}${end}\n`;
-      if (e.details) content += `      {white-fg}${truncate(e.details, 80)}{/white-fg}\n`;
+      const safeTitle = escapeBlessedTags(e.title);
+      content += `${sel}{${e.color}-fg}${e.icon}{/${e.color}-fg} {white-fg}${ago.padEnd(5)}{/white-fg} ${safeTitle}${end}\n`;
+      if (e.details) content += `      {white-fg}${truncate(escapeBlessedTags(e.details), 80)}{/white-fg}\n`;
     }
   }
 
@@ -321,7 +337,9 @@ function renderTimeline(): void {
   // Detail for selected
   const selected = events[selectedIndex];
   if (selected) {
-    detailBox.setContent(` {bold}${selected.type}{/bold}: ${selected.title} {|}{white-fg}${selected.source}{/white-fg}`);
+    const safeTitle = escapeBlessedTags(selected.title);
+    const safeSource = escapeBlessedTags(selected.source);
+    detailBox.setContent(` {bold}${selected.type}{/bold}: ${safeTitle} {|}{white-fg}${safeSource}{/white-fg}`);
   }
 }
 
@@ -352,8 +370,8 @@ function renderAgents(): void {
         const isActive = now - new Date(a.last_heartbeat).getTime() < 120000;
         const icon = a.status === "working" ? "{yellow-fg}*{/yellow-fg}" : isActive ? "{green-fg}o{/green-fg}" : "{white-fg}o{/white-fg}";
 
-        content += `${sel}  ${icon} ${a.agent_id} [${a.assigned_role || "general"}] ${a.status}${end}\n`;
-        if (a.current_task) content += `      {white-fg}${a.current_task}{/white-fg}\n`;
+        content += `${sel}  ${icon} ${escapeBlessedTags(a.agent_id)} [${a.assigned_role || "general"}] ${a.status}${end}\n`;
+        if (a.current_task) content += `      {white-fg}${escapeBlessedTags(a.current_task)}{/white-fg}\n`;
         idx++;
       }
       content += "\n";
@@ -380,7 +398,7 @@ function renderTasks(): void {
     const sel = idx === selectedIndex ? "{inverse}" : "";
     const end = idx === selectedIndex ? "{/inverse}" : "";
     const pc = t.priority === "critical" ? "red" : t.priority === "high" ? "yellow" : "cyan";
-    content += `${sel}  {${pc}-fg}[${t.priority[0].toUpperCase()}]{/${pc}-fg} ${t.title}${end}\n`;
+    content += `${sel}  {${pc}-fg}[${t.priority[0].toUpperCase()}]{/${pc}-fg} ${escapeBlessedTags(t.title)}${end}\n`;
     idx++;
   }
 
@@ -389,13 +407,13 @@ function renderTasks(): void {
     const sel = idx === selectedIndex ? "{inverse}" : "";
     const end = idx === selectedIndex ? "{/inverse}" : "";
     const pc = t.priority === "critical" ? "red" : t.priority === "high" ? "yellow" : "cyan";
-    content += `${sel}  {${pc}-fg}[${t.priority[0].toUpperCase()}]{/${pc}-fg} ${t.title}${end}\n`;
+    content += `${sel}  {${pc}-fg}[${t.priority[0].toUpperCase()}]{/${pc}-fg} ${escapeBlessedTags(t.title)}${end}\n`;
     idx++;
   }
 
   content += `\n{bold}{green-fg}COMPLETED{/green-fg}{/bold} (${byStatus.completed.length})\n`;
   for (const t of byStatus.completed.slice(-5).reverse()) {
-    content += `  {green-fg}[*]{/green-fg} ${t.title} {white-fg}${t.completed_at ? formatTimeAgo(t.completed_at) : ""}{/white-fg}\n`;
+    content += `  {green-fg}[*]{/green-fg} ${escapeBlessedTags(t.title)} {white-fg}${t.completed_at ? formatTimeAgo(t.completed_at) : ""}{/white-fg}\n`;
   }
 
   mainBox.setContent(content);
@@ -416,7 +434,7 @@ function renderSessions(): void {
       const recent = Date.now() - s.time.updated < 3600000;
       const col = recent ? "green" : "white";
 
-      content += `${sel}{${col}-fg}*{/${col}-fg} {bold}${s.title}{/bold}${end}\n`;
+      content += `${sel}{${col}-fg}*{/${col}-fg} {bold}${escapeBlessedTags(s.title || "Untitled")}{/bold}${end}\n`;
       content += `    {white-fg}${s.id.slice(-12)} | ${ago} | T:${stats.toolCount} | ${formatTokens(stats.tokens.total)}{/white-fg}\n`;
     }
   } catch (e) {
@@ -430,8 +448,8 @@ function renderSessions(): void {
 function renderSessionDetail(): void {
   if (!viewingSession) return;
 
-  const sessionTitle = viewingSession.title || viewingSession.id || "Unknown Session";
-  const sessionDir = viewingSession.directory || "Unknown";
+  const sessionTitle = escapeBlessedTags(viewingSession.title || viewingSession.id || "Unknown Session");
+  const sessionDir = escapeBlessedTags(viewingSession.directory || "Unknown");
   
   const stats = getOpenCodeSessionStats(viewingSession.id);
   let content = `{bold}{magenta-fg}SESSION: ${sessionTitle}{/magenta-fg}{/bold}\n`;
@@ -456,18 +474,19 @@ function renderSessionDetail(): void {
     const parts = getOpenCodePartsForMessage(msg.id);
     for (const part of parts) {
       if (part.type === "text" && part.text) {
-        // Truncate long text content
-        const text = part.text.length > 500 ? part.text.slice(0, 500) + "..." : part.text;
+        // Truncate long text content and escape curly braces
+        const rawText = part.text.length > 500 ? part.text.slice(0, 500) + "..." : part.text;
+        const text = escapeBlessedTags(rawText);
         const lines = text.split("\n").slice(0, 10);
         for (const line of lines) {
           content += `    ${line}\n`;
         }
-        if (text.split("\n").length > 10) {
-          content += `    {white-fg}... (${text.split("\n").length - 10} more lines){/white-fg}\n`;
+        if (rawText.split("\n").length > 10) {
+          content += `    {white-fg}... (${rawText.split("\n").length - 10} more lines){/white-fg}\n`;
         }
       } else if (part.type === "tool" || part.type === "tool-invocation") {
         toolCount++;
-        const toolName = part.tool || part.toolName || "unknown";
+        const toolName = escapeBlessedTags(String(part.tool || part.toolName || "unknown"));
         const status = part.state?.status || "completed";
         const statusColor = status === "completed" ? "green" : status === "error" ? "red" : "yellow";
 
@@ -476,14 +495,16 @@ function renderSessionDetail(): void {
         // Show args (truncated) - get from part.args or part.state.input
         const args = part.args || part.state?.input;
         if (args) {
-          const argsStr = typeof args === "string" ? args : JSON.stringify(args);
+          const rawArgsStr = typeof args === "string" ? args : JSON.stringify(args);
+          const argsStr = escapeBlessedTags(rawArgsStr);
           content += `      {white-fg}> ${argsStr.slice(0, 200)}${argsStr.length > 200 ? "..." : ""}{/white-fg}\n`;
         }
         
         // Show output (truncated) - get from part.result or part.state.output
         const output = part.result || part.state?.output;
         if (output !== undefined && output !== null) {
-          const outStr = typeof output === "string" ? output : JSON.stringify(output);
+          const rawOutStr = typeof output === "string" ? output : JSON.stringify(output);
+          const outStr = escapeBlessedTags(rawOutStr);
           content += `      {white-fg}< ${outStr.slice(0, 200)}${outStr.length > 200 ? "..." : ""}{/white-fg}\n`;
         }
       }
@@ -496,7 +517,10 @@ function renderSessionDetail(): void {
   content += `{bold}Summary:{/bold} Messages: ${messages.length} | Tools: ${toolCount} | Tokens: ${formatTokens(stats.tokens.total)}\n`;
 
   mainBox.setContent(content);
-  mainBox.setLabel(` Session: ${truncate(viewingSession.title || viewingSession.id || "Unknown", 30)} [ESC:Back] `);
+  // Sanitize label to avoid blessed parsing issues with special characters
+  const labelText = truncate(String(viewingSession.title || viewingSession.id || "Unknown"), 30)
+    .replace(/[{}]/g, ""); // Remove curly braces that could be interpreted as tags
+  mainBox.setLabel(` Session: ${labelText} [ESC:Back] `);
   detailBox.setContent(` {magenta-fg}Viewing session{/magenta-fg} | {bold}ESC{/bold} to go back | {bold}j/k{/bold} to scroll`);
 }
 

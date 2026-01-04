@@ -1744,3 +1744,317 @@
 [2026-01-04T10:30:19+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767522331796-kulwo4:epoch17). Skipping respawn.
 [2026-01-04T10:31:19+00:00] [INFO] Healthy leader exists: agent-1767522331796-kulwo4 (epoch 17), lease valid for 161s
 [2026-01-04T10:31:20+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767522331796-kulwo4:epoch17). Skipping respawn.
+[2026-01-04T10:32:20+00:00] [INFO] Healthy leader exists: agent-1767522331796-kulwo4 (epoch 17), lease valid for 161s
+[2026-01-04T10:32:20+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767522331796-kulwo4:epoch17). Skipping respawn.
+[2026-01-04T10:33:20+00:00] [INFO] Healthy leader exists: agent-1767522331796-kulwo4 (epoch 17), lease valid for 161s
+[2026-01-04T10:33:20+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767522331796-kulwo4:epoch17). Skipping respawn.
+[2026-01-04T10:34:20+00:00] [INFO] Healthy leader exists: agent-1767522331796-kulwo4 (epoch 17), lease valid for 161s
+[2026-01-04T10:34:20+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767522331796-kulwo4:epoch17). Skipping respawn.
+[2026-01-04T10:35:20+00:00] [INFO] Healthy leader exists: agent-1767522331796-kulwo4 (epoch 17), lease valid for 101s
+[2026-01-04T10:35:20+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767522331796-kulwo4:epoch17). Skipping respawn.
+[2026-01-04T10:36:21+00:00] [INFO] Healthy leader exists: agent-1767522331796-kulwo4 (epoch 17), lease valid for 40s
+[2026-01-04T10:36:21+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767522331796-kulwo4:epoch17). Skipping respawn.
+[2026-01-04T10:37:21+00:00] [WARN] Leader lease expired 49s ago: agent-1767522331796-kulwo4 (epoch 17)
+[2026-01-04T10:37:21+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-04T10:37:21+00:00] [WARN] Leader lease expired 49s ago: agent-1767522331796-kulwo4 (epoch 17)
+[2026-01-04T10:37:21+00:00] [INFO] Starting orchestrator agent (restart #9 this hour)...
+[2026-01-04T10:37:21+00:00] [OK] Orchestrator started with PID: 333202 (model: openai/gpt-5.2)
+[2026-01-04T10:37:26+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T10:39:26+00:00] [INFO] Healthy leader exists: agent-1767523054296-sju01w (epoch 18), lease valid for 157s
+[2026-01-04T10:39:26+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767523054296-sju01w:epoch18). Skipping respawn.
+[2026-01-04T10:40:27+00:00] [INFO] Healthy leader exists: agent-1767523054296-sju01w (epoch 18), lease valid for 97s
+[2026-01-04T10:40:27+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767523054296-sju01w:epoch18). Skipping respawn.
+[2026-01-04T10:41:27+00:00] [INFO] Healthy leader exists: agent-1767523054296-sju01w (epoch 18), lease valid for 36s
+[2026-01-04T10:41:27+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767523054296-sju01w:epoch18). Skipping respawn.
+[2026-01-04T10:41:38+00:00] [WARN] Received shutdown signal
+[2026-01-04T10:41:38+00:00] [INFO] Stopping watchdog...
+[2026-01-04T10:41:38+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T10:41:38+00:00] [OK] Orchestrator stopped
+[2026-01-04T10:41:38+00:00] [OK] Watchdog stopped
+[2026-01-04T10:46:53+00:00] [INFO] =========================================
+[2026-01-04T10:46:53+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T10:46:53+00:00] [INFO] Check interval: 60s
+[2026-01-04T10:46:53+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T10:46:53+00:00] [INFO] Token limit: 150000
+[2026-01-04T10:46:53+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T10:46:53+00:00] [INFO] Watchdog PID: 335319
+[2026-01-04T10:46:53+00:00] [INFO] =========================================
+[2026-01-04T10:46:53+00:00] [WARN] Leader lease expired 318s ago: agent-1767523054296-sju01w (epoch 18)
+[2026-01-04T10:46:53+00:00] [WARN] Leader lease expired 319s ago: agent-1767523054296-sju01w (epoch 18)
+[2026-01-04T10:46:53+00:00] [INFO] Starting orchestrator agent (restart #10 this hour)...
+[2026-01-04T10:46:53+00:00] [OK] Orchestrator started with PID: 335438 (model: openai/gpt-5.2)
+[2026-01-04T10:46:58+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T10:47:58+00:00] [INFO] Healthy leader exists: agent-1767523619995-foa15q (epoch 19), lease valid for 151s
+[2026-01-04T10:47:58+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767523619995-foa15q:epoch19). Skipping respawn.
+[2026-01-04T10:48:02+00:00] [WARN] Received shutdown signal
+[2026-01-04T10:48:02+00:00] [INFO] Stopping watchdog...
+[2026-01-04T10:48:02+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T10:48:02+00:00] [OK] Orchestrator stopped
+[2026-01-04T10:48:02+00:00] [OK] Watchdog stopped
+[2026-01-04T11:07:28+00:00] [INFO] =========================================
+[2026-01-04T11:07:28+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T11:07:28+00:00] [INFO] Check interval: 60s
+[2026-01-04T11:07:28+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T11:07:28+00:00] [INFO] Token limit: 150000
+[2026-01-04T11:07:28+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T11:07:28+00:00] [INFO] Watchdog PID: 337591
+[2026-01-04T11:07:28+00:00] [INFO] =========================================
+[2026-01-04T11:07:28+00:00] [WARN] Leader lease expired 1048s ago: agent-1767523619995-foa15q (epoch 19)
+[2026-01-04T11:07:28+00:00] [WARN] Leader lease expired 1048s ago: agent-1767523619995-foa15q (epoch 19)
+[2026-01-04T11:07:28+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-04T11:07:28+00:00] [OK] Orchestrator started with PID: 337710 (model: openai/gpt-5.2)
+[2026-01-04T11:07:33+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T11:13:34+00:00] [INFO] Healthy leader exists: agent-1767524856892-kwo3oj (epoch 20), lease valid for 92s
+[2026-01-04T11:13:34+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767524856892-kwo3oj:epoch20). Skipping respawn.
+[2026-01-04T11:14:34+00:00] [INFO] Healthy leader exists: agent-1767524856892-kwo3oj (epoch 20), lease valid for 31s
+[2026-01-04T11:14:35+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767524856892-kwo3oj:epoch20). Skipping respawn.
+[2026-01-04T11:15:35+00:00] [WARN] Leader lease expired 58s ago: agent-1767524856892-kwo3oj (epoch 20)
+[2026-01-04T11:15:35+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-04T11:15:35+00:00] [WARN] Leader lease expired 58s ago: agent-1767524856892-kwo3oj (epoch 20)
+[2026-01-04T11:15:35+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-04T11:15:35+00:00] [OK] Orchestrator started with PID: 341770 (model: openai/gpt-5.2)
+[2026-01-04T11:15:40+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T11:17:40+00:00] [INFO] Healthy leader exists: agent-1767525357240-cjx20l (epoch 21), lease valid for 106s
+[2026-01-04T11:17:40+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767525357240-cjx20l:epoch21). Skipping respawn.
+[2026-01-04T11:18:41+00:00] [INFO] Healthy leader exists: agent-1767525357240-cjx20l (epoch 21), lease valid for 46s
+[2026-01-04T11:18:41+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767525357240-cjx20l:epoch21). Skipping respawn.
+[2026-01-04T11:19:41+00:00] [WARN] Leader lease expired 44s ago: agent-1767525357240-cjx20l (epoch 21)
+[2026-01-04T11:19:41+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-04T11:19:41+00:00] [WARN] Leader lease expired 44s ago: agent-1767525357240-cjx20l (epoch 21)
+[2026-01-04T11:19:41+00:00] [INFO] Starting orchestrator agent (restart #3 this hour)...
+[2026-01-04T11:19:41+00:00] [OK] Orchestrator started with PID: 343504 (model: openai/gpt-5.2)
+[2026-01-04T11:19:46+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T11:22:46+00:00] [INFO] Healthy leader exists: agent-1767525603825-7fsrrg (epoch 22), lease valid for 106s
+[2026-01-04T11:22:47+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767525603825-7fsrrg:epoch22). Skipping respawn.
+[2026-01-04T11:23:47+00:00] [INFO] Healthy leader exists: agent-1767525603825-7fsrrg (epoch 22), lease valid for 46s
+[2026-01-04T11:23:47+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767525603825-7fsrrg:epoch22). Skipping respawn.
+[2026-01-04T11:24:47+00:00] [WARN] Leader lease expired 43s ago: agent-1767525603825-7fsrrg (epoch 22)
+[2026-01-04T11:24:47+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-04T11:24:47+00:00] [WARN] Leader lease expired 43s ago: agent-1767525603825-7fsrrg (epoch 22)
+[2026-01-04T11:24:47+00:00] [INFO] Starting orchestrator agent (restart #4 this hour)...
+[2026-01-04T11:24:47+00:00] [OK] Orchestrator started with PID: 356235 (model: openai/gpt-5.2)
+[2026-01-04T11:24:52+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T11:29:53+00:00] [INFO] Healthy leader exists: agent-1767525954296-hs2nfg (epoch 23), lease valid for 150s
+[2026-01-04T11:29:53+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767525954296-hs2nfg:epoch23). Skipping respawn.
+[2026-01-04T11:30:53+00:00] [INFO] Healthy leader exists: agent-1767525954296-hs2nfg (epoch 23), lease valid for 90s
+[2026-01-04T11:30:53+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767525954296-hs2nfg:epoch23). Skipping respawn.
+[2026-01-04T11:31:53+00:00] [INFO] Healthy leader exists: agent-1767525954296-hs2nfg (epoch 23), lease valid for 30s
+[2026-01-04T11:31:54+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767525954296-hs2nfg:epoch23). Skipping respawn.
+[2026-01-04T11:32:54+00:00] [WARN] Leader lease expired 59s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T11:32:54+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-04T11:32:54+00:00] [WARN] Leader lease expired 60s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T11:32:54+00:00] [INFO] Starting orchestrator agent (restart #5 this hour)...
+[2026-01-04T11:32:54+00:00] [OK] Orchestrator started with PID: 375151 (model: openai/gpt-5.2)
+[2026-01-04T11:32:59+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T11:33:59+00:00] [WARN] Rate limit detected! API resets in 12485s
+[2026-01-04T11:33:59+00:00] [WARN] Rate limit detected during health check - waiting for cooldown
+[2026-01-04T11:33:59+00:00] [WARN] Stopping orchestrator stuck in rate limit retry loop
+[2026-01-04T11:33:59+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T11:34:00+00:00] [OK] Orchestrator stopped
+[2026-01-04T11:34:00+00:00] [WARN] Rate limit detected! API resets in 12485s
+[2026-01-04T11:34:00+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T12:04:00+00:00] [INFO] Rate limit cooldown complete
+[2026-01-04T12:04:00+00:00] [WARN] Leader lease expired 1926s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T12:04:01+00:00] [WARN] Rate limit detected! API resets in 12485s
+[2026-01-04T12:04:01+00:00] [WARN] Rate limit detected! API resets in 12485s
+[2026-01-04T12:04:01+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T12:34:01+00:00] [INFO] Rate limit cooldown complete
+[2026-01-04T12:34:01+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-04T12:34:01+00:00] [OK] Orchestrator started with PID: 377836 (model: openai/gpt-5.2)
+[2026-01-04T12:34:06+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T12:47:16+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T12:47:16+00:00] [WARN] Rate limit detected during health check - waiting for cooldown
+[2026-01-04T12:47:16+00:00] [WARN] Stopping orchestrator stuck in rate limit retry loop
+[2026-01-04T12:47:16+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T12:47:17+00:00] [OK] Orchestrator stopped
+[2026-01-04T12:47:17+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T12:47:17+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T13:17:17+00:00] [INFO] Rate limit cooldown complete
+[2026-01-04T13:17:17+00:00] [WARN] Leader lease expired 6323s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T13:17:17+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T13:17:17+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T13:17:17+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T15:47:58+00:00] [WARN] Received shutdown signal
+[2026-01-04T15:47:58+00:00] [INFO] Stopping watchdog...
+[2026-01-04T15:47:58+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T15:47:58+00:00] [OK] Orchestrator stopped
+[2026-01-04T15:47:58+00:00] [OK] Watchdog stopped
+[2026-01-04T15:47:59+00:00] [INFO] =========================================
+[2026-01-04T15:47:59+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T15:47:59+00:00] [INFO] Check interval: 60s
+[2026-01-04T15:47:59+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T15:47:59+00:00] [INFO] Token limit: 150000
+[2026-01-04T15:47:59+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T15:47:59+00:00] [INFO] Watchdog PID: 379856
+[2026-01-04T15:47:59+00:00] [INFO] =========================================
+[2026-01-04T15:47:59+00:00] [WARN] Leader lease expired 15365s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:47:59+00:00] [WARN] Leader lease expired 15365s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:47:59+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T15:47:59+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T15:47:59+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T15:49:08+00:00] [WARN] Received shutdown signal
+[2026-01-04T15:49:08+00:00] [INFO] Stopping watchdog...
+[2026-01-04T15:49:08+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T15:49:08+00:00] [OK] Orchestrator stopped
+[2026-01-04T15:49:08+00:00] [OK] Watchdog stopped
+[2026-01-04T15:49:23+00:00] [INFO] =========================================
+[2026-01-04T15:49:23+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T15:49:23+00:00] [INFO] Check interval: 60s
+[2026-01-04T15:49:23+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T15:49:23+00:00] [INFO] Token limit: 150000
+[2026-01-04T15:49:23+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T15:49:23+00:00] [INFO] Watchdog PID: 380138
+[2026-01-04T15:49:23+00:00] [INFO] =========================================
+[2026-01-04T15:49:23+00:00] [WARN] Leader lease expired 15448s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:49:23+00:00] [WARN] Leader lease expired 15449s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:49:23+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T15:49:23+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T15:49:23+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T15:49:25+00:00] [WARN] Received shutdown signal
+[2026-01-04T15:49:25+00:00] [INFO] Stopping watchdog...
+[2026-01-04T15:49:25+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T15:49:25+00:00] [OK] Orchestrator stopped
+[2026-01-04T15:49:25+00:00] [OK] Watchdog stopped
+[2026-01-04T15:50:37+00:00] [INFO] =========================================
+[2026-01-04T15:50:37+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T15:50:37+00:00] [INFO] Check interval: 60s
+[2026-01-04T15:50:37+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T15:50:37+00:00] [INFO] Token limit: 150000
+[2026-01-04T15:50:37+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T15:50:37+00:00] [INFO] Watchdog PID: 380543
+[2026-01-04T15:50:37+00:00] [INFO] =========================================
+[2026-01-04T15:50:38+00:00] [WARN] Leader lease expired 15523s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:50:38+00:00] [WARN] Leader lease expired 15523s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:50:38+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T15:50:38+00:00] [WARN] Rate limit detected! API resets in 8088s
+[2026-01-04T15:50:38+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T15:50:40+00:00] [WARN] Received shutdown signal
+[2026-01-04T15:50:40+00:00] [INFO] Stopping watchdog...
+[2026-01-04T15:50:40+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T15:50:40+00:00] [OK] Orchestrator stopped
+[2026-01-04T15:50:40+00:00] [OK] Watchdog stopped
+[2026-01-04T15:51:17+00:00] [WARN] Leader lease expired 15563s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:51:24+00:00] [INFO] =========================================
+[2026-01-04T15:51:24+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T15:51:24+00:00] [INFO] Check interval: 60s
+[2026-01-04T15:51:24+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T15:51:24+00:00] [INFO] Token limit: 150000
+[2026-01-04T15:51:24+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T15:51:24+00:00] [INFO] Watchdog PID: 380821
+[2026-01-04T15:51:24+00:00] [INFO] =========================================
+[2026-01-04T15:51:24+00:00] [WARN] Leader lease expired 15570s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:51:24+00:00] [WARN] Leader lease expired 15570s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:51:24+00:00] [DEBUG] Rate limit expired, clearing status file
+[2026-01-04T15:51:24+00:00] [WARN] Rate limit detected! API resets in 485059s (at 06:35:43)
+[2026-01-04T15:51:24+00:00] [WARN] Still rate limited. Wait 485059s more (resets at 06:35:43)
+[2026-01-04T15:51:24+00:00] [WARN] Wait time 485059s exceeds 30min cap, using 1800s
+[2026-01-04T15:51:24+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T15:51:56+00:00] [WARN] Received shutdown signal
+[2026-01-04T15:51:56+00:00] [INFO] Stopping watchdog...
+[2026-01-04T15:51:56+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T15:51:56+00:00] [OK] Orchestrator stopped
+[2026-01-04T15:51:56+00:00] [OK] Watchdog stopped
+[2026-01-04T15:52:17+00:00] [WARN] Leader lease expired 15622s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:52:46+00:00] [INFO] =========================================
+[2026-01-04T15:52:46+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T15:52:46+00:00] [INFO] Check interval: 60s
+[2026-01-04T15:52:46+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T15:52:46+00:00] [INFO] Token limit: 150000
+[2026-01-04T15:52:46+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T15:52:46+00:00] [INFO] Watchdog PID: 381101
+[2026-01-04T15:52:46+00:00] [INFO] =========================================
+[2026-01-04T15:52:46+00:00] [WARN] Leader lease expired 15652s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:52:46+00:00] [WARN] Leader lease expired 15652s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:52:46+00:00] [WARN] Still rate limited. Wait 484977s more (resets at 06:35:43)
+[2026-01-04T15:52:46+00:00] [WARN] Still rate limited. Wait 484977s more (resets at 06:35:43)
+[2026-01-04T15:52:46+00:00] [WARN] Wait time 484977s exceeds 30min cap, using 1800s
+[2026-01-04T15:52:46+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T15:53:05+00:00] [WARN] Received shutdown signal
+[2026-01-04T15:53:05+00:00] [INFO] Stopping watchdog...
+[2026-01-04T15:53:05+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T15:53:05+00:00] [OK] Orchestrator stopped
+[2026-01-04T15:53:05+00:00] [OK] Watchdog stopped
+[2026-01-04T15:53:26+00:00] [INFO] =========================================
+[2026-01-04T15:53:26+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T15:53:26+00:00] [INFO] Check interval: 60s
+[2026-01-04T15:53:26+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T15:53:26+00:00] [INFO] Token limit: 150000
+[2026-01-04T15:53:26+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T15:53:26+00:00] [INFO] Watchdog PID: 381323
+[2026-01-04T15:53:26+00:00] [INFO] =========================================
+[2026-01-04T15:53:26+00:00] [WARN] Leader lease expired 15692s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:53:27+00:00] [WARN] Leader lease expired 15692s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:53:27+00:00] [WARN] Still rate limited. Wait 484936s more (resets at 06:35:43)
+[2026-01-04T15:53:27+00:00] [WARN] Still rate limited. Wait 484936s more (resets at 06:35:43)
+[2026-01-04T15:53:27+00:00] [WARN] Wait time 484936s exceeds 30min cap, using 1800s
+[2026-01-04T15:53:27+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T15:53:28+00:00] [WARN] Received shutdown signal
+[2026-01-04T15:53:28+00:00] [INFO] Stopping watchdog...
+[2026-01-04T15:53:28+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T15:53:28+00:00] [OK] Orchestrator stopped
+[2026-01-04T15:53:28+00:00] [OK] Watchdog stopped
+[2026-01-04T15:53:49+00:00] [INFO] =========================================
+[2026-01-04T15:53:49+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T15:53:49+00:00] [INFO] Check interval: 60s
+[2026-01-04T15:53:49+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T15:53:49+00:00] [INFO] Token limit: 150000
+[2026-01-04T15:53:49+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T15:53:49+00:00] [INFO] Watchdog PID: 381527
+[2026-01-04T15:53:49+00:00] [INFO] =========================================
+[2026-01-04T15:53:49+00:00] [WARN] Leader lease expired 15714s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:53:49+00:00] [WARN] Leader lease expired 15714s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:53:49+00:00] [WARN] Still rate limited. Wait 484914s more (resets at 06:35:43)
+[2026-01-04T15:53:49+00:00] [WARN] Still rate limited. Wait 484914s more (resets at 06:35:43)
+[2026-01-04T15:53:49+00:00] [WARN] Wait time 484914s exceeds 30min cap, using 1800s
+[2026-01-04T15:53:49+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T15:53:52+00:00] [WARN] Watchdog already running with PID: 381527
+[2026-01-04T15:53:59+00:00] [WARN] Received shutdown signal
+[2026-01-04T15:53:59+00:00] [INFO] Stopping watchdog...
+[2026-01-04T15:53:59+00:00] [INFO] Stopping orchestrator...
+[2026-01-04T15:53:59+00:00] [OK] Orchestrator stopped
+[2026-01-04T15:53:59+00:00] [OK] Watchdog stopped
+[2026-01-04T15:54:03+00:00] [INFO] =========================================
+[2026-01-04T15:54:03+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T15:54:03+00:00] [INFO] Check interval: 60s
+[2026-01-04T15:54:03+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T15:54:03+00:00] [INFO] Token limit: 150000
+[2026-01-04T15:54:03+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T15:54:03+00:00] [INFO] Watchdog PID: 381718
+[2026-01-04T15:54:03+00:00] [INFO] =========================================
+[2026-01-04T15:54:03+00:00] [WARN] Leader lease expired 15729s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:54:04+00:00] [WARN] Leader lease expired 15729s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:54:04+00:00] [WARN] Still rate limited. Wait 484899s more (resets at 06:35:43)
+[2026-01-04T15:54:04+00:00] [WARN] Still rate limited. Wait 484899s more (resets at 06:35:43)
+[2026-01-04T15:54:04+00:00] [WARN] Wait time 484899s exceeds 30min cap, using 1800s
+[2026-01-04T15:54:04+00:00] [WARN] Waiting 1800s for rate limit to clear...
+[2026-01-04T15:54:42+00:00] [INFO] =========================================
+[2026-01-04T15:54:42+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-04T15:54:42+00:00] [INFO] Check interval: 60s
+[2026-01-04T15:54:42+00:00] [INFO] Max restarts/hour: 20
+[2026-01-04T15:54:42+00:00] [INFO] Token limit: 150000
+[2026-01-04T15:54:42+00:00] [INFO] Model: openai/gpt-5.2
+[2026-01-04T15:54:42+00:00] [INFO] Watchdog PID: 381884
+[2026-01-04T15:54:42+00:00] [INFO] =========================================
+[2026-01-04T15:54:42+00:00] [WARN] Leader lease expired 15767s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:54:42+00:00] [WARN] Leader lease expired 15768s ago: agent-1767525954296-hs2nfg (epoch 23)
+[2026-01-04T15:54:42+00:00] [INFO] Starting orchestrator agent (restart #9 this hour)...
+[2026-01-04T15:54:42+00:00] [OK] Orchestrator started with PID: 382006 (model: openai/gpt-5.2)
+[2026-01-04T15:54:47+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T15:57:48+00:00] [INFO] Healthy leader exists: agent-1767542113753-o38n5 (epoch 24), lease valid for 115s
+[2026-01-04T15:57:48+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767542113753-o38n5:epoch24). Skipping respawn.
+[2026-01-04T15:58:48+00:00] [INFO] Healthy leader exists: agent-1767542113753-o38n5 (epoch 24), lease valid for 55s
+[2026-01-04T15:58:48+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767542113753-o38n5:epoch24). Skipping respawn.
+[2026-01-04T15:59:48+00:00] [DEBUG] Orchestrator state file is empty or corrupted - no valid leader
+[2026-01-04T15:59:48+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-04T15:59:48+00:00] [DEBUG] Orchestrator state file is empty or corrupted - no valid leader
+[2026-01-04T15:59:48+00:00] [INFO] Starting orchestrator agent (restart #10 this hour)...
+[2026-01-04T15:59:48+00:00] [WARN] Warning: prompt-generator.ts failed, using fallback prompt
+[2026-01-04T15:59:48+00:00] [OK] Orchestrator started with PID: 383622 (model: openai/gpt-5.2)
+[2026-01-04T15:59:53+00:00] [OK] Orchestrator confirmed running
+[2026-01-04T16:01:54+00:00] [DEBUG] Orchestrator state file is empty or corrupted - no valid leader
+[2026-01-04T16:01:54+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-04T16:01:54+00:00] [DEBUG] Orchestrator state file is empty or corrupted - no valid leader
+[2026-01-04T16:01:54+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-04T16:01:54+00:00] [WARN] Warning: prompt-generator.ts failed, using fallback prompt
+[2026-01-04T16:01:54+00:00] [OK] Orchestrator started with PID: 385191 (model: openai/gpt-5.2)
+[2026-01-04T16:01:59+00:00] [OK] Orchestrator confirmed running

@@ -1,20 +1,18 @@
 #!/usr/bin/env bun
 /**
- * Prompt Generator Library
+ * Centralized Prompt Generator Library
  * 
- * Generates structured prompts for orchestrator and worker agents following Anthropic best practices:
- * - Clear role definition with XML tags
- * - Explicit context about current system state
- * - Step-by-step instructions
- * - Constraints and output format
+ * Generates structured prompts for orchestrator and worker agents.
+ * All prompts are defined in /prompts/prompts.json - this file loads and combines
+ * templates with dynamic data.
+ * 
+ * CRITICAL: This system operates AUTONOMOUSLY - no human interaction.
+ * Agents should NEVER ask questions or wait for responses.
  * 
  * Usage:
  *   import { generateOrchestratorPrompt, generateWorkerPrompt } from './lib/prompt-generator';
  *   
- *   // Generate orchestrator prompt
  *   const orchPrompt = generateOrchestratorPrompt();
- *   
- *   // Generate worker prompt
  *   const workerPrompt = generateWorkerPrompt("Implement feature X", "code-worker");
  */
 
@@ -27,13 +25,73 @@ import { logWarning, getErrorMessage } from "../shared/error-handler";
 import type { Task, SystemState, Agent } from "../shared/types";
 
 const MEMORY_DIR = join(process.cwd(), "memory");
+const PROMPTS_PATH = join(process.cwd(), "prompts", "prompts.json");
 const STATE_PATH = join(MEMORY_DIR, "state.json");
 const TASKS_PATH = join(MEMORY_DIR, "tasks.json");
 const REGISTRY_PATH = join(MEMORY_DIR, "agent-registry.json");
-const USER_MESSAGES_PATH = join(MEMORY_DIR, "user-messages.jsonl");
+
+// Cache for prompts config
+let promptsConfig: any = null;
 
 // ============================================================================
-// Orchestrator Prompt Generation
+// Prompts Configuration Loading
+// ============================================================================
+
+function loadPromptsConfig(): any {
+  if (promptsConfig) return promptsConfig;
+  
+  if (!existsSync(PROMPTS_PATH)) {
+    throw new Error(`Prompts configuration not found at ${PROMPTS_PATH}`);
+  }
+  
+  promptsConfig = JSON.parse(readFileSync(PROMPTS_PATH, "utf-8"));
+  return promptsConfig;
+}
+
+function getRole(roleName: string): any {
+  const config = loadPromptsConfig();
+  return config.roles[roleName] || config.roles.worker;
+}
+
+function getSection(sectionName: string): string[] | string {
+  const config = loadPromptsConfig();
+  const section = config.sections[sectionName];
+  if (!section) return [];
+  return section.content || section.template || [];
+}
+
+function getCriticalBehavior(): { neverDo: string[], alwaysDo: string[] } {
+  const config = loadPromptsConfig();
+  return {
+    neverDo: config.critical_behavior?.NEVER_DO || [],
+    alwaysDo: config.critical_behavior?.ALWAYS_DO || []
+  };
+}
+
+function buildAutonomySection(): string {
+  const config = loadPromptsConfig();
+  const principles = config.core_principles || {};
+  const behavior = config.critical_behavior || {};
+  
+  let content = `<autonomous_operation>
+CRITICAL: This is a FULLY AUTONOMOUS system. There is NO human operator.
+
+${principles.autonomous_operation || ""}
+${principles.no_user_interaction || ""}
+${principles.decision_making || ""}
+
+## NEVER DO (These will cause the system to hang forever):
+${(behavior.NEVER_DO || []).map((x: string) => `- ${x}`).join("\n")}
+
+## ALWAYS DO:
+${(behavior.ALWAYS_DO || []).map((x: string) => `- ${x}`).join("\n")}
+</autonomous_operation>`;
+  
+  return content;
+}
+
+// ============================================================================
+// Data Loading Functions
 // ============================================================================
 
 function loadState(): SystemState {
@@ -74,29 +132,11 @@ function loadActiveAgents(): Agent[] {
   });
 }
 
-function loadUnreadUserMessages(): number {
-  if (!existsSync(USER_MESSAGES_PATH)) return 0;
-  const content = readFileSync(USER_MESSAGES_PATH, "utf-8");
-  const lines = content.trim().split("\n").filter(Boolean);
-  let unread = 0;
-  for (const line of lines) {
-    try {
-      const msg = JSON.parse(line);
-      if (!msg.read) unread++;
-    } catch (error) {
-      logWarning("Failed to parse user message line", { error: getErrorMessage(error) });
-    }
-  }
-  return unread;
-}
+// ============================================================================
+// Section Builders
+// ============================================================================
 
-export function generateOrchestratorPrompt(): string {
-  const state = loadState();
-  const pendingTasks = loadPendingTasks();
-  const activeAgents = loadActiveAgents();
-  const unreadMessages = loadUnreadUserMessages();
-
-  // Format pending tasks
+function buildContextSection(state: SystemState, pendingTasks: Task[], activeAgents: Agent[]): string {
   let taskSection = "";
   if (pendingTasks.length > 0) {
     const taskList = pendingTasks
@@ -109,43 +149,15 @@ ${taskList}
 ${pendingTasks.length > 5 ? `  ... and ${pendingTasks.length - 5} more` : ""}
 </pending_tasks>`;
   } else {
+    const noTasksContent = getSection("no_tasks_action");
     taskSection = `
 <pending_tasks count="0">
 No pending tasks in queue.
 
-CRITICAL: When there are no pending tasks, you MUST generate improvement tasks using these sources:
-
-## 1. ANALYZE SYSTEM LOGS (find bugs/issues):
-- \`cat logs/watchdog.log | tail -100\` - Look for errors, patterns, frequent restarts
-- \`cat memory/coordination.log | tail -100\` - Check agent health, failed handoffs  
-- \`grep -i error logs/*.log memory/*.log | tail -30\` - Recent errors
-
-## 2. FIND TECH DEBT:
-- \`grep -r "TODO\\|FIXME\\|HACK" tools/ plugins/ --include="*.ts" | head -20\`
-- \`find . -name "*.ts" -newer memory/state.json -mmin -60\` - Recent changes to review
-
-## 3. STUDY DOCUMENTATION FOR IMPROVEMENTS (READ THESE):
-- \`cat docs/RESOURCES.md\` - External resources, RSS feeds, research tasks
-- \`cat docs/OPENCODE_ARCHITECTURE.md\` - System architecture to understand
-- \`cat docs/TOOLS_REFERENCE.md\` - Tool documentation gaps
-- \`cat docs/CODEBASE_ANALYSIS.md\` - Known issues and improvement areas
-
-## 4. CHECK EXTERNAL RESOURCES (from docs/RESOURCES.md):
-- Fetch https://simonwillison.net/atom/everything/ for AI news
-- Fetch https://docs.anthropic.com/en/prompt-library/library for prompt patterns
-- Look for new techniques to implement
-
-Based on findings, create tasks with task_create(). Examples:
-- "Fix frequent orchestrator restarts observed in watchdog.log"  
-- "Implement prompt pattern X from Anthropic's library"
-- "Research topic Y from Simon Willison's blog"
-- "Refactor [file] - found FIXME comment"
-
-DO NOT just sit idle. The system should always be improving.
+${Array.isArray(noTasksContent) ? noTasksContent.join("\n") : noTasksContent}
 </pending_tasks>`;
   }
 
-  // Format active agents
   let agentSection = "";
   if (activeAgents.length > 0) {
     const agentList = activeAgents
@@ -157,7 +169,6 @@ ${agentList}
 </active_agents>`;
   }
 
-  // Format achievements
   let achievementSection = "";
   if (state.recent_achievements?.length > 0) {
     const achievementList = state.recent_achievements
@@ -170,123 +181,214 @@ ${achievementList}
 </recent_achievements>`;
   }
 
-  const prompt = `<context>
+  return `<context>
 ## System State
 Session: ${state.session_count}
 Status: ${state.status || "unknown"}
-Unread user messages: ${unreadMessages}
 Active agents: ${activeAgents.length}
 Pending tasks: ${pendingTasks.length}
 ${taskSection}
 ${agentSection}
 ${achievementSection}
-</context>
+</context>`;
+}
 
-<role>
-You are the ORCHESTRATOR - the persistent coordinator of a multi-agent AI system.
-You were auto-restarted by the watchdog.
-</role>
+function buildRoleSection(role: any): string {
+  return `<role>
+${role.identity}
+${role.purpose ? `\n${role.purpose}` : ""}
+</role>`;
+}
 
-<leader_election>
-CRITICAL: You are part of a single-leader orchestrator model. The watchdog only spawns you if no healthy leader exists.
+function buildLeaderElectionSection(): string {
+  const content = getSection("leader_election");
+  return `<leader_election>
+${Array.isArray(content) ? content.join("\n") : content}
+</leader_election>`;
+}
 
-LEADER CHECK PROTOCOL:
-1. agent_register(role='orchestrator') triggers leader election check
-2. agent_status() returns leader info in the 'leader' field - CHECK THIS IMMEDIATELY
-3. If you are NOT the leader and another healthy leader exists:
-   - Log a message: "Deferring to existing leader [agent_id]"
-   - Exit gracefully (you can set handoff=true and let the session end)
-4. If leader lease is expired OR you won the election:
-   - You ARE the leader - continue with normal operations
-   - Call agent_set_handoff(enabled=false) to prevent stopping
+function buildSpawningWorkersSection(): string {
+  const content = getSection("spawning_workers");
+  return `<spawning_workers>
+${Array.isArray(content) ? content.join("\n") : content}
+</spawning_workers>`;
+}
 
-SINGLE-LEADER GUARANTEE:
-- Only ONE orchestrator should be actively coordinating at any time
-- The watchdog checks leader lease BEFORE spawning - if you're running, you should be the leader
-- If somehow multiple orchestrators are running, the non-leaders must yield
-</leader_election>
+function buildInstructionsSection(role: any, roleName: string): string {
+  const firstActions = role.first_actions || [];
+  const workflow = role.workflow_loop || role.workflow_phases || role.approach || [];
+  const constraints = role.constraints || [];
+  
+  let firstActionsStr = "";
+  if (firstActions.length > 0) {
+    firstActionsStr = `## Critical First Actions (Execute IMMEDIATELY in this exact order)
+${firstActions.map((a: string, i: number) => `${i + 1}. ${a}`).join("\n")}
+`;
+  }
 
-<spawning_workers>
-To spawn workers WITHOUT blocking (fire-and-forget), use spawn-worker.sh:
+  let thinkingPattern = "";
+  if (role.thinking_pattern) {
+    thinkingPattern = `
+Before taking action, use this thinking pattern:
 
-\`\`\`bash
-# Option 1: Spawn by task ID (RECOMMENDED - auto-generates prompt from task)
-./spawn-worker.sh --task task_1234567890_abcdef
+${role.thinking_pattern.template}
+`;
+  }
 
-# Option 2: Spawn with custom prompt
-./spawn-worker.sh "You are a WORKER. agent_register(role='worker'). Task: [DESCRIPTION]"
-\`\`\`
-
-IMPORTANT: 
-- The native Task tool BLOCKS. Use spawn-worker.sh for parallel work.
-- spawn-worker.sh handles shell quoting safely (no issues with apostrophes/special chars)
-
-Example good delegation:
-\`\`\`bash
-# By task ID - cleanest approach
-./spawn-worker.sh --task task_1767520273725_sckp83
-
-# Or with inline prompt for ad-hoc work
-./spawn-worker.sh "You are a CODE-WORKER. Task: Refactor error handling in tools/cli.ts"
-\`\`\`
-</spawning_workers>
-
-${formatToolsForRole("orchestrator", true)}
-
-<instructions>
-## Critical First Actions (Execute IMMEDIATELY in this exact order)
-1. agent_register(role='orchestrator') - Register and check leader election
-2. agent_status() - Check the 'leader' field to verify you are the leader
-3. IF you are the leader:
-   a. agent_set_handoff(enabled=false) - CRITICAL: Prevents you from stopping
-   b. user_messages_read() - Check for user requests (HIGHEST PRIORITY)
-4. IF you are NOT the leader:
-   a. Log "Deferring to existing leader: [leader_id]"
-   b. Exit gracefully (session can end normally)
-
-## Main Workflow
-
-Before taking any action, use this thinking pattern:
-
-<scratchpad>
-What is the most important thing to address right now?
-- Any unread user messages? (ALWAYS check first)
-- Any worker completions to process?
-- Any high-priority pending tasks?
-- Any blocked workers needing help?
-
-What is the right action?
-- DELEGATE to worker if task is self-contained
-- DO directly only if trivial (<2 min) or orchestrator-specific
-</scratchpad>
+  let workflowStr = "";
+  if (roleName === "orchestrator") {
+    workflowStr = `## Main Workflow
 
 Then follow this loop:
-1. CHECK MESSAGES: user_messages_read() - handle user requests first
-2. CHECK WORKERS: agent_messages() - process completions and help requests  
-3. REVIEW TASKS: task_list(status='pending') - see what needs work
-4. SPAWN WORKERS: Use bash with nohup for parallel task execution
-5. MONITOR: agent_status() to track worker progress
-6. ASSESS: quality_assess() for completed work
+${(role.workflow_loop || []).map((w: string, i: number) => `${i + 1}. ${w}`).join("\n")}
+`;
+  } else if (role.workflow_phases) {
+    workflowStr = `## Workflow Phases
+${role.workflow_phases.map((p: string) => `### ${p}`).join("\n")}
+`;
+  }
 
-## Constraints
-- NEVER enable handoff - you must stay running
-- DELEGATE work to workers instead of implementing yourself
-- CHECK user messages before starting new work
-- SPAWN workers in background with nohup ... &
-- COMMIT changes regularly to preserve progress
+  let constraintsStr = "";
+  if (constraints.length > 0) {
+    constraintsStr = `## Constraints
+${constraints.map((c: string) => `- ${c}`).join("\n")}
+`;
+  }
+
+  // Add quality principles
+  const qualityContent = getSection("quality_principles");
+  let qualityStr = "";
+  if (qualityContent && roleName !== "orchestrator") {
+    qualityStr = `## Quality Principles
+${Array.isArray(qualityContent) ? qualityContent.join("\n") : qualityContent}
+`;
+  }
+
+  // Add autonomy section
+  const autonomySection = buildAutonomySection();
+
+  return `${autonomySection}
+
+<instructions>
+${firstActionsStr}
+${thinkingPattern}
+${workflowStr}
+${constraintsStr}
+${qualityStr}
+## Working Memory (memory/working.md)
+READ this file at session start - it contains context from previous sessions.
+WRITE to this file:
+- Your decisions and reasoning
+- Open questions for future sessions to investigate
+- Important findings and context
+NEVER ask questions in your output - write them to working.md instead.
 
 ## Output Format
-When transitioning or reporting status, include:
-1. What was accomplished this session
-2. Current worker status
-3. Pending work remaining
-4. Any blockers or concerns
-</instructions>
+When reporting completion, include:
+1. What was accomplished
+2. Files changed (if any)
+3. Issues found (if any)
+4. Recommendations for follow-up
+</instructions>`;
+}
 
-BEGIN: Execute critical_first_actions NOW in the exact order listed.
+function buildRoleSpecializationSection(role: any, roleName: string): string {
+  const toolsSection = formatToolsForRole(roleName, true);
+  
+  let qualityStandards = "";
+  if (role.quality_standards) {
+    qualityStandards = `
+## Quality Standards
+${role.quality_standards.map((s: string) => `- ${s}`).join("\n")}
+`;
+  }
+
+  let keyFiles = "";
+  if (role.key_files) {
+    keyFiles = `
+## Key Files
+${role.key_files.map((f: string) => `- ${f}`).join("\n")}
+`;
+  }
+
+  let outputFormat = "";
+  if (role.output_format) {
+    outputFormat = `
+## Output Format
+${role.output_format.map((f: string) => f).join("\n")}
+`;
+  }
+
+  let methodology = "";
+  if (role.methodology) {
+    methodology = `
+## Methodology
+${role.methodology.map((m: string, i: number) => `${i + 1}. ${m}`).join("\n")}
+`;
+  }
+
+  return `<role_specialization>
+${role.identity}
+
+${toolsSection}
+${qualityStandards}
+${keyFiles}
+${outputFormat}
+${methodology}
+${role.thinking_pattern ? role.thinking_pattern.template : ""}
+</role_specialization>`;
+}
+
+function buildUsefulCommandsSection(): string {
+  const config = loadPromptsConfig();
+  const commands = config.useful_commands?.commands || [];
+  
+  return `<useful_commands>
+${commands.map((c: string) => `# ${c}`).join("\n")}
+</useful_commands>`;
+}
+
+// ============================================================================
+// Orchestrator Prompt Generation
+// ============================================================================
+
+export function generateOrchestratorPrompt(): string {
+  const state = loadState();
+  const pendingTasks = loadPendingTasks();
+  const activeAgents = loadActiveAgents();
+  const role = getRole("orchestrator");
+
+  const contextSection = buildContextSection(state, pendingTasks, activeAgents);
+  const roleSection = buildRoleSection(role);
+  const leaderElectionSection = buildLeaderElectionSection();
+  const spawningWorkersSection = buildSpawningWorkersSection();
+  const toolsSection = formatToolsForRole("orchestrator", true);
+  const instructionsSection = buildInstructionsSection(role, "orchestrator");
+
+  return `${contextSection}
+
+${roleSection}
+
+<critical_autonomy>
+THIS IS A FULLY AUTONOMOUS SYSTEM. There is NO human operator.
+- NEVER ask questions - no one will answer
+- NEVER wait for confirmation - proceed with best judgment  
+- NEVER say "let me know if..." - no one is listening
+- If uncertain, write your doubts to memory/working.md for the next session
+- READ memory/working.md first - it has context from previous sessions
+- Make decisions and ACT. Wrong action > no action.
+</critical_autonomy>
+
+${leaderElectionSection}
+
+${spawningWorkersSection}
+
+${toolsSection}
+
+${instructionsSection}
+
+BEGIN: Read memory/working.md for context, then execute critical_first_actions NOW.
 IMPORTANT: Check leader status FIRST. Only continue if you are the leader. If not, exit gracefully.`;
-
-  return prompt;
 }
 
 // ============================================================================
@@ -295,165 +397,57 @@ IMPORTANT: Check leader status FIRST. Only continue if you are the leader. If no
 
 export type WorkerRole = "code-worker" | "memory-worker" | "analysis-worker" | "worker";
 
-function getRoleSpecificInstructions(role: WorkerRole): string {
-  // Get dynamic tool list for this role
-  const toolsSection = formatToolsForRole(role, true);
-  
-  switch (role) {
-    case "code-worker":
-      return `<role_specialization>
-You are a CODE WORKER - specialized in implementing, fixing, and improving code.
-
-${toolsSection}
-
-## Quality Standards
-- Follow existing code style and conventions
-- Handle errors gracefully with structured error messages
-- Add comments for complex logic (but not obvious code)
-- Run tests before reporting completion: \`bun test\`
-- Keep functions small and focused (< 50 lines)
-- Validate changes compile: \`bun build path/to/file.ts --no-bundle\`
-
-## Thinking Pattern
-Before writing code, use this scratchpad:
-
-<scratchpad>
-1. What is the current state of the code?
-2. What exactly needs to change?
-3. What are the edge cases?
-4. How will I verify this works?
-</scratchpad>
-</role_specialization>`;
-
-    case "memory-worker":
-      return `<role_specialization>
-You are a MEMORY WORKER - specialized in memory system operations.
-
-${toolsSection}
-
-## Focus Areas
-- Memory optimization and cleanup
-- Knowledge extraction and organization  
-- State management and consistency
-
-## Key Files
-- memory/state.json - System state
-- memory/tasks.json - Task persistence
-- memory/knowledge-base.json - Extracted insights
-- memory/working.md - Current context
-
-## Validation
-Always verify JSON files are valid after modification:
-\`\`\`bash
-bun -e "JSON.parse(require('fs').readFileSync('memory/state.json'))"
-\`\`\`
-</role_specialization>`;
-
-    case "analysis-worker":
-      return `<role_specialization>
-You are an ANALYSIS WORKER - specialized in research and investigation.
-You are READ-ONLY: you cannot modify files.
-
-${toolsSection}
-
-## Output Format
-Structure your analysis as:
-
-1. **Summary** (2-3 sentences): Key findings at a glance
-2. **Detailed Findings**: Organized by topic with file:line references
-3. **Evidence**: Direct quotes from code/docs supporting findings  
-4. **Recommendations**: Prioritized list (high/medium/low)
-5. **Open Questions**: Areas needing further investigation
-
-## Methodology
-Before concluding, verify by:
-1. Cross-referencing multiple sources
-2. Checking for contradictory evidence
-3. Noting confidence level for each finding
-</role_specialization>`;
-
-    default:
-      return `<role_specialization>
-You are a general WORKER agent.
-Complete your assigned task efficiently and report back.
-
-${toolsSection}
-
-## Approach
-1. Understand the task fully before acting
-2. Plan your approach (what files to read, what to change)
-3. Execute methodically
-4. Validate your work
-5. Report clearly
-</role_specialization>`;
-  }
-}
-
-export function generateWorkerPrompt(task: string, role: WorkerRole = "worker"): string {
+export function generateWorkerPrompt(task: string, roleName: WorkerRole = "worker"): string {
   const state = loadState();
   const sessionNum = state.session_count || 0;
-  const roleInstructions = getRoleSpecificInstructions(role);
+  const role = getRole(roleName);
 
-  return `<context>
+  const contextSection = `<context>
 Session: ${sessionNum}
 Working directory: /app/workspace
 Runtime: bun (use bun, not npm or node)
 Task: ${task}
-</context>
+</context>`;
 
-<role>
+  const roleSection = `<role>
 You are a WORKER agent in a multi-agent AI system.
 You were spawned by the orchestrator to complete a specific task.
 Focus exclusively on your assigned task, then report completion and exit.
 </role>
 
-${roleInstructions}
+<critical_autonomy>
+THIS IS A FULLY AUTONOMOUS SYSTEM. There is NO human operator.
+- NEVER ask questions - no one will answer
+- NEVER wait for confirmation - proceed with best judgment
+- If uncertain, write doubts to memory/working.md for future sessions
+- Make decisions and ACT. Complete your task without waiting for input.
+</critical_autonomy>`;
 
-<useful_commands>
-# Check system status
-bun tools/cli.ts status
+  const roleSpecialization = buildRoleSpecializationSection(role, roleName);
+  const usefulCommands = buildUsefulCommandsSection();
 
-# Verify TypeScript compiles
-bun build path/to/file.ts --no-bundle
+  // Worker-specific instructions
+  const constraints = role.constraints || [];
+  const completionReport = getSection("worker_completion_report");
+  const qualityContent = getSection("quality_principles");
 
-# Run tests
-bun test
-
-# Search for patterns
-grep -r "pattern" tools/
-
-# Check memory state
-bun tools/cli.ts memory health
-</useful_commands>
-
-<instructions>
+  const instructionsSection = `<instructions>
 ## Initialization (Do First)
-1. agent_register(role='${role}')
+1. agent_register(role='${roleName}')
 2. Read memory/working.md for recent context
 3. Understand the task requirements fully before acting
 
-## Workflow
+## Workflow Phases
 
 ### Phase 1: UNDERSTAND
 Before taking any action, analyze your task:
 
-<scratchpad>
-What exactly am I being asked to do?
-- Core objective:
-- Success criteria:
-- Constraints:
-
-What context do I need?
-- Files to read:
-- Dependencies to understand:
-- Potential blockers:
-</scratchpad>
+${role.thinking_pattern?.template || "<scratchpad>\nWhat exactly am I being asked to do?\n</scratchpad>"}
 
 ### Phase 2: PLAN
 Break down the work:
 - Step 1: [specific action]
 - Step 2: [specific action]
-- ...
 - Final step: Validate and report
 
 ### Phase 3: IMPLEMENT
@@ -468,38 +462,18 @@ Before reporting:
 - Run tests if applicable: \`bun test\`
 - Check code compiles: \`bun build path/to/file.ts --no-bundle\`
 
-### Phase 5: DOCUMENT & REPORT
-Update memory/working.md with what you did, then:
+### Phase 5: REPORT
+Report completion:
 
 \`\`\`typescript
-agent_send(type='task_complete', payload={
-  task_id: '[if known]',
-  summary: '[what was done]',
-  files_changed: ['list', 'of', 'files'],
-  issues_found: ['any', 'problems'],
-  recommendations: ['follow-up', 'items']
-})
+${typeof completionReport === 'string' ? completionReport : ''}
 \`\`\`
 
 ## Constraints
-- Stay focused on your assigned task
-- Do NOT modify dashboard-ui/ or _wip_ui/ without explicit permission
-- Do NOT commit to git (orchestrator handles that)
-- Report blockers immediately: agent_send(type='request_help', payload={...})
-- You CAN handoff when your task is complete
+${constraints.map((c: string) => `- ${c}`).join("\n")}
 
 ## Quality Principles
-IMPROVE EVERYTHING YOU TOUCH:
-- If you find bugs, fix them
-- If code is confusing, simplify it
-- If there's duplication, consolidate it
-- If error handling is missing, add it
-- Leave code better than you found it
-
-BE CRITICAL:
-- Don't add unnecessary code
-- Don't over-engineer solutions
-- Don't skip validation steps
+${Array.isArray(qualityContent) ? qualityContent.join("\n") : qualityContent}
 
 ## Output Format
 When reporting completion, structure your summary as:
@@ -514,10 +488,17 @@ When reporting completion, structure your summary as:
 
 **Recommendations**:
 - [follow-up work needed]
+</instructions>`;
 
-**Lessons Learned**:
-- [insights for knowledge base]
-</instructions>
+  return `${contextSection}
+
+${roleSection}
+
+${roleSpecialization}
+
+${usefulCommands}
+
+${instructionsSection}
 
 BEGIN: Execute initialization steps, then follow the workflow to complete your task.`;
 }

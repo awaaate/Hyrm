@@ -136,3 +136,7 @@ Auto-generated index of task specs in `docs/specs/`.
 - [docs/specs/task_1767520395465_tools-reorganization_COMPLETED.md](docs/specs/task_1767520395465_tools-reorganization_COMPLETED.md)
 - [docs/specs/task_1767520395465_tools-reorganization.md](docs/specs/task_1767520395465_tools-reorganization.md)
 - [docs/specs/task_1767520578520_spec-system.md](docs/specs/task_1767520578520_spec-system.md)
+- [docs/specs/task_1767525709940_diagnose-frequent-orchestrator.md](docs/specs/task_1767525709940_diagnose-frequent-orchestrator.md)
+- [docs/specs/task_1767525710136_fix-orchestrator-respawn-failu.md](docs/specs/task_1767525710136_fix-orchestrator-respawn-failu.md)
+- [docs/specs/task_1767525712139_eliminate-remaining-plugin-red.md](docs/specs/task_1767525712139_eliminate-remaining-plugin-red.md)
+- [docs/specs/task_1767525714221_handle-oauth-token-expiry-grac.md](docs/specs/task_1767525714221_handle-oauth-token-expiry-grac.md)

@@ -2976,9 +2976,9 @@
       "title": "Handle expired OAuth/API tokens gracefully (avoid crash/restart loops)",
       "description": "memory/realtime.log shows session.error with 401 ‘OAuth token has expired’. Add a guardrail: detect auth failures, mark system status as blocked/degraded, pause expensive loops, and emit a clear operator action message (refresh token) instead of cascading failures.\n\nSuccess criteria:\n- On 401, orchestrator remains healthy and stops retry storms\n- A single clear error status is recorded (state + logs) with recovery steps",
       "priority": "medium",
-      "status": "pending",
+      "status": "cancelled",
       "created_at": "2026-01-03T17:18:27.507Z",
-      "updated_at": "2026-01-04T10:30:53.599Z",
+      "updated_at": "2026-01-04T15:56:42.954Z",
       "created_by": "unknown",
       "tags": [
         "auth",
@@ -2986,16 +2986,21 @@
         "ux"
       ],
       "complexity": "moderate",
-      "spec_file": "docs/specs/task_1767460707507_handle-expired-oauthapi-tokens.md"
+      "spec_file": "docs/specs/task_1767460707507_handle-expired-oauthapi-tokens.md",
+      "assigned_to": "dashboard-user",
+      "claimed_at": "2026-01-04T10:34:02.294Z",
+      "notes": [
+        "[2026-01-04T15:56:42.954Z] Cancelled as obsolete per user priority signal umsg_1767541963707_8hvdii."
+      ]
     },
     {
       "id": "task_1767460709823_9305p0",
       "title": "Implement scheduled external-resource ingest from docs/RESOURCES.md",
       "description": "docs/RESOURCES.md recommends periodically fetching Simon Willison RSS + prompt libraries. Build a small scheduled ingest job that fetches configured RSS/URLs, extracts headlines/patterns, and stores summarized deltas into memory/knowledge-base.json with timestamps.\n\nSuccess criteria:\n- Runs without network failures causing crashes (timeouts/backoff)\n- Adds deduped entries to knowledge base\n- Exposes a CLI command to run ingest on-demand",
       "priority": "low",
-      "status": "pending",
+      "status": "cancelled",
       "created_at": "2026-01-03T17:18:29.823Z",
-      "updated_at": "2026-01-04T10:30:53.599Z",
+      "updated_at": "2026-01-04T15:56:43.691Z",
       "created_by": "unknown",
       "tags": [
         "research",
@@ -3003,7 +3008,12 @@
         "knowledge-base"
       ],
       "complexity": "moderate",
-      "spec_file": "docs/specs/task_1767460709823_implement-scheduled-external-r.md"
+      "spec_file": "docs/specs/task_1767460709823_implement-scheduled-external-r.md",
+      "assigned_to": "agent-1767524856892-kwo3oj",
+      "claimed_at": "2026-01-04T11:10:01.193Z",
+      "notes": [
+        "[2026-01-04T15:56:43.691Z] Cancelled as obsolete per user priority signal umsg_1767541963707_8hvdii."
+      ]
     },
     {
       "id": "task_1767520205269_rwoygc",
@@ -3133,9 +3143,9 @@
       "title": "Create spec system - auto-generate spec.md for every task linked to GitHub issue",
       "description": "Create automated spec system for all tasks.\n\nSee full specification: docs/specs/task_1767520578520_spec-system.md\n\nSummary:\n1. Every task gets docs/specs/task_<id>_<slug>.md\n2. Spec content = GitHub issue body (synced)\n3. Auto-generate on task creation\n4. Template for consistent format\n5. CLI commands: spec, spec:view, spec:sync\n\nDepends on: GitHub auto-issue task, Tools reorganization",
       "priority": "critical",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-04T09:56:18.520Z",
-      "updated_at": "2026-01-04T10:27:38.323Z",
+      "updated_at": "2026-01-04T10:32:32.587Z",
       "created_by": "orchestrator",
       "tags": [
         "critical",
@@ -3151,9 +3161,125 @@
         "task_1767520395465_2o5xy7"
       ],
       "assigned_to": "agent-1767522331796-kulwo4",
-      "claimed_at": "2026-01-04T10:27:38.323Z"
+      "claimed_at": "2026-01-04T10:27:38.323Z",
+      "completed_at": "2026-01-04T10:32:32.578Z",
+      "notes": [
+        "[2026-01-04T10:32:32.581Z] Successfully implemented complete spec system:\n\n✅ Core Integration:\n- Auto-generation on task creation in task-tools.ts\n- Spec files stored in docs/specs/task_<id>_<slug>.md\n- spec_file field added to Task interface\n- GitHub issues use spec content as body\n- Bidirectional sync with GitHub\n\n✅ CLI Tool (tools/spec-cli.ts):\n- generate: Create/regenerate specs\n- view: Display spec content\n- sync: Update GitHub issue with spec\n- list: Show all specs with status\n- backfill: Generate specs for all tasks\n\n✅ Results:\n- 133 existing tasks backfilled with specs\n- Auto-generated README.md index\n- Comprehensive documentation in SPEC_SYSTEM_IMPLEMENTATION.md\n- All changes committed (164 files, 9292 insertions)\n\n✅ Testing:\n- Spec generation verified\n- View command tested\n- List command tested\n- Backfill completed successfully\n\nThe spec system is fully operational and integrated into the task creation workflow."
+      ],
+      "quality_score": 7.8,
+      "quality_notes": "Auto-assessed"
+    },
+    {
+      "id": "task_1767525709940_qa99je",
+      "title": "Diagnose frequent orchestrator restarts and silent start failures",
+      "description": "watchdog.log shows many restarts and repeated \"Orchestrator failed to start!\" without a root-cause message. Improve watchdog/orchestrator startup diagnostics: capture exit code + stderr, persist last failure reason, and distinguish intentional shutdown vs crash. Goal: reduce restart churn and make failures actionable.",
+      "priority": "critical",
+      "status": "cancelled",
+      "created_at": "2026-01-04T11:21:49.940Z",
+      "updated_at": "2026-01-04T15:56:41.715Z",
+      "created_by": "unknown",
+      "tags": [
+        "stability",
+        "watchdog",
+        "orchestrator",
+        "logging"
+      ],
+      "estimated_hours": 6,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767525709940_diagnose-frequent-orchestrator.md",
+      "notes": [
+        "[2026-01-04T15:56:41.715Z] Cancelled as obsolete per user priority signal umsg_1767541963707_8hvdii."
+      ]
+    },
+    {
+      "id": "task_1767525710136_6d0n07",
+      "title": "Fix orchestrator respawn failure: invalid stdio argument type",
+      "description": "memory/realtime.log reports: \"Failed to re-spawn orchestrator\" with TypeError [ERR_INVALID_ARG_TYPE]: \"stdio must be an array of 'inherit', 'ignore', or null\". Locate respawn code path and correct child_process spawn options (stdio) and add a small regression test or runtime guard.",
+      "priority": "high",
+      "status": "cancelled",
+      "created_at": "2026-01-04T11:21:50.136Z",
+      "updated_at": "2026-01-04T15:56:42.193Z",
+      "created_by": "unknown",
+      "tags": [
+        "bug",
+        "orchestrator",
+        "respawn",
+        "node"
+      ],
+      "estimated_hours": 3,
+      "complexity": "simple",
+      "spec_file": "docs/specs/task_1767525710136_fix-orchestrator-respawn-failu.md",
+      "notes": [
+        "[2026-01-04T15:56:42.193Z] Cancelled as obsolete per user priority signal umsg_1767541963707_8hvdii."
+      ]
+    },
+    {
+      "id": "task_1767525712139_ng89qv",
+      "title": "Eliminate remaining plugin Redirect parse errors from shell usage",
+      "description": "memory/realtime.log repeatedly shows: \"Plugin error: expected a command or assignment but got: Redirect\" even after prior fixes. Audit plugin/tool code for remaining ctx.$ usage with shell redirects or other unsupported syntax; replace with fs-based helpers (readJson/writeJsonSafe) and add a regression check (grep-based or unit test).",
+      "priority": "high",
+      "status": "cancelled",
+      "created_at": "2026-01-04T11:21:52.140Z",
+      "updated_at": "2026-01-04T15:56:42.652Z",
+      "created_by": "unknown",
+      "tags": [
+        "bug",
+        "plugin",
+        "shell",
+        "fs"
+      ],
+      "estimated_hours": 4,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767525712139_eliminate-remaining-plugin-red.md",
+      "notes": [
+        "[2026-01-04T15:56:42.652Z] Cancelled as obsolete per user priority signal umsg_1767541963707_8hvdii."
+      ]
+    },
+    {
+      "id": "task_1767525714221_5831f3",
+      "title": "Handle OAuth token expiry gracefully and surface remediation",
+      "description": "memory/realtime.log shows APIError 401: \"OAuth token has expired\". Add detection + user-facing guidance (clear error message and next steps) and ensure orchestrator doesn’t enter restart loops due to auth failures (e.g., backoff/disable GitHub automation until refreshed).",
+      "priority": "medium",
+      "status": "cancelled",
+      "created_at": "2026-01-04T11:21:54.221Z",
+      "updated_at": "2026-01-04T15:56:43.207Z",
+      "created_by": "unknown",
+      "tags": [
+        "ux",
+        "auth",
+        "stability",
+        "github"
+      ],
+      "estimated_hours": 2,
+      "complexity": "simple",
+      "spec_file": "docs/specs/task_1767525714221_handle-oauth-token-expiry-grac.md",
+      "assigned_to": "agent-1767526034089-vlxe3v",
+      "claimed_at": "2026-01-04T11:29:31.565Z",
+      "notes": [
+        "[2026-01-04T15:56:43.207Z] Cancelled as obsolete per user priority signal umsg_1767541963707_8hvdii."
+      ]
+    },
+    {
+      "id": "task_1767526105265_4tm7gp",
+      "title": "Handle OAuth token expiry gracefully",
+      "description": "You are implementing task_1767525714221_5831f3 in /app/workspace (bun runtime). Goal: detect API auth failures where error is APIError 401 with message containing \"OAuth token has expired\" (see memory/realtime.log line ~7269). Implement guardrails so the orchestrator/plugin/watchdog does not enter restart loops on this auth failure.\n\nRequirements:\n1) Add a classifier util (or reuse existing patterns) to detect expired OAuth/authentication errors from caught exceptions (APIError with statusCode==...",
+      "priority": "medium",
+      "status": "cancelled",
+      "created_at": "2026-01-04T11:28:25.265Z",
+      "updated_at": "2026-01-04T15:56:43.549Z",
+      "claimed_at": "2026-01-04T11:28:25.265Z",
+      "created_by": "unknown",
+      "spawned_by": "agent-1767525736907-yoyfwn",
+      "subagent_type": "general",
+      "tags": [
+        "spawned",
+        "general"
+      ],
+      "notes": [
+        "[2026-01-04T15:56:43.549Z] Cancelled as obsolete per user priority signal umsg_1767541963707_8hvdii."
+      ]
     }
   ],
-  "completed_count": 139,
-  "last_updated": "2026-01-04T10:30:53.600Z"
+  "completed_count": 140,
+  "last_updated": "2026-01-04T15:56:43.691Z"
 }
