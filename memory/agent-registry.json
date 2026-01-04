@@ -5,7 +5,7 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-04T20:20:25Z",
+      "last_heartbeat": "2026-01-04T20:21:25Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
@@ -15,7 +15,7 @@
       "agent_id": "agent-gWTznv8A",
       "session_id": "ses_47554ed6cffehc1ek9gWTznv8A",
       "started_at": "2026-01-04T20:20:25.975Z",
-      "last_heartbeat": "2026-01-04T20:20:25.979Z",
+      "last_heartbeat": "2026-01-04T20:21:25.979Z",
       "status": "active",
       "assigned_role": "code-worker",
       "pid": 664669
@@ -24,13 +24,22 @@
       "agent_id": "agent-1767558030320-oph5p",
       "session_id": "session-1767558030320",
       "started_at": "2026-01-04T20:20:30.320Z",
-      "last_heartbeat": "2026-01-04T20:20:35.985Z",
+      "last_heartbeat": "2026-01-04T20:21:30.329Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 664669,
       "current_task": "Orchestrator mode - no handoff"
+    },
+    {
+      "agent_id": "agent-1767558079360-jadvft",
+      "session_id": "session-1767558079360",
+      "started_at": "2026-01-04T20:21:19.360Z",
+      "last_heartbeat": "2026-01-04T20:21:19.361Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 666448
     }
   ],
-  "last_updated": "2026-01-04T20:20:35.985Z",
-  "lock_version": 9
+  "last_updated": "2026-01-04T20:21:30.329Z",
+  "lock_version": 10
 }

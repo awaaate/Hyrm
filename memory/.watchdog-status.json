@@ -1,8 +1,8 @@
 {
     "status": "running",
-    "last_check": "2026-01-04T20:20:31+00:00",
+    "last_check": "2026-01-04T20:21:31+00:00",
     "orchestrator_pid": 664669,
-    "details": "Orchestrator healthy",
+    "details": "Monitoring active",
     "watchdog_pid": 655920,
     "restarts_this_hour": 3,
     "token_usage": 0,
