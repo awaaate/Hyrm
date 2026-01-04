@@ -2,6 +2,8 @@
   "dependencies": {
     "@types/blessed": "^0.1.27",
     "blessed": "^0.1.81",
-    "blessed-contrib": "^4.11.0"
+    "blessed-contrib": "^4.11.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-import": "^2.32.0"
   }
 }
