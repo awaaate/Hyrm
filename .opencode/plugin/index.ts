@@ -24,6 +24,7 @@ import {
   mkdirSync,
   readdirSync,
   unlinkSync,
+  statSync,
 } from "fs";
 import { join } from "path";
 import { readJson, writeJson, readJsonl } from "../../tools/shared/json-utils";
@@ -364,6 +365,62 @@ export const MemoryPlugin: Plugin = async (ctx) => {
     return "other";
   };
 
+  // Check if realtime.log needs rotation and rotate if necessary
+  // Rotate when file exceeds 5MB threshold
+  const checkAndRotateRealtimeLog = (): void => {
+    try {
+      if (!existsSync(logPath)) return;
+      
+      const stats = statSync(logPath);
+      const fileSizeInBytes = stats.size;
+      const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+      const ROTATION_THRESHOLD_MB = 5;
+      
+      // Rotate if file exceeds threshold
+      if (fileSizeInMB > ROTATION_THRESHOLD_MB) {
+        const content = readFileSync(logPath, "utf-8");
+        const lines = content.trim().split("\n").filter(l => l);
+        
+        // Keep last 5000 lines, archive the rest
+        if (lines.length > 5000) {
+          const keepCount = 5000;
+          const toArchive = lines.slice(0, -keepCount);
+          const toKeep = lines.slice(-keepCount);
+          
+          // Create archive directory if it doesn't exist
+          const archiveDir = join(memoryDir, "realtime-archives");
+          if (!existsSync(archiveDir)) {
+            mkdirSync(archiveDir, { recursive: true });
+          }
+          
+          // Create timestamped archive file
+          const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+          const archivePath = join(archiveDir, `realtime-${timestamp}.log`);
+          
+          // Write archived lines
+          writeFileSync(archivePath, toArchive.join("\n") + "\n");
+          
+          // Write rotated realtime.log with only recent lines
+          writeFileSync(logPath, toKeep.join("\n") + "\n");
+        }
+      }
+      
+      // Log warning if file is approaching or exceeds 5MB
+      if (fileSizeInMB > 4.5 && isPrimaryInstance()) {
+        const logEntry = {
+          timestamp: new Date().toISOString(),
+          session: currentSessionId,
+          level: "WARN",
+          message: `realtime.log size: ${fileSizeInMB.toFixed(2)}MB - approaching rotation threshold`,
+        };
+        appendFileSync(logPath, JSON.stringify(logEntry) + "\n");
+      }
+    } catch (error) {
+      // Silent fail - don't break logging if rotation check fails
+      // This ensures the logging system itself remains resilient
+    }
+  };
+
   // Real-time logger
   // Only writes to file if this is the primary instance (prevents 4x duplicate logging)
   const log = (
@@ -382,6 +439,11 @@ export const MemoryPlugin: Plugin = async (ctx) => {
         message,
         ...(data && { data }),
       };
+      
+      // Check and rotate log if necessary before appending
+      checkAndRotateRealtimeLog();
+      
+      // Append the new log entry
       appendFileSync(logPath, JSON.stringify(logEntry) + "\n");
     }
   };
