@@ -22,6 +22,9 @@ A multi-agent AI orchestration system built on OpenCode with persistent memory, 
 │   └── src/                      # Dashboard source code
 │
 ├── docs/                         # Documentation
+│   ├── LEADER_ELECTION.md        # Leader lease timeout tuning guide
+│   ├── ARCHITECTURE.ascii        # System architecture diagram
+│   ├── CODEBASE_ANALYSIS.md      # Code structure overview
 │   └── archive/                  # Old session reports and research
 │
 ├── memory/                       # Persistent state
