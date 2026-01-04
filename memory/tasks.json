@@ -3285,7 +3285,7 @@
       "priority": "medium",
       "status": "cancelled",
       "created_at": "2026-01-04T11:28:25.265Z",
-      "updated_at": "2026-01-04T15:56:43.549Z",
+      "updated_at": "2026-01-04T19:43:29.426Z",
       "claimed_at": "2026-01-04T11:28:25.265Z",
       "created_by": "unknown",
       "spawned_by": "agent-1767525736907-yoyfwn",
@@ -3296,7 +3296,8 @@
       ],
       "notes": [
         "[2026-01-04T15:56:43.549Z] Cancelled as obsolete per user priority signal umsg_1767541963707_8hvdii."
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767526105265_handle-oauth-token-expiry-grac.md"
     },
     {
       "id": "task_1767545918892_x1ci6e",
@@ -3534,9 +3535,9 @@
       "title": "Replace TODO placeholders in auto-generated spec files with real content",
       "description": "spec-generator.ts creates spec.md files with placeholder text like 'TODO: Add problem statement', 'TODO: Add implementation phases', etc. These make specs useless for documentation. Improve spec generation to extract meaningful content from task descriptions, GitHub issues, and recent commits. Focus on: (1) Extract problem statement from task description, (2) Auto-generate goals from task title/priority, (3) Break into phases from task dependencies, (4) Pull success criteria from task comments in GitHub.",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-04T19:41:47.386Z",
-      "updated_at": "2026-01-04T19:41:47.398Z",
+      "updated_at": "2026-01-04T19:44:42.853Z",
       "created_by": "unknown",
       "tags": [
         "docs",
@@ -3545,7 +3546,14 @@
       ],
       "estimated_hours": 1,
       "complexity": "moderate",
-      "spec_file": "docs/specs/task_1767555707386_replace-todo-placeholders-in-a.md"
+      "spec_file": "docs/specs/task_1767555707386_replace-todo-placeholders-in-a.md",
+      "completed_at": "2026-01-04T19:44:41.112Z",
+      "notes": [
+        "[2026-01-04T19:44:11.251Z] Successfully replaced TODO placeholders in auto-generated spec files with meaningful content. Improved spec generation functions to extract problem statements from descriptions, auto-generate goals based on priority/complexity/tags, create implementation phases adapted to complexity level, and build success criteria based on task properties. Regenerated 149 existing specs with improvements. All tests pass (206 tests). Commit: 16019de\"",
+        "[2026-01-04T19:44:41.112Z] Worker agent-1767555722640-bwhw1r completed with quality score 9/10. All 149 spec files regenerated with meaningful content instead of TODO placeholders. Tests pass 206/206.\""
+      ],
+      "quality_score": 9,
+      "quality_notes": "Auto-generating documentation from task metadata (priority, complexity, tags) can create consistently high-quality content. Key insight: structured generation scales where manual writing doesn't. Regenerating 149 specs in one operation proves bulk improvements are feasible. Template-driven generation with priority/complexity scaling ensures appropriate depth and detail for different task types."
     },
     {
       "id": "task_1767555709057_q5q225",
@@ -3566,6 +3574,6 @@
       "spec_file": "docs/specs/task_1767555709057_verify-realtimelog-rotation-is.md"
     }
   ],
-  "completed_count": 154,
-  "last_updated": "2026-01-04T19:41:49.064Z"
+  "completed_count": 156,
+  "last_updated": "2026-01-04T19:44:41.112Z"
 }

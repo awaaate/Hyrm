@@ -1314,11 +1314,15 @@ start_orchestrator() {
     # Record session start for timeout tracking
     record_session_start
     
-    log "Orchestrator started with PID: $pid (model: $use_model)" "OK"
-    update_status "starting" "Orchestrator starting" $pid
-    
-    # Wait for startup
-    sleep $STARTUP_DELAY
+     log "Orchestrator started with PID: $pid (model: $use_model)" "OK"
+     update_status "starting" "Orchestrator starting" $pid
+     
+     # Start heartbeat service to keep leader lease alive
+     # This runs independently of OpenCode session lifecycle
+     bash tools/heartbeat-service.sh "memory/.heartbeat-service.pid" start 2>&1 | tee -a "$LOGFILE" || true
+     
+     # Wait for startup
+     sleep $STARTUP_DELAY
     
     # Verify it's still running
     if is_orchestrator_running; then
@@ -1393,45 +1397,48 @@ is_orchestrator_running() {
 
 # Stop the orchestrator
 stop_orchestrator() {
-    local reason="${1:-manual_stop}"
+     local reason="${1:-manual_stop}"
 
-    log "Stopping orchestrator..."
+     log "Stopping orchestrator..."
 
-    if [[ -f "$PIDFILE" ]]; then
-        local pid
-        pid=$(cat "$PIDFILE" 2>/dev/null || echo "0")
+     # Stop heartbeat service first (it will try to read the lease)
+     bash tools/heartbeat-service.sh "memory/.heartbeat-service.pid" stop 2>&1 | tee -a "$LOGFILE" || true
 
-        if [[ -n "$pid" ]] && [[ "$pid" != "0" ]] && ps -p "$pid" > /dev/null 2>&1; then
-            record_stop_request "$reason" "$pid"
+     if [[ -f "$PIDFILE" ]]; then
+         local pid
+         pid=$(cat "$PIDFILE" 2>/dev/null || echo "0")
 
-            # Try graceful shutdown first
-            kill -TERM "$pid" 2>/dev/null || true
+         if [[ -n "$pid" ]] && [[ "$pid" != "0" ]] && ps -p "$pid" > /dev/null 2>&1; then
+             record_stop_request "$reason" "$pid"
 
-            # Wait for graceful shutdown
-            local count=0
-            while ps -p "$pid" > /dev/null 2>&1 && [[ $count -lt $GRACEFUL_SHUTDOWN_TIMEOUT ]]; do
-                sleep 1
-                count=$((count + 1))
-            done
+             # Try graceful shutdown first
+             kill -TERM "$pid" 2>/dev/null || true
 
-            # Force kill if still running
-            if ps -p "$pid" > /dev/null 2>&1; then
-                log "Force killing orchestrator..." "WARN"
-                kill -9 "$pid" 2>/dev/null || true
-            fi
+             # Wait for graceful shutdown
+             local count=0
+             while ps -p "$pid" > /dev/null 2>&1 && [[ $count -lt $GRACEFUL_SHUTDOWN_TIMEOUT ]]; do
+                 sleep 1
+                 count=$((count + 1))
+             done
 
-            local exit_code
-            exit_code=$(get_child_exit_code "$pid")
-            record_orchestrator_exit "$pid" "$exit_code" "intentional" "$reason" ""
-            reset_crash_loop
-        fi
+             # Force kill if still running
+             if ps -p "$pid" > /dev/null 2>&1; then
+                 log "Force killing orchestrator..." "WARN"
+                 kill -9 "$pid" 2>/dev/null || true
+             fi
 
-        rm -f "$PIDFILE" 2>/dev/null || true
-    fi
+             local exit_code
+             exit_code=$(get_child_exit_code "$pid")
+             record_orchestrator_exit "$pid" "$exit_code" "intentional" "$reason" ""
+             reset_crash_loop
+         fi
 
-    log "Orchestrator stopped" "OK"
-    update_status "stopped" "Orchestrator stopped ($reason)" 0
-}
+         rm -f "$PIDFILE" 2>/dev/null || true
+     fi
+
+     log "Orchestrator stopped" "OK"
+     update_status "stopped" "Orchestrator stopped ($reason)" 0
+ }
 
 # Stop the watchdog itself
 stop_watchdog() {

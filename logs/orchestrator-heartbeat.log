@@ -1,0 +1,10 @@
+[2026-01-04T19:43:30Z] [INFO] Heartbeat service starting
+[2026-01-04T19:43:30Z] [DEBUG] Updated agent agent-1767555629988-l36c6n heartbeat in registry
+[2026-01-04T19:43:30Z] [DEBUG] Refreshed leader lease for agent agent-1767555629988-l36c6n
+[2026-01-04T19:43:30Z] [INFO] Heartbeat cycle complete (agent: agent-1767555629988-l36c6n)
+[2026-01-04T19:43:30Z] [INFO] Heartbeat service complete
+[2026-01-04T19:44:30Z] [INFO] Heartbeat service starting
+[2026-01-04T19:44:30Z] [DEBUG] Updated agent agent-1767555629988-l36c6n heartbeat in registry
+[2026-01-04T19:44:30Z] [DEBUG] Refreshed leader lease for agent agent-1767555629988-l36c6n
+[2026-01-04T19:44:30Z] [INFO] Heartbeat cycle complete (agent: agent-1767555629988-l36c6n)
+[2026-01-04T19:44:30Z] [INFO] Heartbeat service complete
