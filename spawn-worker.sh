@@ -32,8 +32,38 @@ generate_worker_prompt() {
     local role="${2:-worker}"
     
     if command -v bun &> /dev/null && [[ -f "$PROMPT_GENERATOR" ]]; then
-        bun "$PROMPT_GENERATOR" worker --role "$role" "$task" 2>/dev/null
-    else
+        local prompt=""
+        local exit_code=0
+        local stderr_file
+        stderr_file=$(mktemp /tmp/spawn-worker-promptgen-stderr-XXXXXX.txt)
+
+        # Retry once to handle transient bun/FS issues
+        for attempt in 1 2; do
+            exit_code=0
+            prompt=$(bun "$PROMPT_GENERATOR" worker --role "$role" "$task" 2>"$stderr_file" || exit_code=$?)
+
+            if [[ $exit_code -eq 0 ]] && [[ -n "$prompt" ]]; then
+                rm -f "$stderr_file"
+                echo "$prompt"
+                return 0
+            fi
+
+            if [[ $exit_code -ne 0 ]]; then
+                local stderr_preview
+                stderr_preview=$(tail -n 20 "$stderr_file" 2>/dev/null | tr '\r\n' ' ' | cut -c1-2000 || true)
+                log "prompt-generator.ts failed (attempt $attempt/2, exit $exit_code). stderr: ${stderr_preview}"
+            else
+                log "prompt-generator.ts returned empty output (attempt $attempt/2)"
+            fi
+
+            sleep 0.2
+        done
+
+        rm -f "$stderr_file"
+    fi
+
+    # Fallback to simple prompt if bun or generator not available
+    {
         # Fallback to simple prompt if bun or generator not available
         cat <<EOF
 You are a ${role} agent.
@@ -51,7 +81,7 @@ ${task}
 - Make clean, minimal changes
 - Report completion via agent_send
 EOF
-    fi
+    }
 }
 
 # Get task info from tasks.json

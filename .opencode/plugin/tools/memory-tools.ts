@@ -45,17 +45,35 @@ Use this at session start to understand context.`,
           )
           .optional(),
       },
-      async execute({ include_metrics = true }) {
+        async execute({ include_metrics = true }) {
         try {
           const ctx = getContext();
-          const state = existsSync(ctx.statePath)
-              ? readJson(ctx.statePath, {})
-            : { session_count: 0, status: "unknown", active_tasks: [] };
 
-          const metrics =
-            include_metrics && existsSync(ctx.metricsPath)
-              ? readJson(ctx.metricsPath, {})
-              : null;
+          let state: any;
+          if (existsSync(ctx.statePath)) {
+            try {
+              state = JSON.parse(readFileSync(ctx.statePath, "utf-8"));
+            } catch (error) {
+              return JSON.stringify({
+                success: false,
+                error: `Failed to parse state.json: ${String(error)}`,
+              });
+            }
+          } else {
+            state = { session_count: 0, status: "unknown", active_tasks: [] };
+          }
+
+          let metrics: any = null;
+          if (include_metrics && existsSync(ctx.metricsPath)) {
+            try {
+              metrics = JSON.parse(readFileSync(ctx.metricsPath, "utf-8"));
+            } catch (error) {
+              return JSON.stringify({
+                success: false,
+                error: `Failed to parse metrics.json: ${String(error)}`,
+              });
+            }
+          }
 
           return JSON.stringify({
             success: true,

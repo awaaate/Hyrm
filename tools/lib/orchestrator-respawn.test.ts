@@ -3,9 +3,11 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 test("orchestrator respawn uses Bun.spawn with ignore stdio", () => {
-  const repoRoot = join(import.meta.dir, "..", "..", "..");
-  const pluginIndexPath = join(repoRoot, ".opencode", "plugin", "index.ts");
+  // bun test runs with CWD at repo root; using it is more reliable than import.meta.dir
+  // (which can vary depending on bundling/transpilation).
+  const pluginIndexPath = join(process.cwd(), ".opencode", "plugin", "index.ts");
   const source = readFileSync(pluginIndexPath, "utf-8");
+
 
   // Regression guard: Bun.spawn rejects Node-style `stdio: "ignore"`.
   expect(source).not.toContain('stdio: "ignore"');

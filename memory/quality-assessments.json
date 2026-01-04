@@ -4549,11 +4549,87 @@
         "auto_generated": true,
         "heuristic_base_score": 8
       }
+    },
+    {
+      "task_id": "task_1767548025724_8b49mn",
+      "task_title": "Fix watchdog prompt-generator failures and fallback behavior",
+      "assessed_at": "2026-01-04T17:47:33.887Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.9,
+      "lessons_learned": "When generating prompts from scripts, always preserve stderr and exit codes; silent redirects make watchdogs appear flaky and hide actionable failures.",
+      "metadata": {
+        "duration_minutes": 14
+      }
+    },
+    {
+      "task_id": "task_1767548025490_5nmykl",
+      "task_title": "Fix plugin ReferenceError breaking session.created events",
+      "assessed_at": "2026-01-04T17:47:32.813Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8,
+      "lessons_learned": "Primary-election gating can drop early session events; buffer session.created until election settles, and add fallback boot when session.id appears in other events.",
+      "metadata": {
+        "duration_minutes": 13
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 118,
-    "avg_overall_score": 8.057627118644064
+    "total_assessed": 120,
+    "avg_overall_score": 8.055833333333329
   },
-  "last_updated": "2026-01-04T10:32:32.586Z"
+  "last_updated": "2026-01-04T17:47:33.888Z"
 }

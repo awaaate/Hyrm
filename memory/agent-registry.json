@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "agents": [
+    {
+      "agent_id": "agent-1767548076931-m606mu",
+      "session_id": "session-1767548076931",
+      "started_at": "2026-01-04T17:34:36.932Z",
+      "last_heartbeat": "2026-01-04T19:15:37.443Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 444766
+    },
+    {
+      "agent_id": "agent-uGaYIuhw",
+      "session_id": "ses_475a2eddcffevG7FepuGaYIuhw",
+      "started_at": "2026-01-04T18:55:14.028Z",
+      "last_heartbeat": "2026-01-04T18:56:14.041Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 468104
+    }
+  ],
+  "last_updated": "2026-01-04T19:15:37.443Z",
+  "lock_version": 23
+}

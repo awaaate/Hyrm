@@ -47,6 +47,12 @@ import { createGitTools } from "./tools/git-tools";
 const LOCK_STALE_THRESHOLD = 30000; // 30 seconds
 const AGENT_STALE_THRESHOLD = 2 * 60 * 1000; // 2 minutes
 
+// Some OpenCode event hooks can fire before plugin primary election stabilizes.
+// Use module-level state for cross-instance buffering + log throttling.
+let bufferedSessionCreatedEvent: any | null = null;
+const PLUGIN_ERROR_LOG_COOLDOWN_MS = 30_000;
+const pluginErrorLogState = new Map<string, number>();
+
 // NOTE: INSTANCE_ID is now generated INSIDE the plugin function (see line ~85)
 // to ensure each plugin instance gets a unique ID. Before this fix, the ID was
 // generated here at module scope, which meant all 4 parallel plugin instances
@@ -97,7 +103,9 @@ export const MemoryPlugin: Plugin = async (ctx) => {
   let tokenCount = 0;
   let toolCallCount = 0;
   let sessionBootRan = false;
+  let bufferedSessionCreatedEvent: any | null = null;
   let coordinator: MultiAgentCoordinator | null = null;
+
 
   // Tool timing state - maps callID to start time and metadata
   const toolTimingState = new Map<
@@ -232,6 +240,24 @@ export const MemoryPlugin: Plugin = async (ctx) => {
     }
 
     // Time to elect - do it once and cache
+    isPrimary = electPrimary();
+    primaryElectionDone = true;
+    return isPrimary;
+  };
+
+  // Async variant: waits until election delay has elapsed.
+  // This prevents missing the very first `session.created` event.
+  const isPrimaryInstanceAsync = async (): Promise<boolean> => {
+    if (primaryElectionDone) {
+      return isPrimary;
+    }
+
+    const elapsed = Date.now() - instanceStartTime;
+    const remaining = ELECTION_DELAY_MS - elapsed;
+    if (remaining > 0) {
+      await new Promise((resolve) => setTimeout(resolve, remaining));
+    }
+
     isPrimary = electPrimary();
     primaryElectionDone = true;
     return isPrimary;
@@ -951,12 +977,50 @@ REMINDER: oldString and newString cannot be identical. Check your edit parameter
     // Main event handler
     event: async ({ event }) => {
       try {
+        // IMPORTANT: session.created can arrive before primary election finishes.
+        // Buffer it so the eventual primary still runs the boot sequence.
+        if (event.type === "session.created" && !sessionBootRan) {
+          if (!isPrimaryInstance()) {
+            bufferedSessionCreatedEvent = event;
+            return;
+          }
+          await handleSessionCreated(event);
+        }
+
         if (!isPrimaryInstance()) return;
         refreshLock();
 
-        // SESSION START
-        if (event.type === "session.created" && !sessionBootRan) {
-          await handleSessionCreated(event);
+        // If we became primary after buffering, run the boot sequence now.
+        if (bufferedSessionCreatedEvent && !sessionBootRan) {
+          const buffered = bufferedSessionCreatedEvent;
+          bufferedSessionCreatedEvent = null;
+          await handleSessionCreated(buffered);
+        }
+
+        // Fallback: OpenCode sometimes doesn't emit `session.created` for spawned sessions.
+        // If we observe a session ID via status/idle/error events and haven't run the
+        // boot sequence for it yet, treat it as a new session.
+        const observedSessionId: string | null =
+          event.properties?.sessionID || event.properties?.info?.id || null;
+
+        if (
+          observedSessionId &&
+          ["session.status", "session.idle", "session.error", "session.end"].includes(
+            event.type
+          ) &&
+          (!sessionBootRan || !currentSessionId || currentSessionId !== observedSessionId)
+        ) {
+          log("WARN", "Missing session.created; booting from fallback event", {
+            event_type: event.type,
+            observed_session_id: observedSessionId,
+            current_session_id: currentSessionId,
+          });
+
+          await handleSessionCreated({
+            properties: {
+              info: { id: observedSessionId },
+            },
+          });
         }
 
         // SESSION IDLE

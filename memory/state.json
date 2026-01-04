@@ -1,7 +1,7 @@
 {
   "version": "2.0",
-  "session_count": 177,
-  "status": "Session 178 orchestrator starting. All Session 177 tasks completed successfully. System in clean state: 0 pending tasks, 0 active agents, 0 user messages. Monitoring for new work.",
+  "session_count": 180,
+  "status": "Session 178 - Investigating session counter bug: session.created events not firing since Jan 3rd. Plugin hook never called, session_count stuck at 177.",
   "active_tasks": [
     "Spawned cli-leader-monitor-worker for task_1767423270940_xmgxle to integrate leader election state into CLI dashboard/monitor.",
     "Created task_1767423420053_426y6d to backfill quality assessments for unassessed tasks; spawned quality-worker via opencode run to execute it.",
@@ -15,9 +15,9 @@
     "Session 177: Session 182: Completed 4 code quality tasks - removed deprecated code, fixed empty catch blocks, migrated git-integration to readJson, improved type safety in plugin tools",
     "Session 177: Session 182: Completed 3 code quality tasks - removed deprecated code (1400 lines), fixed empty catch blocks, migrated git-integration to readJson utility"
   ],
-  "last_session": "2026-01-03T10:07:32.722Z",
-  "current_session_id": "ses_47cac6692fferGPih4po6Yp2Z5",
-  "last_updated": "2026-01-04T16:01:55.145Z",
+  "last_session": "2026-01-04T18:55:14.025Z",
+  "current_session_id": "ses_475a2eddcffevG7FepuGaYIuhw",
+  "last_updated": "2026-01-04T16:58:26.744Z",
   "sessions_metadata": {
     "ses_489c3933bffeL5S1ti3unQcfDs": {
       "tokens": 50000,

@@ -42,6 +42,18 @@ LAST_EXIT_FILE="memory/.orchestrator-last-exit.json"
 LAST_FAILURE_FILE="memory/.orchestrator-last-failure.json"
 CRASH_LOOP_FILE="memory/.orchestrator-crash-loop.json"
 FAILURE_LOG_DIR="logs/orchestrator-failures"
+CURRENT_STDERR_FILE="memory/.orchestrator-current-stderr.json"
+ORCHESTRATOR_STDERR_STATE_FILE="memory/.orchestrator-stderr.json"
+
+# Startup diagnostics
+STDERR_TAIL_LINES=80          # how many stderr lines to surface on startup failure
+
+# Restart jitter (prevents thundering-herd restart storms)
+RESTART_JITTER_ENABLED=true   # add small jitter on restart attempts
+RESTART_JITTER_MAX_SECONDS=5  # max jitter seconds to add
+
+# Exponential backoff jitter (applies when backoff enabled)
+RESTART_BACKOFF_JITTER_PCT=20 # +/- jitter percentage for exponential backoff
 
 # Leader election configuration
 LEADER_TTL_MS=180000           # Default leader TTL: 3 minutes (matches plugin)
@@ -119,12 +131,28 @@ HEALTH_CHECK_TIMEOUT=10     # seconds to wait for health check response
 GRACEFUL_SHUTDOWN_TIMEOUT=10 # seconds to wait for graceful shutdown
 
 # ==============================================================================
+# STARTUP DIAGNOSTICS
+# ==============================================================================
+# How many orchestrator stderr lines to surface on startup failure
+STDERR_TAIL_LINES=80
+
+# ==============================================================================
 # RESTART LIMITS
 # ==============================================================================
 MAX_RESTARTS=50             # max restarts per hour (higher since sessions are short)
 RESTART_BACKOFF_ENABLED=false # DISABLED - we want short orchestration sessions
 RESTART_BACKOFF_BASE=5      # minimal backoff time in seconds
 RESTART_BACKOFF_MAX=30      # max backoff time in seconds
+
+# ==============================================================================
+# RESTART JITTER
+# ==============================================================================
+# Adds small random delays on restarts to avoid thundering-herd storms
+RESTART_JITTER_ENABLED=true
+RESTART_JITTER_MAX_SECONDS=5
+
+# Applies +/- jitter to exponential backoff when backoff is enabled
+RESTART_BACKOFF_JITTER_PCT=20
 
 # ==============================================================================
 # TOKEN LIMITS (Per Session)
@@ -178,7 +206,7 @@ CONFIGEOF
 # ==============================================================================
 
 # Ensure directories exist
-mkdir -p logs memory
+mkdir -p logs memory "$FAILURE_LOG_DIR"
 
 # Load config after defining defaults
 load_config
@@ -452,6 +480,217 @@ get_leader_info() {
 }
 
 # ==============================================================================
+# ORCHESTRATOR DIAGNOSTICS
+# ==============================================================================
+
+# Record that a stop was requested (intentional shutdown/restart)
+record_stop_request() {
+    local reason="${1:-unspecified}"
+    local pid="${2:-0}"
+
+    jq -n \
+        --arg requested_at "$(date -Iseconds)" \
+        --arg reason "$reason" \
+        --argjson pid "${pid:-0}" \
+        --argjson watchdog_pid "$$" \
+        '{requested_at:$requested_at, reason:$reason, pid:$pid, watchdog_pid:$watchdog_pid}' \
+        > "$STOP_REQUEST_FILE" 2>/dev/null || true
+}
+
+clear_stop_request() {
+    rm -f "$STOP_REQUEST_FILE" 2>/dev/null || true
+}
+
+# Capture exit details for the last orchestrator process
+record_orchestrator_exit() {
+    local pid="${1:-0}"
+    local exit_code="${2:-0}"
+    local kind="${3:-unknown}"           # intentional | crash | startup_failed | unknown
+    local reason="${4:-}"                # human-readable reason
+    local extra_file="${5:-}"            # optional path (e.g., failure log)
+
+    local stop_requested="false"
+    local stop_reason=""
+    local stop_requested_at=""
+
+    if [[ -f "$STOP_REQUEST_FILE" ]]; then
+        local stop_pid
+        stop_pid=$(jq -r '.pid // 0' "$STOP_REQUEST_FILE" 2>/dev/null || echo "0")
+        if [[ "$stop_pid" == "$pid" ]]; then
+            stop_requested="true"
+            stop_reason=$(jq -r '.reason // ""' "$STOP_REQUEST_FILE" 2>/dev/null || echo "")
+            stop_requested_at=$(jq -r '.requested_at // ""' "$STOP_REQUEST_FILE" 2>/dev/null || echo "")
+        fi
+    fi
+
+    jq -n \
+        --arg recorded_at "$(date -Iseconds)" \
+        --arg kind "$kind" \
+        --arg reason "$reason" \
+        --arg extra_file "$extra_file" \
+        --arg stop_requested "$stop_requested" \
+        --arg stop_reason "$stop_reason" \
+        --arg stop_requested_at "$stop_requested_at" \
+        --argjson pid "${pid:-0}" \
+        --argjson exit_code "${exit_code:-0}" \
+        '{recorded_at:$recorded_at, pid:$pid, exit_code:$exit_code, kind:$kind, reason:$reason, extra_file:$extra_file, stop_requested:($stop_requested=="true"), stop_reason:$stop_reason, stop_requested_at:$stop_requested_at}' \
+        > "$LAST_EXIT_FILE" 2>/dev/null || true
+
+    # Stop request is single-use once we record an exit for that pid
+    if [[ "$stop_requested" == "true" ]]; then
+        clear_stop_request
+    fi
+}
+
+# Track consecutive crash/startup failures to avoid tight loops
+record_crash_loop_event() {
+    local kind="${1:-unknown}"
+    local window_seconds=300
+
+    local now_epoch
+    now_epoch=$(date +%s)
+
+    local count=0
+    local first_epoch=$now_epoch
+
+    if [[ -f "$CRASH_LOOP_FILE" ]]; then
+        local stored_first stored_count
+        stored_first=$(jq -r '.first_epoch // 0' "$CRASH_LOOP_FILE" 2>/dev/null || echo "0")
+        stored_count=$(jq -r '.count // 0' "$CRASH_LOOP_FILE" 2>/dev/null || echo "0")
+
+        if [[ "$stored_first" -gt 0 ]] && [[ $((now_epoch - stored_first)) -lt $window_seconds ]]; then
+            first_epoch=$stored_first
+            count=$stored_count
+        fi
+    fi
+
+    count=$((count + 1))
+
+    jq -n \
+        --arg updated_at "$(date -Iseconds)" \
+        --arg kind "$kind" \
+        --argjson first_epoch "$first_epoch" \
+        --argjson last_epoch "$now_epoch" \
+        --argjson count "$count" \
+        '{updated_at:$updated_at, kind:$kind, first_epoch:$first_epoch, last_epoch:$last_epoch, count:$count}' \
+        > "$CRASH_LOOP_FILE" 2>/dev/null || true
+}
+
+reset_crash_loop() {
+    rm -f "$CRASH_LOOP_FILE" 2>/dev/null || true
+}
+
+maybe_apply_crash_loop_backoff() {
+    if [[ ! -f "$CRASH_LOOP_FILE" ]]; then
+        return 0
+    fi
+
+    local count last_epoch
+    count=$(jq -r '.count // 0' "$CRASH_LOOP_FILE" 2>/dev/null || echo "0")
+    last_epoch=$(jq -r '.last_epoch // 0' "$CRASH_LOOP_FILE" 2>/dev/null || echo "0")
+
+    local now_epoch
+    now_epoch=$(date +%s)
+
+    # Only back off if failures are recent and consecutive
+    if [[ "$count" -ge 3 ]] && [[ "$last_epoch" -gt 0 ]] && [[ $((now_epoch - last_epoch)) -lt 120 ]]; then
+        local delay=$((5 * count))
+        if [[ $delay -gt 60 ]]; then
+            delay=60
+        fi
+        log "Crash loop protection: ${count} recent failures. Sleeping ${delay}s before restart." "WARN"
+        update_status "crash_loop" "Crash loop protection: ${count} recent failures" 0
+        sleep "$delay"
+    fi
+}
+
+get_child_exit_code() {
+    local pid="${1:-0}"
+
+    if [[ -z "$pid" ]] || [[ "$pid" == "0" ]]; then
+        echo "0"
+        return
+    fi
+
+    # wait returns the child exit code, but can be non-zero; protect against set -e.
+    local rc=0
+    set +e
+    wait "$pid" 2>/dev/null
+    rc=$?
+    set -e
+
+    echo "$rc"
+}
+
+persist_startup_failure() {
+    local pid="${1:-0}"
+    local exit_code="${2:-0}"
+    local restart_count="${3:-0}"
+    local model="${4:-}"
+    local stderr_log="${5:-}"
+
+    local ts
+    ts=$(date -u +%Y%m%dT%H%M%SZ)
+
+    local failure_snippet="${FAILURE_LOG_DIR}/startup-failure-${ts}-pid${pid}.tail.log"
+    tail -200 "$STARTUP_LOGFILE" > "$failure_snippet" 2>/dev/null || true
+
+    local stderr_tail_file=""
+    if [[ -n "$stderr_log" ]] && [[ -f "$stderr_log" ]]; then
+        stderr_tail_file="${FAILURE_LOG_DIR}/startup-stderr-${ts}-pid${pid}.tail.log"
+        tail -n "$STDERR_TAIL_LINES" "$stderr_log" > "$stderr_tail_file" 2>/dev/null || true
+    fi
+
+    jq -n \
+        --arg recorded_at "$(date -Iseconds)" \
+        --arg kind "startup_failed" \
+        --arg model "$model" \
+        --arg startup_log "$STARTUP_LOGFILE" \
+        --arg failure_snippet "$failure_snippet" \
+        --arg stderr_log "$stderr_log" \
+        --arg stderr_tail_file "$stderr_tail_file" \
+        --argjson pid "${pid:-0}" \
+        --argjson exit_code "${exit_code:-0}" \
+        --argjson restart_count "${restart_count:-0}" \
+        '{recorded_at:$recorded_at, kind:$kind, pid:$pid, exit_code:$exit_code, restart_count:$restart_count, model:$model, startup_log:$startup_log, failure_snippet:$failure_snippet, stderr_log:$stderr_log, stderr_tail_file:$stderr_tail_file}' \
+        > "$LAST_FAILURE_FILE" 2>/dev/null || true
+
+    record_orchestrator_exit "$pid" "$exit_code" "startup_failed" "Startup failed" "$failure_snippet"
+    record_crash_loop_event "startup_failed"
+}
+
+persist_crash_failure() {
+    local pid="${1:-0}"
+    local exit_code="${2:-0}"
+    local reason="${3:-crash}"
+
+    local ts
+    ts=$(date -u +%Y%m%dT%H%M%SZ)
+
+    local failure_snippet="${FAILURE_LOG_DIR}/crash-${ts}-pid${pid}.tail.log"
+    tail -200 "$STARTUP_LOGFILE" > "$failure_snippet" 2>/dev/null || true
+
+    # Best-effort: point at the most recent captured stderr log
+    local latest_stderr
+    latest_stderr=$(ls -t "${FAILURE_LOG_DIR}"/orchestrator-stderr-*.log 2>/dev/null | head -1 || true)
+
+    jq -n \
+        --arg recorded_at "$(date -Iseconds)" \
+        --arg kind "crash" \
+        --arg reason "$reason" \
+        --arg startup_log "$STARTUP_LOGFILE" \
+        --arg failure_snippet "$failure_snippet" \
+        --arg stderr_log "$latest_stderr" \
+        --argjson pid "${pid:-0}" \
+        --argjson exit_code "${exit_code:-0}" \
+        '{recorded_at:$recorded_at, kind:$kind, pid:$pid, exit_code:$exit_code, reason:$reason, startup_log:$startup_log, failure_snippet:$failure_snippet, stderr_log:$stderr_log}' \
+        > "$LAST_FAILURE_FILE" 2>/dev/null || true
+
+    record_orchestrator_exit "$pid" "$exit_code" "crash" "$reason" "$failure_snippet"
+    record_crash_loop_event "crash"
+}
+
+# ==============================================================================
 # RATE LIMIT DETECTION
 # ==============================================================================
 
@@ -691,20 +930,85 @@ EOF
 # Calculate backoff time with exponential increase
 calculate_backoff() {
     local restart_count="$1"
-    
+
     if [[ "$RESTART_BACKOFF_ENABLED" != "true" ]]; then
         echo "0"
         return
     fi
-    
+
     # Exponential backoff: base * 2^(count-1), capped at max
     local backoff=$((RESTART_BACKOFF_BASE * (1 << (restart_count - 1))))
-    
+
     if [[ $backoff -gt $RESTART_BACKOFF_MAX ]]; then
         backoff=$RESTART_BACKOFF_MAX
     fi
-    
+
+    # Apply +/- jitter to avoid synchronized restarts
+    if [[ "${RESTART_BACKOFF_JITTER_PCT:-0}" -gt 0 ]]; then
+        local delta=$((backoff * RESTART_BACKOFF_JITTER_PCT / 100))
+        if [[ $delta -gt 0 ]]; then
+            local rand=$((RANDOM % (2 * delta + 1)))
+            local offset=$((rand - delta))
+            backoff=$((backoff + offset))
+            if [[ $backoff -lt 0 ]]; then
+                backoff=0
+            fi
+        fi
+    fi
+
     echo "$backoff"
+}
+
+maybe_sleep_restart_jitter() {
+    local restart_count="${1:-1}"
+
+    if [[ "${RESTART_JITTER_ENABLED:-false}" != "true" ]]; then
+        return 0
+    fi
+
+    local max="${RESTART_JITTER_MAX_SECONDS:-0}"
+    if [[ -z "$max" ]] || [[ "$max" -le 0 ]]; then
+        return 0
+    fi
+
+    # Only jitter on restarts (not the very first start)
+    if [[ "$restart_count" -le 1 ]]; then
+        return 0
+    fi
+
+    local jitter=$((RANDOM % (max + 1)))
+    if [[ "$jitter" -gt 0 ]]; then
+        log "Applying restart jitter: ${jitter}s (restart #$restart_count)" "INFO"
+        sleep "$jitter"
+    fi
+}
+
+log_stderr_tail() {
+    local stderr_log="$1"
+    local lines="${2:-50}"
+
+    if [[ -z "$stderr_log" ]]; then
+        return 0
+    fi
+
+    if [[ ! -f "$stderr_log" ]]; then
+        log "stderr log missing: $stderr_log" "ERROR"
+        return 0
+    fi
+
+    log "---- Orchestrator stderr tail (last ${lines} lines): $stderr_log ----" "ERROR"
+
+    local count=0
+    while IFS= read -r line; do
+        log "stderr: $line" "ERROR"
+        count=$((count + 1))
+    done < <(tail -n "$lines" "$stderr_log" 2>/dev/null || true)
+
+    if [[ $count -eq 0 ]]; then
+        log "stderr: <empty>" "ERROR"
+    fi
+
+    log "---- end stderr tail ----" "ERROR"
 }
 
 # ==============================================================================
@@ -798,20 +1102,42 @@ PROMPT_GENERATOR="tools/lib/prompt-generator.ts"
 generate_prompt() {
     # Use the TypeScript prompt generator (centralized prompts)
     if command -v bun &> /dev/null && [[ -f "$PROMPT_GENERATOR" ]]; then
-        local ts_prompt
-        ts_prompt=$(bun "$PROMPT_GENERATOR" orchestrator 2>/dev/null || true)
-        if [[ -n "$ts_prompt" ]] && [[ "$ts_prompt" != "" ]]; then
-            echo "$ts_prompt"
-            return 0
-        fi
+        local ts_prompt=""
+        local exit_code=0
+        local stderr_file
+        stderr_file=$(mktemp /tmp/watchdog-promptgen-stderr-XXXXXX.txt)
+
+        # Retry once to handle transient bun/FS issues
+        for attempt in 1 2; do
+            exit_code=0
+            ts_prompt=$(bun "$PROMPT_GENERATOR" orchestrator 2>"$stderr_file" || exit_code=$?)
+
+            if [[ $exit_code -eq 0 ]] && [[ -n "$ts_prompt" ]]; then
+                rm -f "$stderr_file"
+                echo "$ts_prompt"
+                return 0
+            fi
+
+            if [[ $exit_code -ne 0 ]]; then
+                local stderr_preview
+                stderr_preview=$(tail -n 50 "$stderr_file" 2>/dev/null || true)
+                log "prompt-generator.ts failed (attempt $attempt/2, exit $exit_code). stderr: ${stderr_preview}" "WARN"
+            else
+                log "prompt-generator.ts returned empty output (attempt $attempt/2)" "WARN"
+            fi
+
+            sleep 0.2
+        done
+
+        rm -f "$stderr_file"
     fi
-    
+
     # Fallback: minimal prompt if generator fails
     log "Warning: prompt-generator.ts failed, using fallback prompt" "WARN"
-    
+
     local session_count=$(get_session_count)
     local pending_tasks=$(get_pending_tasks)
-    
+
     cat << EOF
 You are the ORCHESTRATOR - the persistent coordinator of a multi-agent AI system.
 
@@ -906,6 +1232,9 @@ start_orchestrator() {
     fi
     
     log "Starting orchestrator agent (restart #$restart_count this hour)..."
+
+    # Crash-loop protection for frequent startup failures/crashes
+    maybe_apply_crash_loop_backoff
     
     # Initialize token tracking for new session
     init_token_tracking
@@ -936,11 +1265,27 @@ start_orchestrator() {
         use_model="$MODEL_FALLBACK"
     fi
     
+    local attempt_ts
+    attempt_ts=$(date -u +%Y%m%dT%H%M%SZ)
+    local stderr_log="${FAILURE_LOG_DIR}/orchestrator-stderr-${attempt_ts}.log"
+
     # Start opencode in background
-    opencode run --model "$use_model" "$prompt" >> "$STARTUP_LOGFILE" 2>&1 &
-    
+    # - stdout goes to startup log
+    # - stderr is captured separately for actionable failures
+    echo "[$(date -Iseconds)] stderr log: $stderr_log" >> "$STARTUP_LOGFILE"
+    opencode run --model "$use_model" "$prompt" 1>>"$STARTUP_LOGFILE" 2>>"$stderr_log" &
+
     local pid=$!
     echo $pid > "$PIDFILE"
+
+    # Track stderr log for this pid
+    jq -n \
+        --arg started_at "$(date -Iseconds)" \
+        --arg model "$use_model" \
+        --arg stderr_log "$stderr_log" \
+        --argjson pid "$pid" \
+        '{started_at:$started_at, pid:$pid, model:$model, stderr_log:$stderr_log}' \
+        > "$CURRENT_STDERR_FILE" 2>/dev/null || true
     
     # Record session start for timeout tracking
     record_session_start
@@ -955,12 +1300,45 @@ start_orchestrator() {
     if is_orchestrator_running; then
         log "Orchestrator confirmed running" "OK"
         update_status "running" "Orchestrator healthy" $pid
+        reset_crash_loop
         return 0
     else
-        log "Orchestrator failed to start!" "ERROR"
-        update_status "failed" "Startup failed" 0
+        # Capture exit code if we can (wait works only for child pids)
+        local exit_code
+        exit_code=$(get_child_exit_code "$pid")
+
+        log "Orchestrator failed to start! (pid: $pid, exit: $exit_code, stderr: $stderr_log)" "ERROR"
+        persist_startup_failure "$pid" "$exit_code" "$restart_count" "$use_model" "$stderr_log"
+
+        rm -f "$PIDFILE" 2>/dev/null || true
+        update_status "failed" "Startup failed (exit: $exit_code). See $LAST_FAILURE_FILE" 0
         return 1
     fi
+
+    # Startup failed: try to capture an exit code and persist actionable context.
+    local exit_code="unknown"
+    if [[ -f "$PIDFILE" ]]; then
+        local start_pid
+        start_pid=$(cat "$PIDFILE" 2>/dev/null || echo "0")
+        if [[ "$start_pid" != "0" ]]; then
+            if wait "$start_pid" 2>/dev/null; then
+                exit_code="$?"
+            else
+                exit_code="$?"
+            fi
+        fi
+    fi
+
+    local stderr_tail
+    stderr_tail=$(tail -50 "$stderr_log" 2>/dev/null || true)
+
+    log "Orchestrator failed to start (pid=$pid, exit=$exit_code). stderr: $stderr_log" "ERROR"
+
+    record_orchestrator_exit "$pid" "$exit_code" "startup_failed" "startup check failed" "$stderr_log"
+    record_startup_failure "$pid" "$exit_code" "$use_model" "$stderr_log" "$stderr_tail"
+
+    update_status "failed" "Startup failed (pid=$pid, exit=$exit_code). See $stderr_log" 0
+    return 1
 }
 
 # Check if orchestrator is running
@@ -984,34 +1362,44 @@ is_orchestrator_running() {
 
 # Stop the orchestrator
 stop_orchestrator() {
+    local reason="${1:-manual_stop}"
+
     log "Stopping orchestrator..."
-    
+
     if [[ -f "$PIDFILE" ]]; then
-        local pid=$(cat "$PIDFILE")
-        
-        if ps -p "$pid" > /dev/null 2>&1; then
+        local pid
+        pid=$(cat "$PIDFILE" 2>/dev/null || echo "0")
+
+        if [[ -n "$pid" ]] && [[ "$pid" != "0" ]] && ps -p "$pid" > /dev/null 2>&1; then
+            record_stop_request "$reason" "$pid"
+
             # Try graceful shutdown first
             kill -TERM "$pid" 2>/dev/null || true
-            
+
             # Wait for graceful shutdown
             local count=0
             while ps -p "$pid" > /dev/null 2>&1 && [[ $count -lt $GRACEFUL_SHUTDOWN_TIMEOUT ]]; do
                 sleep 1
                 count=$((count + 1))
             done
-            
+
             # Force kill if still running
             if ps -p "$pid" > /dev/null 2>&1; then
                 log "Force killing orchestrator..." "WARN"
                 kill -9 "$pid" 2>/dev/null || true
             fi
+
+            local exit_code
+            exit_code=$(get_child_exit_code "$pid")
+            record_orchestrator_exit "$pid" "$exit_code" "intentional" "$reason" ""
+            reset_crash_loop
         fi
-        
-        rm -f "$PIDFILE"
+
+        rm -f "$PIDFILE" 2>/dev/null || true
     fi
-    
+
     log "Orchestrator stopped" "OK"
-    update_status "stopped" "Orchestrator stopped" 0
+    update_status "stopped" "Orchestrator stopped ($reason)" 0
 }
 
 # Stop the watchdog itself
@@ -1019,7 +1407,7 @@ stop_watchdog() {
     log "Stopping watchdog..."
     
     # Stop orchestrator first
-    stop_orchestrator
+    stop_orchestrator "watchdog_shutdown"
     
     # Remove watchdog PID file
     rm -f "$WATCHDOG_PIDFILE"
@@ -1048,7 +1436,15 @@ show_status() {
     if is_orchestrator_running; then
         echo -e "Orchestrator: ${GREEN}Running${NC} (PID: $(cat "$PIDFILE"))"
     else
-        echo -e "Orchestrator: ${RED}Not running${NC}"
+        local exit_code=0
+        wait "$pid" 2>/dev/null
+        exit_code=$?
+
+        log "Orchestrator failed to start! (pid=$pid, exit=$exit_code, stderr=$stderr_log)" "ERROR"
+        persist_startup_failure "$pid" "$exit_code" "$restart_count" "$use_model" "$stderr_log"
+        rm -f "$CURRENT_STDERR_FILE" 2>/dev/null || true
+        update_status "failed" "Startup failed (exit=$exit_code). See $LAST_FAILURE_FILE" 0
+        return 1
     fi
     
     # Configuration status
@@ -1172,6 +1568,18 @@ run_watchdog() {
     
     # Initial start - but ONLY if no healthy leader exists
     if ! is_orchestrator_running; then
+        # If we previously had a PID, record an unexpected exit for diagnostics
+        if [[ -f "$PIDFILE" ]]; then
+            local last_pid
+            last_pid=$(cat "$PIDFILE" 2>/dev/null || echo "0")
+            if [[ -n "$last_pid" ]] && [[ "$last_pid" != "0" ]]; then
+                local last_exit
+                last_exit=$(get_child_exit_code "$last_pid")
+                persist_crash_failure "$last_pid" "$last_exit" "initial_start: not running"
+                rm -f "$PIDFILE" 2>/dev/null || true
+            fi
+        fi
+
         # Check if a healthy leader already exists before spawning
         if check_leader_lease; then
             local current_leader
@@ -1208,7 +1616,7 @@ run_watchdog() {
             # Stop current orchestrator if running (it's probably stuck in retry loop)
             if is_orchestrator_running; then
                 log "Stopping orchestrator stuck in rate limit retry loop" "WARN"
-                stop_orchestrator
+                stop_orchestrator "rate_limit"
             fi
             wait_for_rate_limit
             start_orchestrator || true
@@ -1219,6 +1627,18 @@ run_watchdog() {
         
         # Check if orchestrator is running
         if ! is_orchestrator_running; then
+            # If we had a tracked PID, persist crash details before deciding what to do.
+            if [[ -f "$PIDFILE" ]]; then
+                local last_pid
+                last_pid=$(cat "$PIDFILE" 2>/dev/null || echo "0")
+                if [[ -n "$last_pid" ]] && [[ "$last_pid" != "0" ]]; then
+                    local last_exit
+                    last_exit=$(get_child_exit_code "$last_pid")
+                    persist_crash_failure "$last_pid" "$last_exit" "health_check: not running"
+                    rm -f "$PIDFILE" 2>/dev/null || true
+                fi
+            fi
+
             # Before restarting, check if a healthy leader exists
             # Another orchestrator might be running that we didn't start (e.g., from another watchdog instance)
             if check_leader_lease; then
@@ -1241,7 +1661,7 @@ run_watchdog() {
             token_check_counter=0
             if ! check_token_limits; then
                 log "Restarting due to token limit" "WARN"
-                stop_orchestrator
+                stop_orchestrator "token_limit"
                 start_orchestrator || true
                 continue
             fi
@@ -1252,7 +1672,7 @@ run_watchdog() {
             memory_check_counter=0
             if ! check_memory_usage; then
                 log "Restarting due to memory limit" "WARN"
-                stop_orchestrator
+                stop_orchestrator "memory_limit"
                 start_orchestrator || true
                 continue
             fi
@@ -1261,7 +1681,7 @@ run_watchdog() {
         # Session timeout check
         if ! check_session_timeout; then
             log "Restarting due to session timeout" "WARN"
-            stop_orchestrator
+            stop_orchestrator "session_timeout"
             start_orchestrator || true
             continue
         fi
@@ -1287,7 +1707,7 @@ case "${1:-run}" in
     stop)
         if [[ -f "$WATCHDOG_PIDFILE" ]]; then
             kill $(cat "$WATCHDOG_PIDFILE") 2>/dev/null || true
-            stop_orchestrator
+            stop_orchestrator "watchdog_stop"
             rm -f "$WATCHDOG_PIDFILE"
             echo "Watchdog stopped"
         else
@@ -1295,8 +1715,8 @@ case "${1:-run}" in
         fi
         ;;
     restart)
-        stop_orchestrator
-        start_orchestrator
+    stop_orchestrator "manual_restart"
+    start_orchestrator
         ;;
     status)
         show_status

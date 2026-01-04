@@ -39,13 +39,19 @@ let promptsConfig: any = null;
 
 function loadPromptsConfig(): any {
   if (promptsConfig) return promptsConfig;
-  
+
   if (!existsSync(PROMPTS_PATH)) {
     throw new Error(`Prompts configuration not found at ${PROMPTS_PATH}`);
   }
-  
-  promptsConfig = JSON.parse(readFileSync(PROMPTS_PATH, "utf-8"));
-  return promptsConfig;
+
+  try {
+    const content = readFileSync(PROMPTS_PATH, "utf-8");
+    const parsed = JSON.parse(content);
+    promptsConfig = parsed;
+    return promptsConfig;
+  } catch (error) {
+    throw new Error(`Failed to load prompts configuration at ${PROMPTS_PATH}: ${getErrorMessage(error)}`);
+  }
 }
 
 function getRole(roleName: string): any {
@@ -106,8 +112,7 @@ function loadState(): SystemState {
 }
 
 function loadPendingTasks(): Task[] {
-  if (!existsSync(TASKS_PATH)) return [];
-  const store = JSON.parse(readFileSync(TASKS_PATH, "utf-8"));
+  const store = readJson<{ tasks: Task[] }>(TASKS_PATH, { tasks: [] });
   return (store.tasks || [])
     .filter((t: Task) => t.status === "pending")
     .sort((a: Task, b: Task) => {
@@ -122,8 +127,7 @@ function loadPendingTasks(): Task[] {
 }
 
 function loadActiveAgents(): Agent[] {
-  if (!existsSync(REGISTRY_PATH)) return [];
-  const registry = JSON.parse(readFileSync(REGISTRY_PATH, "utf-8"));
+  const registry = readJson<{ agents: Agent[] }>(REGISTRY_PATH, { agents: [] });
   const now = Date.now();
   const fiveMinutesAgo = now - 5 * 60 * 1000;
   return (registry.agents || []).filter((a: Agent) => {
@@ -131,6 +135,7 @@ function loadActiveAgents(): Agent[] {
     return lastHB > fiveMinutesAgo;
   });
 }
+
 
 // ============================================================================
 // Section Builders
