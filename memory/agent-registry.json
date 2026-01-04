@@ -34,7 +34,7 @@
       "agent_id": "agent-1767558079360-jadvft",
       "session_id": "session-1767558079360",
       "started_at": "2026-01-04T20:21:19.360Z",
-      "last_heartbeat": "2026-01-04T20:22:19.361Z",
+      "last_heartbeat": "2026-01-04T20:22:58.730Z",
       "status": "active",
       "assigned_role": "code-worker",
       "pid": 666448
@@ -49,6 +49,6 @@
       "pid": 673036
     }
   ],
-  "last_updated": "2026-01-04T20:22:30.330Z",
-  "lock_version": 11
+  "last_updated": "2026-01-04T20:22:58.730Z",
+  "lock_version": 13
 }
