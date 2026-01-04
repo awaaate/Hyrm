@@ -273,3 +273,6 @@ Auto-generated index of task specs in `docs/specs/`.
 - [docs/specs/task_1767554975557_task-c.md](docs/specs/task_1767554975557_task-c.md)
 - [docs/specs/task_1767554975561_unified-task-1.md](docs/specs/task_1767554975561_unified-task-1.md)
 - [docs/specs/task_1767554975565_test.md](docs/specs/task_1767554975565_test.md)
+- [docs/specs/task_1767555705974_fix-orchestrator-leader-heartb.md](docs/specs/task_1767555705974_fix-orchestrator-leader-heartb.md)
+- [docs/specs/task_1767555707386_replace-todo-placeholders-in-a.md](docs/specs/task_1767555707386_replace-todo-placeholders-in-a.md)
+- [docs/specs/task_1767555709057_verify-realtimelog-rotation-is.md](docs/specs/task_1767555709057_verify-realtimelog-rotation-is.md)

@@ -3465,7 +3465,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-04T19:26:11.394Z",
-      "updated_at": "2026-01-04T19:34:03.254Z",
+      "updated_at": "2026-01-04T19:40:55.344Z",
       "created_by": "unknown",
       "tags": [
         "documentation",
@@ -3480,7 +3480,9 @@
       "completed_at": "2026-01-04T19:34:03.252Z",
       "notes": [
         "[2026-01-04T19:34:03.254Z] Created comprehensive LEADER_ELECTION.md documentation covering: timeout configuration, leader election protocol, tuning guidelines for different scenarios (high churn, slow failover, stale agent cleanup), recommended configurations (production/HA/lenient), implementation details, monitoring metrics, troubleshooting guide. Updated AGENTS.md to reference new documentation."
-      ]
+      ],
+      "quality_score": 9,
+      "quality_notes": "Creating comprehensive tuning guides with multiple scenario-based configurations (Production/HA/Lenient) helps operators understand tradeoffs. Documentation for distributed systems should include monitoring metrics, troubleshooting paths, and real-world thresholds."
     },
     {
       "id": "task_1767554772790_oq3oip",
@@ -3489,7 +3491,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-04T19:26:12.790Z",
-      "updated_at": "2026-01-04T19:34:43.685Z",
+      "updated_at": "2026-01-04T19:40:56.990Z",
       "created_by": "unknown",
       "tags": [
         "monitoring",
@@ -3504,9 +3506,66 @@
       "completed_at": "2026-01-04T19:34:43.684Z",
       "notes": [
         "[2026-01-04T19:34:43.685Z] Evaluated realtime.log rotation effectiveness: Currently 5.3 MB with 28,468 lines, well below 10 MB threshold. Growth rate ~14,000 lines/day (9.8 KB/hour), sustainable. Rotation system working properly with archives. Created comprehensive REALTIME_LOG_MONITORING.md with: health assessment, monitoring metrics, maintenance schedules, scaling guidelines, future improvements. System is healthy; no changes needed at current rate."
-      ]
+      ],
+      "quality_score": 8.6,
+      "quality_notes": "Proactive monitoring of log growth patterns (14K lines/day = 9.8 KB/hour) with clear thresholds (10 MB limit) prevents operational surprises. Documenting rotation effectiveness and scaling guidelines enables smooth operations as system grows. Key insight: sustainable growth patterns are healthy indicators of system stability."
+    },
+    {
+      "id": "task_1767555705974_l7mqvy",
+      "title": "Fix orchestrator leader heartbeat decay - decouple from session lifecycle",
+      "description": "Orchestrator sessions idle after 5-8 minutes even with handoff=false, killing the heartbeat interval timer and causing leader leases to expire. This causes unnecessary respawns every ~8 minutes. Root cause: heartbeat loop is tied to session context; when session idles, the interval timer is killed. Solution: Implement a background heartbeat mechanism that runs independently of session lifecycle. Options: (1) spawn background worker that heartbeats continuously, (2) use shell script loop in watchdog, (3) ensure orchestrator main loop prevents idle. Current impact: 5-6 respawns per hour instead of 0.",
+      "priority": "critical",
+      "status": "pending",
+      "created_at": "2026-01-04T19:41:45.974Z",
+      "updated_at": "2026-01-04T19:41:45.982Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "heartbeat",
+        "leader-election",
+        "critical"
+      ],
+      "estimated_hours": 2,
+      "complexity": "complex",
+      "spec_file": "docs/specs/task_1767555705974_fix-orchestrator-leader-heartb.md"
+    },
+    {
+      "id": "task_1767555707386_rparc5",
+      "title": "Replace TODO placeholders in auto-generated spec files with real content",
+      "description": "spec-generator.ts creates spec.md files with placeholder text like 'TODO: Add problem statement', 'TODO: Add implementation phases', etc. These make specs useless for documentation. Improve spec generation to extract meaningful content from task descriptions, GitHub issues, and recent commits. Focus on: (1) Extract problem statement from task description, (2) Auto-generate goals from task title/priority, (3) Break into phases from task dependencies, (4) Pull success criteria from task comments in GitHub.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-04T19:41:47.386Z",
+      "updated_at": "2026-01-04T19:41:47.398Z",
+      "created_by": "unknown",
+      "tags": [
+        "docs",
+        "spec-system",
+        "quality"
+      ],
+      "estimated_hours": 1,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767555707386_replace-todo-placeholders-in-a.md"
+    },
+    {
+      "id": "task_1767555709057_q5q225",
+      "title": "Verify realtime.log rotation is working and archives are preserved",
+      "description": "Session 185 implemented realtime.log rotation (keeping last 5000 lines, archiving rest). Verify: (1) Rotation is actually executing on schedule, (2) Archives exist in memory/realtime-archives/, (3) Total archived size is reasonable, (4) Rotation isn't causing data loss. Check cron/automation for rotation trigger and ensure archives aren't accumulating unbounded.",
+      "priority": "low",
+      "status": "pending",
+      "created_at": "2026-01-04T19:41:49.057Z",
+      "updated_at": "2026-01-04T19:41:49.064Z",
+      "created_by": "unknown",
+      "tags": [
+        "monitoring",
+        "maintenance",
+        "logs"
+      ],
+      "estimated_hours": 0.5,
+      "complexity": "simple",
+      "spec_file": "docs/specs/task_1767555709057_verify-realtimelog-rotation-is.md"
     }
   ],
   "completed_count": 154,
-  "last_updated": "2026-01-04T19:35:47.295Z"
+  "last_updated": "2026-01-04T19:41:49.064Z"
 }

@@ -1,10 +1,10 @@
 {
-  "recorded_at": "2026-01-04T19:29:14+00:00",
-  "pid": 470079,
+  "recorded_at": "2026-01-04T19:37:21+00:00",
+  "pid": 530402,
   "exit_code": 0,
   "kind": "crash",
   "reason": "health_check: not running",
-  "extra_file": "logs/orchestrator-failures/crash-20260104T192914Z-pid470079.tail.log",
+  "extra_file": "logs/orchestrator-failures/crash-20260104T193721Z-pid530402.tail.log",
   "stop_requested": false,
   "stop_reason": "",
   "stop_requested_at": ""
