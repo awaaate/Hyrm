@@ -2,7 +2,7 @@
 
 Auto-generated documentation for all CLI tools in the workspace.
 
-**Last Updated**: 2026-01-04T10:11:56.364Z
+**Last Updated**: 2026-01-04T10:14:31.933Z
 
 ## Quick Reference
 

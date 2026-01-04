@@ -34,47 +34,48 @@ A multi-agent AI orchestration system built on OpenCode with persistent memory, 
 │   ├── working.md                # Working memory
 │   └── sessions/                 # Per-session state
 │
-├── tools/                        # CLI utilities (23 tools)
-│   ├── shared/                   # Shared utilities (colors, paths, json, etc.)
+├── tools/                        # CLI utilities and libraries
+│   ├── ui/                       # Interactive UIs (for humans)
+│   │   ├── dashboard.ts          # Main TUI dashboard (blessed-based, 6 views)
+│   │   ├── realtime.ts           # Real-time monitor with file watching
+│   │   └── README.md             # UI documentation and keybindings
 │   │
-│   │   ## CLI Principal (1)
+│   ├── lib/                      # Non-executable libraries
+│   │   ├── coordinator.ts        # MultiAgentCoordinator class
+│   │   ├── prompt-generator.ts   # Generate orchestrator/worker prompts
+│   │   ├── task-router.ts        # Task routing logic
+│   │   └── system-message-config.ts # System message configuration
+│   │
+│   ├── shared/                   # Shared utilities (colors, paths, json, types, etc.)
+│   │   ├── colors.ts             # Terminal color utilities
+│   │   ├── paths.ts              # Centralized path constants
+│   │   ├── json-utils.ts         # JSON read/write helpers
+│   │   ├── types.ts              # TypeScript type definitions
+│   │   ├── data-fetchers.ts      # Data loading functions
+│   │   └── ...                   # And more utility modules
+│   │
+│   │   ## Core CLI Tools (root level - to be organized)
 │   ├── cli.ts                        # Unified CLI (status, agents, tasks, monitor)
-│   │
-│   │   ## Agent Tools (8)
-│   ├── agent-conversation-viewer.ts  # View agent conversations
-│   ├── agent-health-monitor.ts       # Agent health/cleanup
-│   ├── agent-performance-profiler.ts # Agent analytics
-│   ├── critique-agent.ts             # Code review agent
-│   ├── multi-agent-coordinator.ts    # Agent coordination
-│   ├── message-bus-manager.ts        # Message bus maintenance
-│   ├── generate-orchestrator-prompt.ts # Generate orchestrator prompts
-│   ├── generate-worker-prompt.ts     # Generate worker prompts
-│   │
-│   │   ## Memory Tools (3)
-│   ├── knowledge-deduplicator.ts     # Clean duplicate knowledge
+│   ├── task-manager.ts               # Task CRUD operations with GitHub integration
+│   ├── git-integration.ts            # Git operations and automation
+│   ├── agent-health-monitor.ts       # Agent health monitoring and cleanup
+│   ├── agent-conversation-viewer.ts  # View agent message history
+│   ├── agent-performance-profiler.ts # Agent analytics and metrics
+│   ├── critique-agent.ts             # Automated code review
+│   ├── quality-assessor.ts           # Task quality assessment
 │   ├── knowledge-extractor.ts        # Extract session insights
+│   ├── knowledge-deduplicator.ts     # Clean duplicate knowledge
 │   ├── working-memory-manager.ts     # Working.md archival
-│   │
-│   │   ## Task Tools (3)
-│   ├── task-manager.ts               # Task CRUD operations
-│   ├── task-router.ts                # Task routing
-│   ├── quality-assessor.ts           # Quality tracking
-│   │
-│   │   ## Session Tools (2)
-│   ├── opencode-tracker.ts           # OpenCode session tracking (PRIMARY)
 │   ├── session-summarizer.ts         # Summarize sessions
-│   │
-│   │   ## Monitor Tools (2)
-│   ├── realtime-monitor.ts           # Live dashboard (d/a/m/t/l keys)
+│   ├── opencode-tracker.ts           # OpenCode session tracking (PRIMARY)
 │   ├── daily-report-generator.ts     # Performance reports
-│   │
-│   │   ## CLI/Core (4)
+│   ├── message-bus-manager.ts        # Message bus maintenance
 │   ├── user-message.ts               # User messaging CLI
-│   ├── system-message-config.ts      # System message config
-│   ├── git-integration.ts            # Git operations
-│   └── debug-capture.ts              # Debug output capture
+│   ├── debug-capture.ts              # Debug output capture
+│   ├── generate-tools-docs.ts        # Auto-generate tools documentation
+│   └── ...                           # Other legacy tools
 │
-├── terminal-dashboard/           # NEW: Modular TUI dashboard
+├── terminal-dashboard/           # Experimental modular TUI (alternative to tools/ui/dashboard.ts)
 │   ├── index.ts                  # Main entry point
 │   ├── data.ts                   # Data loading functions
 │   └── types.ts                  # TypeScript types
@@ -104,8 +105,9 @@ bun tools/opencode-cli.ts agents     # Active agents
 bun tools/opencode-cli.ts tasks      # Task list
 bun tools/opencode-cli.ts monitor    # Live dashboard
 
-# Real-time monitoring
-bun tools/realtime-monitor.ts        # Interactive monitor (d/a/m/t/l keys)
+# Interactive UIs (for humans)
+bun tools/ui/dashboard.ts            # Main TUI dashboard (6 views: timeline, agents, tasks, sessions, tokens, logs)
+bun tools/ui/realtime.ts             # Real-time monitor (d/a/m/t/l keys)
 
 # User messaging
 bun tools/user-message.ts send "msg" # Send to agents

@@ -794,6 +794,54 @@ Coordinate work via agent_send() and agent_messages().
   const gitTools = createGitTools(getGitToolsContext);
 
   // ============================================================================
+  // EDIT ERROR RECOVERY - state and helper function
+  // ============================================================================
+  
+  let lastEditErrorTime = 0;
+  const EDIT_ERROR_COOLDOWN = 5 * 60 * 1000; // 5 minutes between reminders
+
+  // Detect Edit tool errors and inject helpful reminder
+  const detectEditError = (output: any): string | null => {
+    if (!output.output || typeof output.output !== "string") return null;
+    
+    const errorText = output.output.toLowerCase();
+    
+    if (errorText.includes("oldstring not found")) {
+      return `⚠️ EDIT ERROR DETECTED - oldString not found in file
+
+CRITICAL REMINDERS:
+1. Use Read tool FIRST to verify exact indentation and whitespace
+2. Line numbers in Read output are ONLY for reference - DO NOT include them in oldString
+3. Match exact whitespace (spaces vs tabs) as shown after the line number prefix
+4. Consider using larger context (more surrounding lines) to make match unique
+
+Example: If Read shows:
+  123\t    function foo() {
+The actual content is "    function foo() {" (4 spaces), NOT "123    function foo()".`;
+    }
+    
+    if (errorText.includes("oldstring found multiple times")) {
+      return `⚠️ EDIT ERROR DETECTED - oldString found multiple times
+
+CRITICAL REMINDERS:
+1. Provide MORE surrounding context to make the match unique
+2. Include additional lines before/after the target change
+3. Use Read tool to verify the exact unique context around your target
+4. Alternatively, use replaceAll=true if you want to replace ALL occurrences
+
+The oldString you provided matches multiple locations in the file. Expand it with unique surrounding code.`;
+    }
+    
+    if (errorText.includes("must be different")) {
+      return `⚠️ EDIT ERROR DETECTED - newString must be different from oldString
+
+REMINDER: oldString and newString cannot be identical. Check your edit parameters.`;
+    }
+    
+    return null;
+  };
+
+  // ============================================================================
   // PLUGIN RETURN OBJECT
   // ============================================================================
 
