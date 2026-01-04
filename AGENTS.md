@@ -22,6 +22,7 @@ A multi-agent AI orchestration system built on OpenCode with persistent memory, 
 │   └── src/                      # Dashboard source code
 │
 ├── docs/                         # Documentation
+│   ├── HEARTBEAT_SERVICE.md      # Background heartbeat service (prevents respawns)
 │   ├── LEADER_ELECTION.md        # Leader lease timeout tuning guide
 │   ├── ARCHITECTURE.ascii        # System architecture diagram
 │   ├── CODEBASE_ANALYSIS.md      # Code structure overview
@@ -43,11 +44,12 @@ A multi-agent AI orchestration system built on OpenCode with persistent memory, 
 │   │   ├── realtime.ts           # Real-time monitor with file watching
 │   │   └── README.md             # UI documentation and keybindings
 │   │
-│   ├── lib/                      # Non-executable libraries
+│   ├── lib/                      # Non-executable libraries and helpers
 │   │   ├── coordinator.ts        # MultiAgentCoordinator class
 │   │   ├── prompt-generator.ts   # Generate orchestrator/worker prompts
 │   │   ├── task-router.ts        # Task routing logic
-│   │   └── system-message-config.ts # System message configuration
+│   │   ├── system-message-config.ts # System message configuration
+│   │   └── orchestrator-heartbeat.sh # Heartbeat logic for background service
 │   │
 │   ├── shared/                   # Shared utilities (colors, paths, json, types, etc.)
 │   │   ├── colors.ts             # Terminal color utilities
@@ -56,6 +58,8 @@ A multi-agent AI orchestration system built on OpenCode with persistent memory, 
 │   │   ├── types.ts              # TypeScript type definitions
 │   │   ├── data-fetchers.ts      # Data loading functions
 │   │   └── ...                   # And more utility modules
+│   │
+│   ├── heartbeat-service.sh          # Background heartbeat service controller
 │   │
 │   │   ## Core CLI Tools (root level - to be organized)
 │   ├── cli.ts                        # Unified CLI (status, agents, tasks, monitor)
