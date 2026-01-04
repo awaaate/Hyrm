@@ -4266,3 +4266,9 @@
 2026-01-04T19:40:33.235Z [INFO] [agent-1767555629988-l36c6n] Status updated: working - Orchestrator mode - no handoff
 2026-01-04T19:41:30.002Z [INFO] [agent-1767555629988-l36c6n] File locked: /app/workspace/memory/orchestrator-state.json
 2026-01-04T19:41:30.004Z [INFO] [agent-1767555629988-l36c6n] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T19:42:02.468Z [INFO] [agent-1767555722467-9rs119] Agent registered: agent-1767555722467-9rs119 (role: code-worker)
+2026-01-04T19:42:02.470Z [INFO] [agent-1767555722467-9rs119] Message sent: heartbeat (broadcast)
+2026-01-04T19:42:02.640Z [INFO] [agent-1767555722640-bwhw1r] Agent registered: agent-1767555722640-bwhw1r (role: code-worker)
+2026-01-04T19:42:02.641Z [INFO] [agent-1767555722640-bwhw1r] Message sent: heartbeat (broadcast)
+2026-01-04T19:42:08.227Z [INFO] [agent-1767555629988-l36c6n] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T19:42:08.229Z [INFO] [agent-1767555629988-l36c6n] File unlocked: /app/workspace/memory/orchestrator-state.json
