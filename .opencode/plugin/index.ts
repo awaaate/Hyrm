@@ -1307,34 +1307,42 @@ Read memory/working.md for full details.`);
 
       log("INFO", "Handoff disabled - re-spawning orchestrator agent (this agent is leader)");
 
+      // CRITICAL: Release the leader lease BEFORE spawning the new orchestrator
+      // This allows the new agent to immediately take over leadership instead of
+      // seeing our lease as "healthy" and self-demoting (which caused infinite spawn loops)
+      if (coordinator) {
+        const released = coordinator.releaseLeaderLease();
+        if (released) {
+          log("INFO", "Leader lease released - new orchestrator can take over immediately");
+        } else {
+          log("WARN", "Failed to release leader lease - new orchestrator may need to wait for TTL expiry");
+        }
+      }
+
       const state = existsSync(statePath)
         ? JSON.parse(readFileSync(statePath, "utf-8"))
         : {};
 
       const respawnPrompt = `You are the ORCHESTRATOR AGENT resuming work.
 
-## IMMEDIATE ACTIONS:
-1. Call agent_register with role="orchestrator" (this triggers leader election)
-2. Call agent_status to check if you are the leader via the leader field
-3. If NOT the leader: exit gracefully - do NOT call agent_set_handoff(enabled=false)
-4. If you ARE the leader: Call agent_set_handoff with enabled=false to persist
-5. Call memory_status to see current state
-
-## LEADER ELECTION:
-- Only ONE orchestrator should be the leader at a time
-- If agent_status shows a different leader_id than your agent_id, you are NOT the leader
-- Non-leaders should exit immediately to avoid conflicts
+## IMMEDIATE ACTIONS (in order):
+1. agent_set_handoff(enabled=false) - Prevent auto-exit
+2. agent_register(role="orchestrator") - Register and claim leadership
+3. user_messages_read() - Check for user requests first
+4. task_list(status="pending") - See what needs to be done
 
 ## CONTEXT:
 - Session count: ${state.session_count || 0}
 - Active tasks: ${state.active_tasks?.join(", ") || "none"}
-- Status: ${state.status || "unknown"}
+- Previous leader released lease - you should become leader immediately
 
-## YOUR MISSION (IF LEADER):
-Continue improving the multi-agent system. Check memory/working.md for recent context.
-Spawn workers for parallel tasks using: opencode run "worker prompt"
+## YOUR MISSION:
+1. Check for pending user messages and tasks
+2. If tasks exist: spawn workers with \`nohup opencode run "worker prompt" &\`
+3. Monitor progress, then exit gracefully when done
+4. Watchdog will restart you to continue the cycle
 
-IMPORTANT: Only the leader should persist. If you're not the leader, exit gracefully.`;
+Keep sessions focused (~5-10 min). Delegate work to workers, don't do everything yourself.`;
 
       // Use Bun.spawn for background process - ctx.$ doesn't support shell redirects
       try {

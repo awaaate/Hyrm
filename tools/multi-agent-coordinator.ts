@@ -781,6 +781,56 @@ class MultiAgentCoordinator {
   }
 
   /**
+   * Release the leader lease before spawning a new orchestrator.
+   * This allows the new orchestrator to immediately take over leadership
+   * instead of waiting for the TTL to expire.
+   * 
+   * Should be called by the current leader before respawning.
+   */
+  public releaseLeaderLease(): boolean {
+    if (!this.isLeader) {
+      this.log("WARN", "releaseLeaderLease called but this agent is not the leader");
+      return false;
+    }
+
+    try {
+      const locked = this.requestFileLock(ORCHESTRATOR_STATE_PATH);
+      if (!locked) {
+        this.log("ERROR", "Failed to acquire lock for orchestrator-state.json during lease release");
+        return false;
+      }
+
+      try {
+        const current = this.readLeaderLeaseUnsafe();
+        
+        // Only release if we are still the recorded leader
+        if (current && current.leader_id === this.agentId) {
+          // Set heartbeat to epoch 0 (far past) so the lease appears expired immediately
+          const releasedLease: OrchestratorLease = {
+            leader_id: current.leader_id,
+            leader_epoch: current.leader_epoch,
+            last_heartbeat: new Date(0).toISOString(), // 1970-01-01 - instant expiry
+            ttl_ms: current.ttl_ms,
+          };
+          this.writeLeaderLeaseUnsafe(releasedLease);
+          this.isLeader = false;
+          this.leaderEpoch = null;
+          this.log("INFO", `Released orchestrator leader lease (epoch ${current.leader_epoch}) - new agent can take over immediately`);
+          return true;
+        } else {
+          this.log("WARN", `Cannot release lease: current leader is ${current?.leader_id}, not us (${this.agentId})`);
+          return false;
+        }
+      } finally {
+        this.releaseFileLock(ORCHESTRATOR_STATE_PATH);
+      }
+    } catch (error) {
+      this.log("ERROR", `Failed to release leader lease: ${error}`);
+      return false;
+    }
+  }
+
+  /**
    * Broadcast current status to all agents
    */
   broadcastStatus(status: string, details?: Record<string, unknown>): void {
