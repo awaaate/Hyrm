@@ -5347,11 +5347,49 @@
       "metadata": {
         "duration_minutes": 1
       }
+    },
+    {
+      "task_id": "task_1767558064190_zkfq4m",
+      "task_title": "Investigate orchestrator crashes in watchdog logs (exit code 0 and 137)",
+      "assessed_at": "2026-01-04T20:25:48.519Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "Investigation methodology: When seeing \"crashes\" in logs, trace the full timeline and examine both exit codes and surrounding events. Exit code 0 can indicate graceful exit, not failure. Always verify by examining: (1) the code path that would produce that exit, (2) the preceding log events showing what was happening, (3) the subsequent events to see if system recovered correctly. In this case, the 'crashes' were actually successful leadership transitions showing resilient design.\"",
+      "metadata": {
+        "duration_minutes": 3
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 139,
-    "avg_overall_score": 8.017985611510788
+    "total_assessed": 140,
+    "avg_overall_score": 8.021428571428569
   },
-  "last_updated": "2026-01-04T20:22:47.764Z"
+  "last_updated": "2026-01-04T20:25:48.520Z"
 }

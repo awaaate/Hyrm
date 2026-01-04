@@ -142,3 +142,28 @@
 [2026-01-04T20:23:25Z] [DEBUG] Not the leader, skipping lease refresh
 [2026-01-04T20:23:25Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
 [2026-01-04T20:23:25Z] [INFO] Heartbeat service complete (success)
+[2026-01-04T20:24:25Z] [INFO] Heartbeat service starting
+[2026-01-04T20:24:25Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-04T20:24:25Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-04T20:24:25Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
+[2026-01-04T20:24:25Z] [INFO] Heartbeat service complete (success)
+[2026-01-04T20:25:25Z] [INFO] Heartbeat service starting
+[2026-01-04T20:25:25Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-04T20:25:25Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-04T20:25:25Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
+[2026-01-04T20:25:25Z] [INFO] Heartbeat service complete (success)
+[2026-01-04T20:26:25Z] [INFO] Heartbeat service starting
+[2026-01-04T20:26:25Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-04T20:26:25Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-04T20:26:25Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
+[2026-01-04T20:26:25Z] [INFO] Heartbeat service complete (success)
+[2026-01-04T20:27:25Z] [INFO] Heartbeat service starting
+[2026-01-04T20:27:25Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-04T20:27:25Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-04T20:27:25Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
+[2026-01-04T20:27:25Z] [INFO] Heartbeat service complete (success)
+[2026-01-04T20:28:25Z] [INFO] Heartbeat service starting
+[2026-01-04T20:28:25Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-04T20:28:25Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-04T20:28:25Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
+[2026-01-04T20:28:25Z] [INFO] Heartbeat service complete (success)
