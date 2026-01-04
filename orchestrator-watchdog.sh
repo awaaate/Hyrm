@@ -639,6 +639,17 @@ persist_startup_failure() {
     if [[ -n "$stderr_log" ]] && [[ -f "$stderr_log" ]]; then
         stderr_tail_file="${FAILURE_LOG_DIR}/startup-stderr-${ts}-pid${pid}.tail.log"
         tail -n "$STDERR_TAIL_LINES" "$stderr_log" > "$stderr_tail_file" 2>/dev/null || true
+        
+        # Log the stderr tail immediately to watchdog.log for visibility
+        log "=========================================" "ERROR"
+        log "STARTUP FAILURE DETAILS:" "ERROR"
+        log "  PID: $pid, Exit Code: $exit_code, Restart Count: $restart_count" "ERROR"
+        log "  Model: $model" "ERROR"
+        log "=========================================" "ERROR"
+        log_stderr_tail "$stderr_log" "$STDERR_TAIL_LINES"
+        log "=========================================" "ERROR"
+    else
+        log "STARTUP FAILURE: pid=$pid exit_code=$exit_code restart_count=$restart_count (no stderr log available)" "ERROR"
     fi
 
     jq -n \
@@ -673,6 +684,16 @@ persist_crash_failure() {
     # Best-effort: point at the most recent captured stderr log
     local latest_stderr
     latest_stderr=$(ls -t "${FAILURE_LOG_DIR}"/orchestrator-stderr-*.log 2>/dev/null | head -1 || true)
+
+    # Log crash details immediately to watchdog.log with exit code and reason
+    log "=========================================" "ERROR"
+    log "ORCHESTRATOR CRASH DETECTED:" "ERROR"
+    log "  PID: $pid, Exit Code: $exit_code, Reason: $reason" "ERROR"
+    if [[ -n "$latest_stderr" ]]; then
+        log "  Stderr Log: $latest_stderr" "ERROR"
+        log_stderr_tail "$latest_stderr" "$STDERR_TAIL_LINES"
+    fi
+    log "=========================================" "ERROR"
 
     jq -n \
         --arg recorded_at "$(date -Iseconds)" \
@@ -1221,20 +1242,23 @@ start_orchestrator() {
         wait_for_rate_limit
     fi
     
-    # Calculate and apply backoff if enabled
-    if [[ $restart_count -gt 1 && "$RESTART_BACKOFF_ENABLED" == "true" ]]; then
-        local backoff
-        backoff=$(calculate_backoff "$restart_count")
-        if [[ $backoff -gt 0 ]]; then
-            log "Applying restart backoff: ${backoff}s (restart #$restart_count)" "INFO"
-            sleep "$backoff"
-        fi
-    fi
-    
-    log "Starting orchestrator agent (restart #$restart_count this hour)..."
+     # Calculate and apply backoff if enabled
+     if [[ $restart_count -gt 1 && "$RESTART_BACKOFF_ENABLED" == "true" ]]; then
+         local backoff
+         backoff=$(calculate_backoff "$restart_count")
+         if [[ $backoff -gt 0 ]]; then
+             log "Applying restart backoff: ${backoff}s (restart #$restart_count)" "INFO"
+             sleep "$backoff"
+         fi
+     fi
+     
+     # Always apply restart jitter to prevent thundering-herd
+     maybe_sleep_restart_jitter "$restart_count"
+     
+     log "Starting orchestrator agent (restart #$restart_count this hour)..."
 
-    # Crash-loop protection for frequent startup failures/crashes
-    maybe_apply_crash_loop_backoff
+     # Crash-loop protection for frequent startup failures/crashes
+     maybe_apply_crash_loop_backoff
     
     # Initialize token tracking for new session
     init_token_tracking
@@ -1308,6 +1332,10 @@ start_orchestrator() {
         exit_code=$(get_child_exit_code "$pid")
 
         log "Orchestrator failed to start! (pid: $pid, exit: $exit_code, stderr: $stderr_log)" "ERROR"
+        
+        # Log stderr tail to watchdog.log for immediate visibility
+        log_stderr_tail "$stderr_log" "$STDERR_TAIL_LINES"
+        
         persist_startup_failure "$pid" "$exit_code" "$restart_count" "$use_model" "$stderr_log"
 
         rm -f "$PIDFILE" 2>/dev/null || true
@@ -1333,6 +1361,9 @@ start_orchestrator() {
     stderr_tail=$(tail -50 "$stderr_log" 2>/dev/null || true)
 
     log "Orchestrator failed to start (pid=$pid, exit=$exit_code). stderr: $stderr_log" "ERROR"
+    
+    # Log stderr tail for diagnostics
+    log_stderr_tail "$stderr_log" "$STDERR_TAIL_LINES"
 
     record_orchestrator_exit "$pid" "$exit_code" "startup_failed" "startup check failed" "$stderr_log"
     record_startup_failure "$pid" "$exit_code" "$use_model" "$stderr_log" "$stderr_tail"
