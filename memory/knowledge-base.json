@@ -1,5 +1,29 @@
 [
   {
+    "session_id": "ses_475887038ffe1IuYqMv66ldnme",
+    "timestamp": 1767554650106,
+    "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_47591e365ffe5LVURU9P7JJDLi",
+    "timestamp": 1767554080804,
+    "messages": 9,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
     "session_id": "ses_475a2eddcffevG7FepuGaYIuhw",
     "timestamp": 1767552914010,
     "messages": 2,
@@ -301,11 +325,13 @@
   },
   {
     "session_id": "ses_4764c8e26ffejNDoxIuRUegvtC",
-    "timestamp": 1767544072899,
-    "messages": 37,
+    "timestamp": 1767554503362,
+    "messages": 55,
     "decisions": [],
     "discoveries": [],
-    "code_created": [],
+    "code_created": [
+      "docs/ARCHITECTURE.ascii"
+    ],
     "problems_solved": [],
     "key_insights": [],
     "techniques": [],

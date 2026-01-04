@@ -84,7 +84,7 @@ IDLE_TIMEOUT=0              # restart if idle for this many seconds (0 = disable
 
 # Model configuration
 # Priority: environment variable > config file > default
-MODEL="${OPENCODE_MODEL:-openai/gpt-5.2-codex}"   # default model to use
+MODEL="${OPENCODE_MODEL:-anthropic/claude-haiku-4-5}"   # default model to use
 MODEL_FALLBACK="${OPENCODE_MODEL_FALLBACK:-anthropic/claude-sonnet}"  # fallback model
 RATE_LIMIT_COOLDOWN="${OPENCODE_RATE_LIMIT_COOLDOWN:-300}"  # seconds to wait when rate limited
 
@@ -174,7 +174,7 @@ IDLE_TIMEOUT=0              # restart if idle for this many seconds (0 = disable
 # MODEL CONFIGURATION
 # ==============================================================================
 # Use environment variables OPENCODE_MODEL and OPENCODE_MODEL_FALLBACK to override
-MODEL="openai/gpt-5.2-codex"   # primary model to use
+MODEL="anthropic/claude-haiku-4-5"   # primary model to use
 MODEL_FALLBACK="anthropic/claude-sonnet"  # fallback model if primary fails
 RATE_LIMIT_COOLDOWN=300      # seconds to wait when rate limited
 

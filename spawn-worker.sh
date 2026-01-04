@@ -19,7 +19,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG_FILE="${SCRIPT_DIR}/memory/worker-spawns.log"
-MODEL="${OPENCODE_MODEL:-openai/gpt-5.2}"
+MODEL="${OPENCODE_MODEL:-anthropic/claude-haiku-4-5}"
 PROMPT_GENERATOR="${SCRIPT_DIR}/tools/lib/prompt-generator.ts"
 
 log() {
@@ -177,7 +177,7 @@ Usage:
 Roles: code-worker, memory-worker, analysis-worker, worker
 
 Environment:
-  OPENCODE_MODEL    Model to use (default: openai/gpt-5.2)
+  OPENCODE_MODEL    Model to use (default: anthropic/claude-haiku-4-5)
 
 Examples:
   $0 "Fix the bug in cli.ts"

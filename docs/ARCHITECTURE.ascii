@@ -1,0 +1,422 @@
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                        ║
+║                     MULTI-AGENT AUTONOMOUS ORCHESTRATION SYSTEM - ARCHITECTURE                         ║
+║                                                                                                        ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                         EXTERNAL LAYER                                                 │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│    ┌──────────────────────┐          ┌──────────────────────┐          ┌──────────────────────┐       │
+│    │    USER MESSAGES     │          │    OPENCODE CLI      │          │     LLM PROVIDERS    │       │
+│    │  bun user-message.ts │          │    opencode run      │          │  OpenAI / Anthropic  │       │
+│    │    "prioridad alta"  │          │                      │          │                      │       │
+│    └──────────┬───────────┘          └──────────┬───────────┘          └──────────┬───────────┘       │
+│               │                                 │                                 │                    │
+│               │ writes                          │ spawns                          │ API calls          │
+│               ▼                                 ▼                                 ▼                    │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                  │
+                                                  │
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                      SUPERVISOR LAYER                                                  │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│    ┌─────────────────────────────────────────────────────────────────────────────────────────────┐    │
+│    │                              WATCHDOG (orchestrator-watchdog.sh)                            │    │
+│    ├─────────────────────────────────────────────────────────────────────────────────────────────┤    │
+│    │                                                                                             │    │
+│    │   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐       │    │
+│    │   │  RATE LIMIT     │  │  TOKEN LIMIT    │  │  RESTART LIMIT  │  │  LEADER CHECK   │       │    │
+│    │   │  DETECTION      │  │  ENFORCEMENT    │  │  MANAGEMENT     │  │  VERIFICATION   │       │    │
+│    │   ├─────────────────┤  ├─────────────────┤  ├─────────────────┤  ├─────────────────┤       │    │
+│    │   │ - 429 errors    │  │ - 100k input    │  │ - 50/hour max   │  │ - TTL: 180s     │       │    │
+│    │   │ - Primary only  │  │ - 50k output    │  │ - Backoff opt.  │  │ - Grace: 30s    │       │    │
+│    │   │ - Auto-cooldown │  │ - 150k total    │  │ - Crash protect │  │ - Epoch check   │       │    │
+│    │   └─────────────────┘  └─────────────────┘  └─────────────────┘  └─────────────────┘       │    │
+│    │                                                                                             │    │
+│    │   LIFECYCLE:  check_leader_lease() ──► start_orchestrator() ──► monitor_loop() ◄──┐       │    │
+│    │                                                                          │         │       │    │
+│    │                                              restart on death ◄──────────┴─────────┘       │    │
+│    └─────────────────────────────────────────────────────────────────────────────────────────────┘    │
+│                                                  │                                                     │
+│                                                  │ spawns (if no healthy leader)                       │
+│                                                  ▼                                                     │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                  │
+                                                  │
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                     COORDINATION LAYER                                                 │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│    ┌─────────────────────────────────────────────────────────────────────────────────────────────┐    │
+│    │                                    ORCHESTRATOR AGENT                                       │    │
+│    ├─────────────────────────────────────────────────────────────────────────────────────────────┤    │
+│    │                                                                                             │    │
+│    │   1. agent_register(role='orchestrator')    ──► Register & check leader election           │    │
+│    │   2. agent_status()                         ──► Verify: Am I the leader?                   │    │
+│    │   3. agent_set_handoff(enabled=false)       ──► CRITICAL: Stay alive                       │    │
+│    │   4. task_list(status='pending')            ──► Find work to delegate                      │    │
+│    │   5. spawn-worker.sh --task <id>            ──► Fire-and-forget workers                    │    │
+│    │   6. agent_messages()                       ──► Monitor completions                        │    │
+│    │   7. quality_assess()                       ──► Score completed work                       │    │
+│    │                                                                                             │    │
+│    │   ┌────────────────────────────────────────────────────────────────────────────────────┐   │    │
+│    │   │ LEADER ELECTION:  If NOT leader ──► Log "Deferring to leader X" ──► Exit graceful │   │    │
+│    │   └────────────────────────────────────────────────────────────────────────────────────┘   │    │
+│    └───────────────────────────────────┬─────────────────────────────────────────────────────────┘    │
+│                                        │                                                              │
+│        ┌───────────────────────────────┼───────────────────────────────┐                              │
+│        │ spawn-worker.sh               │                               │ spawn-worker.sh              │
+│        ▼                               ▼                               ▼                              │
+│   ┌─────────────┐               ┌─────────────┐               ┌─────────────┐                        │
+│   │   WORKER    │               │   WORKER    │               │   WORKER    │      ...N workers      │
+│   │  code-worker│               │memory-worker│               │  analysis   │                        │
+│   ├─────────────┤               ├─────────────┤               ├─────────────┤                        │
+│   │ task_claim()│               │ task_claim()│               │ task_claim()│                        │
+│   │   [work]    │               │   [work]    │               │   [work]    │                        │
+│   │ agent_send  │               │ agent_send  │               │ agent_send  │                        │
+│   │(task_complete)              │(task_complete)              │(task_complete)                       │
+│   └──────┬──────┘               └──────┬──────┘               └──────┬──────┘                        │
+│          │                             │                             │                                │
+│          └─────────────────────────────┼─────────────────────────────┘                                │
+│                                        │                                                              │
+│                                        ▼                                                              │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         │
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                     COMMUNICATION LAYER                                                │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│    ┌─────────────────────────────────────────────────────────────────────────────────────────────┐    │
+│    │                              MESSAGE BUS (message-bus.jsonl)                                │    │
+│    ├─────────────────────────────────────────────────────────────────────────────────────────────┤    │
+│    │                                                                                             │    │
+│    │   APPEND-ONLY LOG:                                                                         │    │
+│    │   ┌─────────────────────────────────────────────────────────────────────────────────────┐  │    │
+│    │   │ {"type":"task_claim","task_id":"task_123","from":"agent-abc","ts":"..."}           │  │    │
+│    │   │ {"type":"task_complete","task_id":"task_123","summary":"Fixed bug","ts":"..."}     │  │    │
+│    │   │ {"type":"broadcast","status":"working","details":{...},"ts":"..."}                 │  │    │
+│    │   │ {"type":"heartbeat","from":"agent-xyz","status":"active","ts":"..."}               │  │    │
+│    │   │ {"type":"request_help","from":"agent-xyz","problem":"stuck on X","ts":"..."}       │  │    │
+│    │   └─────────────────────────────────────────────────────────────────────────────────────┘  │    │
+│    │                                                                                             │    │
+│    │   MESSAGE TYPES:                                                                           │    │
+│    │   ├── broadcast      → All agents receive                                                  │    │
+│    │   ├── direct         → Specific agent (to_agent field)                                    │    │
+│    │   ├── task_claim     → Agent claiming task (atomic via file lock)                         │    │
+│    │   ├── task_complete  → Task finished with summary                                         │    │
+│    │   ├── task_available → New task ready for claiming                                        │    │
+│    │   ├── heartbeat      → Keep-alive signal                                                  │    │
+│    │   └── request_help   → Ask for assistance                                                 │    │
+│    │                                                                                             │    │
+│    └─────────────────────────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                                        │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         │
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                      PERSISTENCE LAYER                                                 │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│    memory/                                                                                             │
+│    ├────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│    │                                    CORE STATE FILES                                            │ │
+│    ├────────────────────────────────────────────────────────────────────────────────────────────────┤ │
+│    │                                                                                                │ │
+│    │  ┌──────────────────────┐  ┌──────────────────────┐  ┌──────────────────────┐                 │ │
+│    │  │    state.json        │  │    tasks.json        │  │  agent-registry.json │                 │ │
+│    │  ├──────────────────────┤  ├──────────────────────┤  ├──────────────────────┤                 │ │
+│    │  │ session_count: 177   │  │ tasks: [             │  │ agents: [            │                 │ │
+│    │  │ status: "running"    │  │   {id, title,        │  │   {id, role,         │                 │ │
+│    │  │ achievements: [...]  │  │    priority,         │  │    status,           │                 │ │
+│    │  │ active_task: "..."   │  │    status,           │  │    heartbeat,        │                 │ │
+│    │  │                      │  │    assigned_to}      │  │    current_task}     │                 │ │
+│    │  │                      │  │ ]                    │  │ ]                    │                 │ │
+│    │  └──────────────────────┘  └──────────────────────┘  └──────────────────────┘                 │ │
+│    │                                                                                                │ │
+│    │  ┌──────────────────────┐  ┌──────────────────────┐  ┌──────────────────────┐                 │ │
+│    │  │orchestrator-state.json│ │ knowledge-base.json  │  │quality-assessments   │                 │ │
+│    │  ├──────────────────────┤  ├──────────────────────┤  ├──────────────────────┤                 │ │
+│    │  │ LEADER ELECTION      │  │ insights: [          │  │ assessments: [       │                 │ │
+│    │  │ leader_id: "agent-X" │  │   {insight,          │  │   {task_id,          │                 │ │
+│    │  │ leader_epoch: 23     │  │    source,           │  │    score: 0-100,     │                 │ │
+│    │  │ last_heartbeat: "..."│  │    confidence}       │  │    dimensions,       │                 │ │
+│    │  │ ttl_ms: 180000       │  │ ]                    │  │    notes}            │                 │ │
+│    │  └──────────────────────┘  └──────────────────────┘  └──────────────────────┘                 │ │
+│    │                                                                                                │ │
+│    └────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                                        │
+│    ├────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│    │                                    WORKING MEMORY                                              │ │
+│    ├────────────────────────────────────────────────────────────────────────────────────────────────┤ │
+│    │                                                                                                │ │
+│    │  ┌──────────────────────────────────────────────────────────────────────────────────────────┐ │ │
+│    │  │  working.md  (Free-form context for agents)                                              │ │ │
+│    │  ├──────────────────────────────────────────────────────────────────────────────────────────┤ │ │
+│    │  │  ## Current Focus                                                                        │ │ │
+│    │  │  Working on orchestrator stability improvements...                                       │ │ │
+│    │  │                                                                                          │ │ │
+│    │  │  ## Open Questions (for next session)                                                    │ │ │
+│    │  │  - Should we increase watchdog check interval?                                           │ │ │
+│    │  │                                                                                          │ │ │
+│    │  │  ## Recent Decisions                                                                     │ │ │
+│    │  │  - Switched to absolute timestamps for rate limits                                       │ │ │
+│    │  └──────────────────────────────────────────────────────────────────────────────────────────┘ │ │
+│    │                                                                                                │ │
+│    └────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                                        │
+│    ├────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│    │                                    WATCHDOG STATE                                              │ │
+│    ├────────────────────────────────────────────────────────────────────────────────────────────────┤ │
+│    │  .orchestrator.pid      .watchdog.pid      .watchdog-status.json      .rate-limit-status.json │ │
+│    │  .restart-count.json    .token-usage.json                                                     │ │
+│    └────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                                        │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                        PLUGIN LAYER                                                    │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│    .opencode/plugin/index.ts                                                                           │
+│    ├────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│    │                                    OPENCODE PLUGIN                                             │ │
+│    ├────────────────────────────────────────────────────────────────────────────────────────────────┤ │
+│    │                                                                                                │ │
+│    │   HOOKS:                                          TOOLS EXPOSED:                              │ │
+│    │   ┌────────────────────────────────┐              ┌────────────────────────────────┐          │ │
+│    │   │ session.start                  │              │ AGENT:                         │          │ │
+│    │   │ ├── Inject system context      │              │ ├── agent_register(role)       │          │ │
+│    │   │ ├── Load memory/working.md     │              │ ├── agent_status()             │          │ │
+│    │   │ └── Primary instance election  │              │ ├── agent_send(type, payload)  │          │ │
+│    │   │                                │              │ ├── agent_messages()           │          │ │
+│    │   │ session.end                    │              │ ├── agent_update_status()      │          │ │
+│    │   │ ├── Extract knowledge          │              │ └── agent_set_handoff(enabled) │          │ │
+│    │   │ ├── Save session state         │              │                                │          │ │
+│    │   │ └── Cleanup                    │              │ TASK:                          │          │ │
+│    │   │                                │              │ ├── task_list(status, limit)   │          │ │
+│    │   │ tool.call                      │              │ ├── task_create(title, ...)    │          │ │
+│    │   │ ├── Track timing               │              │ ├── task_claim(task_id)        │          │ │
+│    │   │ └── Log to tool-timing.jsonl   │              │ ├── task_update(task_id, ...)  │          │ │
+│    │   │                                │              │ ├── task_next()                │          │ │
+│    │   │ tool.error                     │              │ └── task_schedule()            │          │ │
+│    │   │ └── Edit error recovery hints  │              │                                │          │ │
+│    │   └────────────────────────────────┘              │ MEMORY:                        │          │ │
+│    │                                                   │ ├── memory_status()            │          │ │
+│    │                                                   │ ├── memory_search(query)       │          │ │
+│    │                                                   │ └── memory_update(...)         │          │ │
+│    │                                                   │                                │          │ │
+│    │                                                   │ QUALITY:                       │          │ │
+│    │                                                   │ ├── quality_assess(...)        │          │ │
+│    │                                                   │ └── quality_report()           │          │ │
+│    │                                                   │                                │          │ │
+│    │                                                   │ USER:                          │          │ │
+│    │                                                   │ ├── user_messages_read()       │          │ │
+│    │                                                   │ └── user_messages_mark_read()  │          │ │
+│    │                                                   │                                │          │ │
+│    │                                                   │ GIT:                           │          │ │
+│    │                                                   │ ├── git_status()               │          │ │
+│    │                                                   │ ├── git_diff()                 │          │ │
+│    │                                                   │ ├── git_commit()               │          │ │
+│    │                                                   │ └── git_log()                  │          │ │
+│    │                                                   └────────────────────────────────┘          │ │
+│    └────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                                        │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                      TASK LIFECYCLE                                                    │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│                                                                                                        │
+│      ┌──────────┐        ┌──────────────┐        ┌───────────┐        ┌───────────┐                   │
+│      │ CREATED  │───────►│   PENDING    │───────►│IN_PROGRESS│───────►│ COMPLETED │                   │
+│      │          │        │              │        │           │        │           │                   │
+│      └──────────┘        └──────┬───────┘        └─────┬─────┘        └───────────┘                   │
+│                                 │                      │                     ▲                         │
+│                                 │                      │                     │                         │
+│                                 ▼                      │                     │                         │
+│                          ┌──────────────┐              │                     │                         │
+│                          │   BLOCKED    │──────────────┴─────────────────────┘                         │
+│                          │ (depends_on) │     (unblocks when deps complete)                           │
+│                          └──────────────┘                                                              │
+│                                                                                                        │
+│   PRIORITY LEVELS:   critical > high > medium > low                                                    │
+│   PRIORITY AGING:    Older tasks gradually increase in urgency                                         │
+│                                                                                                        │
+│   TASK CLAIMING:     Atomic via file lock + optimistic locking in agent-registry.json                 │
+│                                                                                                        │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    LEADER ELECTION FLOW                                                │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│                                                                                                        │
+│    ORCHESTRATOR A                              ORCHESTRATOR B                                          │
+│    ─────────────                              ─────────────                                            │
+│         │                                           │                                                  │
+│         │  agent_register(role='orchestrator')      │                                                  │
+│         │──────────────────────────────────────►    │                                                  │
+│         │                                           │                                                  │
+│         │  Read orchestrator-state.json             │                                                  │
+│         │  No leader or lease expired?              │                                                  │
+│         │           │                               │                                                  │
+│         │    YES    │    NO                         │                                                  │
+│         │    ▼      │    ▼                          │                                                  │
+│         │  CLAIM    │  DEFER                        │                                                  │
+│         │  epoch++  │  exit                         │                                                  │
+│         │           │                               │                                                  │
+│         │◄──────────┘                               │  agent_register(role='orchestrator')             │
+│         │                                           │──────────────────────────────────────►           │
+│         │                                           │                                                  │
+│         │  [heartbeat every 60s]                    │  Read orchestrator-state.json                    │
+│         │  ─────────────────────►                   │  Healthy leader A exists?                        │
+│         │                                           │           │                                      │
+│         │                                           │    YES    │                                      │
+│         │                                           │    ▼      │                                      │
+│         │                                           │  DEFER    │                                      │
+│         │                                           │  "Deferring to leader A"                         │
+│         │                                           │  exit gracefully                                 │
+│         │                                           │                                                  │
+│         │                                           │                                                  │
+│         │                                                                                              │
+│    ┌────────────────────────────────────────────────────────────────────────────────────────────┐     │
+│    │  orchestrator-state.json                                                                   │     │
+│    │  {                                                                                         │     │
+│    │    "leader_id": "agent-A-12345",                                                          │     │
+│    │    "leader_epoch": 24,           ◄── Fencing token (prevents split-brain)                 │     │
+│    │    "last_heartbeat": "2026-01-04T15:50:00Z",                                              │     │
+│    │    "ttl_ms": 180000              ◄── 3 minute lease                                       │     │
+│    │  }                                                                                         │     │
+│    └────────────────────────────────────────────────────────────────────────────────────────────┘     │
+│                                                                                                        │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                     DIRECTORY STRUCTURE                                                │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│    /app/workspace/                                                                                     │
+│    │                                                                                                   │
+│    ├── .opencode/                                                                                      │
+│    │   ├── plugin/                                                                                     │
+│    │   │   ├── index.ts                  # Main plugin (2000+ lines)                                  │
+│    │   │   ├── tools/                                                                                  │
+│    │   │   │   ├── agent-tools.ts        # agent_* functions                                          │
+│    │   │   │   ├── task-tools.ts         # task_* functions                                           │
+│    │   │   │   ├── memory-tools.ts       # memory_* functions                                         │
+│    │   │   │   ├── quality-tools.ts      # quality_* functions                                        │
+│    │   │   │   ├── git-tools.ts          # git_* functions                                            │
+│    │   │   │   └── user-message-tools.ts # user_messages_* functions                                  │
+│    │   │   └── utils/                                                                                  │
+│    │   │       └── spawn.ts              # Worker spawning utility                                    │
+│    │   └── skill/                        # Agent skills                                               │
+│    │                                                                                                   │
+│    ├── memory/                           # PERSISTENT STATE                                            │
+│    │   ├── state.json                    # Session count, status, achievements                        │
+│    │   ├── tasks.json                    # Task queue                                                 │
+│    │   ├── agent-registry.json           # Active agents                                              │
+│    │   ├── orchestrator-state.json       # Leader election                                            │
+│    │   ├── message-bus.jsonl             # Agent messages (append-only)                               │
+│    │   ├── knowledge-base.json           # Extracted insights                                         │
+│    │   ├── quality-assessments.json      # Task scores                                                │
+│    │   ├── working.md                    # Working memory                                             │
+│    │   ├── user-messages.jsonl           # User → Agent                                               │
+│    │   └── sessions/                     # Per-session state                                          │
+│    │                                                                                                   │
+│    ├── tools/                            # CLI TOOLS                                                   │
+│    │   ├── lib/                                                                                        │
+│    │   │   ├── coordinator.ts            # MultiAgentCoordinator class                                │
+│    │   │   └── prompt-generator.ts       # Centralized prompts                                        │
+│    │   ├── shared/                                                                                     │
+│    │   │   ├── paths.ts                  # Path constants                                             │
+│    │   │   ├── json-utils.ts             # JSON helpers                                               │
+│    │   │   └── types.ts                  # TypeScript types                                           │
+│    │   ├── ui/                                                                                         │
+│    │   │   ├── dashboard.ts              # Interactive TUI                                            │
+│    │   │   └── realtime.ts               # Real-time monitor                                          │
+│    │   └── cli.ts                        # Unified CLI                                                │
+│    │                                                                                                   │
+│    ├── logs/                             # LOG FILES                                                   │
+│    │   ├── watchdog.log                  # Watchdog activity                                          │
+│    │   └── watchdog-startup.log          # Orchestrator spawns                                        │
+│    │                                                                                                   │
+│    ├── docs/                             # DOCUMENTATION                                               │
+│    │   └── specs/                        # Auto-generated task specs                                  │
+│    │                                                                                                   │
+│    ├── orchestrator-watchdog.sh          # WATCHDOG SCRIPT                                             │
+│    ├── spawn-worker.sh                   # WORKER SPAWNING                                             │
+│    ├── start-main.sh                     # Manual startup                                             │
+│    └── opencode.json                     # OpenCode config                                            │
+│                                                                                                        │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                        DATA FLOW SUMMARY                                               │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│                                                                                                        │
+│     USER                WATCHDOG              ORCHESTRATOR              WORKERS                        │
+│       │                    │                      │                       │                            │
+│       │  user_message      │                      │                       │                            │
+│       │─────────────────►  │                      │                       │                            │
+│       │  user-messages.jsonl                      │                       │                            │
+│       │                    │                      │                       │                            │
+│       │                    │  spawn if no leader  │                       │                            │
+│       │                    │─────────────────────►│                       │                            │
+│       │                    │                      │                       │                            │
+│       │                    │                      │  agent_register       │                            │
+│       │                    │                      │─────────────────────► │                            │
+│       │                    │                      │  agent-registry.json  │                            │
+│       │                    │                      │                       │                            │
+│       │                    │                      │  task_list            │                            │
+│       │                    │                      │◄─────────────────────►│                            │
+│       │                    │                      │  tasks.json           │                            │
+│       │                    │                      │                       │                            │
+│       │                    │                      │  spawn-worker.sh      │                            │
+│       │                    │                      │─────────────────────► │                            │
+│       │                    │                      │                       │  task_claim                │
+│       │                    │                      │                       │─────────────────►          │
+│       │                    │                      │                       │  tasks.json                │
+│       │                    │                      │                       │                            │
+│       │                    │                      │                       │  [work...]                 │
+│       │                    │                      │                       │                            │
+│       │                    │                      │                       │  agent_send(task_complete) │
+│       │                    │                      │◄──────────────────────│─────────────────►          │
+│       │                    │                      │  message-bus.jsonl    │                            │
+│       │                    │                      │                       │                            │
+│       │                    │                      │  quality_assess       │                            │
+│       │                    │                      │─────────────────────► │                            │
+│       │                    │                      │quality-assessments.json                            │
+│       │                    │                      │                       │                            │
+│       │                    │  monitor (loop)      │                       │                            │
+│       │                    │◄─────────────────────│                       │                            │
+│       │                    │  restart if dead     │                       │                            │
+│       │                    │                      │                       │                            │
+│                                                                                                        │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                        ║
+║                                          KEY DESIGN PRINCIPLES                                         ║
+║                                                                                                        ║
+║    1. FULLY AUTONOMOUS      - No human operator, agents make all decisions                            ║
+║    2. FILE-BASED IPC        - All communication via JSON/JSONL files                                  ║
+║    3. SINGLE LEADER         - Only one orchestrator active at any time                                ║
+║    4. CRASH RESILIENT       - Watchdog ensures continuous operation                                   ║
+║    5. PERSISTENT MEMORY     - All state survives restarts                                             ║
+║    6. FIRE-AND-FORGET       - Workers spawned non-blocking                                            ║
+║    7. EVENTUAL CONSISTENCY  - File locks + optimistic locking                                         ║
+║                                                                                                        ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝

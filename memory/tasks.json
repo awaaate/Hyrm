@@ -2517,7 +2517,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T10:09:26.797Z",
-      "updated_at": "2026-01-04T10:30:53.591Z",
+      "updated_at": "2026-01-04T19:24:59.593Z",
       "created_by": "unknown",
       "tags": [
         "reliability",
@@ -2531,7 +2531,9 @@
       "notes": [
         "[2026-01-03T10:17:04.642Z] Created error-handler.ts with: 6 typed error classes (AppError, JsonParseError, FileIOError, ValidationError, AgentError, TaskError), readJsonSafe() with backup restoration, writeJsonSafe() with backup creation, schema validation for critical files, structured logging functions. Fixed 14 empty catch blocks across 8 files. Commit: 20b4f16"
       ],
-      "spec_file": "docs/specs/task_1767434966797_implement-centralized-error-ha.md"
+      "spec_file": "docs/specs/task_1767434966797_implement-centralized-error-ha.md",
+      "quality_score": 7.7,
+      "quality_notes": "Centralized error handling improves consistency across tools; JSON recovery patterns help tools survive partial state corruption"
     },
     {
       "id": "task_1767434971056_2ahvj5",
@@ -2615,14 +2617,16 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-03T13:58:38.476Z",
-      "updated_at": "2026-01-04T10:30:53.592Z",
+      "updated_at": "2026-01-04T19:25:07.743Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "trivial",
       "assigned_to": "agent-1767448598591-77z4at",
       "claimed_at": "2026-01-03T13:58:42.293Z",
       "completed_at": "2026-01-03T13:58:45.491Z",
-      "spec_file": "docs/specs/task_1767448718476_test-auto-assessment.md"
+      "spec_file": "docs/specs/task_1767448718476_test-auto-assessment.md",
+      "quality_score": 4.4,
+      "quality_notes": "Test tasks should not be completed without actual testing infrastructure; this was a POC that exposed auto_assess feature but had no real test harness"
     },
     {
       "id": "task_1767448827428_p5ueo3",
@@ -2631,7 +2635,7 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-03T14:00:27.428Z",
-      "updated_at": "2026-01-04T10:30:53.592Z",
+      "updated_at": "2026-01-04T19:25:08.603Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "simple",
@@ -2641,7 +2645,9 @@
       "notes": [
         "[2026-01-03T14:00:34.554Z] Testing updated auto-assessment implementation with fixed file writing order"
       ],
-      "spec_file": "docs/specs/task_1767448827428_test-auto-assessment-v2.md"
+      "spec_file": "docs/specs/task_1767448827428_test-auto-assessment-v2.md",
+      "quality_score": 4.4,
+      "quality_notes": "Auto-assessment feature validation should use integration tests rather than manual task completion"
     },
     {
       "id": "task_1767448859094_9yoj9d",
@@ -2650,14 +2656,16 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-03T14:00:59.094Z",
-      "updated_at": "2026-01-04T10:30:53.593Z",
+      "updated_at": "2026-01-04T19:25:09.568Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "trivial",
       "assigned_to": "agent-1767448598591-77z4at",
       "claimed_at": "2026-01-03T14:01:02.714Z",
       "completed_at": "2026-01-03T14:01:06.081Z",
-      "spec_file": "docs/specs/task_1767448859094_test-auto-assessment-v3.md"
+      "spec_file": "docs/specs/task_1767448859094_test-auto-assessment-v3.md",
+      "quality_score": 4.4,
+      "quality_notes": "Duplicate test tasks indicate need for test automation framework to avoid manual POC duplication"
     },
     {
       "id": "task_1767448891576_ta5xgf",
@@ -2666,14 +2674,16 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-03T14:01:31.576Z",
-      "updated_at": "2026-01-04T10:30:53.593Z",
+      "updated_at": "2026-01-04T19:25:10.544Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "moderate",
       "assigned_to": "agent-1767448598591-77z4at",
       "claimed_at": "2026-01-03T14:01:35.725Z",
       "completed_at": "2026-01-03T14:01:38.071Z",
-      "spec_file": "docs/specs/task_1767448891576_test-auto-assessment-v4.md"
+      "spec_file": "docs/specs/task_1767448891576_test-auto-assessment-v4.md",
+      "quality_score": 4.4,
+      "quality_notes": "Task naming should be more descriptive; 'v4' indicates iterative POC pattern that should trigger test-automation epic"
     },
     {
       "id": "task_1767449124099_qwnrk9",
@@ -2757,7 +2767,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T14:12:12.262Z",
-      "updated_at": "2026-01-04T10:30:53.594Z",
+      "updated_at": "2026-01-04T19:25:00.621Z",
       "created_by": "unknown",
       "tags": [
         "bug",
@@ -2766,7 +2776,9 @@
       ],
       "complexity": "moderate",
       "completed_at": "2026-01-03T14:13:52.743Z",
-      "spec_file": "docs/specs/task_1767449532262_fix-memorysearch-tool-readfile.md"
+      "spec_file": "docs/specs/task_1767449532262_fix-memorysearch-tool-readfile.md",
+      "quality_score": 8.7,
+      "quality_notes": "Import issues in tool files can break plugin tools silently; add import linting to CI/pre-commit checks"
     },
     {
       "id": "task_1767450975777_nwtn6a",
@@ -2910,7 +2922,7 @@
       "priority": "critical",
       "status": "completed",
       "created_at": "2026-01-03T17:18:23.488Z",
-      "updated_at": "2026-01-04T10:30:53.598Z",
+      "updated_at": "2026-01-04T19:25:01.538Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2925,7 +2937,9 @@
       "notes": [
         "[2026-01-04] Fixed in commit 174d07e - added releaseLeaderLease() to prevent infinite spawn loop"
       ],
-      "spec_file": "docs/specs/task_1767460703488_investigate-orchestrator-leade.md"
+      "spec_file": "docs/specs/task_1767460703488_investigate-orchestrator-leade.md",
+      "quality_score": 8.6,
+      "quality_notes": "Leader lease churn indicates tight heartbeat windows or clock skew; implement exponential backoff in leader election to reduce restart storms"
     },
     {
       "id": "task_1767460703767_6hiynl",
@@ -3198,7 +3212,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-04T11:21:50.136Z",
-      "updated_at": "2026-01-04T16:45:28.836Z",
+      "updated_at": "2026-01-04T19:25:02.573Z",
       "created_by": "unknown",
       "tags": [
         "bug",
@@ -3214,7 +3228,9 @@
         "[2026-01-04T16:38:57.823Z] Root cause was Node child_process stdio semantics leaking into orchestrator respawn path; ensured orchestrator respawn uses Bun.spawn with explicit {stdin/stdout/stderr: 'ignore'} (no Node-style stdio option). Added regression test tools/lib/orchestrator-respawn.test.ts to prevent reintroducing `stdio: 'ignore'` and verify both respawn + task-continuation spawns ignore stdio. Ran `bun test` (pass). `bun build tools/opencode-tracker.ts --no-bundle` fails due to missing undici dependency (pre-existing env/setup issue).",
         "[2026-01-04T16:45:28.836Z] Respawn path in `.opencode/plugin/index.ts` already uses Bun.spawn with `{ stdin/stdout/stderr: \"ignore\" }` (not Node child_process stdio) to avoid ERR_INVALID_ARG_TYPE. Added regression test `tools/lib/orchestrator-respawn.test.ts` to guard against reintroducing `stdio: \"ignore\"` and to ensure ignore streams are explicitly set for detached spawns. Ran `bun test tools/lib/orchestrator-respawn.test.ts`."
       ],
-      "completed_at": "2026-01-04T16:45:28.836Z"
+      "completed_at": "2026-01-04T16:45:28.836Z",
+      "quality_score": 8.9,
+      "quality_notes": "Bun.spawn stdio argument type mismatches cause silent failures; validate Bun API types in respawn code paths and test error cases"
     },
     {
       "id": "task_1767525712139_ng89qv",
@@ -3289,7 +3305,7 @@
       "priority": "critical",
       "status": "completed",
       "created_at": "2026-01-04T16:58:38.892Z",
-      "updated_at": "2026-01-04T17:16:49.149Z",
+      "updated_at": "2026-01-04T19:25:03.443Z",
       "created_by": "unknown",
       "tags": [
         "bug",
@@ -3303,7 +3319,9 @@
       "completed_at": "2026-01-04T17:16:49.144Z",
       "notes": [
         "[2026-01-04T17:16:49.149Z] Implemented fallback session boot when session.created is missing by detecting sessionID from session.status/idle/error/end events. This restores state.json session_count increments and ensures handleSessionCreated() runs for opencode-run spawned sessions. Added buffering so session.created received before primary election isn't lost. Verified with bun test; bun build .opencode/plugin/index.ts --no-bundle."
-      ]
+      ],
+      "quality_score": 9.5,
+      "quality_notes": "Session hook ordering matters - session.created may fire before plugin has initialized state tables; use buffering and fallback boot detection"
     },
     {
       "id": "task_1767548025490_5nmykl",

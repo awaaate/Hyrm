@@ -1,13 +1,13 @@
 {
-    "status": "rate_limited",
-    "last_check": "2026-01-04T18:56:18+00:00",
-    "orchestrator_pid": 0,
-    "details": "Waiting for rate limit cooldown",
-    "watchdog_pid": 405354,
-    "restarts_this_hour": 1,
+    "status": "running",
+    "last_check": "2026-01-04T19:25:14+00:00",
+    "orchestrator_pid": 470079,
+    "details": "Monitoring active",
+    "watchdog_pid": 469960,
+    "restarts_this_hour": 3,
     "token_usage": 0,
     "token_limit": 150000,
-    "model": "openai/gpt-5.2",
+    "model": "anthropic/claude-haiku-4-5",
     "config_loaded": true,
     "version": "3.0"
 }
