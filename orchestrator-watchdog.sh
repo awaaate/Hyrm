@@ -1674,6 +1674,11 @@ run_watchdog() {
                     last_exit=$(get_child_exit_code "$last_pid")
                     persist_crash_failure "$last_pid" "$last_exit" "health_check: not running"
                     rm -f "$PIDFILE" 2>/dev/null || true
+                    
+                    # CRITICAL: Stop heartbeat service when orchestrator dies
+                    # Otherwise it keeps renewing the lease and blocks respawn
+                    log "Stopping orphaned heartbeat service..." "DEBUG"
+                    bash tools/heartbeat-service.sh "memory/.heartbeat-service.pid" stop 2>/dev/null || true
                 fi
             fi
 

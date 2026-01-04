@@ -2,43 +2,35 @@
   "version": "1.0.0",
   "agents": [
     {
-      "agent_id": "agent-1767548076931-m606mu",
-      "session_id": "session-1767548076931",
-      "started_at": "2026-01-04T17:34:36.932Z",
-      "last_heartbeat": "2026-01-04T19:53:37.532Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 444766
-    },
-    {
-      "agent_id": "agent-LCjUypPf",
-      "session_id": "ses_4756f6512ffeOS6pdFLCjUypPf",
-      "started_at": "2026-01-04T19:51:32.187Z",
-      "last_heartbeat": "2026-01-04T19:53:32.204Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 637837
-    },
-    {
-      "agent_id": "agent-1767556297888-n6td1ig",
-      "session_id": "session-1767556297888",
-      "started_at": "2026-01-04T19:51:37.888Z",
-      "last_heartbeat": "2026-01-04T19:53:37.893Z",
+      "agent_id": "agent-1767557539707-gpscqs",
+      "session_id": "session-1767557539707",
+      "started_at": "2026-01-04T20:12:19.708Z",
+      "last_heartbeat": "2026-01-04T20:20:25Z",
       "status": "working",
       "assigned_role": "orchestrator",
-      "pid": 637837,
+      "pid": 656016,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-1767556328289-q0ctpa",
-      "session_id": "session-1767556328289",
-      "started_at": "2026-01-04T19:52:08.290Z",
-      "last_heartbeat": "2026-01-04T19:53:10.098Z",
+      "agent_id": "agent-gWTznv8A",
+      "session_id": "ses_47554ed6cffehc1ek9gWTznv8A",
+      "started_at": "2026-01-04T20:20:25.975Z",
+      "last_heartbeat": "2026-01-04T20:20:25.979Z",
       "status": "active",
       "assigned_role": "code-worker",
-      "pid": 639068
+      "pid": 664669
+    },
+    {
+      "agent_id": "agent-1767558030320-oph5p",
+      "session_id": "session-1767558030320",
+      "started_at": "2026-01-04T20:20:30.320Z",
+      "last_heartbeat": "2026-01-04T20:20:35.985Z",
+      "status": "working",
+      "assigned_role": "orchestrator",
+      "pid": 664669,
+      "current_task": "Orchestrator mode - no handoff"
     }
   ],
-  "last_updated": "2026-01-04T19:53:37.893Z",
-  "lock_version": 50
+  "last_updated": "2026-01-04T20:20:35.985Z",
+  "lock_version": 9
 }

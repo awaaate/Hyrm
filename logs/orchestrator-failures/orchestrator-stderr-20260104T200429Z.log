@@ -1,0 +1,15 @@
+[91m[1m| [0m[90m Bash     [0mCheck CLI system status
+
+
+
+[44m[37m[1m  OPENCODE SYSTEM STATUS  [0m
+
+[36mSESSION[0m     [1m186[0m
+[36mSTATUS[0m      [33mSession 184: Orchestrator completed - I am leader (epoch 9). Verified realtime.log rotation (8.3/10 quality), identified it's manual-only not automatic. Created HIGH-priority follow-up task for automatic rotation. All pending tasks resolved, created new work item. System health: leader stable, heartbeat service working, 206 tests 100% passing.[0m
+[36mAGENTS[0m      [1m3[0m active
+[36mTASKS[0m       [1m1[0m pending
+[36mMESSAGES[0m    [2m0[0m unread from users
+[36mQUALITY[0m     [1m8.0[0m/10 avg (stable)
+
+[2mLast updated: 8:06:41 PM[0m
+

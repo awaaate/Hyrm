@@ -1,0 +1,5 @@
+[91m[1m| [0m[90m Bash     [0mVerify rotation function is in place
+
+370:  const checkAndRotateRealtimeLog = (): void => {
+444:      checkAndRotateRealtimeLog();
+

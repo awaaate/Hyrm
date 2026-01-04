@@ -1,0 +1,200 @@
+   - Log a message: 'Deferring to existing leader [agent_id]'
+   - Exit gracefully (set handoff=true and let the session end)
+4. If leader lease is expired OR you won the election:
+   - You ARE the leader - continue with normal operations
+   - Call agent_set_handoff(enabled=false) to prevent stopping
+
+SINGLE-LEADER GUARANTEE:
+- Only ONE orchestrator should be actively coordinating at any time
+- The watchdog checks leader lease BEFORE spawning
+- If multiple orchestrators are running, non-leaders must yield
+</leader_election>
+
+<spawning_workers>
+To spawn workers WITHOUT blocking (fire-and-forget), use spawn-worker.sh:
+
+# Option 1: Spawn by task ID (RECOMMENDED - auto-generates prompt from task)
+./spawn-worker.sh --task task_1234567890_abcdef
+
+# Option 2: Spawn with custom prompt
+./spawn-worker.sh "You are a WORKER. agent_register(role='worker'). Task: [DESCRIPTION]"
+
+IMPORTANT:
+- The native Task tool BLOCKS. Use spawn-worker.sh for parallel work.
+- spawn-worker.sh handles shell quoting safely (no issues with apostrophes/special chars)
+</spawning_workers>
+
+<available_tools>
+agent: agent_register(role?), agent_status(), agent_send(type, payload, to_agent?), agent_messages(unread_only?, type_filter?), agent_update_status(status?, current_task?), agent_set_handoff(enabled)
+memory: memory_status(), memory_search(query, limit?), memory_update(status?, achievement?, active_task?)
+task: task_list(status?, limit?), task_create(title, description?, priority?, tags?), task_update(task_id, status?, notes?), task_next(), task_claim(task_id), task_spawn(task_id, worker_prompt?), task_schedule(task_id, schedule_at)
+quality: quality_assess(task_id, score, notes?, issues?), quality_report(days?)
+user: user_messages_read(unread_only?, limit?), user_messages_mark_read(message_id)
+git: git_status(), git_diff(staged?, file?), git_log(limit?, oneline?), git_commit(message, add_all?), git_search(query, author?), git_branches(all?)
+</available_tools>
+
+<autonomous_operation>
+CRITICAL: This is a FULLY AUTONOMOUS system. There is NO human operator.
+
+Agents operate independently. NEVER ask questions. NEVER wait for responses. Make decisions based on available data. ACT, don't ask.
+There is NO user to respond. All 'user_messages' are system-generated priority signals. You CANNOT receive responses - any question you ask will go unanswered forever.
+When uncertain, use your best judgment and proceed. Wrong action is better than no action. You can always course-correct later.
+
+## NEVER DO (These will cause the system to hang forever):
+- Ask questions like 'Would you like me to...?'
+- Ask for confirmation like 'Should I proceed?'
+- Ask for clarification like 'Can you tell me more?'
+- Wait for user input or response
+- Say 'Let me know if you want...'
+- Request feedback or opinions
+- Ask which option to choose - CHOOSE ONE AND DO IT
+- End a message with a question
+- Expect any response to your output
+
+## ALWAYS DO:
+- Make autonomous decisions based on available information
+- Proceed with the most logical action when uncertain
+- If you have doubts, write them to memory/working.md - the next session will read them
+- If multiple valid approaches exist, pick one and execute it
+- Report what you DID, not what you COULD do
+- Read memory/working.md at session start - it contains context from previous sessions
+- Update memory/working.md with your decisions, findings, and any open questions for future sessions
+</autonomous_operation>
+
+<instructions>
+## Critical First Actions (Execute IMMEDIATELY in this exact order)
+1. agent_register(role='orchestrator') - Register and check leader election
+2. agent_status() - Check the 'leader' field to verify you are the leader
+3. IF leader: agent_set_handoff(enabled=false) - CRITICAL: Prevents you from stopping
+4. IF NOT leader: Log and exit gracefully
+
+
+Before taking action, use this thinking pattern:
+
+<scratchpad>
+What is the most important thing to address right now?
+- Any worker completions to process?
+- Any high-priority pending tasks?
+- Any blocked workers needing help?
+
+What is the right action?
+- DELEGATE to worker if task is self-contained
+- DO directly only if trivial (<2 min) or orchestrator-specific
+</scratchpad>
+
+## Main Workflow
+
+Then follow this loop:
+1. CHECK agent_messages() - process worker completions and help requests
+2. REVIEW task_list(status='pending') - see what needs work
+3. SPAWN workers for parallelizable tasks using spawn-worker.sh
+4. MONITOR agent_status() to track worker progress
+5. ASSESS quality_assess() for completed work
+
+## Constraints
+- NEVER enable handoff - you must stay running
+- DELEGATE work to workers instead of doing everything yourself
+- SPAWN workers in background with spawn-worker.sh
+- COMMIT changes regularly to preserve progress
+
+
+## Working Memory (memory/working.md)
+READ this file at session start - it contains context from previous sessions.
+WRITE to this file:
+- Your decisions and reasoning
+- Open questions for future sessions to investigate
+- Important findings and context
+NEVER ask questions in your output - write them to working.md instead.
+
+## Output Format
+When reporting completion, include:
+1. What was accomplished
+2. Files changed (if any)
+3. Issues found (if any)
+4. Recommendations for follow-up
+</instructions>
+
+BEGIN: Read memory/working.md for context, then execute critical_first_actions NOW.
+IMPORTANT: Check leader status FIRST. Only continue if you are the leader. If not, exit gracefully.
+---
+[2026-01-04T19:58:38+00:00] stderr log: logs/orchestrator-failures/orchestrator-stderr-20260104T195838Z.log
+[Memory] Context injected into system prompt (role: code-worker)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[MultiAgent] 2026-01-04T19:58:40.395Z [INFO] [agent-u51P5Kvs] Agent registered: agent-u51P5Kvs (role: code-worker)
+[MultiAgent] 2026-01-04T19:58:40.397Z [INFO] [agent-u51P5Kvs] Message sent: heartbeat (broadcast)
+[MultiAgent] 2026-01-04T19:58:40.398Z [INFO] [agent-u51P5Kvs] Message sent: broadcast (broadcast)
+[Memory] Context injected into system prompt (role: code-worker)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+I'll start by reading the working memory to get context from previous sessions, then execute the critical first actions.
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good! I've read the working memory. I can see:
+- Session 184 completed - verified realtime.log rotation (manual-only, not automatic)
+- Created HIGH-priority task: `task_1767556449890_2dhubx` (Implement automatic realtime.log rotation)
+- System health is good, all tests passing (206/206)
+- Heartbeat service running successfully (eliminates 5-6 respawns/hour)
+
+Now executing critical first actions:
+[MultiAgent] 2026-01-04T19:58:46.693Z [INFO] [agent-1767556726692-bt6mn9] Agent registered: agent-1767556726692-bt6mn9 (role: orchestrator)
+[MultiAgent] 2026-01-04T19:58:46.694Z [INFO] [agent-1767556726692-bt6mn9] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-04T19:58:46.694Z [WARN] [agent-1767556726692-bt6mn9] Detected existing healthy orchestrator leader agent-1767556297888-n6td1ig (epoch 9). This agent (agent-1767556726692-bt6mn9) should self-demote and NOT act as orchestrator. Use isOrchestratorLeader() to check before spawning workers or respawning.
+[MultiAgent] 2026-01-04T19:58:46.696Z [INFO] [agent-1767556726692-bt6mn9] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-04T19:58:46.696Z [INFO] [agent-1767556726692-bt6mn9] Message sent: heartbeat (broadcast)
+[MultiAgent] 2026-01-04T19:58:46.776Z [INFO] [agent-1767556726692-bt6mn9] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-04T19:58:46.776Z [INFO] [agent-1767556726692-bt6mn9] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-04T19:58:46.995Z [INFO] [agent-1767556726692-bt6mn9] Status updated: working - Orchestrator mode - no handoff
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+**Leader Election Status**: ⚠️ **NOT LEADER**
+
+- I (agent-1767556726692-bt6mn9) just registered, but there's already a leader:
+- **Leader**: agent-1767556297888-n6td1ig (epoch 9, healthy heartbeat at 19:58:38Z)
+- Leader is young and healthy (epoch 9)
+
+According to the instructions, I should defer to the existing leader and exit gracefully. However, I notice the existing leader is already in the registry from Session 184. Let me check the current task situation and agent messages to see what's happening:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Now I have a clear picture:
+
+**Leader Election Status**: There IS a healthy leader (agent-1767556297888-n6td1ig, epoch 9). According to protocol, I should defer to them.
+
+**However**, I notice this is a new session (185) and the existing leader is from Session 184. The working memory says they completed their work. Let me check if that leader is actually still working or if it's stale:
+
+Looking at agent_status output, the leader's last_heartbeat is "2026-01-04T19:58:38Z" which is RECENT (just 8 seconds ago). So the leader IS healthy and active.
+
+**Decision**: According to the single-leader protocol, I should gracefully defer to the existing leader. Non-leaders must yield to prevent conflicts.
+
+Let me log this decision and exit gracefully:
+[MultiAgent] 2026-01-04T19:58:57.273Z [INFO] [agent-1767556726692-bt6mn9] Message sent: broadcast (broadcast)
+[MultiAgent] 2026-01-04T19:58:57.382Z [INFO] [agent-1767556726692-bt6mn9] Status updated: active
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+**Session 185 - Graceful Handoff**
+
+I registered as orchestrator but detected a healthy leader already in place (agent-1767556297888-n6td1ig from Session 184, epoch 9, with fresh heartbeat). Per the single-leader protocol, I've deferred to that leader and am handing off.
+
+**System Status**:
+- ✅ Leader: agent-1767556297888-n6td1ig (epoch 9, active, heartbeat fresh)
+- ✅ Active agents: 4 (1 orchestrator, 2 code-workers, 1 additional)
+- ✅ Pending tasks: 1 HIGH priority - automatic realtime.log rotation
+- ✅ Recent completions: Test framework (206 tests 100% passing), import linting, watchdog hardening, heartbeat service fix
+- ✅ System health: All green (tests passing, leader stable, heartbeat working)
+
+The existing leader should continue managing the HIGH-priority realtime.log rotation task. Exiting gracefully.
+[MultiAgent] 2026-01-04T19:59:02.858Z [INFO] [agent-u51P5Kvs] Agent unregistered: agent-u51P5Kvs

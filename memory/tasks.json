@@ -3593,9 +3593,9 @@
       "title": "Implement automatic realtime.log rotation in orchestrator lifecycle",
       "description": "Session 184 discovery: realtime.log rotation works when manually invoked, but has no automatic trigger. Log currently 5.4MB with 28k+ lines. Without automatic rotation, log grows unbounded. Integrate rotation into: (1) Orchestrator idle-cleanup task loop, or (2) Plugin log append (check size before write), or (3) Session-end hooks. Add monitoring to alert if realtime.log exceeds 5MB (indicates rotation isn't running).\",",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-04T19:54:09.890Z",
-      "updated_at": "2026-01-04T19:54:09.895Z",
+      "updated_at": "2026-01-04T20:13:56.264Z",
       "created_by": "unknown",
       "tags": [
         "logging",
@@ -3603,9 +3603,121 @@
         "automation"
       ],
       "complexity": "moderate",
-      "spec_file": "docs/specs/task_1767556449890_implement-automatic-realtimelo.md"
+      "spec_file": "docs/specs/task_1767556449890_implement-automatic-realtimelo.md",
+      "completed_at": "2026-01-04T20:13:35.065Z",
+      "notes": [
+        "[2026-01-04T20:13:35.066Z] Automatic realtime.log rotation implemented in plugin (commit e6ff6a3). Implementation:\n- Rotation integrated into plugin log append (checkAndRotateRealtimeLog called before every write)\n- Rotates when realtime.log exceeds 5MB threshold\n- Keeps last 5000 lines, archives older entries with timestamp\n- Logs WARN at 4.5MB threshold to alert if rotation isn't running\n- Silent fail ensures logging system resilience\n- Currently working: log is 983K (under 5MB), archives are being created\n- All 119 tests passing\n- Code compiles successfully\""
+      ],
+      "quality_score": 8.9,
+      "quality_notes": "Automatic log rotation should be integrated at the write point rather than as a separate cleanup task. This ensures rotation happens reliably regardless of orchestrator activity patterns. Check-before-append pattern is more reliable than post-session cleanup."
+    },
+    {
+      "id": "task_1767558061880_oen9bn",
+      "title": "Add archive compression for realtime.log archives exceeding 100MB",
+      "description": "Current archives: 4.5MB. Recommendation from Session 187 task completion. Implement gzip compression in checkAndRotateRealtimeLog() to compress archived logs. Keep last 5 uncompressed, compress older ones. Will reduce storage by ~80-90% for long-term archival. Track archive growth metrics.\\\",\\n  \\\"priority\\\": \\\"low\\\",\\n  \\\"tags\\\": [\\\"optimization\\\",\\\"storage\\\",\\\"maintenance\\\"],\\n  \\\"estimated_hours\\\": 2",
+      "priority": "low",
+      "status": "pending",
+      "created_at": "2026-01-04T20:21:01.880Z",
+      "updated_at": "2026-01-04T20:21:01.897Z",
+      "created_by": "unknown",
+      "tags": [
+        "optimization",
+        "storage",
+        "maintenance"
+      ],
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767558061880_add-archive-compression-for-re.md"
+    },
+    {
+      "id": "task_1767558064190_zkfq4m",
+      "title": "Investigate orchestrator crashes in watchdog logs (exit code 0 and 137)",
+      "description": "Observed 2 crashes: (1) exit code 0 at 20:07:36Z (PID 647752), (2) exit code 0 at 20:15:19Z (PID 656016). Both detected by health_check:not_running. Exit code 0 is unusual (suggests clean exit, not crash). Investigate: Is orchestrator intentionally exiting? Are exit handlers properly configured? Check logs/orchestrator-failures for stderr details. Root cause analysis and fix if needed.\\\",\\n  \\\"priority\\\": \\\"medium\\\",\\n  \\\"tags\\\": [\\\"debugging\\\",\\\"stability\\\",\\\"watchdog\\\"],\\n  \\\"estimated_hours\\\": 2",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-04T20:21:04.190Z",
+      "updated_at": "2026-01-04T20:21:04.200Z",
+      "created_by": "unknown",
+      "tags": [
+        "debugging",
+        "stability",
+        "watchdog"
+      ],
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767558064190_investigate-orchestrator-crash.md"
+    },
+    {
+      "id": "task_1767558065957_sld23r",
+      "title": "Document orchestrator lifecycle and shutdown behavior in ARCHITECTURE.md",
+      "description": "Current docs missing: orchestrator shutdown triggers, exit handlers, graceful shutdown paths, session lifecycle hooks, and why exit code 0 is seen. Add section covering: (1) Normal shutdown vs crash detection, (2) Agent handoff behavior, (3) Leader lease cleanup on exit, (4) Log rotation on shutdown, (5) State file persistence. Will improve debugging and future orchestrator changes.\\\",\\n  \\\"priority\\\": \\\"medium\\\",\\n  \\\"tags\\\": [\\\"documentation\\\",\\\"architecture\\\"],\\n  \\\"estimated_hours\\\": 1.5",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-04T20:21:05.957Z",
+      "updated_at": "2026-01-04T20:21:05.961Z",
+      "created_by": "unknown",
+      "tags": [
+        "documentation",
+        "architecture"
+      ],
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767558065957_document-orchestrator-lifecycl.md"
+    },
+    {
+      "id": "task_1767558067916_6d4dco",
+      "title": "Add coordination.log rotation to prevent unbounded growth",
+      "description": "Current: coordination.log 484K. Growing from agent heartbeats and messages (every 60s+). No automatic rotation configured. Similar to realtime.log issue but was missed. Add rotation check in multi-agent coordinator to archive old entries. Keep last 10k lines. Estimate growth: 10KB/hour, will hit 10MB in 40 days without rotation.\\\",\\n  \\\"priority\\\": \\\"medium\\\",\\n  \\\"tags\\\": [\\\"maintenance\\\",\\\"logging\\\",\\\"storage\\\"],\\n  \\\"estimated_hours\\\": 1",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-04T20:21:07.916Z",
+      "updated_at": "2026-01-04T20:21:07.921Z",
+      "created_by": "unknown",
+      "tags": [
+        "maintenance",
+        "logging",
+        "storage"
+      ],
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767558067916_add-coordinationlog-rotation-t.md"
+    },
+    {
+      "id": "task_1767558069607_vf5kgj",
+      "title": "Add GitHub Actions CI job to run tests on every commit",
+      "description": "Tests are working locally (206 passing) but not integrated into CI. Add GitHub Actions workflow to: (1) run npm test on all PRs, (2) fail if tests don't pass, (3) report coverage metrics, (4) catch regressions before merge. Use bun for fast execution. Prevents manual testing burden and ensures code quality.\\\",\\n  \\\"priority\\\": \\\"high\\\",\\n  \\\"tags\\\": [\\\"ci-cd\\\",\\\"quality\\\",\\\"automation\\\"],\\n  \\\"estimated_hours\\\": 1.5,\\n  \\\"create_github_issue\\\": true",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-04T20:21:09.607Z",
+      "updated_at": "2026-01-04T20:21:11.552Z",
+      "created_by": "unknown",
+      "tags": [
+        "ci-cd",
+        "quality",
+        "automation"
+      ],
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767558069607_add-github-actions-ci-job-to-r.md",
+      "github_issue_number": 6,
+      "github_issue_url": "https://github.com/awaaate/Hyrm/issues/6",
+      "notes": [
+        "[2026-01-04T20:21:11.552Z] Created GitHub issue #6"
+      ]
+    },
+    {
+      "id": "task_1767558071507_779q2v",
+      "title": "Implement performance benchmarking for agent tools and task operations",
+      "description": "Currently only track tool timing in tool-timing.jsonl (3.6MB file). Add comprehensive benchmarks: (1) agent registration/deregistration, (2) task create/update/claim, (3) memory operations, (4) leader election cycles, (5) message bus throughput. Build dashboard/report showing trends over time. Identify bottlenecks. This is the foundation for performance optimization.\\\",\\n  \\\"priority\\\": \\\"medium\\\",\\n  \\\"tags\\\": [\\\"performance\\\",\\\"monitoring\\\",\\\"benchmarking\\\"],\\n  \\\"estimated_hours\\\": 3",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-04T20:21:11.507Z",
+      "updated_at": "2026-01-04T20:21:11.512Z",
+      "created_by": "unknown",
+      "tags": [
+        "performance",
+        "monitoring",
+        "benchmarking"
+      ],
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767558071507_implement-performance-benchmar.md"
     }
   ],
-  "completed_count": 160,
-  "last_updated": "2026-01-04T19:54:09.895Z"
+  "completed_count": 161,
+  "last_updated": "2026-01-04T20:21:11.552Z"
 }
