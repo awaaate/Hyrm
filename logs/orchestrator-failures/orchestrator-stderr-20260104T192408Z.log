@@ -1,26 +1,5 @@
-[91m[1m| [0m[90m Bash     [0mCheck task status
+[91m[1m| [0m[90m Bash     [0mCheck task assignment
 
-      "id": "task_1767460707507_q5bin1",
-      "title": "Handle expired OAuth/API tokens gracefully (avoid crash/restart loops)",
-      "description": "memory/realtime.log shows session.error with 401 ‘OAuth token has expired’. Add a guardrail: detect auth failures, mark system status as blocked/degraded, pause expensive loops, and emit a clear operator action message (refresh token) instead of cascading failures.\n\nSuccess criteria:\n- On 401, orchestrator remains healthy and stops retry storms\n- A single clear error status is recorded (state + logs) with recovery steps",
-      "priority": "medium",
-      "status": "cancelled",
-      "created_at": "2026-01-03T17:18:27.507Z",
-      "updated_at": "2026-01-04T15:56:42.954Z",
-      "created_by": "unknown",
-      "tags": [
-        "auth",
-        "resilience",
-        "ux"
-      ],
-      "complexity": "moderate",
-      "spec_file": "docs/specs/task_1767460707507_handle-expired-oauthapi-tokens.md",
-      "assigned_to": "dashboard-user",
 
-[93m[1m| [0m[90m Todo     [0m0 todos
-
-[96m[1m| [0m[90m Read     [0mmemory/working.md[92m[1m| [0m[90m Edit     [0mmemory/working.md
-[94m[1m| [0m[90m task_create  [0m{"title":"Implement test automation framework for plugin tools","priority":"high","complexity":"moderate","description":"Replace ad-hoc POC test tasks (v1/v2/v3/v4 pattern) with proper integration test framework. Should cover: agent registration, task creation/completion, quality assessment, memory operations. Use jest or vitest with proper setup/teardown.","tags":["testing","automation","quality"],"estimated_hours":8,"create_github_issue":true}
-[94m[1m| [0m[90m task_create  [0m{"title":"Document leader lease timeout tuning guidelines","priority":"medium","complexity":"simple","description":"Session 189 found leader-lease churn with tight heartbeats; document current timeout values (180s ttl in orchestrator-state.json) and recommendations for exponential backoff in leader election logic. Add to AGENTS.md or new LEADER_ELECTION.md doc.","tags":["documentation","leader-election","resilience"],"estimated_hours":2}
-
-[94m[1m| [0m[90m task_create  [0m{"title":"Add TypeScript import linting to catch missing imports before runtime","priority":"high","complexity":"simple","description":"Configure ESLint with import rules to catch missing imports (readFileSync, etc.) before runtime. Add to pre-commit hook. Prevent repeats of task_1767449532262_smsyvq (memory_search readFileSync bug).","tags":["linting","quality","automation"],"estimated_hours":3,"create_github_issue":true}[94m[1m| [0m[90m task_create  [0m{"title":"Evaluate and monitor realtime.log rotation effectiveness","priority":"medium","complexity":"simple","description":"Realtime.log is currently 5.2M; rotation was implemented in Session 185. Monitor growth over next 1-2 weeks; if it exceeds 10M, consider more aggressive rotation (keep last 2500 lines instead of 5000) or rate-limiting verbose event logging.","tags":["monitoring","performance","logging"],"estimated_hours":1}
+      "status": "in_progress",
+[94m[1m| [0m[90m task_update  [0m{"task_id":"task_1767548027432_dsoaar","status":"pending","notes":"Reset from stale in_progress (idle for 40+ minutes with no assignee). Ready for fresh worker."}

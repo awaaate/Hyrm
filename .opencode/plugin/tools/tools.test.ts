@@ -899,14 +899,15 @@ describe("Edge Cases: Corrupted JSON Recovery", () => {
     expect(data.success).toBe(false);
   });
 
-  test("task_list returns error for corrupted tasks.json", async () => {
+  test("task_list gracefully handles corrupted tasks.json with default", async () => {
     writeFileSync(join(TEST_DIR, "tasks.json"), "not valid json {{}}");
 
     const result = await taskTools.task_list.execute({ status: "pending" });
     const data = JSON.parse(result);
     
-    // Currently returns success:false for corrupted JSON
-    expect(data.success).toBe(false);
+    // readJson gracefully returns default value { tasks: [] } for corrupted JSON
+    expect(data.success).toBe(true);
+    expect(data.tasks).toEqual([]);
   });
 
   test("task_list handles tasks.json with null tasks array", async () => {

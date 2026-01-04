@@ -3377,9 +3377,9 @@
       "title": "Reduce orchestrator start failures observed in watchdog.log",
       "description": "logs/watchdog.log contains repeated `[ERROR] Orchestrator failed to start!` and restart storms (including too many restarts/hour). After fixing plugin/prompt issues, harden watchdog startup diagnostics: include last N lines of orchestrator stderr, surface exit codes, and add backoff/jitter to prevent restart thundering-herd.",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "created_at": "2026-01-04T17:33:47.432Z",
-      "updated_at": "2026-01-04T17:47:10.107Z",
+      "updated_at": "2026-01-04T19:27:21.238Z",
       "created_by": "unknown",
       "tags": [
         "reliability",
@@ -3389,7 +3389,8 @@
       "complexity": "moderate",
       "spec_file": "docs/specs/task_1767548027432_reduce-orchestrator-start-fail.md",
       "notes": [
-        "[2026-01-04T17:47:10.107Z] Worker spawned via spawn-worker.sh (PID 444876). Investigate frequent orchestrator start failures in logs/watchdog.log; correlate with prompt-generator and plugin errors."
+        "[2026-01-04T17:47:10.107Z] Worker spawned via spawn-worker.sh (PID 444876). Investigate frequent orchestrator start failures in logs/watchdog.log; correlate with prompt-generator and plugin errors.",
+        "[2026-01-04T19:27:21.238Z] Reset from stale in_progress (idle for 40+ minutes with no assignee). Ready for fresh worker."
       ]
     },
     {
@@ -3397,9 +3398,9 @@
       "title": "Implement test automation framework for plugin tools",
       "description": "Replace ad-hoc POC test tasks (v1/v2/v3/v4 pattern) with proper integration test framework. Should cover: agent registration, task creation/completion, quality assessment, memory operations. Use jest or vitest with proper setup/teardown.",
       "priority": "high",
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2026-01-04T19:26:08.950Z",
-      "updated_at": "2026-01-04T19:26:10.926Z",
+      "updated_at": "2026-01-04T19:26:26.852Z",
       "created_by": "unknown",
       "tags": [
         "testing",
@@ -3413,7 +3414,9 @@
       "github_issue_url": "https://github.com/awaaate/Hyrm/issues/4",
       "notes": [
         "[2026-01-04T19:26:10.926Z] Created GitHub issue #4"
-      ]
+      ],
+      "assigned_to": "agent-1767554786459-5cyyg6",
+      "claimed_at": "2026-01-04T19:26:26.851Z"
     },
     {
       "id": "task_1767554770108_en729x",
@@ -3476,5 +3479,5 @@
     }
   ],
   "completed_count": 146,
-  "last_updated": "2026-01-04T19:26:12.801Z"
+  "last_updated": "2026-01-04T19:27:21.238Z"
 }
