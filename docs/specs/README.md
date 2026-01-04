@@ -300,3 +300,4 @@ Auto-generated index of task specs in `docs/specs/`.
 - [docs/specs/task_1767555805757_task-c.md](docs/specs/task_1767555805757_task-c.md)
 - [docs/specs/task_1767555805762_unified-task-1.md](docs/specs/task_1767555805762_unified-task-1.md)
 - [docs/specs/task_1767555805767_test.md](docs/specs/task_1767555805767_test.md)
+- [docs/specs/task_1767556449890_implement-automatic-realtimelo.md](docs/specs/task_1767556449890_implement-automatic-realtimelo.md)
