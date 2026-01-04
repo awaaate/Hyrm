@@ -52,6 +52,8 @@ export interface Task {
   github_issue_number?: number;
   github_issue_url?: string;
   github_branch?: string;
+  // Spec file integration
+  spec_file?: string;
 }
 
 /**

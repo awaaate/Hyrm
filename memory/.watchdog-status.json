@@ -1,10 +1,10 @@
 {
     "status": "leader_exists",
-    "last_check": "2026-01-04T10:16:06+00:00",
+    "last_check": "2026-01-04T10:31:20+00:00",
     "orchestrator_pid": 0,
-    "details": "Healthy leader: agent-1767521648837-srvema:epoch14",
+    "details": "Healthy leader: agent-1767522331796-kulwo4:epoch17",
     "watchdog_pid": 286266,
-    "restarts_this_hour": 6,
+    "restarts_this_hour": 8,
     "token_usage": 0,
     "token_limit": 150000,
     "model": "openai/gpt-5.2",

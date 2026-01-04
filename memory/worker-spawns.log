@@ -1,2 +1,4 @@
 [2026-01-04T10:16:06+00:00] Spawning worker with model=openai/gpt-5.2 prompt_file=/tmp/worker-prompt-hZt9U9.txt task=task_1767520578520_78t9d5
 [2026-01-04T10:16:06+00:00] Worker spawned with PID=311933
+[2026-01-04T10:26:33+00:00] Spawning worker with model=openai/gpt-5.2 prompt_file=/tmp/worker-prompt-A2qmhZ.txt task=task_1767520578520_78t9d5
+[2026-01-04T10:26:33+00:00] Worker spawned with PID=318703

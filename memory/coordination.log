@@ -3007,3 +3007,66 @@
 2026-01-04T10:16:28.275Z [INFO] [agent-1767521788272-gza51e] Agent registered: agent-1767521788272-gza51e (role: code-worker)
 2026-01-04T10:16:28.277Z [INFO] [agent-1767521788272-gza51e] Message sent: heartbeat (broadcast)
 2026-01-04T10:16:28.294Z [INFO] [agent-1767521788272-gza51e] Status updated: active
+2026-01-04T10:16:44.543Z [INFO] [agent-1767521025284-g52vg] Message sent: broadcast (broadcast)
+2026-01-04T10:16:59.169Z [INFO] [agent-1767521678394-bu0pz] Status updated: active - Monitoring spec-system worker (PID 311933). 2 medium/low priority tasks queued for next cycle.
+2026-01-04T10:17:10.301Z [INFO] [agent-1767521678394-bu0pz] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:17:10.305Z [INFO] [agent-1767521678394-bu0pz] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:18:12.946Z [INFO] [agent-1767521892945-inih7j] Cleaning up 1 stale agent(s): agent-1767521195249-9aan9
+2026-01-04T10:18:12.948Z [INFO] [agent-1767521892945-inih7j] Agent registered: agent-1767521892945-inih7j (role: orchestrator)
+2026-01-04T10:18:12.951Z [INFO] [agent-1767521892945-inih7j] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:18:12.952Z [WARN] [agent-1767521892945-inih7j] Took over orchestrator leader lease from stale leader agent-1767521648837-srvema (epoch 15)
+2026-01-04T10:18:12.954Z [INFO] [agent-1767521892945-inih7j] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:18:12.958Z [INFO] [agent-1767521892945-inih7j] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:18:12.960Z [INFO] [agent-1767521892945-inih7j] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:18:12.963Z [INFO] [agent-1767521892945-inih7j] Message sent: heartbeat (broadcast)
+2026-01-04T10:18:23.296Z [INFO] [agent-1767521892945-inih7j] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:18:23.296Z [INFO] [agent-1767521892945-inih7j] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:18:25.682Z [INFO] [agent-1767521892945-inih7j] Status updated: working - Orchestrator mode - no handoff
+2026-01-04T10:21:28.307Z [INFO] [agent-1767521788272-gza51e] Message sent: heartbeat (broadcast)
+2026-01-04T10:22:20.578Z [INFO] [agent-1767522140577-fqj8mr] Cleaning up 3 stale agent(s): agent-1767521025284-g52vg, agent-1767521678394-bu0pz, agent-1767521892945-inih7j
+2026-01-04T10:22:20.582Z [INFO] [agent-1767522140577-fqj8mr] Agent registered: agent-1767522140577-fqj8mr (role: orchestrator)
+2026-01-04T10:22:20.586Z [INFO] [agent-1767522140577-fqj8mr] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:22:20.589Z [WARN] [agent-1767522140577-fqj8mr] Took over orchestrator leader lease from stale leader agent-1767521892945-inih7j (epoch 16)
+2026-01-04T10:22:20.593Z [INFO] [agent-1767522140577-fqj8mr] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:22:20.596Z [INFO] [agent-1767522140577-fqj8mr] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:22:20.598Z [INFO] [agent-1767522140577-fqj8mr] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:22:20.600Z [INFO] [agent-1767522140577-fqj8mr] Message sent: heartbeat (broadcast)
+2026-01-04T10:22:31.422Z [INFO] [agent-1767522140577-fqj8mr] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:22:31.424Z [INFO] [agent-1767522140577-fqj8mr] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:22:40.296Z [INFO] [agent-1767522140577-fqj8mr] Status updated: working - Orchestrator mode - no handoff
+2026-01-04T10:25:31.797Z [INFO] [agent-1767522331796-kulwo4] Cleaning up 1 stale agent(s): agent-1767522140577-fqj8mr
+2026-01-04T10:25:31.801Z [INFO] [agent-1767522331796-kulwo4] Agent registered: agent-1767522331796-kulwo4 (role: orchestrator)
+2026-01-04T10:25:31.804Z [INFO] [agent-1767522331796-kulwo4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:25:31.806Z [WARN] [agent-1767522331796-kulwo4] Took over orchestrator leader lease from stale leader agent-1767522140577-fqj8mr (epoch 17)
+2026-01-04T10:25:31.810Z [INFO] [agent-1767522331796-kulwo4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:25:31.815Z [INFO] [agent-1767522331796-kulwo4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:25:31.818Z [INFO] [agent-1767522331796-kulwo4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:25:31.821Z [INFO] [agent-1767522331796-kulwo4] Message sent: heartbeat (broadcast)
+2026-01-04T10:25:36.176Z [INFO] [agent-1767522331796-kulwo4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:25:36.178Z [INFO] [agent-1767522331796-kulwo4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:26:03.233Z [INFO] [agent-1767522331796-kulwo4] Message sent: broadcast (broadcast)
+2026-01-04T10:26:17.736Z [INFO] [agent-1767522331796-kulwo4] Status updated: active - Monitoring spec-system worker, investigating stale worker situation
+2026-01-04T10:26:31.815Z [INFO] [agent-1767522331796-kulwo4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:26:31.816Z [INFO] [agent-1767522331796-kulwo4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:26:31.818Z [INFO] [agent-1767522331796-kulwo4] Cleaned up 1 stale agent(s): agent-1767521788272-gza51e
+2026-01-04T10:26:31.818Z [INFO] [agent-1767522331796-kulwo4] Orchestrator heartbeat: cleaned up 1 stale agents
+2026-01-04T10:26:38.696Z [INFO] [agent-1767522331796-kulwo4] Status updated: working - Spawned fresh worker for critical spec-system task. Monitoring 3 pending tasks.
+2026-01-04T10:26:55.138Z [INFO] [agent-1767522415136-v278xq] Agent registered: agent-1767522415136-v278xq (role: orchestrator)
+2026-01-04T10:26:55.142Z [INFO] [agent-1767522415136-v278xq] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:26:55.144Z [WARN] [agent-1767522415136-v278xq] Detected existing healthy orchestrator leader agent-1767522331796-kulwo4 (epoch 17). This agent (agent-1767522415136-v278xq) should self-demote and NOT act as orchestrator. Use isOrchestratorLeader() to check before spawning workers or respawning.
+2026-01-04T10:26:55.146Z [INFO] [agent-1767522415136-v278xq] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:26:55.150Z [INFO] [agent-1767522415136-v278xq] Message sent: heartbeat (broadcast)
+2026-01-04T10:26:55.219Z [INFO] [agent-1767522415136-v278xq] Status updated: working - Orchestrator mode - no handoff
+2026-01-04T10:27:31.820Z [INFO] [agent-1767522331796-kulwo4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:27:31.824Z [INFO] [agent-1767522331796-kulwo4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:28:31.824Z [INFO] [agent-1767522331796-kulwo4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:28:31.826Z [INFO] [agent-1767522331796-kulwo4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:29:31.833Z [INFO] [agent-1767522331796-kulwo4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:29:31.838Z [INFO] [agent-1767522331796-kulwo4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:29:31.842Z [INFO] [agent-1767522331796-kulwo4] Cleaned up 1 stale agent(s): agent-1767522415136-v278xq
+2026-01-04T10:29:31.844Z [INFO] [agent-1767522331796-kulwo4] Orchestrator heartbeat: cleaned up 1 stale agents
+2026-01-04T10:30:31.837Z [INFO] [agent-1767522331796-kulwo4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:30:31.842Z [INFO] [agent-1767522331796-kulwo4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:30:31.846Z [INFO] [agent-1767522331796-kulwo4] Message sent: heartbeat (broadcast)
+2026-01-04T10:31:31.843Z [INFO] [agent-1767522331796-kulwo4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T10:31:31.849Z [INFO] [agent-1767522331796-kulwo4] File unlocked: /app/workspace/memory/orchestrator-state.json

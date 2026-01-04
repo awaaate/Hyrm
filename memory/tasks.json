@@ -8,11 +8,12 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2025-12-31T21:22:21.159Z",
-      "updated_at": "2025-12-31T21:39:40.739Z",
+      "updated_at": "2026-01-04T10:30:53.557Z",
       "created_by": "orchestrator",
       "completed_at": "2025-12-31T21:26:55.559Z",
       "quality_score": 7.3,
-      "quality_notes": "Improved extraction patterns to capture 1126 decisions - use structured parsing for better results"
+      "quality_notes": "Improved extraction patterns to capture 1126 decisions - use structured parsing for better results",
+      "spec_file": "docs/specs/task_1767216141159_improve-knowledge-extraction-p.md"
     },
     {
       "id": "task_1767216142154_o6ihy7",
@@ -21,11 +22,12 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T21:22:22.154Z",
-      "updated_at": "2025-12-31T21:39:45.956Z",
+      "updated_at": "2026-01-04T10:30:53.557Z",
       "created_by": "orchestrator",
       "completed_at": "2025-12-31T21:27:10.501Z",
       "quality_score": 6.4,
-      "quality_notes": "MCP research valuable - Playwright is best choice for browser automation"
+      "quality_notes": "MCP research valuable - Playwright is best choice for browser automation",
+      "spec_file": "docs/specs/task_1767216142154_research-mcp-servers-for-brows.md"
     },
     {
       "id": "task_1767216143317_daipfh",
@@ -34,11 +36,12 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T21:22:23.317Z",
-      "updated_at": "2025-12-31T21:39:47.540Z",
+      "updated_at": "2026-01-04T10:30:53.557Z",
       "created_by": "orchestrator",
       "completed_at": "2025-12-31T21:27:10.453Z",
       "quality_score": 7.3,
-      "quality_notes": "WebSocket live updates enhance dashboard usability"
+      "quality_notes": "WebSocket live updates enhance dashboard usability",
+      "spec_file": "docs/specs/task_1767216143317_enhance-dashboard-with-websock.md"
     },
     {
       "id": "task_1767216144606_2nq7qx",
@@ -47,11 +50,12 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2025-12-31T21:22:24.606Z",
-      "updated_at": "2025-12-31T21:40:15.108Z",
+      "updated_at": "2026-01-04T10:30:53.557Z",
       "created_by": "orchestrator",
       "completed_at": "2025-12-31T21:40:02.948Z",
       "quality_score": 7.3,
-      "quality_notes": "Quality assessment system enables tracking task quality over time - use for continuous improvement"
+      "quality_notes": "Quality assessment system enables tracking task quality over time - use for continuous improvement",
+      "spec_file": "docs/specs/task_1767216144606_implement-task-quality-assessm.md"
     },
     {
       "id": "task_1767216535897_9ud1uj",
@@ -60,11 +64,12 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2025-12-31T21:28:55.897Z",
-      "updated_at": "2025-12-31T21:39:49.133Z",
+      "updated_at": "2026-01-04T10:30:53.558Z",
       "created_by": "orchestrator",
       "completed_at": "2025-12-31T21:29:30.325Z",
       "quality_score": 8.2,
-      "quality_notes": "Compaction hook critical for memory persistence"
+      "quality_notes": "Compaction hook critical for memory persistence",
+      "spec_file": "docs/specs/task_1767216535897_add-compaction-hook-to-preserv.md"
     },
     {
       "id": "task_1767216535944_0l8dxb",
@@ -73,14 +78,15 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T21:28:55.944Z",
-      "updated_at": "2025-12-31T21:54:16.763Z",
+      "updated_at": "2026-01-04T10:30:53.558Z",
       "created_by": "orchestrator",
       "completed_at": "2025-12-31T21:54:16.763Z",
       "notes": [
         "[Session 52] Migrated 14 tools to modern tool() helper pattern with Zod schemas"
       ],
       "quality_score": 8.5,
-      "quality_notes": "Modern tool() pattern with Zod provides better type safety and consistency with OpenCode core tools"
+      "quality_notes": "Modern tool() pattern with Zod provides better type safety and consistency with OpenCode core tools",
+      "spec_file": "docs/specs/task_1767216535944_migrate-tools-to-use-modern-to.md"
     },
     {
       "id": "task_1767216535988_r9gtnl",
@@ -89,14 +95,15 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2025-12-31T21:28:55.988Z",
-      "updated_at": "2025-12-31T22:28:52.724Z",
+      "updated_at": "2026-01-04T10:30:53.558Z",
       "created_by": "orchestrator",
       "completed_at": "2025-12-31T22:27:59.721Z",
       "notes": [
         "[2025-12-31T22:27:59.721Z] Created full Playwright MCP server with 11 tools: navigate, screenshot, get_content, click, type, evaluate, wait, get_attribute, fill_form, scroll, close. Configured in opencode.json and tested startup."
       ],
       "quality_score": 8.6,
-      "quality_notes": "MCP server implementation is straightforward with the SDK. The server manages browser state globally which works well for sequential operations but could be enhanced with session management for concurrent use. Type safety could be improved with proper typing for tool arguments."
+      "quality_notes": "MCP server implementation is straightforward with the SDK. The server manages browser state globally which works well for sequential operations but could be enhanced with session management for concurrent use. Type safety could be improved with proper typing for tool arguments.",
+      "spec_file": "docs/specs/task_1767216535988_create-playwright-mcp-server-f.md"
     },
     {
       "id": "task_1767217578418_ywxtys",
@@ -105,7 +112,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T21:46:18.418Z",
-      "updated_at": "2025-12-31T21:59:06.404Z",
+      "updated_at": "2026-01-04T10:30:53.559Z",
       "created_by": "ses_489a9932fffeDEet6LdjfhyvI1",
       "tags": [
         "knowledge",
@@ -116,7 +123,8 @@
         "[Session 52] Enhanced knowledge extraction with techniques and solutions categories, improved filtering, and similarity checking"
       ],
       "quality_score": 7.6,
-      "quality_notes": "Knowledge extraction benefits from stricter filtering with similarity checking to reduce noise"
+      "quality_notes": "Knowledge extraction benefits from stricter filtering with similarity checking to reduce noise",
+      "spec_file": "docs/specs/task_1767217578418_improve-knowledge-extraction-t.md"
     },
     {
       "id": "task_1767218463745_pfhp0h",
@@ -125,7 +133,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2025-12-31T22:01:03.746Z",
-      "updated_at": "2025-12-31T22:21:11.536Z",
+      "updated_at": "2026-01-04T10:30:53.559Z",
       "created_by": "session-52-orchestrator",
       "tags": [
         "memory",
@@ -136,7 +144,8 @@
         "[2025-12-31T22:13:07.487Z] Implemented smart context summarization using tools/context-summarizer.ts. Updated compaction hook to use generateCompactSummary() for smarter, more relevant context during compaction."
       ],
       "quality_score": 7.9,
-      "quality_notes": "Key decisions extraction needs better filtering to avoid generic event messages like 'Event: session.updated'"
+      "quality_notes": "Key decisions extraction needs better filtering to avoid generic event messages like 'Event: session.updated'",
+      "spec_file": "docs/specs/task_1767218463745_implement-memory-context-summa.md"
     },
     {
       "id": "task_1767219732753_u2u15f",
@@ -145,7 +154,7 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2025-12-31T22:22:12.753Z",
-      "updated_at": "2025-12-31T22:22:59.171Z",
+      "updated_at": "2026-01-04T10:30:53.560Z",
       "created_by": "unknown",
       "tags": [
         "improvement",
@@ -156,7 +165,8 @@
         "[2025-12-31T22:22:53.888Z] Added exclude patterns for generic events (Event:, Session started/ended, Tool executed, etc.) and deduplication. Now only captures meaningful decisions."
       ],
       "quality_score": 7.9,
-      "quality_notes": "Regex patterns are effective for filtering out generic log messages - maintain exclude list as new patterns emerge"
+      "quality_notes": "Regex patterns are effective for filtering out generic log messages - maintain exclude list as new patterns emerge",
+      "spec_file": "docs/specs/task_1767219732753_improve-key-decisions-extracti.md"
     },
     {
       "id": "task_1767220141289_z0mnif",
@@ -165,7 +175,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T22:29:01.289Z",
-      "updated_at": "2025-12-31T22:31:57.712Z",
+      "updated_at": "2026-01-04T10:30:53.560Z",
       "created_by": "unknown",
       "tags": [
         "multi-agent",
@@ -177,7 +187,8 @@
         "[2025-12-31T22:31:51.156Z] Implemented task claiming system: 1) Added task_available message type for broadcasting high-priority tasks, 2) task_create now broadcasts when critical/high priority tasks are created, 3) Added task_claim tool that atomically claims tasks and broadcasts task_claim message, 4) Updated agent_send to support task_available message type. Agents can now react to task_available messages and claim tasks."
       ],
       "quality_score": 8,
-      "quality_notes": "Task claiming adds coordination but true automatic detection would require background processes. The message bus approach allows agents to poll for task_available messages. Consider adding a task_watch command for CLI monitoring."
+      "quality_notes": "Task claiming adds coordination but true automatic detection would require background processes. The message bus approach allows agents to poll for task_available messages. Consider adding a task_watch command for CLI monitoring.",
+      "spec_file": "docs/specs/task_1767220141289_enhance-agent-coordination-sup.md"
     },
     {
       "id": "task_1767220142907_0eu8la",
@@ -186,7 +197,7 @@
       "priority": "low",
       "status": "cancelled",
       "created_at": "2025-12-31T22:29:02.907Z",
-      "updated_at": "2025-12-31T22:48:14.636Z",
+      "updated_at": "2026-01-04T10:30:53.560Z",
       "created_by": "unknown",
       "tags": [
         "mcp",
@@ -195,7 +206,8 @@
       ],
       "notes": [
         "[2025-12-31T22:48:14.636Z] User cancelled - Playwright MCP is now installed directly via @playwright/mcp, no need for HTTP server mode."
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767220142907_add-http-server-mode-to-playwr.md"
     },
     {
       "id": "task_1767220555040_h2wr4e",
@@ -204,7 +216,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T22:35:55.040Z",
-      "updated_at": "2026-01-03T09:55:33.936Z",
+      "updated_at": "2026-01-04T10:30:53.561Z",
       "created_by": "unknown",
       "tags": [
         "skills",
@@ -216,7 +228,8 @@
         "[2025-12-31T22:41:00.600Z] Explored Anthropic Agent Skills at https://github.com/anthropics/skills and https://agentskills.io. Our system already uses Agent Skills format in .opencode/skill/ with three skills: agent-orchestrator, memory-manager, multi-agent-patterns. The format matches the spec with SKILL.md files containing YAML frontmatter (name, description) and markdown instructions."
       ],
       "quality_score": 7.6,
-      "quality_notes": "Anthropic Agent Skills format with SKILL.md files provides a standardized way to document agent capabilities. Our system already follows this format in .opencode/skill/ directory."
+      "quality_notes": "Anthropic Agent Skills format with SKILL.md files provides a standardized way to document agent capabilities. Our system already follows this format in .opencode/skill/ directory.",
+      "spec_file": "docs/specs/task_1767220555040_explore-anthropic-agent-skills.md"
     },
     {
       "id": "task_1767221023879_op1bzi",
@@ -225,7 +238,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2025-12-31T22:43:43.879Z",
-      "updated_at": "2025-12-31T22:47:53.775Z",
+      "updated_at": "2026-01-04T10:30:53.561Z",
       "created_by": "ses_4896ef297ffeKeGfMbqzinDUc3",
       "tags": [
         "multi-agent",
@@ -239,7 +252,8 @@
         "[2025-12-31T22:47:47.529Z] Implemented: 1) Task dependencies with depends_on field, 2) Automatic unblocking when deps complete, 3) Worker pool patterns documented, 4) Load balancing patterns documented"
       ],
       "quality_score": 8.6,
-      "quality_notes": "Task dependencies enable complex workflow orchestration. The automatic unblocking mechanism reduces manual coordination. Worker pool patterns should be combined with proper cleanup for stale workers."
+      "quality_notes": "Task dependencies enable complex workflow orchestration. The automatic unblocking mechanism reduces manual coordination. Worker pool patterns should be combined with proper cleanup for stale workers.",
+      "spec_file": "docs/specs/task_1767221023879_create-advanced-multi-agent-co.md"
     },
     {
       "id": "task_1767221327725_wh08mn",
@@ -248,7 +262,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2025-12-31T22:48:47.725Z",
-      "updated_at": "2025-12-31T22:49:00.215Z",
+      "updated_at": "2026-01-04T10:30:53.562Z",
       "created_by": "ses_4896ef297ffeKeGfMbqzinDUc3",
       "tags": [
         "plugin",
@@ -260,7 +274,8 @@
         "[2025-12-31T22:48:53.620Z] Implemented in plugin index.ts loadMemoryContext function. Now includes pending tasks sorted by priority and unread user messages."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Dynamic context injection is powerful for agent awareness. Keep injected context concise to avoid token waste. Prioritize important information (tasks, messages) over historical context."
+      "quality_notes": "Dynamic context injection is powerful for agent awareness. Keep injected context concise to avoid token waste. Prioritize important information (tasks, messages) over historical context.",
+      "spec_file": "docs/specs/task_1767221327725_enhanced-dynamic-system-prompt.md"
     },
     {
       "id": "task_1767221517699_xg36x2",
@@ -269,7 +284,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2025-12-31T22:51:57.699Z",
-      "updated_at": "2026-01-03T09:55:30.291Z",
+      "updated_at": "2026-01-04T10:30:53.562Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -283,7 +298,8 @@
         "[2025-12-31T22:53:24.187Z] WebSocket dashboard already exists and is fully functional. Server.ts has file watchers that broadcast changes via WebSocket. Frontend app.js connects to /ws endpoint and receives real-time updates for stats, agents, sessions, memory, tasks, quality, and logs. Features include visual update indicators, automatic reconnection, and ping/pong keep-alive."
       ],
       "quality_score": 7.9,
-      "quality_notes": "WebSocket real-time updates are key for dashboard monitoring. Existing implementations can often be enhanced rather than rebuilt from scratch."
+      "quality_notes": "WebSocket real-time updates are key for dashboard monitoring. Existing implementations can often be enhanced rather than rebuilt from scratch.",
+      "spec_file": "docs/specs/task_1767221517699_create-real-time-websocket-das.md"
     },
     {
       "id": "task_1767221519024_tkfemx",
@@ -292,7 +308,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2025-12-31T22:51:59.024Z",
-      "updated_at": "2025-12-31T22:56:04.276Z",
+      "updated_at": "2026-01-04T10:30:53.562Z",
       "created_by": "unknown",
       "tags": [
         "agents",
@@ -306,7 +322,8 @@
         "[2025-12-31T22:56:01.304Z] Created tools/agent-health-monitor.ts with comprehensive health monitoring: status command shows all agent health, check runs single health check with recording, monitor provides continuous real-time monitoring with auto-cleanup, metrics tracks historical data and alerts, cleanup removes dead agents. Integrated with opencode-cli.ts via 'health' command."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Health monitoring should be integrated early in multi-agent systems. The monitor includes auto-cleanup which prevents registry bloat from dead agents."
+      "quality_notes": "Health monitoring should be integrated early in multi-agent systems. The monitor includes auto-cleanup which prevents registry bloat from dead agents.",
+      "spec_file": "docs/specs/task_1767221519024_implement-agent-health-checks-.md"
     },
     {
       "id": "task_1767221520438_u8fiel",
@@ -315,7 +332,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T22:52:00.438Z",
-      "updated_at": "2025-12-31T22:59:05.715Z",
+      "updated_at": "2026-01-04T10:30:53.563Z",
       "created_by": "unknown",
       "tags": [
         "tasks",
@@ -329,7 +346,8 @@
         "[2025-12-31T22:59:02.727Z] Added priority aging system (tasks gain priority over time), complexity and estimated_hours fields to task creation, smart scheduling with task_schedule tool that provides urgency scores and recommendations"
       ],
       "quality_score": 7.7,
-      "quality_notes": "Priority aging prevents task starvation - even low priority tasks will eventually bubble up. Complexity scoring helps with workload estimation."
+      "quality_notes": "Priority aging prevents task starvation - even low priority tasks will eventually bubble up. Complexity scoring helps with workload estimation.",
+      "spec_file": "docs/specs/task_1767221520438_add-task-prioritization-and-sm.md"
     },
     {
       "id": "task_1767221521904_0lsxdu",
@@ -338,7 +356,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T22:52:01.904Z",
-      "updated_at": "2025-12-31T23:04:35.700Z",
+      "updated_at": "2026-01-04T10:30:53.563Z",
       "created_by": "unknown",
       "tags": [
         "knowledge",
@@ -352,7 +370,8 @@
         "[2025-12-31T23:04:24.323Z] Created session-summarizer.ts with: summarize, recent, stats, export commands. Automatically extracts learnings, code changes, tasks completed, and feeds into knowledge base."
       ],
       "quality_score": 7.7,
-      "quality_notes": "Session summarization extracts learnings from OpenCode's message/part storage. Key is to feed extracted insights back into knowledge base for continuous learning."
+      "quality_notes": "Session summarization extracts learnings from OpenCode's message/part storage. Key is to feed extracted insights back into knowledge base for continuous learning.",
+      "spec_file": "docs/specs/task_1767221521904_create-session-summarization-t.md"
     },
     {
       "id": "task_1767222355463_2rfgsd",
@@ -361,7 +380,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T23:05:55.463Z",
-      "updated_at": "2025-12-31T23:08:46.187Z",
+      "updated_at": "2026-01-04T10:30:53.563Z",
       "created_by": "unknown",
       "tags": [
         "knowledge",
@@ -376,7 +395,8 @@
         "[2025-12-31T23:08:43.568Z] Created knowledge-deduplicator.ts with analyze, dedupe, stats, and top commands. Uses Jaccard similarity for fuzzy matching, creates backups before changes, filters noise patterns."
       ],
       "quality_score": 7.7,
-      "quality_notes": "Knowledge deduplication requires both exact and fuzzy matching. Jaccard similarity on word sets works well for detecting near-duplicates. Always backup before destructive operations."
+      "quality_notes": "Knowledge deduplication requires both exact and fuzzy matching. Jaccard similarity on word sets works well for detecting near-duplicates. Always backup before destructive operations.",
+      "spec_file": "docs/specs/task_1767222355463_implement-automatic-knowledge-.md"
     },
     {
       "id": "task_1767222357984_k1k3nc",
@@ -385,7 +405,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2025-12-31T23:05:57.984Z",
-      "updated_at": "2026-01-01T17:17:57.449Z",
+      "updated_at": "2026-01-04T10:30:53.563Z",
       "created_by": "unknown",
       "tags": [
         "testing",
@@ -400,7 +420,8 @@
         "[2026-01-01T17:17:45.983Z] Created comprehensive test suite with 38 tests covering memory-tools, task-tools, quality-tools, and user-message-tools. All tests pass."
       ],
       "quality_score": 8.5,
-      "quality_notes": "Comprehensive test suite with proper isolation using beforeEach/afterEach for clean state. Integration tests verify full workflows."
+      "quality_notes": "Comprehensive test suite with proper isolation using beforeEach/afterEach for clean state. Integration tests verify full workflows.",
+      "spec_file": "docs/specs/task_1767222357984_create-automated-test-suite-fo.md"
     },
     {
       "id": "task_1767222360366_ubhpdp",
@@ -409,7 +430,7 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2025-12-31T23:06:00.366Z",
-      "updated_at": "2026-01-01T18:37:25.188Z",
+      "updated_at": "2026-01-04T10:30:53.564Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -424,7 +445,8 @@
         "[2026-01-01T18:37:17.334Z] Session 82: Added Session Analytics dashboard page with: 1) Summary stats (total sessions, tool calls, avg duration, today/week counts), 2) Session Activity by Hour bar chart, 3) Tool Usage Distribution chart, 4) Recent Sessions table, 5) Quality Metrics section with assessments and lessons learned. All features support real-time WebSocket updates."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Building vanilla JS charts is straightforward with CSS flexbox. Horizontal bar charts work well for activity data. Always add file watchers for analytics data sources to enable real-time updates."
+      "quality_notes": "Building vanilla JS charts is straightforward with CSS flexbox. Horizontal bar charts work well for activity data. Always add file watchers for analytics data sources to enable real-time updates.",
+      "spec_file": "docs/specs/task_1767222360366_add-session-analytics-dashboar.md"
     },
     {
       "id": "task_1767222573488_46uivh",
@@ -433,7 +455,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2025-12-31T23:09:33.488Z",
-      "updated_at": "2026-01-01T17:13:07.390Z",
+      "updated_at": "2026-01-04T10:30:53.564Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -451,7 +473,8 @@
         "[2026-01-01T17:12:59.439Z] Built React dashboard UI with WebSocket real-time updates. Features: Overview, Agents, Tasks, Logs, and Quality tabs. Modern dark theme with status badges and live connection indicator."
       ],
       "quality_score": 7.9,
-      "quality_notes": "Building dashboard UIs benefits from starting with WebSocket for real-time updates, falling back to HTTP polling. Modular components (Card, Badge, Panel) enable rapid iteration."
+      "quality_notes": "Building dashboard UIs benefits from starting with WebSocket for real-time updates, falling back to HTTP polling. Modular components (Card, Badge, Panel) enable rapid iteration.",
+      "spec_file": "docs/specs/task_1767222573488_create-beautiful-dashboard-ui-.md"
     },
     {
       "id": "task_1767292760667_irqr9z",
@@ -460,7 +483,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-01T18:39:20.667Z",
-      "updated_at": "2026-01-01T21:30:00.380Z",
+      "updated_at": "2026-01-04T10:30:53.565Z",
       "created_by": "unknown",
       "tags": [
         "ui",
@@ -476,7 +499,8 @@
         "[2026-01-01T21:29:57.532Z] Implemented shadcn/ui components for dashboard-ui: Button, Card, Badge, Tabs, Table, Progress. Updated App.tsx to use the new components with proper Tailwind v4 theme configuration. Reduced App.css from 618 lines to minimal custom styles. Build passes, lint passes."
       ],
       "quality_score": 8.1,
-      "quality_notes": "Tailwind CSS v4 uses @theme directive instead of CSS custom properties with hsl(). shadcn/ui components work well with Tailwind v4 but require careful color configuration. ESLint react-refresh warnings for component files can be disabled in the ui folder."
+      "quality_notes": "Tailwind CSS v4 uses @theme directive instead of CSS custom properties with hsl(). shadcn/ui components work well with Tailwind v4 but require careful color configuration. ESLint react-refresh warnings for component files can be disabled in the ui folder.",
+      "spec_file": "docs/specs/task_1767292760667_add-shadcnui-components-to-das.md"
     },
     {
       "id": "task_1767292762829_jjvd2z",
@@ -485,7 +509,7 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-01T18:39:22.829Z",
-      "updated_at": "2026-01-01T21:43:09.005Z",
+      "updated_at": "2026-01-04T10:30:53.565Z",
       "created_by": "unknown",
       "tags": [
         "notifications",
@@ -501,7 +525,8 @@
         "[2026-01-01T21:42:57.662Z] Implemented task completion notifications: 1) Added showTaskCompletedNotification() with browser Notification API + audio alert using Web Audio API. 2) Added task_completed WebSocket event handler in App.tsx. 3) Added notification toggle button in header. 4) Updated task-tools.ts to broadcast task_completed messages when tasks are marked complete. 5) Created dashboard-ui/server.ts that watches message-bus.jsonl and broadcasts task_completed events."
       ],
       "quality_score": 8,
-      "quality_notes": "Task completion notifications implemented with browser Notification API and Web Audio API for audio alerts. The dashboard server watches message-bus.jsonl for task_completed messages and broadcasts to WebSocket clients. Notification toggle in header allows users to enable/disable alerts. Integration with existing plugin task_update function ensures all task completions trigger notifications."
+      "quality_notes": "Task completion notifications implemented with browser Notification API and Web Audio API for audio alerts. The dashboard server watches message-bus.jsonl for task_completed messages and broadcasts to WebSocket clients. Notification toggle in header allows users to enable/disable alerts. Integration with existing plugin task_update function ensures all task completions trigger notifications.",
+      "spec_file": "docs/specs/task_1767292762829_implement-task-completion-noti.md"
     },
     {
       "id": "task_1767292765181_vtxabo",
@@ -510,7 +535,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-01T18:39:25.181Z",
-      "updated_at": "2026-01-01T18:42:27.736Z",
+      "updated_at": "2026-01-04T10:30:53.565Z",
       "created_by": "unknown",
       "tags": [
         "metrics",
@@ -526,7 +551,8 @@
         "[2026-01-01T18:42:20.670Z] Implemented per-agent performance metrics tracking: tasks_completed, tasks_claimed, avg_duration_ms, quality_scores. Added to task-tools.ts (on task complete/claim) and quality-tools.ts (on quality assess). Added /api/agent-performance endpoint to dashboard server with WebSocket support."
       ],
       "quality_score": 8.1,
-      "quality_notes": "Agent performance metrics are best collected at key lifecycle events (task claim, task complete, quality assess) to minimize overhead. Storing metrics in a separate file from health checks keeps concerns separated."
+      "quality_notes": "Agent performance metrics are best collected at key lifecycle events (task claim, task complete, quality assess) to minimize overhead. Storing metrics in a separate file from health checks keeps concerns separated.",
+      "spec_file": "docs/specs/task_1767292765181_add-agent-performance-metrics-.md"
     },
     {
       "id": "task_1767302976346_qb53ep",
@@ -535,7 +561,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-01T21:29:36.346Z",
-      "updated_at": "2026-01-01T21:33:56.549Z",
+      "updated_at": "2026-01-04T10:30:53.566Z",
       "created_by": "ses_4848b250dffe6S7Kfsq39MS3qc",
       "tags": [
         "logging",
@@ -551,7 +577,8 @@
         "[2026-01-01T21:33:56.549Z] Created opencode-tracker.ts and enhanced opencode-cli.ts with conversation tracking and action capabilities"
       ],
       "quality_score": 8.3,
-      "quality_notes": "OpenCode stores conversations in a structured format: sessions in /session/<project_hash>/, messages in /message/<session_id>/, and parts in /part/<message_id>/. Each is a JSON file with clear schema. The watch command uses fs.watch with recursive option for real-time monitoring."
+      "quality_notes": "OpenCode stores conversations in a structured format: sessions in /session/<project_hash>/, messages in /message/<session_id>/, and parts in /part/<message_id>/. Each is a JSON file with clear schema. The watch command uses fs.watch with recursive option for real-time monitoring.",
+      "spec_file": "docs/specs/task_1767302976346_create-opencode-conversation-t.md"
     },
     {
       "id": "task_1767303323074_puchsn",
@@ -560,7 +587,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-01T21:35:23.074Z",
-      "updated_at": "2026-01-01T21:39:46.128Z",
+      "updated_at": "2026-01-04T10:30:53.566Z",
       "created_by": "ses_4848b250dffe6S7Kfsq39MS3qc",
       "tags": [
         "analytics",
@@ -578,7 +605,8 @@
       ],
       "completed_at": "2026-01-01T21:39:45.875Z",
       "quality_score": 8.1,
-      "quality_notes": "Session analytics tool provides valuable insights into tool usage patterns, success rates, and common errors. Verified working with 100% session success rate. Integrates with knowledge base for persistent learning."
+      "quality_notes": "Session analytics tool provides valuable insights into tool usage patterns, success rates, and common errors. Verified working with 100% session success rate. Integrates with knowledge base for persistent learning.",
+      "spec_file": "docs/specs/task_1767303323074_create-session-analytics-and-l.md"
     },
     {
       "id": "task_1767303948079_i1avub",
@@ -587,7 +615,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-01T21:45:48.079Z",
-      "updated_at": "2026-01-01T21:51:18.762Z",
+      "updated_at": "2026-01-04T10:30:53.567Z",
       "created_by": "unknown",
       "tags": [
         "testing",
@@ -601,7 +629,8 @@
         "[2026-01-01T21:51:14.680Z] Added 25 new edge case tests covering: corrupted JSON recovery (6 tests), concurrent task claims (4 tests), large message bus handling (2 tests), task dependencies (4 tests), quality assessment (5 tests), user messages (3 tests), task scheduling (3 tests). Total tests now 63 (up from 38). Tests document actual behavior including areas for future improvement."
       ],
       "quality_score": 8,
-      "quality_notes": "Edge case tests help document actual system behavior vs expected behavior. Several tests revealed that corrupted JSON files return errors rather than graceful defaults - this is documented as future improvement area. Blocked tasks can still be claimed (manual override pattern). Missing dependencies don't block tasks (they're treated as already complete)."
+      "quality_notes": "Edge case tests help document actual system behavior vs expected behavior. Several tests revealed that corrupted JSON files return errors rather than graceful defaults - this is documented as future improvement area. Blocked tasks can still be claimed (manual override pattern). Missing dependencies don't block tasks (they're treated as already complete).",
+      "spec_file": "docs/specs/task_1767303948079_add-plugin-unit-tests-for-edge.md"
     },
     {
       "id": "task_1767303951013_akfk11",
@@ -610,7 +639,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-01T21:45:51.013Z",
-      "updated_at": "2026-01-01T21:55:40.190Z",
+      "updated_at": "2026-01-04T10:30:53.567Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -624,7 +653,8 @@
         "[2026-01-01T21:55:37.372Z] Implemented WebSocket connection status with three states (connected/disconnected/reconnecting), exponential backoff for auto-reconnect (1s initial, 30s max, 1.5x multiplier), and a visual indicator component showing reconnect attempts."
       ],
       "quality_score": 8,
-      "quality_notes": "Exponential backoff should always have both minimum and maximum bounds. Using refs for WebSocket and timeout storage prevents closure issues in React effects."
+      "quality_notes": "Exponential backoff should always have both minimum and maximum bounds. Using refs for WebSocket and timeout storage prevents closure issues in React effects.",
+      "spec_file": "docs/specs/task_1767303951013_create-dashboard-real-time-con.md"
     },
     {
       "id": "task_1767303954292_lbrq8c",
@@ -633,7 +663,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-01T21:45:54.292Z",
-      "updated_at": "2026-01-01T21:47:47.336Z",
+      "updated_at": "2026-01-04T10:30:53.568Z",
       "created_by": "unknown",
       "tags": [
         "multi-agent",
@@ -647,7 +677,8 @@
         "[2026-01-01T21:47:43.691Z] Added 6 new collaboration patterns to multi-agent-patterns skill: 1) Task Decomposition - split complex tasks into subtasks 2) Result Aggregation - collect and merge worker results 3) Review Pattern - peer review between agents 4) Consensus Pattern - multi-agent voting 5) Checkpoint Pattern - save/resume progress 6) Pipeline Pattern - chain agents in sequence. Also added Anti-Patterns section."
       ],
       "quality_score": 8.5,
-      "quality_notes": "Multi-agent collaboration patterns are best documented with TypeScript examples showing message flow and state transitions. The checkpoint pattern is particularly valuable for long-running tasks that may be interrupted. Anti-patterns section helps prevent common mistakes."
+      "quality_notes": "Multi-agent collaboration patterns are best documented with TypeScript examples showing message flow and state transitions. The checkpoint pattern is particularly valuable for long-running tasks that may be interrupted. Anti-patterns section helps prevent common mistakes.",
+      "spec_file": "docs/specs/task_1767303954292_implement-agent-collaboration-.md"
     },
     {
       "id": "task_1767304600474_r2j8og",
@@ -656,7 +687,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-01T21:56:40.474Z",
-      "updated_at": "2026-01-01T22:00:36.230Z",
+      "updated_at": "2026-01-04T10:30:53.568Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -672,7 +703,8 @@
         "[2026-01-01T22:00:32.955Z] Enhanced WebSocket event streaming with 10 new event types: task_completed, task_claimed, task_available, agent_registered, agent_broadcast, agent_heartbeat, help_requested, quality_assessed. Added /api/events endpoint for event history. All file watchers enhanced with proper event detection."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Event categorization pattern (categorizeEvent function) makes it easy to add new event types. STREAMABLE_EVENT_TYPES set provides clear enumeration of what gets streamed. Quality assessment detection requires tracking count, not just file change."
+      "quality_notes": "Event categorization pattern (categorizeEvent function) makes it easy to add new event types. STREAMABLE_EVENT_TYPES set provides clear enumeration of what gets streamed. Quality assessment detection requires tracking count, not just file change.",
+      "spec_file": "docs/specs/task_1767304600474_add-websocket-event-streaming-.md"
     },
     {
       "id": "task_1767304603691_nkxu5c",
@@ -681,7 +713,7 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-01T21:56:43.691Z",
-      "updated_at": "2026-01-01T22:14:17.126Z",
+      "updated_at": "2026-01-04T10:30:53.568Z",
       "created_by": "unknown",
       "tags": [
         "testing",
@@ -697,7 +729,8 @@
         "[2026-01-01T22:14:09.856Z] Created comprehensive integration test suite (.opencode/plugin/tools/integration.test.ts) with 24 tests covering: real file I/O operations, JSON parsing edge cases (corrupted files, BOM, truncation), concurrent operations, recovery tool workflows, and end-to-end task/memory/quality workflows. All 24 integration tests pass alongside the existing 63 unit tests."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Integration tests complement unit tests by testing actual file I/O, JSON corruption scenarios, and multi-tool workflows. Using isolated test directories prevents pollution between tests while still validating real filesystem behavior."
+      "quality_notes": "Integration tests complement unit tests by testing actual file I/O, JSON corruption scenarios, and multi-tool workflows. Using isolated test directories prevents pollution between tests while still validating real filesystem behavior.",
+      "spec_file": "docs/specs/task_1767304603691_create-plugin-integration-test.md"
     },
     {
       "id": "task_1767304606771_ld07ud",
@@ -706,7 +739,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-01T21:56:46.771Z",
-      "updated_at": "2026-01-01T22:05:05.172Z",
+      "updated_at": "2026-01-04T10:30:53.569Z",
       "created_by": "unknown",
       "tags": [
         "agents",
@@ -722,7 +755,8 @@
         "[2026-01-01T22:05:01.111Z] Implemented session recovery system with: 1) recovery-tools.ts with 4 plugin tools (checkpoint_save, checkpoint_load, recovery_status, recovery_cleanup), 2) CLI commands (recovery, recover), 3) Checkpoint data structure storing task state, files modified, context, next steps, blockers. Also fixed undefined generateCompactSummary and formatSummaryAsMarkdown functions in plugin."
       ],
       "quality_score": 8,
-      "quality_notes": "Recovery system needs to be used at task claim time to save checkpoints. The checkpoint data structure captures context well (what was happening, next steps, blockers). Fixed bug: generateCompactSummary was undefined - always test compaction hook. CLI recovery commands provide good visibility into session state."
+      "quality_notes": "Recovery system needs to be used at task claim time to save checkpoints. The checkpoint data structure captures context well (what was happening, next steps, blockers). Fixed bug: generateCompactSummary was undefined - always test compaction hook. CLI recovery commands provide good visibility into session state.",
+      "spec_file": "docs/specs/task_1767304606771_implement-agent-session-recove.md"
     },
     {
       "id": "task_1767305782664_c7bnuz",
@@ -731,7 +765,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-01T22:16:22.664Z",
-      "updated_at": "2026-01-01T22:23:05.499Z",
+      "updated_at": "2026-01-04T10:30:53.569Z",
       "created_by": "unknown",
       "tags": [
         "memory",
@@ -746,7 +780,8 @@
         "[2026-01-01T22:23:02.137Z] Created working-memory-manager.ts with: status, archive, search, list, view, clean, auto commands. Archived 17 old sessions to separate file. Reduced working.md from 855 to 107 lines (87% reduction). Added 'memory' command to CLI."
       ],
       "quality_score": 8.6,
-      "quality_notes": "Session parsing requires handling multiple header formats (Current/Previous/Earlier Session). Archiving significantly reduces context size while preserving full history. Index file enables fast archive discovery without reading all files."
+      "quality_notes": "Session parsing requires handling multiple header formats (Current/Previous/Earlier Session). Archiving significantly reduces context size while preserving full history. Index file enables fast archive discovery without reading all files.",
+      "spec_file": "docs/specs/task_1767305782664_create-working-memory-archival.md"
     },
     {
       "id": "task_1767305786654_im18xd",
@@ -755,7 +790,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-01T22:16:26.654Z",
-      "updated_at": "2026-01-01T22:19:27.086Z",
+      "updated_at": "2026-01-04T10:30:53.569Z",
       "created_by": "unknown",
       "tags": [
         "message-bus",
@@ -770,7 +805,8 @@
         "[2026-01-01T22:19:24.063Z] Created message-bus-manager.ts with: status, rotate, compact, cleanup, search, stats, auto commands. Integrated with plugin for automatic maintenance on session start. Reduced message bus from 198 to 123 messages (38% reduction). Added CLI command 'bus' to opencode-cli.ts."
       ],
       "quality_score": 8.5,
-      "quality_notes": "Message bus management is critical for system health. Auto-maintenance during boot prevents unbounded growth. Archive + index pattern enables historical search while keeping active bus small."
+      "quality_notes": "Message bus management is critical for system health. Auto-maintenance during boot prevents unbounded growth. Archive + index pattern enables historical search while keeping active bus small.",
+      "spec_file": "docs/specs/task_1767305786654_implement-message-bus-rotation.md"
     },
     {
       "id": "task_1767305790341_ood0eu",
@@ -779,7 +815,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-01T22:16:30.341Z",
-      "updated_at": "2026-01-02T08:54:53.226Z",
+      "updated_at": "2026-01-04T10:30:53.570Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -795,7 +831,8 @@
       ],
       "completed_at": "2026-01-02T08:54:45.754Z",
       "quality_score": 8.3,
-      "quality_notes": "Canvas-based widgets in blessed-contrib require specific terminal width constraints. Text-based alternatives using blessed.box with ANSI formatting provide more reliable cross-terminal compatibility."
+      "quality_notes": "Canvas-based widgets in blessed-contrib require specific terminal width constraints. Text-based alternatives using blessed.box with ANSI formatting provide more reliable cross-terminal compatibility.",
+      "spec_file": "docs/specs/task_1767305790341_create-live-terminal-dashboard.md"
     },
     {
       "id": "task_1767305793004_0arlhn",
@@ -804,7 +841,7 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-01T22:16:33.004Z",
-      "updated_at": "2026-01-02T07:29:51.815Z",
+      "updated_at": "2026-01-04T10:30:53.570Z",
       "created_by": "unknown",
       "tags": [
         "performance",
@@ -819,7 +856,8 @@
         "[2026-01-02T07:29:48.132Z] Created tools/agent-performance-profiler.ts with 8 commands: profile, tools, agents, efficiency, errors, suggestions, export, help. Features: tool execution time tracking, context usage efficiency analysis, task completion rates by agent, error pattern detection, automated optimization suggestions. Integrated with opencode-cli.ts via 'perf' and 'profile' commands."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Performance profiling requires analyzing multiple data sources (OpenCode parts, session logs, performance metrics, quality assessments). The key insight is to aggregate data from various sources and generate actionable suggestions rather than just reporting metrics."
+      "quality_notes": "Performance profiling requires analyzing multiple data sources (OpenCode parts, session logs, performance metrics, quality assessments). The key insight is to aggregate data from various sources and generate actionable suggestions rather than just reporting metrics.",
+      "spec_file": "docs/specs/task_1767305793004_add-agent-performance-profilin.md"
     },
     {
       "id": "task_1767306304817_13dvqt",
@@ -828,7 +866,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-01T22:25:04.817Z",
-      "updated_at": "2026-01-01T22:31:18.540Z",
+      "updated_at": "2026-01-04T10:30:53.570Z",
       "created_by": "unknown",
       "tags": [
         "git",
@@ -845,7 +883,8 @@
         "[2026-01-01T22:31:15.713Z] Created comprehensive git integration with CLI tool (11 commands), plugin tools (6 tools), and full opencode-cli integration. Features: status, log, diff, commit with agent metadata, search, branches, stash, auto-commit for tasks. Activity tracked in git-activity.jsonl."
       ],
       "quality_score": 8.5,
-      "quality_notes": "Git integration enables agents to track their code changes with metadata. The CLI/plugin split provides both programmatic and user-accessible interfaces. Activity logging enables historical analysis of agent git operations."
+      "quality_notes": "Git integration enables agents to track their code changes with metadata. The CLI/plugin split provides both programmatic and user-accessible interfaces. Activity logging enables historical analysis of agent git operations.",
+      "spec_file": "docs/specs/task_1767306304817_git-integration-for-multi-agen.md"
     },
     {
       "id": "task_1767339034717_mqnz73",
@@ -854,7 +893,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T07:30:34.717Z",
-      "updated_at": "2026-01-02T09:23:00.923Z",
+      "updated_at": "2026-01-04T10:30:53.571Z",
       "created_by": "ses_48268a5afffeWWEUVpx2LgDsjc",
       "tags": [
         "dashboard",
@@ -870,7 +909,8 @@
       ],
       "completed_at": "2026-01-02T09:22:57.977Z",
       "quality_score": 8.3,
-      "quality_notes": "Performance dashboards require careful consideration of data visualization - bar charts with dual metrics (count + duration) provide good density. Agent efficiency scoring with weighted quality metrics enables meaningful leaderboard comparisons. WebSocket integration already existed in server.ts, only needed frontend consumption."
+      "quality_notes": "Performance dashboards require careful consideration of data visualization - bar charts with dual metrics (count + duration) provide good density. Agent efficiency scoring with weighted quality metrics enables meaningful leaderboard comparisons. WebSocket integration already existed in server.ts, only needed frontend consumption.",
+      "spec_file": "docs/specs/task_1767339034717_add-real-time-performance-metr.md"
     },
     {
       "id": "task_1767339037402_4nebhl",
@@ -879,7 +919,7 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-02T07:30:37.402Z",
-      "updated_at": "2026-01-02T09:03:03.529Z",
+      "updated_at": "2026-01-04T10:30:53.571Z",
       "created_by": "ses_48268a5afffeWWEUVpx2LgDsjc",
       "tags": [
         "automation",
@@ -894,7 +934,8 @@
         "[2026-01-02T09:02:55.114Z] Created tools/daily-report-generator.ts with 7 commands: generate, list, view, summary, trends, help. Features: agent productivity metrics (tool calls, tasks, sessions), quality trends analysis (scores by dimension, trend direction), error pattern detection, automated improvement suggestions. Reports saved as markdown in memory/reports/. Integrated with opencode-cli.ts via report command."
       ],
       "quality_score": 8.6,
-      "quality_notes": "Daily reports provide valuable visibility into system health. Storing reports as markdown enables easy reading and archiving. Automatic suggestion generation based on metrics thresholds helps identify issues proactively."
+      "quality_notes": "Daily reports provide valuable visibility into system health. Storing reports as markdown enables easy reading and archiving. Automatic suggestion generation based on metrics thresholds helps identify issues proactively.",
+      "spec_file": "docs/specs/task_1767339037402_create-automated-daily-perform.md"
     },
     {
       "id": "task_1767339040290_agt8x5",
@@ -903,7 +944,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T07:30:40.290Z",
-      "updated_at": "2026-01-02T08:59:41.307Z",
+      "updated_at": "2026-01-04T10:30:53.571Z",
       "created_by": "ses_48268a5afffeWWEUVpx2LgDsjc",
       "tags": [
         "plugin",
@@ -918,7 +959,8 @@
         "[2026-01-02T08:59:30.745Z] Implemented tool execution time tracking in plugin hooks. Added: 1) tool.execute.before hook to capture start time and input size, 2) Enhanced tool.execute.after to calculate duration and store to tool-timing.jsonl, 3) Tool categorization system for 15+ categories, 4) CLI timing command with 6 subcommands (summary, tools, recent, slow, categories, export). Data tracked: tool name, call ID, start/end time, duration, input/output sizes, success/failure, category."
       ],
       "quality_score": 8.5,
-      "quality_notes": "Using Map for in-memory state tracking of active tool calls allows efficient lookup without file I/O. The tool.execute.before hook captures start time while tool.execute.after calculates and logs timing - this pattern enables accurate duration measurement."
+      "quality_notes": "Using Map for in-memory state tracking of active tool calls allows efficient lookup without file I/O. The tool.execute.before hook captures start time while tool.execute.after calculates and logs timing - this pattern enables accurate duration measurement.",
+      "spec_file": "docs/specs/task_1767339040290_implement-tool-execution-time-.md"
     },
     {
       "id": "task_1767344641899_hkgfeg",
@@ -927,7 +969,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T09:04:01.899Z",
-      "updated_at": "2026-01-02T09:08:18.692Z",
+      "updated_at": "2026-01-04T10:30:53.572Z",
       "created_by": "ses_482182354ffepRlDEVp5Iz33WO",
       "tags": [
         "monitoring",
@@ -942,7 +984,8 @@
         "[2026-01-02T09:08:09.441Z] Created tools/agent-conversation-viewer.ts with 6 commands: agents (list all agents), view (show agent conversation), tools (show tool calls), stream (real-time activity), timeline (chronological view), export (markdown export). Shows messages, tool calls, and logs per agent. Integrated with opencode-cli.ts via 'conv' command."
       ],
       "quality_score": 8.2,
-      "quality_notes": "Per-agent conversation tracking requires correlating multiple data sources (messages, tool timing, logs) by agent ID and session ID. The real-time stream feature with file watching provides good visibility into agent activity."
+      "quality_notes": "Per-agent conversation tracking requires correlating multiple data sources (messages, tool timing, logs) by agent ID and session ID. The real-time stream feature with file watching provides good visibility into agent activity.",
+      "spec_file": "docs/specs/task_1767344641899_add-per-agent-conversation-vie.md"
     },
     {
       "id": "task_1767344645072_oyp9nk",
@@ -951,7 +994,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T09:04:05.072Z",
-      "updated_at": "2026-01-03T09:55:39.814Z",
+      "updated_at": "2026-01-04T10:30:53.572Z",
       "created_by": "ses_482182354ffepRlDEVp5Iz33WO",
       "tags": [
         "prompts",
@@ -966,7 +1009,8 @@
         "[2026-01-02T09:19:32.965Z] Completed by previous orchestrator - improved agent prompts in watchdog script and created critique-agent skill file for code review capabilities"
       ],
       "quality_score": 7.6,
-      "quality_notes": "Agent prompts benefit from explicit skill loading instructions and context awareness patterns. Critique-agent skill file demonstrates proper skill documentation."
+      "quality_notes": "Agent prompts benefit from explicit skill loading instructions and context awareness patterns. Critique-agent skill file demonstrates proper skill documentation.",
+      "spec_file": "docs/specs/task_1767344645072_improve-agent-prompts-and-ensu.md"
     },
     {
       "id": "task_1767344648841_8si6qk",
@@ -975,7 +1019,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T09:04:08.841Z",
-      "updated_at": "2026-01-02T09:14:35.038Z",
+      "updated_at": "2026-01-04T10:30:53.572Z",
       "created_by": "ses_482182354ffepRlDEVp5Iz33WO",
       "tags": [
         "agents",
@@ -990,7 +1034,8 @@
         "[2026-01-02T09:14:32.576Z] Created critique agent with 9 commands (code, output, task, system, review, list, view, summary, help). Analyzes security, quality, performance, and style issues. Created skill file at .opencode/skill/critique-agent/SKILL.md. Integrated with opencode-cli.ts via 'critique'/'review'/'cr' commands. Critiques saved as markdown in memory/critiques/."
       ],
       "quality_score": 8.5,
-      "quality_notes": "Pattern-based code analysis works well for common issues but can have false positives when patterns appear in string literals. Skill files provide good documentation for agent capabilities."
+      "quality_notes": "Pattern-based code analysis works well for common issues but can have false positives when patterns appear in string literals. Skill files provide good documentation for agent capabilities.",
+      "spec_file": "docs/specs/task_1767344648841_create-critique-agent-type-for.md"
     },
     {
       "id": "task_1767346015405_uj38ak",
@@ -999,7 +1044,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T09:26:55.405Z",
-      "updated_at": "2026-01-03T09:55:36.726Z",
+      "updated_at": "2026-01-04T10:30:53.573Z",
       "created_by": "ses_481f97c3dffeXiO48A3gwALPnj",
       "tags": [
         "skill",
@@ -1013,7 +1058,8 @@
         "[2026-01-02T09:27:04.693Z] Addressed user feedback about critique-agent not being a real agent. Updated skill file with spawning instructions and demonstrated spawning a critique agent successfully."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Skills need spawning instructions so agents know how to use them. Task tool with proper prompt enables real agent spawning rather than just CLI utility usage."
+      "quality_notes": "Skills need spawning instructions so agents know how to use them. Task tool with proper prompt enables real agent spawning rather than just CLI utility usage.",
+      "spec_file": "docs/specs/task_1767346015405_improved-critique-agent-skill-.md"
     },
     {
       "id": "task_1767346173578_rcafqh",
@@ -1022,7 +1068,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T09:29:33.578Z",
-      "updated_at": "2026-01-02T09:32:43.024Z",
+      "updated_at": "2026-01-04T10:30:53.573Z",
       "created_by": "ses_481f97c3dffeXiO48A3gwALPnj",
       "tags": [
         "memory-system",
@@ -1039,7 +1085,8 @@
         "[2026-01-02T09:32:39.163Z] Implemented automatic session knowledge extraction: 1) Added session.end hook to auto-extract learnings from tool timing data 2) Created extractSessionKnowledge function that analyzes tool usage patterns, errors, and slow tools 3) Added summarize-current command to session-summarizer for quiet auto-summarization 4) Added Memory System Architecture section to AGENTS.md documenting active vs deprecated tools"
       ],
       "quality_score": 8.2,
-      "quality_notes": "Automatic extraction on session end needs to be lightweight to avoid blocking. Extracting tool patterns (most used, slow, error-prone) provides actionable insights. Having both quiet (summarize-current) and verbose (summarize) modes enables both automated and manual use. Documentation of active vs deprecated tools is essential for maintainability."
+      "quality_notes": "Automatic extraction on session end needs to be lightweight to avoid blocking. Extracting tool patterns (most used, slow, error-prone) provides actionable insights. Having both quiet (summarize-current) and verbose (summarize) modes enables both automated and manual use. Documentation of active vs deprecated tools is essential for maintainability.",
+      "spec_file": "docs/specs/task_1767346173578_refactor-memory-system-to-prop.md"
     },
     {
       "id": "task_1767346467804_5sh2f0",
@@ -1048,7 +1095,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T09:34:27.804Z",
-      "updated_at": "2026-01-02T09:59:00.642Z",
+      "updated_at": "2026-01-04T10:30:53.573Z",
       "created_by": "unknown",
       "tags": [
         "analysis",
@@ -1062,7 +1109,8 @@
       ],
       "completed_at": "2026-01-02T09:58:57.980Z",
       "quality_score": 8.6,
-      "quality_notes": "Created comprehensive shared utilities module that will prevent future code duplication. Migration pattern established: 1) Create shared utils first without touching existing code, 2) Migrate low-risk tools first, 3) Migrate high-usage tools last with thorough testing."
+      "quality_notes": "Created comprehensive shared utilities module that will prevent future code duplication. Migration pattern established: 1) Create shared utils first without touching existing code, 2) Migrate low-risk tools first, 3) Migrate high-usage tools last with thorough testing.",
+      "spec_file": "docs/specs/task_1767346467804_deep-codebase-analysis-and-doc.md"
     },
     {
       "id": "task_1767348019820_2811ek",
@@ -1071,7 +1119,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T10:00:19.820Z",
-      "updated_at": "2026-01-02T10:05:50.816Z",
+      "updated_at": "2026-01-04T10:30:53.574Z",
       "created_by": "ses_481f0dab3ffexmJMTDjKO1xwP9",
       "tags": [
         "memory",
@@ -1086,7 +1134,8 @@
         "[2026-01-02T10:05:42.667Z] Enhanced opencode-tracker.ts with: 1) Improved sync command that saves rich session data including tool usage, topics, and file changes to memory/opencode-sessions.json, 2) New learn command for extracting insights from sessions, 3) Migration to shared utilities. Tested all commands."
       ],
       "quality_score": 8.5,
-      "quality_notes": "OpenCode stores sessions in ~/.local/share/opencode/storage with session/message/part structure. Enhanced sync captures tool patterns, topics, and file changes. Incremental sync prevents reprocessing. Learn command extracts knowledge from conversations."
+      "quality_notes": "OpenCode stores sessions in ~/.local/share/opencode/storage with session/message/part structure. Enhanced sync captures tool patterns, topics, and file changes. Incremental sync prevents reprocessing. Learn command extracts knowledge from conversations.",
+      "spec_file": "docs/specs/task_1767348019820_improve-opencode-conversation-.md"
     },
     {
       "id": "task_1767348386518_cgkx0r",
@@ -1095,7 +1144,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T10:06:26.518Z",
-      "updated_at": "2026-01-02T10:09:31.830Z",
+      "updated_at": "2026-01-04T10:30:53.574Z",
       "created_by": "ses_481f0dab3ffexmJMTDjKO1xwP9",
       "tags": [
         "opencode",
@@ -1111,7 +1160,8 @@
       ],
       "completed_at": "2026-01-02T10:09:30.068Z",
       "quality_score": 8.6,
-      "quality_notes": "OpenCode is highly extensible via plugins. Task tool creates child sessions with restricted permissions. Best integration approach is wrapper tools + system message injection rather than forking."
+      "quality_notes": "OpenCode is highly extensible via plugins. Task tool creates child sessions with restricted permissions. Best integration approach is wrapper tools + system message injection rather than forking.",
+      "spec_file": "docs/specs/task_1767348386518_analyze-and-customize-opencode.md"
     },
     {
       "id": "task_1767348773210_ezwle4",
@@ -1120,7 +1170,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T10:12:53.210Z",
-      "updated_at": "2026-01-02T10:19:26.122Z",
+      "updated_at": "2026-01-04T10:30:53.575Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1136,7 +1186,8 @@
         "[2026-01-02T10:19:23.963Z] Migrated all 7 CLI tools: task-manager.ts, daily-report-generator.ts, terminal-dashboard.ts, agent-performance-profiler.ts, git-integration.ts, message-bus-manager.ts, working-memory-manager.ts. Total ~239 lines of duplicated code removed. All tools tested and working."
       ],
       "quality_score": 8.9,
-      "quality_notes": "Worker agents can efficiently handle repetitive migration tasks. The shared utilities pattern established in session 114 made migrations straightforward - just replace inline functions with imports."
+      "quality_notes": "Worker agents can efficiently handle repetitive migration tasks. The shared utilities pattern established in session 114 made migrations straightforward - just replace inline functions with imports.",
+      "spec_file": "docs/specs/task_1767348773210_complete-cli-tool-migrations-t.md"
     },
     {
       "id": "task_1767348775843_qpjn27",
@@ -1145,7 +1196,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T10:12:55.844Z",
-      "updated_at": "2026-01-02T10:23:52.333Z",
+      "updated_at": "2026-01-04T10:30:53.575Z",
       "created_by": "unknown",
       "tags": [
         "testing",
@@ -1161,7 +1212,8 @@
         "[2026-01-02T10:23:49.904Z] Created tools/shared/shared.test.ts with 114 test cases covering all shared utility modules: json-utils (23), time-utils (27), string-utils (49), paths (15). All tests pass. Run with: bun test tools/shared/shared.test.ts"
       ],
       "quality_score": 8.7,
-      "quality_notes": "Comprehensive unit tests for shared utilities provide confidence in the migration work. 114 tests covering all 4 modules with edge cases like empty strings, invalid JSON, ANSI codes, and boundary conditions. Tests run fast (59ms) with bun test."
+      "quality_notes": "Comprehensive unit tests for shared utilities provide confidence in the migration work. 114 tests covering all 4 modules with edge cases like empty strings, invalid JSON, ANSI codes, and boundary conditions. Tests run fast (59ms) with bun test.",
+      "spec_file": "docs/specs/task_1767348775843_add-automated-testing-for-cli-.md"
     },
     {
       "id": "task_1767348778705_uoy1y9",
@@ -1170,7 +1222,7 @@
       "priority": "low",
       "status": "cancelled",
       "created_at": "2026-01-02T10:12:58.705Z",
-      "updated_at": "2026-01-02T11:12:01.063Z",
+      "updated_at": "2026-01-04T10:30:53.576Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -1182,7 +1234,8 @@
       "assigned_to": "terminal-user",
       "notes": [
         "[2026-01-02T11:12:01.063Z] Cancelled - assigned to terminal-user (stale). Dashboard visualizations are low priority. Will recreate when focusing on UI improvements."
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767348778705_enhance-dashboard-ui-with-more.md"
     },
     {
       "id": "task_1767349529403_09cipw",
@@ -1191,7 +1244,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T10:25:29.403Z",
-      "updated_at": "2026-01-03T09:55:43.029Z",
+      "updated_at": "2026-01-04T10:30:53.576Z",
       "created_by": "ses_481cd75b8ffevcv1L5aqaLPZG9",
       "tags": [
         "traceability",
@@ -1207,7 +1260,8 @@
         "[2026-01-02T10:29:31.901Z] Enhanced opencode-tracker.ts with 3 new commands: view (full conversation with all parts), tools (tool calls with I/O), search (cross-session search). Also enhanced sessions command to show tool counts, duration, and topics."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Full conversation traceability requires view, tools, and search commands across sessions. Enhanced opencode-tracker provides complete visibility into agent activity."
+      "quality_notes": "Full conversation traceability requires view, tools, and search commands across sessions. Enhanced opencode-tracker provides complete visibility into agent activity.",
+      "spec_file": "docs/specs/task_1767349529403_enhance-opencode-tracker-for-f.md"
     },
     {
       "id": "task_1767349531023_a796l4",
@@ -1216,7 +1270,7 @@
       "priority": "high",
       "status": "cancelled",
       "created_at": "2026-01-02T10:25:31.023Z",
-      "updated_at": "2026-01-02T11:11:59.047Z",
+      "updated_at": "2026-01-04T10:30:53.576Z",
       "created_by": "ses_481cd75b8ffevcv1L5aqaLPZG9",
       "tags": [
         "terminal-dashboard",
@@ -1230,7 +1284,8 @@
       "notes": [
         "[2026-01-02T10:39:16.841Z] Agent that claimed this task may be stale. Checking if work was completed.",
         "[2026-01-02T11:11:59.047Z] Cancelled - assigned to stale agent. Terminal dashboard works but needs refinement. Will recreate if needed."
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767349531023_debug-and-fix-terminal-dashboa.md"
     },
     {
       "id": "task_1767349532596_z8mmzv",
@@ -1239,7 +1294,7 @@
       "priority": "medium",
       "status": "cancelled",
       "created_at": "2026-01-02T10:25:32.596Z",
-      "updated_at": "2026-01-02T11:12:00.221Z",
+      "updated_at": "2026-01-04T10:30:53.577Z",
       "created_by": "ses_481cd75b8ffevcv1L5aqaLPZG9",
       "tags": [
         "documentation",
@@ -1251,7 +1306,8 @@
       "assigned_to": "terminal-user",
       "notes": [
         "[2026-01-02T11:12:00.221Z] Cancelled - assigned to terminal-user (stale). Documentation agent skill not critical - can recreate later."
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767349532596_create-specialized-documentati.md"
     },
     {
       "id": "task_1767349926620_836elg",
@@ -1260,7 +1316,7 @@
       "priority": "critical",
       "status": "completed",
       "created_at": "2026-01-02T10:32:06.620Z",
-      "updated_at": "2026-01-02T10:36:35.440Z",
+      "updated_at": "2026-01-04T10:30:53.577Z",
       "created_by": "ses_481bcf20fffenxdmFcE6LcoRzI",
       "tags": [
         "opencode",
@@ -1277,7 +1333,8 @@
         "[2026-01-02T10:36:28.383Z] Completed OpenCode improvements: 1) Added task_spawn tool with memory context injection, 2) Enhanced plugin to track Task-spawned sessions, 3) Added 3 custom agent types (memory-worker, code-worker, analysis-worker) to opencode.json"
       ],
       "quality_score": 8.5,
-      "quality_notes": "OpenCode source is well-structured - agents defined in config, plugins can hook into tool execution, session linking via parentID. The task_spawn tool creates better coordination by injecting memory context and task IDs into subagent prompts."
+      "quality_notes": "OpenCode source is well-structured - agents defined in config, plugins can hook into tool execution, session linking via parentID. The task_spawn tool creates better coordination by injecting memory context and task IDs into subagent prompts.",
+      "spec_file": "docs/specs/task_1767349926620_apply-opencode-learnings-to-im.md"
     },
     {
       "id": "task_1767350438773_eop2kb",
@@ -1286,7 +1343,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T10:40:38.773Z",
-      "updated_at": "2026-01-02T10:44:34.236Z",
+      "updated_at": "2026-01-04T10:30:53.577Z",
       "created_by": "unknown",
       "tags": [
         "enhancement",
@@ -1302,7 +1359,8 @@
         "[2026-01-02T10:44:30.710Z] Enhanced extractSessionKnowledge to pull from 6 data sources (message bus, quality assessments, tasks, git activity, sessions, tool timing). Improved session-summarizer extractLearnings with 15 regex patterns for decisions, insights, solutions. Knowledge base now stores structured data."
       ],
       "quality_score": 8.1,
-      "quality_notes": "Multi-source knowledge extraction is more reliable than regex on conversation text alone. Structured data from message bus task_complete messages, quality assessments lessons_learned, and git commits provides factual information vs inferred learnings."
+      "quality_notes": "Multi-source knowledge extraction is more reliable than regex on conversation text alone. Structured data from message bus task_complete messages, quality assessments lessons_learned, and git commits provides factual information vs inferred learnings.",
+      "spec_file": "docs/specs/task_1767350438773_improve-automatic-knowledge-ex.md"
     },
     {
       "id": "task_1767350442149_qnozk0",
@@ -1311,7 +1369,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T10:40:42.149Z",
-      "updated_at": "2026-01-02T10:46:54.885Z",
+      "updated_at": "2026-01-04T10:30:53.577Z",
       "created_by": "unknown",
       "tags": [
         "optimization",
@@ -1326,7 +1384,8 @@
         "[2026-01-02T10:46:51.612Z] Reduced heartbeat spam: lowered thresholds in message-bus-manager, reduced heartbeat frequency to 60s, only send to message bus every 5 min. Result: 51% message reduction."
       ],
       "quality_score": 8.1,
-      "quality_notes": "Heartbeat frequency can be reduced significantly (30s->60s) without affecting agent health detection. Message bus heartbeats can be sent less frequently than registry updates since coordination messages are the primary use case."
+      "quality_notes": "Heartbeat frequency can be reduced significantly (30s->60s) without affecting agent health detection. Message bus heartbeats can be sent less frequently than registry updates since coordination messages are the primary use case.",
+      "spec_file": "docs/specs/task_1767350442149_compact-message-bus-remove-exc.md"
     },
     {
       "id": "task_1767350445520_hih29g",
@@ -1335,7 +1394,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T10:40:45.520Z",
-      "updated_at": "2026-01-02T10:50:12.824Z",
+      "updated_at": "2026-01-04T10:30:53.578Z",
       "created_by": "unknown",
       "tags": [
         "feature",
@@ -1350,7 +1409,8 @@
         "[2026-01-02T10:50:09.581Z] Added 'tree' command to opencode-tracker.ts that shows parent-child session relationships. Visual tree with icons (🎯 orchestrator, ⚙️ worker, 🔍 explore), connectors, tool counts, and duration. Groups orphan and standalone sessions."
       ],
       "quality_score": 8.3,
-      "quality_notes": "OpenCode stores parentID in session objects allowing easy tree reconstruction. Visual tree formatting with Unicode box-drawing characters (├── └──) works well in terminals. Grouping by session type using title keywords provides good UX."
+      "quality_notes": "OpenCode stores parentID in session objects allowing easy tree reconstruction. Visual tree formatting with Unicode box-drawing characters (├── └──) works well in terminals. Grouping by session type using title keywords provides good UX.",
+      "spec_file": "docs/specs/task_1767350445520_add-parent-child-session-visua.md"
     },
     {
       "id": "task_1767352351947_r8bqq2",
@@ -1359,7 +1419,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T11:12:31.947Z",
-      "updated_at": "2026-01-02T11:19:01.482Z",
+      "updated_at": "2026-01-04T10:30:53.578Z",
       "created_by": "ses_481aa010fffeU8A0urISmUeKNL",
       "tags": [
         "dashboard",
@@ -1375,7 +1435,8 @@
         "[2026-01-02T11:18:58.240Z] Refactored App.tsx from 1677 lines to 628 lines. Created 11 component files in components/ directory. Build verified successful."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Breaking large React components into smaller, focused components improves maintainability. Creating a shared types.ts file prevents circular dependencies. Barrel exports (index.ts) simplify imports. The 62% reduction in App.tsx lines makes the codebase much more navigable."
+      "quality_notes": "Breaking large React components into smaller, focused components improves maintainability. Creating a shared types.ts file prevents circular dependencies. Barrel exports (index.ts) simplify imports. The 62% reduction in App.tsx lines makes the codebase much more navigable.",
+      "spec_file": "docs/specs/task_1767352351947_refactor-dashboard-ui-apptsx-i.md"
     },
     {
       "id": "task_1767352353899_xp5f2m",
@@ -1384,7 +1445,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T11:12:33.899Z",
-      "updated_at": "2026-01-02T11:23:14.176Z",
+      "updated_at": "2026-01-04T10:30:53.578Z",
       "created_by": "ses_481aa010fffeU8A0urISmUeKNL",
       "tags": [
         "dashboard",
@@ -1401,7 +1462,8 @@
         "[2026-01-02T11:23:09.263Z] Added recharts 3.6.0, created 5 chart components (ToolTimingChart, AgentActivityChart, QualityTrendChart, TaskCompletionChart, QualitySparkline), updated PerformanceTab.tsx and QualityPanel.tsx. Build verified successful."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Recharts integrates well with React TypeScript projects. Creating separate chart components in a charts/ subdirectory keeps the code organized. Color-coding data by thresholds (green/amber/red) provides instant visual feedback. Sparklines are excellent for showing trends in compact spaces."
+      "quality_notes": "Recharts integrates well with React TypeScript projects. Creating separate chart components in a charts/ subdirectory keeps the code organized. Color-coding data by thresholds (green/amber/red) provides instant visual feedback. Sparklines are excellent for showing trends in compact spaces.",
+      "spec_file": "docs/specs/task_1767352353899_add-recharts-visualization-lib.md"
     },
     {
       "id": "task_1767352356106_042zzf",
@@ -1410,7 +1472,7 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-02T11:12:36.106Z",
-      "updated_at": "2026-01-02T11:24:52.382Z",
+      "updated_at": "2026-01-04T10:30:53.579Z",
       "created_by": "ses_481aa010fffeU8A0urISmUeKNL",
       "tags": [
         "cleanup",
@@ -1426,7 +1488,8 @@
         "[2026-01-02T11:24:49.419Z] Marked conversation-tracker.ts as deprecated with migration guide. Updated opencode-tracker.ts header as primary tool. Updated AGENTS.md to document tool status. Instead of merging, clearly defined roles: opencode-tracker is primary, conversation-tracker is legacy."
       ],
       "quality_score": 7.7,
-      "quality_notes": "When consolidating tools, sometimes deprecation with clear migration guides is better than immediate deletion. This allows gradual migration and preserves backward compatibility. The deprecated tool can be removed in a future cleanup if needed."
+      "quality_notes": "When consolidating tools, sometimes deprecation with clear migration guides is better than immediate deletion. This allows gradual migration and preserves backward compatibility. The deprecated tool can be removed in a future cleanup if needed.",
+      "spec_file": "docs/specs/task_1767352356106_consolidate-conversation-track.md"
     },
     {
       "id": "task_1767352431470_h49swr",
@@ -1435,7 +1498,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T11:13:51.470Z",
-      "updated_at": "2026-01-03T09:57:08.687Z",
+      "updated_at": "2026-01-04T10:30:53.579Z",
       "claimed_at": "2026-01-02T11:13:51.470Z",
       "created_by": "ses_481aa010fffeU8A0urISmUeKNL",
       "spawned_by": "agent-1767351123740-fin1ue",
@@ -1450,7 +1513,8 @@
         "[2026-01-02T11:18:58.994Z] Worker completed refactoring successfully"
       ],
       "quality_score": 8.3,
-      "quality_notes": "App.tsx refactoring from 1677 to 628 lines (62% reduction) dramatically improves maintainability. Shared types.ts prevents circular dependencies."
+      "quality_notes": "App.tsx refactoring from 1677 to 628 lines (62% reduction) dramatically improves maintainability. Shared types.ts prevents circular dependencies.",
+      "spec_file": "docs/specs/task_1767352431470_refactor-dashboard-ui-apptsx-i.md"
     },
     {
       "id": "task_1767355246085_ek7ysv",
@@ -1459,7 +1523,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T12:00:46.085Z",
-      "updated_at": "2026-01-02T12:08:19.451Z",
+      "updated_at": "2026-01-04T10:30:53.579Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -1475,7 +1539,8 @@
       ],
       "completed_at": "2026-01-02T12:08:17.058Z",
       "quality_score": 7.6,
-      "quality_notes": "Terminal dashboards with blessed work well for TUI. Modular data.ts layer makes adding features easier. Task management through dialogs is more user-friendly than raw commands."
+      "quality_notes": "Terminal dashboards with blessed work well for TUI. Modular data.ts layer makes adding features easier. Task management through dialogs is more user-friendly than raw commands.",
+      "spec_file": "docs/specs/task_1767355246085_enhance-terminal-dashboard-wit.md"
     },
     {
       "id": "task_1767355248113_jdg91d",
@@ -1484,7 +1549,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T12:00:48.113Z",
-      "updated_at": "2026-01-03T09:55:49.504Z",
+      "updated_at": "2026-01-04T10:30:53.580Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1499,7 +1564,8 @@
         "[2026-01-02T12:18:04.696Z] Analyzed OpenCode codebase patterns. Key findings: 1) Monorepo with workspaces pattern, 2) Single-word folder names, 3) STYLE_GUIDE.md conventions. Applied: 1) Updated AGENTS.md with proper tool categorization by domain, 2) Removed deprecated conversation-tracker.ts, 3) Created terminal-dashboard/ as separate module following the pattern."
       ],
       "quality_score": 8.2,
-      "quality_notes": "OpenCode's monorepo structure with workspaces and single-word folder names provides a clean organizational pattern. Updating AGENTS.md with proper tool categorization helps navigation."
+      "quality_notes": "OpenCode's monorepo structure with workspaces and single-word folder names provides a clean organizational pattern. Updating AGENTS.md with proper tool categorization helps navigation.",
+      "spec_file": "docs/specs/task_1767355248113_analyze-opencode-codebase-patt.md"
     },
     {
       "id": "task_1767355250010_gt3kac",
@@ -1508,7 +1574,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T12:00:50.010Z",
-      "updated_at": "2026-01-02T12:03:02.996Z",
+      "updated_at": "2026-01-04T10:30:53.580Z",
       "created_by": "unknown",
       "tags": [
         "optimization",
@@ -1523,7 +1589,8 @@
         "[2026-01-02T12:02:33.534Z] Analyzed 4,316 tool calls. Identified low-usage tools: task_spawn (4), checkpoint_load (0), recovery_cleanup (0), git_log (4), memory_search (8). Recommended keeping core tools, moving infrequent tools to CLI."
       ],
       "quality_score": 7.8,
-      "quality_notes": "Tool usage analysis from tool-timing.jsonl provides valuable insights. High-usage tools (read, edit, agent_*, task_*) should remain in plugin. Low-usage tools like task_spawn and recovery tools could move to CLI to reduce token cost."
+      "quality_notes": "Tool usage analysis from tool-timing.jsonl provides valuable insights. High-usage tools (read, edit, agent_*, task_*) should remain in plugin. Low-usage tools like task_spawn and recovery tools could move to CLI to reduce token cost.",
+      "spec_file": "docs/specs/task_1767355250010_clean-up-unused-tools-and-opti.md"
     },
     {
       "id": "task_1767355251859_3gmv0e",
@@ -1532,7 +1599,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T12:00:51.859Z",
-      "updated_at": "2026-01-03T09:55:52.467Z",
+      "updated_at": "2026-01-04T10:30:53.580Z",
       "created_by": "unknown",
       "tags": [
         "documentation",
@@ -1545,7 +1612,8 @@
         "[2026-01-02T12:16:27.309Z] Created workflows folder with self-reflection-guide.md and multi-session-validation.md"
       ],
       "quality_score": 7.8,
-      "quality_notes": "Self-reflection guides and multi-session validation workflows enable continuous improvement. Documentation in workflows/ folder provides templates for common improvement patterns."
+      "quality_notes": "Self-reflection guides and multi-session validation workflows enable continuous improvement. Documentation in workflows/ folder provides templates for common improvement patterns.",
+      "spec_file": "docs/specs/task_1767355251859_create-workflows-folder-with-s.md"
     },
     {
       "id": "task_1767355253372_rjqjur",
@@ -1554,7 +1622,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T12:00:53.372Z",
-      "updated_at": "2026-01-03T09:55:55.074Z",
+      "updated_at": "2026-01-04T10:30:53.580Z",
       "created_by": "unknown",
       "tags": [
         "infrastructure",
@@ -1567,7 +1635,8 @@
         "[2026-01-02T12:18:23.002Z] Upgraded watchdog from v2.0 to v3.0 with: 1) Configuration file support (.watchdog.conf) with init-config command, 2) Token limit tracking and enforcement (100k input, 50k output, 150k total default), 3) Memory usage monitoring (configurable limit), 4) Session timeout configuration, 5) Model selection with fallback support, 6) Log rotation with configurable size/count, 7) Exponential backoff for restarts, 8) Enhanced status display with token usage. All tests pass."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Watchdog configuration file support enables customization without code changes. Token limits, memory monitoring, and exponential backoff improve reliability."
+      "quality_notes": "Watchdog configuration file support enables customization without code changes. Token limits, memory monitoring, and exponential backoff improve reliability.",
+      "spec_file": "docs/specs/task_1767355253372_improve-watchdog-with-configur.md"
     },
     {
       "id": "task_1767355254784_i5mmcr",
@@ -1576,7 +1645,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T12:00:54.784Z",
-      "updated_at": "2026-01-03T09:55:58.023Z",
+      "updated_at": "2026-01-04T10:30:53.581Z",
       "created_by": "unknown",
       "tags": [
         "debugging",
@@ -1591,7 +1660,8 @@
         "[2026-01-02T12:20:53.949Z] Created debug-capture.ts tool with: run (capture command output), log (debug messages), list (view captures), view (inspect specific capture), clean (remove old captures). Added LOGS_DIR and appendLine to shared utilities."
       ],
       "quality_score": 7.7,
-      "quality_notes": "Debug capture utility (debug-capture.ts) enables saving terminal outputs for later analysis. LOGS_DIR and appendLine shared utilities support consistent logging."
+      "quality_notes": "Debug capture utility (debug-capture.ts) enables saving terminal outputs for later analysis. LOGS_DIR and appendLine shared utilities support consistent logging.",
+      "spec_file": "docs/specs/task_1767355254784_add-debugging-tools-save-termi.md"
     },
     {
       "id": "task_1767357229945_z6mnqe",
@@ -1600,7 +1670,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T12:33:49.945Z",
-      "updated_at": "2026-01-02T13:07:06.990Z",
+      "updated_at": "2026-01-04T10:30:53.581Z",
       "created_by": "ses_4814d47d8ffeIIDVFJITkTQRq5",
       "tags": [
         "dashboard",
@@ -1618,7 +1688,8 @@
       ],
       "completed_at": "2026-01-02T13:07:03.934Z",
       "quality_score": 8.3,
-      "quality_notes": "Worker successfully implemented full-stack feature: API endpoints + React component with proper types. Good pattern for future dashboard features."
+      "quality_notes": "Worker successfully implemented full-stack feature: API endpoints + React component with proper types. Good pattern for future dashboard features.",
+      "spec_file": "docs/specs/task_1767357229945_dashboard-show-messages-for-se.md"
     },
     {
       "id": "task_1767357231923_pcgu8x",
@@ -1627,7 +1698,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T12:33:51.923Z",
-      "updated_at": "2026-01-02T12:58:24.553Z",
+      "updated_at": "2026-01-04T10:30:53.581Z",
       "created_by": "ses_4814d47d8ffeIIDVFJITkTQRq5",
       "tags": [
         "dashboard",
@@ -1644,7 +1715,8 @@
         "[2026-01-02T12:58:16.627Z] [\"Implemented token tracking in terminal-dashboard CLI\", \"Added SessionTokens type to types.ts\", \"Added extractSessionTokens function to data.ts\", \"Added getTokenTrends and getTotalTokenUsage functions\", \"Updated getOpenCodeSessions to include token data\", \"Added new 'tokens' view mode (key 7)\", \"Tokens shown in conversations view and dedicated tokens view\", \"Shows input/output/reasoning/cache breakdown\", \"Cache efficiency calculation added\", \"Tested and verified working\"]"
       ],
       "quality_score": 8.3,
-      "quality_notes": "Token data is stored per-message in OpenCode's storage. Cache read/write tracking is valuable for cost analysis. The CLI dashboard pattern works well for terminal-focused users."
+      "quality_notes": "Token data is stored per-message in OpenCode's storage. Cache read/write tracking is valuable for cost analysis. The CLI dashboard pattern works well for terminal-focused users.",
+      "spec_file": "docs/specs/task_1767357231923_track-token-usage-in-opencode-.md"
     },
     {
       "id": "task_1767359324117_pvr0de",
@@ -1653,7 +1725,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T13:08:44.117Z",
-      "updated_at": "2026-01-02T13:13:57.436Z",
+      "updated_at": "2026-01-04T10:30:53.582Z",
       "created_by": "unknown",
       "tags": [
         "dashboard",
@@ -1669,7 +1741,8 @@
         "[2026-01-02T13:13:54.157Z] Implemented token cost estimation for OpenCode sessions panel. Features: Claude pricing ($3/1M input, $15/1M output, $0.30/1M cache read), session-level cost calculations, per-message costs, cache savings display. Commit: c00eb11"
       ],
       "quality_score": 8.3,
-      "quality_notes": "Cost estimation for API usage is valuable for budget tracking. Claude's cache pricing (90% discount) significantly reduces costs - displaying cache savings helps users understand the value of the caching system."
+      "quality_notes": "Cost estimation for API usage is valuable for budget tracking. Claude's cache pricing (90% discount) significantly reduces costs - displaying cache savings helps users understand the value of the caching system.",
+      "spec_file": "docs/specs/task_1767359324117_dashboard-add-token-cost-estim.md"
     },
     {
       "id": "task_1767369862160_fy3daj",
@@ -1678,7 +1751,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T16:04:22.160Z",
-      "updated_at": "2026-01-03T09:56:01.294Z",
+      "updated_at": "2026-01-04T10:30:53.582Z",
       "created_by": "unknown",
       "tags": [
         "self-improvement",
@@ -1694,7 +1767,8 @@
         "[2026-01-02T16:06:39.701Z] Evaluated and improved task-manager.ts CLI tool. Added 5 improvements: 1) Feedback when list returns empty, 2) search command, 3) --help flag support, 4) cancelled count in summary, 5) list all option. All changes tested and working."
       ],
       "quality_score": 7.9,
-      "quality_notes": "Self-improvement cycles should focus on evaluating and debugging existing tools. Task-manager search, help flags, and empty list feedback improve CLI usability."
+      "quality_notes": "Self-improvement cycles should focus on evaluating and debugging existing tools. Task-manager search, help flags, and empty list feedback improve CLI usability.",
+      "spec_file": "docs/specs/task_1767369862160_self-improvement-evaluate-and-.md"
     },
     {
       "id": "task_1767369905654_6e870e",
@@ -1703,11 +1777,12 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-02T16:05:05.654Z",
-      "updated_at": "2026-01-03T09:56:07.554Z",
+      "updated_at": "2026-01-04T10:30:53.582Z",
       "created_by": "orchestrator",
       "completed_at": "2026-01-02T16:05:12.347Z",
       "quality_score": 6.7,
-      "quality_notes": "Test tasks help validate CLI tools work correctly. Quick completion indicates tooling is reliable."
+      "quality_notes": "Test tasks help validate CLI tools work correctly. Quick completion indicates tooling is reliable.",
+      "spec_file": "docs/specs/task_1767369905654_test-task-for-cli-evaluation.md"
     },
     {
       "id": "task_1767373051051_mfbxvp",
@@ -1716,7 +1791,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T16:57:31.053Z",
-      "updated_at": "2026-01-02T17:00:38.324Z",
+      "updated_at": "2026-01-04T10:30:53.582Z",
       "created_by": "ses_4805cd9b9ffeKrD513NS4jYqQm",
       "tags": [
         "refactoring",
@@ -1729,7 +1804,8 @@
         "[2026-01-02T17:00:15.417Z] Worker completed successfully. Consolidated TimingEntry into ToolTiming in shared/types.ts. Removed duplicate interfaces from cli.ts and agent-conversation-viewer.ts. All files compile."
       ],
       "quality_score": 8,
-      "quality_notes": "Worker successfully consolidated TimingEntry to ToolTiming. This reduces code duplication and follows DRY principle."
+      "quality_notes": "Worker successfully consolidated TimingEntry to ToolTiming. This reduces code duplication and follows DRY principle.",
+      "spec_file": "docs/specs/task_1767373051051_consolidar-timingentry-en-shar.md"
     },
     {
       "id": "task_1767373927809_h02iuz",
@@ -1738,7 +1814,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T17:12:07.809Z",
-      "updated_at": "2026-01-03T09:56:10.295Z",
+      "updated_at": "2026-01-04T10:30:53.583Z",
       "created_by": "unknown",
       "tags": [
         "type-safety",
@@ -1751,7 +1827,8 @@
         "[2026-01-02T17:17:36.948Z] Worker agent-1767373949009-b5hbe completed the refactoring. cli.ts now uses proper types from shared/types.ts instead of any. Changes: +87/-55 lines. All 24 any usages replaced with proper types (Agent, Task, Message, UserMessage, etc). CLI tested and working correctly."
       ],
       "quality_score": 8.4,
-      "quality_notes": "Replacing any types with proper TypeScript types improves code quality significantly. Shared types in types.ts enable consistent typing across the codebase."
+      "quality_notes": "Replacing any types with proper TypeScript types improves code quality significantly. Shared types in types.ts enable consistent typing across the codebase.",
+      "spec_file": "docs/specs/task_1767373927809_refactor-clits-to-use-proper-t.md"
     },
     {
       "id": "task_1767374436847_0l6k9v",
@@ -1760,7 +1837,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T17:20:36.847Z",
-      "updated_at": "2026-01-03T09:56:13.453Z",
+      "updated_at": "2026-01-04T10:30:53.583Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1774,7 +1851,8 @@
         "[2026-01-02T17:25:28.391Z] Worker completed successfully. Commit: 8b66b44. Reduced any types from 25 to 0 in daily-report-generator.ts."
       ],
       "quality_score": 8.1,
-      "quality_notes": "Type refactoring from any to specific types requires understanding the actual JSON structure. Field name mismatches (from vs from_agent) should be caught during refactoring."
+      "quality_notes": "Type refactoring from any to specific types requires understanding the actual JSON structure. Field name mismatches (from vs from_agent) should be caught during refactoring.",
+      "spec_file": "docs/specs/task_1767374436847_refactor-daily-report-generato.md"
     },
     {
       "id": "task_1767374755253_d1mls9",
@@ -1783,7 +1861,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T17:25:55.253Z",
-      "updated_at": "2026-01-03T09:56:16.358Z",
+      "updated_at": "2026-01-04T10:30:53.583Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1796,7 +1874,8 @@
         "[2026-01-02T17:29:37.005Z] Worker completed successfully. Commit: cd7a82d. Reduced any types from 14 to 0 in session-summarizer.ts."
       ],
       "quality_score": 8,
-      "quality_notes": "Worker agents can efficiently handle type safety refactoring tasks. Systematic approach reduces any usage from 14 to 0."
+      "quality_notes": "Worker agents can efficiently handle type safety refactoring tasks. Systematic approach reduces any usage from 14 to 0.",
+      "spec_file": "docs/specs/task_1767374755253_refactor-session-summarizerts-.md"
     },
     {
       "id": "task_1767375012040_lkmp1n",
@@ -1805,7 +1884,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T17:30:12.040Z",
-      "updated_at": "2026-01-03T09:56:19.535Z",
+      "updated_at": "2026-01-04T10:30:53.584Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1817,7 +1896,8 @@
         "[2026-01-02T17:32:57.650Z] Worker completed. Commit: 95a2c33"
       ],
       "quality_score": 8.1,
-      "quality_notes": "Type refactoring tasks can be quickly completed when shared types exist. Commit 95a2c33 demonstrates efficient workflow."
+      "quality_notes": "Type refactoring tasks can be quickly completed when shared types exist. Commit 95a2c33 demonstrates efficient workflow.",
+      "spec_file": "docs/specs/task_1767375012040_refactor-generate-orchestrator.md"
     },
     {
       "id": "task_1767375030579_s0jd55",
@@ -1826,7 +1906,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T17:30:30.579Z",
-      "updated_at": "2026-01-03T09:56:25.165Z",
+      "updated_at": "2026-01-04T10:30:53.584Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1838,7 +1918,8 @@
         "[2026-01-02T17:32:58.266Z] Worker completed. Commit: ed11ec1"
       ],
       "quality_score": 8.1,
-      "quality_notes": "System message config benefits from proper typing. Quick completion indicates well-structured refactoring approach."
+      "quality_notes": "System message config benefits from proper typing. Quick completion indicates well-structured refactoring approach.",
+      "spec_file": "docs/specs/task_1767375030579_refactor-system-message-config.md"
     },
     {
       "id": "task_1767375196648_yaks84",
@@ -1847,7 +1928,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T17:33:16.648Z",
-      "updated_at": "2026-01-03T09:56:27.916Z",
+      "updated_at": "2026-01-04T10:30:53.584Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1859,7 +1940,8 @@
         "[2026-01-02T17:36:23.842Z] File already had 0 any types - no changes needed"
       ],
       "quality_score": 8.5,
-      "quality_notes": "Some files are already well-typed. Verification step is important - no changes needed confirms good existing code quality."
+      "quality_notes": "Some files are already well-typed. Verification step is important - no changes needed confirms good existing code quality.",
+      "spec_file": "docs/specs/task_1767375196648_refactor-realtime-monitorts-ty.md"
     },
     {
       "id": "task_1767375197450_wmnhv7",
@@ -1868,7 +1950,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T17:33:17.450Z",
-      "updated_at": "2026-01-03T09:56:30.385Z",
+      "updated_at": "2026-01-04T10:30:53.584Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -1880,7 +1962,8 @@
         "[2026-01-02T17:36:24.683Z] Worker completed. Commit: 1c1644c"
       ],
       "quality_score": 8.1,
-      "quality_notes": "Git integration benefits from proper typing. Commit 1c1644c completes the type safety refactoring."
+      "quality_notes": "Git integration benefits from proper typing. Commit 1c1644c completes the type safety refactoring.",
+      "spec_file": "docs/specs/task_1767375197450_refactor-git-integrationts-typ.md"
     },
     {
       "id": "task_1767377215299_cbhif5",
@@ -1889,7 +1972,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T18:06:55.299Z",
-      "updated_at": "2026-01-03T09:56:33.601Z",
+      "updated_at": "2026-01-04T10:30:53.585Z",
       "created_by": "ses_4801e0610ffeAthLl6itj05o4L",
       "tags": [
         "bug",
@@ -1902,7 +1985,8 @@
         "[2026-01-02T18:08:47.825Z] Worker completed. Commit 5882dc9 added isPrimaryInstance() check to tool.execute.before, tool.execute.after, and config hooks."
       ],
       "quality_score": 8.3,
-      "quality_notes": "isPrimaryInstance() check must be applied to all hooks that write to shared files. Missing checks in tool.execute hooks caused 4x log duplication."
+      "quality_notes": "isPrimaryInstance() check must be applied to all hooks that write to shared files. Missing checks in tool.execute hooks caused 4x log duplication.",
+      "spec_file": "docs/specs/task_1767377215299_fix-duplicate-logging-bug-in-p.md"
     },
     {
       "id": "task_1767377656074_mk1m0r",
@@ -1911,7 +1995,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T18:14:16.074Z",
-      "updated_at": "2026-01-02T18:17:57.610Z",
+      "updated_at": "2026-01-04T10:30:53.585Z",
       "created_by": "ses_4801696dcffez48Sd6iw0YC2YR",
       "tags": [
         "bug-fix",
@@ -1924,7 +2008,8 @@
         "[2026-01-02T18:17:27.536Z] Fixed with commit 90a5f78. New approach: list-based registration with 150ms election delay, smallest ID wins. Lock file cleared for new format to take effect."
       ],
       "quality_score": 8.7,
-      "quality_notes": "Race conditions en file-based locking requieren mecanismos determinísticos. El enfoque de election delay + smallest ID es robusto y simple."
+      "quality_notes": "Race conditions en file-based locking requieren mecanismos determinísticos. El enfoque de election delay + smallest ID es robusto y simple.",
+      "spec_file": "docs/specs/task_1767377656074_fix-isprimaryinstance-race-con.md"
     },
     {
       "id": "task_1767377976707_t4l4jk",
@@ -1933,7 +2018,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T18:19:36.707Z",
-      "updated_at": "2026-01-02T18:22:40.540Z",
+      "updated_at": "2026-01-04T10:30:53.585Z",
       "created_by": "ses_4801696dcffez48Sd6iw0YC2YR",
       "tags": [
         "bug-fix",
@@ -1947,7 +2032,8 @@
       ],
       "completed_at": "2026-01-02T18:22:36.950Z",
       "quality_score": 9.2,
-      "quality_notes": "Shell template syntax ctx.$ can fail with JSON containing special characters. Always prefer direct file system operations (appendFileSync) over shell redirects when writing structured data."
+      "quality_notes": "Shell template syntax ctx.$ can fail with JSON containing special characters. Always prefer direct file system operations (appendFileSync) over shell redirects when writing structured data.",
+      "spec_file": "docs/specs/task_1767377976707_replace-ctx-shell-commands-wit.md"
     },
     {
       "id": "task_1767378361269_59v2s2",
@@ -1956,7 +2042,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T18:26:01.269Z",
-      "updated_at": "2026-01-03T09:56:36.911Z",
+      "updated_at": "2026-01-04T10:30:53.586Z",
       "created_by": "unknown",
       "tags": [
         "cli",
@@ -1970,7 +2056,8 @@
         "[2026-01-02T18:31:03.582Z] Worker agent-1767378386724-tujhx completed: Added interactive mode with 's' for messages, 'n' for tasks, 'o' for OpenCode sessions"
       ],
       "quality_score": 8.1,
-      "quality_notes": "Interactive CLI modes enable user actions directly from monitoring dashboards. Adding message sending, task creation, and OpenCode session viewing improves workflow efficiency."
+      "quality_notes": "Interactive CLI modes enable user actions directly from monitoring dashboards. Adding message sending, task creation, and OpenCode session viewing improves workflow efficiency.",
+      "spec_file": "docs/specs/task_1767378361269_add-interactive-features-to-re.md"
     },
     {
       "id": "task_1767378364900_osxp1x",
@@ -1979,7 +2066,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T18:26:04.900Z",
-      "updated_at": "2026-01-03T09:56:44.510Z",
+      "updated_at": "2026-01-04T10:30:53.586Z",
       "created_by": "unknown",
       "tags": [
         "documentation",
@@ -1992,7 +2079,8 @@
         "[2026-01-02T18:31:05.117Z] Worker agent-1767378393923-70l95 completed: Created docs/TOOLS_REFERENCE.md (483 lines), updated AGENTS.md"
       ],
       "quality_score": 8.5,
-      "quality_notes": "Documentation agents should analyze existing code to understand functionality. docs/TOOLS_REFERENCE.md provides comprehensive tool documentation with categorization."
+      "quality_notes": "Documentation agents should analyze existing code to understand functionality. docs/TOOLS_REFERENCE.md provides comprehensive tool documentation with categorization.",
+      "spec_file": "docs/specs/task_1767378364900_create-documentation-agent.md"
     },
     {
       "id": "task_1767379006347_zrm7k0",
@@ -2001,7 +2089,7 @@
       "priority": "critical",
       "status": "completed",
       "created_at": "2026-01-02T18:36:46.350Z",
-      "updated_at": "2026-01-03T09:57:11.896Z",
+      "updated_at": "2026-01-04T10:30:53.586Z",
       "created_by": "unknown",
       "tags": [
         "bug",
@@ -2014,7 +2102,8 @@
         "[2026-01-02T18:38:31.325Z] Implemented directory-based locking. Each plugin instance now creates its own file in memory/.plugin-instances/{INSTANCE_ID}.lock. This is atomic and prevents race conditions. The smallest INSTANCE_ID alphabetically wins the election after 150ms delay."
       ],
       "quality_score": 9.3,
-      "quality_notes": "Directory-based locking with individual lock files is atomic and prevents race conditions. The smallest INSTANCE_ID alphabetically wins the election - deterministic and simple."
+      "quality_notes": "Directory-based locking with individual lock files is atomic and prevents race conditions. The smallest INSTANCE_ID alphabetically wins the election - deterministic and simple.",
+      "spec_file": "docs/specs/task_1767379006347_fix-plugin-instance-race-condi.md"
     },
     {
       "id": "task_1767380203797_kg0h70",
@@ -2023,7 +2112,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T18:56:43.797Z",
-      "updated_at": "2026-01-03T09:56:47.596Z",
+      "updated_at": "2026-01-04T10:30:53.587Z",
       "claimed_at": "2026-01-02T18:56:43.797Z",
       "created_by": "unknown",
       "spawned_by": "agent-1767380127092-wgo9i6",
@@ -2038,7 +2127,8 @@
         "[2026-01-02T19:05:01.330Z] Successfully implemented GitHub CLI integration. Created issue #1 and test branch."
       ],
       "quality_score": 8.5,
-      "quality_notes": "GitHub CLI integration enables task-to-issue linking. gh:issue, gh:branch, gh:sync commands provide complete workflow for GitHub-backed task management."
+      "quality_notes": "GitHub CLI integration enables task-to-issue linking. gh:issue, gh:branch, gh:sync commands provide complete workflow for GitHub-backed task management.",
+      "spec_file": "docs/specs/task_1767380203797_implement-gh-cli-integration-i.md"
     },
     {
       "id": "task_1767380475553_oml3k5",
@@ -2047,7 +2137,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T19:01:15.553Z",
-      "updated_at": "2026-01-02T19:10:19.626Z",
+      "updated_at": "2026-01-04T10:30:53.587Z",
       "created_by": "orchestrator",
       "github_issue_number": 1,
       "github_issue_url": "https://github.com/awaaate/Hyrm/issues/1",
@@ -2061,7 +2151,8 @@
       "claimed_at": "2026-01-02T19:05:58.758Z",
       "completed_at": "2026-01-02T19:09:23.644Z",
       "quality_score": 8.8,
-      "quality_notes": "Testing CLI tools systematically reveals bugs that aren't obvious during implementation. The gh:sync fix was a simple 3-line change but required full end-to-end testing to discover."
+      "quality_notes": "Testing CLI tools systematically reveals bugs that aren't obvious during implementation. The gh:sync fix was a simple 3-line change but required full end-to-end testing to discover.",
+      "spec_file": "docs/specs/task_1767380475553_test-gh-cli-integration.md"
     },
     {
       "id": "task_1767380783837_moviy3",
@@ -2070,7 +2161,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T19:06:23.838Z",
-      "updated_at": "2026-01-03T09:56:50.482Z",
+      "updated_at": "2026-01-04T10:30:53.587Z",
       "created_by": "orchestrator",
       "github_issue_number": 2,
       "github_issue_url": "https://github.com/awaaate/Hyrm/issues/2",
@@ -2082,7 +2173,8 @@
       "github_branch": "task/high/7_moviy3-test-session-180-gh-cli-validation",
       "completed_at": "2026-01-02T19:06:59.198Z",
       "quality_score": 7.6,
-      "quality_notes": "GitHub issue creation and sync verification helps validate gh CLI integration works end-to-end."
+      "quality_notes": "GitHub issue creation and sync verification helps validate gh CLI integration works end-to-end.",
+      "spec_file": "docs/specs/task_1767380783837_test-session-180-gh-cli-valida.md"
     },
     {
       "id": "task_1767380887365_ljvsp5",
@@ -2091,7 +2183,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T19:08:07.365Z",
-      "updated_at": "2026-01-03T09:56:53.397Z",
+      "updated_at": "2026-01-04T10:30:53.587Z",
       "created_by": "orchestrator",
       "github_issue_number": 3,
       "github_issue_url": "https://github.com/awaaate/Hyrm/issues/3",
@@ -2101,7 +2193,8 @@
       ],
       "completed_at": "2026-01-02T19:08:15.792Z",
       "quality_score": 7.5,
-      "quality_notes": "Quick verification tasks help confirm bug fixes work. gh:sync correctly closed the issue after task completion."
+      "quality_notes": "Quick verification tasks help confirm bug fixes work. gh:sync correctly closed the issue after task completion.",
+      "spec_file": "docs/specs/task_1767380887365_verify-sync-fix.md"
     },
     {
       "id": "task_1767382371883_89d3o6",
@@ -2110,7 +2203,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-02T19:32:51.883Z",
-      "updated_at": "2026-01-03T09:56:56.675Z",
+      "updated_at": "2026-01-04T10:30:53.588Z",
       "created_by": "unknown",
       "tags": [
         "maintenance",
@@ -2125,7 +2218,8 @@
         "[2026-01-02T19:35:36.462Z] Completed by worker agent-1767382393563-d0xzth. Commit 6766db6. Realtime.log rotated from 47k to 5k lines. Archive created at memory/realtime-archives/."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Log rotation prevents unbounded file growth. Keeping 5000 lines provides sufficient history while maintaining performance. realtime-archives/ preserves full history."
+      "quality_notes": "Log rotation prevents unbounded file growth. Keeping 5000 lines provides sufficient history while maintaining performance. realtime-archives/ preserves full history.",
+      "spec_file": "docs/specs/task_1767382371883_implement-realtimelog-rotation.md"
     },
     {
       "id": "task_1767382762057_v16xpy",
@@ -2134,7 +2228,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-02T19:39:22.057Z",
-      "updated_at": "2026-01-03T09:57:04.590Z",
+      "updated_at": "2026-01-04T10:30:53.588Z",
       "created_by": "unknown",
       "tags": [
         "bug",
@@ -2148,7 +2242,8 @@
         "[2026-01-02T19:40:56.955Z] Fixed by worker agent-1767382783686-htvc9. Commit f7c4568. Changed Bun.spawn to use stdin/stdout/stderr: \"ignore\" instead of file handles."
       ],
       "quality_score": 8.3,
-      "quality_notes": "Bun.spawn requires stdio arrays not file handles. Using stdin/stdout/stderr: \\\"ignore\\\" is the correct pattern for backgrounded processes."
+      "quality_notes": "Bun.spawn requires stdio arrays not file handles. Using stdin/stdout/stderr: \\\"ignore\\\" is the correct pattern for backgrounded processes.",
+      "spec_file": "docs/specs/task_1767382762057_fix-bunspawn-stdio-bug-in-plug.md"
     },
     {
       "id": "task_1767422564433_bk0h88",
@@ -2157,7 +2252,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T06:42:44.433Z",
-      "updated_at": "2026-01-03T06:44:43.026Z",
+      "updated_at": "2026-01-04T10:30:53.588Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2173,7 +2268,8 @@
         "[2026-01-03T06:44:40.346Z] Proposed and documented a single-leader orchestrator design with heartbeat-based leader lease, epoch tokens, self-demotion for non-leaders, and stale-agent cleanup using agent_status and memory state. Summary appended to memory/working.md under Session 188."
       ],
       "quality_score": 9.7,
-      "quality_notes": "Multiple orchestrators can be present simultaneously; introducing a single-leader model with explicit epoch-based leasing and heartbeats simplifies coordination and enables safe failover plus stale-agent cleanup."
+      "quality_notes": "Multiple orchestrators can be present simultaneously; introducing a single-leader model with explicit epoch-based leasing and heartbeats simplifies coordination and enables safe failover plus stale-agent cleanup.",
+      "spec_file": "docs/specs/task_1767422564433_design-orchestrator-leader-ele.md"
     },
     {
       "id": "task_1767422571222_xifnzr",
@@ -2182,7 +2278,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T06:42:51.222Z",
-      "updated_at": "2026-01-03T09:52:31.156Z",
+      "updated_at": "2026-01-04T10:30:53.589Z",
       "created_by": "unknown",
       "tags": [
         "cli",
@@ -2202,7 +2298,8 @@
       ],
       "completed_at": "2026-01-03T09:52:22.365Z",
       "quality_score": 8.1,
-      "quality_notes": "Normalize data format between JSON storage and code expectations early; use shared data-fetcher functions to centralize format handling."
+      "quality_notes": "Normalize data format between JSON storage and code expectations early; use shared data-fetcher functions to centralize format handling.",
+      "spec_file": "docs/specs/task_1767422571222_audit-and-debug-cli-dashboard-.md"
     },
     {
       "id": "task_1767422728098_488s1n",
@@ -2211,7 +2308,7 @@
       "priority": "critical",
       "status": "completed",
       "created_at": "2026-01-03T06:45:28.098Z",
-      "updated_at": "2026-01-03T09:44:50.246Z",
+      "updated_at": "2026-01-04T10:30:53.589Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2232,7 +2329,8 @@
       "claimed_at": "2026-01-03T07:00:02.424Z",
       "completed_at": "2026-01-03T09:44:47.374Z",
       "quality_score": 8.3,
-      "quality_notes": "Leader election with epoch-based leasing and heartbeat refresh is essential for multi-orchestrator systems. File-based state with TTL provides simple but effective coordination."
+      "quality_notes": "Leader election with epoch-based leasing and heartbeat refresh is essential for multi-orchestrator systems. File-based state with TTL provides simple but effective coordination.",
+      "spec_file": "docs/specs/task_1767422728098_implement-orchestrator-leader-.md"
     },
     {
       "id": "task_1767423071616_2xmg77",
@@ -2241,7 +2339,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T06:51:11.616Z",
-      "updated_at": "2026-01-03T09:57:15.125Z",
+      "updated_at": "2026-01-04T10:30:53.589Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2261,7 +2359,8 @@
         "[2026-01-03T09:45:07.990Z] Validation completed by agent-1767423215783-oj3a6j (see msg-1767423514368). Findings documented in Session 189 of working.md."
       ],
       "quality_score": 8.6,
-      "quality_notes": "Leader election validation confirms implementation works. Session 189 findings documented recommendations for further hardening."
+      "quality_notes": "Leader election validation confirms implementation works. Session 189 findings documented recommendations for further hardening.",
+      "spec_file": "docs/specs/task_1767423071616_validate-orchestrator-leader-e.md"
     },
     {
       "id": "task_1767423270940_xmgxle",
@@ -2270,7 +2369,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T06:54:30.940Z",
-      "updated_at": "2026-01-03T09:52:33.520Z",
+      "updated_at": "2026-01-04T10:30:53.590Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2290,7 +2389,8 @@
       ],
       "completed_at": "2026-01-03T09:52:25.052Z",
       "quality_score": 8.3,
-      "quality_notes": "Leader election state visibility in CLI is crucial for operator observability; adding file watchers for orchestrator-state.json enables real-time updates."
+      "quality_notes": "Leader election state visibility in CLI is crucial for operator observability; adding file watchers for orchestrator-state.json enables real-time updates.",
+      "spec_file": "docs/specs/task_1767423270940_integrate-leader-election-stat.md"
     },
     {
       "id": "task_1767423420053_426y6d",
@@ -2299,7 +2399,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-03T06:57:00.053Z",
-      "updated_at": "2026-01-03T09:58:23.064Z",
+      "updated_at": "2026-01-04T10:30:53.590Z",
       "created_by": "unknown",
       "tags": [
         "quality",
@@ -2317,7 +2417,8 @@
       ],
       "completed_at": "2026-01-03T09:58:20.325Z",
       "quality_score": 8.2,
-      "quality_notes": "Quality backfill is important for maintaining accurate quality metrics. Regular assessment of completed tasks ensures trend data is meaningful."
+      "quality_notes": "Quality backfill is important for maintaining accurate quality metrics. Regular assessment of completed tasks ensures trend data is meaningful.",
+      "spec_file": "docs/specs/task_1767423420053_backfill-quality-assessments-f.md"
     },
     {
       "id": "task_1767423756900_wguutv",
@@ -2326,7 +2427,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T07:02:36.900Z",
-      "updated_at": "2026-01-03T09:57:15.928Z",
+      "updated_at": "2026-01-04T10:30:53.590Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2347,7 +2448,8 @@
         "[2026-01-03T09:57:12.295Z] Hardened watchdog for single-leader model: Added check_leader_lease() function that checks orchestrator-state.json before spawning; skips respawn if leader heartbeat is fresh. Updated orchestrator prompt to emphasize leader-first checking. Commit: 0b1d02e"
       ],
       "quality_score": 8.5,
-      "quality_notes": "Watchdog should respect leader lease before spawning new orchestrators - adds 30s grace period to TTL for safety margin. File-based leader check in bash is simple and effective."
+      "quality_notes": "Watchdog should respect leader lease before spawning new orchestrators - adds 30s grace period to TTL for safety margin. File-based leader check in bash is simple and effective.",
+      "spec_file": "docs/specs/task_1767423756900_harden-orchestrator-startup-an.md"
     },
     {
       "id": "task_1767423758123_5sy7qw",
@@ -2356,7 +2458,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T07:02:38.123Z",
-      "updated_at": "2026-01-03T09:57:18.361Z",
+      "updated_at": "2026-01-04T10:30:53.591Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2378,7 +2480,8 @@
         "[2026-01-03T09:55:18.316Z] Validation passed - epoch 8 single-leader model confirmed working. Only 1 orchestrator holds leader lease, CLI and realtime-monitor display correctly, 3 stale orchestrators cleaned up, no multi-leader conflicts."
       ],
       "quality_score": 8.3,
-      "quality_notes": "End-to-end validation confirms single-leader model works. Epoch 8 leader with 3 stale orchestrators cleaned up demonstrates effective coordination."
+      "quality_notes": "End-to-end validation confirms single-leader model works. Epoch 8 leader with 3 stale orchestrators cleaned up demonstrates effective coordination.",
+      "spec_file": "docs/specs/task_1767423758123_re-run-leader-election-validat.md"
     },
     {
       "id": "task_1767432302745_8oi36d",
@@ -2387,7 +2490,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T09:25:02.745Z",
-      "updated_at": "2026-01-03T09:39:12.556Z",
+      "updated_at": "2026-01-04T10:30:53.591Z",
       "created_by": "unknown",
       "tags": [
         "prompts",
@@ -2404,7 +2507,8 @@
         "[2026-01-03T09:39:05.357Z] Completed by prompt-worker (agent-1767432364632-gom2eh). Applied Anthropic prompt engineering best practices: added scratchpad/thinking patterns, restructured prompts with context-first ordering, enhanced tool descriptions with examples, updated all 4 skill files."
       ],
       "quality_score": 8.5,
-      "quality_notes": "Anthropic prompting guides provide clear patterns for improving agent prompts: scratchpad thinking, context-first structure, tool descriptions with examples. Apply these patterns systematically across all agent interfaces."
+      "quality_notes": "Anthropic prompting guides provide clear patterns for improving agent prompts: scratchpad thinking, context-first structure, tool descriptions with examples. Apply these patterns systematically across all agent interfaces.",
+      "spec_file": "docs/specs/task_1767432302745_improve-prompts-based-on-anthr.md"
     },
     {
       "id": "task_1767434966797_h44urz",
@@ -2413,7 +2517,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T10:09:26.797Z",
-      "updated_at": "2026-01-03T10:17:04.642Z",
+      "updated_at": "2026-01-04T10:30:53.591Z",
       "created_by": "unknown",
       "tags": [
         "reliability",
@@ -2426,7 +2530,8 @@
       "completed_at": "2026-01-03T10:17:04.640Z",
       "notes": [
         "[2026-01-03T10:17:04.642Z] Created error-handler.ts with: 6 typed error classes (AppError, JsonParseError, FileIOError, ValidationError, AgentError, TaskError), readJsonSafe() with backup restoration, writeJsonSafe() with backup creation, schema validation for critical files, structured logging functions. Fixed 14 empty catch blocks across 8 files. Commit: 20b4f16"
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767434966797_implement-centralized-error-ha.md"
     },
     {
       "id": "task_1767434971056_2ahvj5",
@@ -2435,7 +2540,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T10:09:31.056Z",
-      "updated_at": "2026-01-03T13:54:06.243Z",
+      "updated_at": "2026-01-04T10:30:53.591Z",
       "created_by": "unknown",
       "tags": [
         "reliability",
@@ -2450,7 +2555,8 @@
         "[2026-01-03T12:05:18.063Z] Implemented plugin-level file locking for shared state files. Added async withFileLock helper (.opencode/plugin/tools/file-lock.ts) with .lock sidecar files, exponential backoff, and stale lock cleanup. Updated memory_update in memory-tools to guard state.json writes, and updated task-tools to guard tasks.json and agent-performance-metrics.json updates in task_create, task_update, task_claim, task_spawn, updateAgentMetrics, and recordTaskClaim. Verified changes via bun test ./.opencode/plugin/tools/tools.test.ts (63 tests passing)."
       ],
       "quality_score": 7.9,
-      "quality_notes": "File locking with .lock files and retry logic prevents race conditions in multi-agent scenarios."
+      "quality_notes": "File locking with .lock files and retry logic prevents race conditions in multi-agent scenarios.",
+      "spec_file": "docs/specs/task_1767434971056_add-file-locking-for-concurren.md"
     },
     {
       "id": "task_1767434975559_2cyp5r",
@@ -2459,7 +2565,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-03T10:09:35.559Z",
-      "updated_at": "2026-01-03T14:05:04.297Z",
+      "updated_at": "2026-01-04T10:30:53.592Z",
       "created_by": "unknown",
       "tags": [
         "quality",
@@ -2474,7 +2580,8 @@
         "[2026-01-03T13:58:16.353Z] Successfully implemented auto_assess parameter in task_update. Added heuristic quality scoring based on completion time, priority, complexity, and task notes. Auto-assessment creates quality records marked with auto_generated flag."
       ],
       "quality_score": 8.5,
-      "quality_notes": "Auto-assessment enables quality tracking without manual intervention - key for autonomous improvement."
+      "quality_notes": "Auto-assessment enables quality tracking without manual intervention - key for autonomous improvement.",
+      "spec_file": "docs/specs/task_1767434975559_add-automatic-quality-assessme.md"
     },
     {
       "id": "task_1767434980042_wm7t5c",
@@ -2483,7 +2590,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-03T10:09:40.042Z",
-      "updated_at": "2026-01-03T14:05:06.444Z",
+      "updated_at": "2026-01-04T10:30:53.592Z",
       "created_by": "unknown",
       "tags": [
         "refactoring",
@@ -2498,7 +2605,8 @@
         "[2026-01-03T14:05:01.612Z] [2026-01-03T14:04:00.000Z] Completed by worker agent-1767448633370-7e7bjw. Added caching layer to data-fetchers.ts, replaced 50+ direct readFileSync/writeFileSync calls across plugin tools with centralized json-utils."
       ],
       "quality_score": 7.9,
-      "quality_notes": "Centralized data access with caching improves both code consistency and performance."
+      "quality_notes": "Centralized data access with caching improves both code consistency and performance.",
+      "spec_file": "docs/specs/task_1767434980042_complete-shared-data-layer-abs.md"
     },
     {
       "id": "task_1767448718476_py1yku",
@@ -2507,13 +2615,14 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-03T13:58:38.476Z",
-      "updated_at": "2026-01-03T13:58:45.491Z",
+      "updated_at": "2026-01-04T10:30:53.592Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "trivial",
       "assigned_to": "agent-1767448598591-77z4at",
       "claimed_at": "2026-01-03T13:58:42.293Z",
-      "completed_at": "2026-01-03T13:58:45.491Z"
+      "completed_at": "2026-01-03T13:58:45.491Z",
+      "spec_file": "docs/specs/task_1767448718476_test-auto-assessment.md"
     },
     {
       "id": "task_1767448827428_p5ueo3",
@@ -2522,7 +2631,7 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-03T14:00:27.428Z",
-      "updated_at": "2026-01-03T14:00:34.554Z",
+      "updated_at": "2026-01-04T10:30:53.592Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "simple",
@@ -2531,7 +2640,8 @@
       "completed_at": "2026-01-03T14:00:34.553Z",
       "notes": [
         "[2026-01-03T14:00:34.554Z] Testing updated auto-assessment implementation with fixed file writing order"
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767448827428_test-auto-assessment-v2.md"
     },
     {
       "id": "task_1767448859094_9yoj9d",
@@ -2540,13 +2650,14 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-03T14:00:59.094Z",
-      "updated_at": "2026-01-03T14:01:06.082Z",
+      "updated_at": "2026-01-04T10:30:53.593Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "trivial",
       "assigned_to": "agent-1767448598591-77z4at",
       "claimed_at": "2026-01-03T14:01:02.714Z",
-      "completed_at": "2026-01-03T14:01:06.081Z"
+      "completed_at": "2026-01-03T14:01:06.081Z",
+      "spec_file": "docs/specs/task_1767448859094_test-auto-assessment-v3.md"
     },
     {
       "id": "task_1767448891576_ta5xgf",
@@ -2555,13 +2666,14 @@
       "priority": "low",
       "status": "completed",
       "created_at": "2026-01-03T14:01:31.576Z",
-      "updated_at": "2026-01-03T14:01:38.074Z",
+      "updated_at": "2026-01-04T10:30:53.593Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "moderate",
       "assigned_to": "agent-1767448598591-77z4at",
       "claimed_at": "2026-01-03T14:01:35.725Z",
-      "completed_at": "2026-01-03T14:01:38.071Z"
+      "completed_at": "2026-01-03T14:01:38.071Z",
+      "spec_file": "docs/specs/task_1767448891576_test-auto-assessment-v4.md"
     },
     {
       "id": "task_1767449124099_qwnrk9",
@@ -2570,7 +2682,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T14:05:24.100Z",
-      "updated_at": "2026-01-03T14:24:09.727Z",
+      "updated_at": "2026-01-04T10:30:53.593Z",
       "created_by": "unknown",
       "tags": [
         "documentation",
@@ -2584,7 +2696,8 @@
         "[2026-01-03T14:24:09.716Z] Created comprehensive README.md at repo root. Includes: overview, architecture diagram, quick start, self-improvement loop explanation, key features, plugin tools reference, project structure. Committed as 8493d5b."
       ],
       "quality_score": 6.8,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767449124099_create-readmemd-for-autonomous.md"
     },
     {
       "id": "task_1767449126995_ie797j",
@@ -2593,7 +2706,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T14:05:26.996Z",
-      "updated_at": "2026-01-03T14:28:42.518Z",
+      "updated_at": "2026-01-04T10:30:53.594Z",
       "created_by": "unknown",
       "tags": [
         "git",
@@ -2609,7 +2722,8 @@
         "[2026-01-03T14:28:42.503Z] Implemented GitHub CLI integration: gh-status, issues, issue-task (create issue from task), branch-task (create branch for task), pr-task (create PR from task). All functions gracefully handle missing/unauthenticated gh CLI. Functions exported for plugin use. Committed as 4b524d3."
       ],
       "quality_score": 6.9,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767449126995_improve-git-integration-with-g.md"
     },
     {
       "id": "task_1767449130409_uyousb",
@@ -2618,7 +2732,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T14:05:30.409Z",
-      "updated_at": "2026-01-03T14:26:08.310Z",
+      "updated_at": "2026-01-04T10:30:53.594Z",
       "created_by": "unknown",
       "tags": [
         "agent-system",
@@ -2633,7 +2747,8 @@
         "[2026-01-03T14:26:08.302Z] Implemented: 1) Reduced stale threshold from 5min to 2min, 2) Added cleanupStaleAgents() method, 3) Added getAgentHealthStatus() for health monitoring, 4) Orchestrator heartbeat now runs cleanup automatically, 5) agent_status() tool runs cleanup on every call, 6) Added 'health' CLI command. Committed as 53c2cf9."
       ],
       "quality_score": 6.9,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767449130409_improve-agent-registry-auto-cl.md"
     },
     {
       "id": "task_1767449532262_smsyvq",
@@ -2642,7 +2757,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T14:12:12.262Z",
-      "updated_at": "2026-01-03T14:13:52.743Z",
+      "updated_at": "2026-01-04T10:30:53.594Z",
       "created_by": "unknown",
       "tags": [
         "bug",
@@ -2650,7 +2765,8 @@
         "plugin"
       ],
       "complexity": "moderate",
-      "completed_at": "2026-01-03T14:13:52.743Z"
+      "completed_at": "2026-01-03T14:13:52.743Z",
+      "spec_file": "docs/specs/task_1767449532262_fix-memorysearch-tool-readfile.md"
     },
     {
       "id": "task_1767450975777_nwtn6a",
@@ -2659,7 +2775,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T14:36:15.777Z",
-      "updated_at": "2026-01-03T14:40:43.139Z",
+      "updated_at": "2026-01-04T10:30:53.594Z",
       "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
       "tags": [
         "bug",
@@ -2671,7 +2787,8 @@
       "claimed_at": "2026-01-03T14:39:55.838Z",
       "completed_at": "2026-01-03T14:40:43.120Z",
       "quality_score": 6.9,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767450975777_fix-remaining-empty-catch-bloc.md"
     },
     {
       "id": "task_1767450978364_n5l4uc",
@@ -2680,7 +2797,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-03T14:36:18.364Z",
-      "updated_at": "2026-01-03T14:39:49.102Z",
+      "updated_at": "2026-01-04T10:30:53.595Z",
       "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
       "tags": [
         "cleanup",
@@ -2692,7 +2809,8 @@
       "claimed_at": "2026-01-03T14:39:18.835Z",
       "completed_at": "2026-01-03T14:39:49.083Z",
       "quality_score": 6.9,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767450978364_remove-deprecated-code-from-de.md"
     },
     {
       "id": "task_1767450981450_8a6g5u",
@@ -2701,7 +2819,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-03T14:36:21.450Z",
-      "updated_at": "2026-01-03T14:42:17.892Z",
+      "updated_at": "2026-01-04T10:30:53.595Z",
       "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
       "tags": [
         "refactor",
@@ -2712,7 +2830,8 @@
       "claimed_at": "2026-01-03T14:40:49.087Z",
       "completed_at": "2026-01-03T14:42:17.873Z",
       "quality_score": 6.8,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767450981450_migrate-git-integrationts-to-u.md"
     },
     {
       "id": "task_1767451540532_6uap3r",
@@ -2721,7 +2840,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T14:45:40.533Z",
-      "updated_at": "2026-01-03T14:52:49.516Z",
+      "updated_at": "2026-01-04T10:30:53.595Z",
       "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
       "tags": [
         "refactor",
@@ -2733,7 +2852,8 @@
       "claimed_at": "2026-01-03T14:48:12.043Z",
       "completed_at": "2026-01-03T14:52:49.497Z",
       "quality_score": 6.8,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767451540532_replace-any-types-with-proper-.md"
     },
     {
       "id": "task_1767458638685_y9w6it",
@@ -2742,7 +2862,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-03T16:43:58.685Z",
-      "updated_at": "2026-01-03T16:51:19.955Z",
+      "updated_at": "2026-01-04T10:30:53.596Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2756,7 +2876,8 @@
         "[2026-01-03T16:51:19.947Z] Ran quick liveness checks: leader election healthy (agent-1767458509466-pcfkds epoch 5, TTL 180s), watchdog running, CLI status/agents/tasks responding. Noted frequent watchdog restarts earlier (11 this hour) but system currently stable."
       ],
       "quality_score": 6.9,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767458638685_run-system-liveness-smoke-chec.md"
     },
     {
       "id": "task_1767458639057_wt0m51",
@@ -2765,7 +2886,7 @@
       "priority": "medium",
       "status": "completed",
       "created_at": "2026-01-03T16:43:59.057Z",
-      "updated_at": "2026-01-03T16:51:21.648Z",
+      "updated_at": "2026-01-04T10:30:53.596Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2779,7 +2900,8 @@
         "[2026-01-03T16:51:21.639Z] Reconciled memory vs actual state: memory/state.json status+active_tasks appear stale (last_updated 15:45Z) compared to current leader/orchestrator-state.json and agent-registry.json. Leader data lives in memory/orchestrator-state.json; agent-registry.json currently has leader:null. Recommend follow-up task to unify/refresh memory_status source of truth."
       ],
       "quality_score": 6.8,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767458639057_reconcile-memory-status-vs-act.md"
     },
     {
       "id": "task_1767460703488_zvj1xx",
@@ -2788,7 +2910,7 @@
       "priority": "critical",
       "status": "completed",
       "created_at": "2026-01-03T17:18:23.488Z",
-      "updated_at": "2026-01-03T17:22:19.701Z",
+      "updated_at": "2026-01-04T10:30:53.598Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -2802,7 +2924,8 @@
       "completed_at": "2026-01-04T10:01:00+00:00",
       "notes": [
         "[2026-01-04] Fixed in commit 174d07e - added releaseLeaderLease() to prevent infinite spawn loop"
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767460703488_investigate-orchestrator-leade.md"
     },
     {
       "id": "task_1767460703767_6hiynl",
@@ -2811,7 +2934,7 @@
       "priority": "high",
       "status": "cancelled",
       "created_at": "2026-01-03T17:18:23.768Z",
-      "updated_at": "2026-01-04T10:01:00+00:00",
+      "updated_at": "2026-01-04T10:30:53.598Z",
       "created_by": "unknown",
       "tags": [
         "watchdog",
@@ -2823,7 +2946,8 @@
       "claimed_at": null,
       "notes": [
         "[2026-01-04] Cancelled - agent died. Issue not reproducible after leader-lease fix. Reopen if needed."
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767460703767_fix-watchdog-respawn-failure-i.md"
     },
     {
       "id": "task_1767460705391_1xaoof",
@@ -2832,7 +2956,7 @@
       "priority": "high",
       "status": "cancelled",
       "created_at": "2026-01-03T17:18:25.391Z",
-      "updated_at": "2026-01-04T10:01:00+00:00",
+      "updated_at": "2026-01-04T10:30:53.598Z",
       "created_by": "unknown",
       "tags": [
         "plugin",
@@ -2844,7 +2968,8 @@
       "claimed_at": null,
       "notes": [
         "[2026-01-04] Cancelled - agent died. Redirect error needs investigation but not blocking. Reopen if seen again."
-      ]
+      ],
+      "spec_file": "docs/specs/task_1767460705391_investigate-and-fix-plugin-par.md"
     },
     {
       "id": "task_1767460707507_q5bin1",
@@ -2853,14 +2978,15 @@
       "priority": "medium",
       "status": "pending",
       "created_at": "2026-01-03T17:18:27.507Z",
-      "updated_at": "2026-01-03T17:18:27.507Z",
+      "updated_at": "2026-01-04T10:30:53.599Z",
       "created_by": "unknown",
       "tags": [
         "auth",
         "resilience",
         "ux"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767460707507_handle-expired-oauthapi-tokens.md"
     },
     {
       "id": "task_1767460709823_9305p0",
@@ -2869,14 +2995,15 @@
       "priority": "low",
       "status": "pending",
       "created_at": "2026-01-03T17:18:29.823Z",
-      "updated_at": "2026-01-03T17:18:29.823Z",
+      "updated_at": "2026-01-04T10:30:53.599Z",
       "created_by": "unknown",
       "tags": [
         "research",
         "rss",
         "knowledge-base"
       ],
-      "complexity": "moderate"
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767460709823_implement-scheduled-external-r.md"
     },
     {
       "id": "task_1767520205269_rwoygc",
@@ -2885,7 +3012,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-04T09:50:05.269Z",
-      "updated_at": "2026-01-04T10:09:28.448Z",
+      "updated_at": "2026-01-04T10:30:53.599Z",
       "created_by": "orchestrator",
       "tags": [
         "bug-fix",
@@ -2898,7 +3025,8 @@
       "claimed_at": "2026-01-04T10:06:46.906Z",
       "completed_at": "2026-01-04T10:09:28.430Z",
       "quality_score": 7.9,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767520205269_implement-orphaned-tasks-clean.md"
     },
     {
       "id": "task_1767520206287_6bpixl",
@@ -2907,7 +3035,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-04T09:50:06.287Z",
-      "updated_at": "2026-01-04T10:08:15.574Z",
+      "updated_at": "2026-01-04T10:30:53.599Z",
       "created_by": "orchestrator",
       "tags": [
         "enhancement",
@@ -2923,7 +3051,8 @@
         "[2026-01-04T10:08:15.569Z] Successfully implemented Edit Error Recovery hook in .opencode/plugin/index.ts\n\nFeatures:\n1. ✅ Detects Edit tool failures with error messages:\n   - \"oldString not found\"\n   - \"oldString found multiple times\"\n   - \"newString must be different\"\n\n2. ✅ Injects context-aware reminders with specific guidance:\n   - Reminds to use Read tool first\n   - Warns about line numbers being reference-only\n   - Suggests using larger context for unique matches\n   - Provides examples of common mistakes\n\n3. ✅ Rate limiting to prevent spam:\n   - Max 1 reminder per 5 minutes (cooldown period)\n   - Tracks last error time to avoid duplicate injections\n\n4. ✅ Logging integration:\n   - Logs reminder injection events to realtime.log\n   - Includes call_id and file path for debugging\n\n5. ✅ Tested with 5 test cases - all passing\n\nImplementation in tool.execute.after hook (line ~995-1015) detects errors and appends helpful reminder to output.output before returning to agent."
       ],
       "quality_score": 6.8,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767520206287_add-edit-error-recovery-hook-i.md"
     },
     {
       "id": "task_1767520206937_xbfnbz",
@@ -2932,7 +3061,7 @@
       "priority": "high",
       "status": "completed",
       "created_at": "2026-01-04T09:50:06.937Z",
-      "updated_at": "2026-01-04T10:08:47.504Z",
+      "updated_at": "2026-01-04T10:30:53.600Z",
       "created_by": "orchestrator",
       "tags": [
         "enhancement",
@@ -2948,7 +3077,8 @@
         "[2026-01-04T10:08:47.501Z] Implemented Task Continuation system in .opencode/plugin/index.ts handleSessionIdle function. Features: 1) Detects when non-orchestrator sessions go idle with pending tasks, 2) Auto-spawns code-worker to claim and work on next priority task, 3) Rate limiting: max 1 continuation every 5 minutes (stored in .last-task-continuation.json), 4) Only triggers for normal worker sessions (orchestrator handles its own continuation), 5) Logs all continuation events to realtime.log. Worker spawned with proper prompt including task details and completion instructions."
       ],
       "quality_score": 8,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767520206937_implement-task-continuation-au.md"
     },
     {
       "id": "task_1767520273725_sckp83",
@@ -2957,7 +3087,7 @@
       "priority": "critical",
       "status": "completed",
       "created_at": "2026-01-04T09:51:13.726Z",
-      "updated_at": "2026-01-04T10:08:44.564Z",
+      "updated_at": "2026-01-04T10:30:53.600Z",
       "created_by": "orchestrator",
       "tags": [
         "critical",
@@ -2971,7 +3101,8 @@
       "claimed_at": "2026-01-04T10:06:27.521Z",
       "completed_at": "2026-01-04T10:08:44.555Z",
       "quality_score": 7.8,
-      "quality_notes": "Auto-assessed"
+      "quality_notes": "Auto-assessed",
+      "spec_file": "docs/specs/task_1767520273725_auto-create-github-issue-for-e.md"
     },
     {
       "id": "task_1767520395465_2o5xy7",
@@ -3002,9 +3133,9 @@
       "title": "Create spec system - auto-generate spec.md for every task linked to GitHub issue",
       "description": "Create automated spec system for all tasks.\n\nSee full specification: docs/specs/task_1767520578520_spec-system.md\n\nSummary:\n1. Every task gets docs/specs/task_<id>_<slug>.md\n2. Spec content = GitHub issue body (synced)\n3. Auto-generate on task creation\n4. Template for consistent format\n5. CLI commands: spec, spec:view, spec:sync\n\nDepends on: GitHub auto-issue task, Tools reorganization",
       "priority": "critical",
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2026-01-04T09:56:18.520Z",
-      "updated_at": "2026-01-04T09:56:18.520Z",
+      "updated_at": "2026-01-04T10:27:38.323Z",
       "created_by": "orchestrator",
       "tags": [
         "critical",
@@ -3018,9 +3149,11 @@
       "depends_on": [
         "task_1767520273725_sckp83",
         "task_1767520395465_2o5xy7"
-      ]
+      ],
+      "assigned_to": "agent-1767522331796-kulwo4",
+      "claimed_at": "2026-01-04T10:27:38.323Z"
     }
   ],
   "completed_count": 139,
-  "last_updated": "2026-01-04T10:15:42.487Z"
+  "last_updated": "2026-01-04T10:30:53.600Z"
 }

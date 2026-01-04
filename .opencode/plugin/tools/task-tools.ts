@@ -22,6 +22,12 @@ import {
 import { readJson, writeJson } from "../../../tools/shared/json-utils";
 import { withFileLock } from "./file-lock";
 import type { Task, TaskStore } from "../../../tools/shared/types";
+import { 
+  ensureTaskSpecFile, 
+  readSpecFile, 
+  upsertGitHubIssueLine, 
+  writeSpecFile 
+} from "../../../tools/lib/spec-generator";
 
 // ============================================================================
 // GitHub CLI Integration Helpers
@@ -89,8 +95,18 @@ async function runCommand(cmd: string, args: string[]): Promise<{ success: boole
 
 /**
  * Build issue body from task
+ * Uses spec file content if available, otherwise builds from task metadata
  */
 function buildIssueBody(task: Task): string {
+  // If spec file exists, use its content as the issue body
+  if (task.spec_file) {
+    const specContent = readSpecFile(task.spec_file);
+    if (specContent) {
+      return specContent;
+    }
+  }
+  
+  // Fallback: build from task metadata
   let body = '';
   
   if (task.description) {
@@ -733,6 +749,34 @@ Notes:
 
           ctx.log("INFO", `Task created: ${task.id}`, { title, priority });
 
+          // Auto-generate spec file for the task
+          try {
+            const specResult = ensureTaskSpecFile(task);
+            if (specResult.created) {
+              // Update task with spec_file reference
+              await withFileLock(
+                tasksPath,
+                ctx.agentId || ctx.currentSessionId || "task-tools:spec",
+                async () => {
+                  const store = readJson(tasksPath, { tasks: [] });
+                  const taskToUpdate = store.tasks.find((t: Task) => t.id === task!.id);
+                  if (taskToUpdate) {
+                    taskToUpdate.spec_file = specResult.spec_file;
+                    taskToUpdate.updated_at = new Date().toISOString();
+                    store.last_updated = new Date().toISOString();
+                    writeJson(tasksPath, store);
+                    
+                    // Update task reference
+                    task!.spec_file = specResult.spec_file;
+                  }
+                }
+              );
+              ctx.log("INFO", `Generated spec file: ${specResult.spec_file}`);
+            }
+          } catch (e) {
+            ctx.log("WARN", `Failed to generate spec file: ${e}`);
+          }
+
           // GitHub integration
           let githubIssueCreated = false;
           let githubBranchCreated = false;
@@ -765,6 +809,23 @@ Notes:
                   }
                 }
               );
+
+              // Update spec file with GitHub issue info
+              if (task.spec_file && issueResult.issueNumber && issueResult.issueUrl) {
+                try {
+                  const specContent = readSpecFile(task.spec_file);
+                  if (specContent) {
+                    const updatedSpec = upsertGitHubIssueLine(specContent, {
+                      number: issueResult.issueNumber,
+                      url: issueResult.issueUrl,
+                    });
+                    writeSpecFile(task.spec_file, updatedSpec);
+                    ctx.log("INFO", `Updated spec file with GitHub issue #${issueResult.issueNumber}`);
+                  }
+                } catch (e) {
+                  ctx.log("WARN", `Failed to update spec file with GitHub issue: ${e}`);
+                }
+              }
 
               // Create branch if requested
               if (create_branch) {

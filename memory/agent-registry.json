@@ -1,46 +1,17 @@
 {
   "agents": [
     {
-      "agent_id": "agent-1767521025284-g52vg",
-      "session_id": "session-1767521025284",
-      "started_at": "2026-01-04T10:03:45.286Z",
-      "last_heartbeat": "2026-01-04T10:15:45.339Z",
-      "status": "active",
+      "agent_id": "agent-1767522331796-kulwo4",
+      "session_id": "session-1767522331796",
+      "started_at": "2026-01-04T10:25:31.801Z",
+      "last_heartbeat": "2026-01-04T10:31:31.842Z",
+      "status": "working",
       "assigned_role": "orchestrator",
-      "pid": 287576,
-      "current_task": "Monitoring 5 active workers on critical/high priority tasks"
-    },
-    {
-      "agent_id": "agent-1767521195249-9aan9",
-      "session_id": "session-1767521195249",
-      "started_at": "2026-01-04T10:06:35.250Z",
-      "last_heartbeat": "2026-01-04T10:15:54.007Z",
-      "status": "idle",
-      "assigned_role": "code-worker",
-      "pid": 290175,
-      "current_task": "Task completed - tools reorganization and auto-documentation"
-    },
-    {
-      "agent_id": "agent-1767521678394-bu0pz",
-      "session_id": "session-1767521678394",
-      "started_at": "2026-01-04T10:14:38.395Z",
-      "last_heartbeat": "2026-01-04T10:15:38.406Z",
-      "status": "active",
-      "assigned_role": "orchestrator",
-      "pid": 310160,
-      "current_task": "Monitoring in-progress tools reorganization task. Will spawn spec-system worker once complete."
-    },
-    {
-      "agent_id": "agent-1767521788272-gza51e",
-      "session_id": "session-1767521788272",
-      "started_at": "2026-01-04T10:16:28.274Z",
-      "last_heartbeat": "2026-01-04T10:16:28.294Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 311933
+      "pid": 317566,
+      "current_task": "Spawned fresh worker for critical spec-system task. Monitoring 3 pending tasks."
     }
   ],
   "leader": null,
-  "last_updated": "2026-01-04T10:16:28.294Z",
-  "lock_version": 95
+  "last_updated": "2026-01-04T10:31:31.842Z",
+  "lock_version": 107
 }
