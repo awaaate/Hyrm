@@ -4625,11 +4625,353 @@
       "metadata": {
         "duration_minutes": 13
       }
+    },
+    {
+      "task_id": "task_1767434966797_h44urz",
+      "task_title": "Implement centralized error handling with JSON recovery",
+      "assessed_at": "2026-01-04T19:24:59.587Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.7,
+      "lessons_learned": "Centralized error handling improves consistency across tools; JSON recovery patterns help tools survive partial state corruption",
+      "metadata": {
+        "duration_minutes": 8
+      }
+    },
+    {
+      "task_id": "task_1767449532262_smsyvq",
+      "task_title": "Fix memory_search tool - readFileSync not defined",
+      "assessed_at": "2026-01-04T19:25:00.620Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 9,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.7,
+      "lessons_learned": "Import issues in tool files can break plugin tools silently; add import linting to CI/pre-commit checks",
+      "metadata": {
+        "duration_minutes": 2
+      }
+    },
+    {
+      "task_id": "task_1767460703488_zvj1xx",
+      "task_title": "Investigate orchestrator leader-lease churn and frequent watchdog restarts",
+      "assessed_at": "2026-01-04T19:25:01.537Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.6,
+      "lessons_learned": "Leader lease churn indicates tight heartbeat windows or clock skew; implement exponential backoff in leader election to reduce restart storms",
+      "metadata": {
+        "duration_minutes": 1003
+      }
+    },
+    {
+      "task_id": "task_1767525710136_6d0n07",
+      "task_title": "Fix orchestrator respawn failure: invalid stdio argument type",
+      "assessed_at": "2026-01-04T19:25:02.570Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 9,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.9,
+      "lessons_learned": "Bun.spawn stdio argument type mismatches cause silent failures; validate Bun API types in respawn code paths and test error cases",
+      "metadata": {
+        "duration_minutes": 324
+      }
+    },
+    {
+      "task_id": "task_1767545918892_x1ci6e",
+      "task_title": "Fix session counter bug - session.created events not firing",
+      "assessed_at": "2026-01-04T19:25:03.437Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 10,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 9,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 10,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 9.5,
+      "lessons_learned": "Session hook ordering matters - session.created may fire before plugin has initialized state tables; use buffering and fallback boot detection",
+      "metadata": {
+        "duration_minutes": 18
+      }
+    },
+    {
+      "task_id": "task_1767448718476_py1yku",
+      "task_title": "Test auto assessment",
+      "assessed_at": "2026-01-04T19:25:07.742Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 5,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 5,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 3,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 5,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 3,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 4.4,
+      "lessons_learned": "Test tasks should not be completed without actual testing infrastructure; this was a POC that exposed auto_assess feature but had no real test harness",
+      "metadata": {
+        "duration_minutes": 0
+      }
+    },
+    {
+      "task_id": "task_1767448827428_p5ueo3",
+      "task_title": "Test auto assessment v2",
+      "assessed_at": "2026-01-04T19:25:08.602Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 5,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 5,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 3,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 5,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 3,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 4.4,
+      "lessons_learned": "Auto-assessment feature validation should use integration tests rather than manual task completion",
+      "metadata": {
+        "duration_minutes": 0
+      }
+    },
+    {
+      "task_id": "task_1767448859094_9yoj9d",
+      "task_title": "Test auto assessment v3",
+      "assessed_at": "2026-01-04T19:25:09.567Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 5,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 5,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 3,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 5,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 3,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 4.4,
+      "lessons_learned": "Duplicate test tasks indicate need for test automation framework to avoid manual POC duplication",
+      "metadata": {
+        "duration_minutes": 0
+      }
+    },
+    {
+      "task_id": "task_1767448891576_ta5xgf",
+      "task_title": "Test auto assessment v4",
+      "assessed_at": "2026-01-04T19:25:10.543Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 5,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 5,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 3,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 5,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 3,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 4.4,
+      "lessons_learned": "Task naming should be more descriptive; 'v4' indicates iterative POC pattern that should trigger test-automation epic",
+      "metadata": {
+        "duration_minutes": 0
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 120,
-    "avg_overall_score": 8.055833333333329
+    "total_assessed": 129,
+    "avg_overall_score": 7.966666666666663
   },
-  "last_updated": "2026-01-04T17:47:33.888Z"
+  "last_updated": "2026-01-04T19:25:10.543Z"
 }
