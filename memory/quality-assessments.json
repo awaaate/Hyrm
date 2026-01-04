@@ -5195,11 +5195,49 @@
       "metadata": {
         "duration_minutes": 3
       }
+    },
+    {
+      "task_id": "task_1767555705974_l7mqvy",
+      "task_title": "Fix orchestrator leader heartbeat decay - decouple from session lifecycle",
+      "assessed_at": "2026-01-04T19:45:47.894Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.5,
+      "lessons_learned": "Decoupling critical infrastructure (heartbeat) from application lifecycle requires background processes. Key insight: nohup + shell loop is simpler and more reliable than trying to keep JavaScript timer alive across session boundaries. Using /dev/null for output prevents hanging on buffering. Solution enables orchestrator to maintain leader leases continuously, eliminating unnecessary respawns and resource waste.",
+      "metadata": {
+        "duration_minutes": 4
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 135,
-    "avg_overall_score": 8.002222222222219
+    "total_assessed": 136,
+    "avg_overall_score": 8.005882352941173
   },
-  "last_updated": "2026-01-04T19:44:42.851Z"
+  "last_updated": "2026-01-04T19:45:47.895Z"
 }

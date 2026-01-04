@@ -1,1 +1,3 @@
 [2026-01-04T19:43:30Z] [INFO] Heartbeat service started (PID: 559289)
+[2026-01-04T19:44:49Z] [INFO] Stopping heartbeat service (PID: 559289)
+[2026-01-04T19:44:50Z] [INFO] Heartbeat service stopped

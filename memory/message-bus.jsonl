@@ -44,3 +44,6 @@
 {"message_id":"msg-1767555877512-1nctmt","from_agent":"agent-1767548076931-m606mu","timestamp":"2026-01-04T19:44:37.512Z","type":"heartbeat","payload":{"status":"active"},"read_by":[]}
 {"message_id":"msg-1767555880747-rpi5y1","from_agent":"agent-1767555880744-9t3o2n","timestamp":"2026-01-04T19:44:40.747Z","type":"heartbeat","payload":{"status":"active"},"read_by":[]}
 {"message_id":"msg-1767555881112-r5dtp7","from_agent":"agent-1767555629988-l36c6n","timestamp":"2026-01-04T19:44:41.112Z","type":"task_completed","payload":{"task_id":"task_1767555707386_rparc5","title":"Replace TODO placeholders in auto-generated spec files with real content","priority":"medium"},"read_by":[]}
+{"message_id":"msg-1767555924655-yrvk38","from_agent":"agent-VtC0uvBl","timestamp":"2026-01-04T19:45:24.655Z","type":"heartbeat","payload":{"status":"active"},"read_by":[]}
+{"message_id":"msg-1767555930025-w1sclt","from_agent":"agent-1767555629988-l36c6n","timestamp":"2026-01-04T19:45:30.025Z","type":"heartbeat","payload":{"status":"working"},"read_by":[]}
+{"message_id":"msg-1767555946099-2mf3wa","from_agent":"agent-1767555629988-l36c6n","timestamp":"2026-01-04T19:45:46.099Z","type":"task_completed","payload":{"task_id":"task_1767555705974_l7mqvy","title":"Fix orchestrator leader heartbeat decay - decouple from session lifecycle","priority":"critical"},"read_by":[]}

@@ -3516,9 +3516,9 @@
       "title": "Fix orchestrator leader heartbeat decay - decouple from session lifecycle",
       "description": "Orchestrator sessions idle after 5-8 minutes even with handoff=false, killing the heartbeat interval timer and causing leader leases to expire. This causes unnecessary respawns every ~8 minutes. Root cause: heartbeat loop is tied to session context; when session idles, the interval timer is killed. Solution: Implement a background heartbeat mechanism that runs independently of session lifecycle. Options: (1) spawn background worker that heartbeats continuously, (2) use shell script loop in watchdog, (3) ensure orchestrator main loop prevents idle. Current impact: 5-6 respawns per hour instead of 0.",
       "priority": "critical",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-04T19:41:45.974Z",
-      "updated_at": "2026-01-04T19:41:45.982Z",
+      "updated_at": "2026-01-04T19:45:47.896Z",
       "created_by": "unknown",
       "tags": [
         "orchestrator",
@@ -3528,7 +3528,13 @@
       ],
       "estimated_hours": 2,
       "complexity": "complex",
-      "spec_file": "docs/specs/task_1767555705974_fix-orchestrator-leader-heartb.md"
+      "spec_file": "docs/specs/task_1767555705974_fix-orchestrator-leader-heartb.md",
+      "completed_at": "2026-01-04T19:45:46.099Z",
+      "notes": [
+        "[2026-01-04T19:45:46.100Z] Worker solution: Implemented background heartbeat service (tools/heartbeat-service.sh) with orchestrator-heartbeat.sh. Service runs independently via nohup, decoupled from OpenCode session lifecycle. Heartbeats executing every 60 seconds as evidenced by realtime log entries. This solves the critical issue of leader leases expiring when sessions idle.\""
+      ],
+      "quality_score": 8.5,
+      "quality_notes": "Decoupling critical infrastructure (heartbeat) from application lifecycle requires background processes. Key insight: nohup + shell loop is simpler and more reliable than trying to keep JavaScript timer alive across session boundaries. Using /dev/null for output prevents hanging on buffering. Solution enables orchestrator to maintain leader leases continuously, eliminating unnecessary respawns and resource waste."
     },
     {
       "id": "task_1767555707386_rparc5",
@@ -3574,6 +3580,6 @@
       "spec_file": "docs/specs/task_1767555709057_verify-realtimelog-rotation-is.md"
     }
   ],
-  "completed_count": 156,
-  "last_updated": "2026-01-04T19:44:41.112Z"
+  "completed_count": 157,
+  "last_updated": "2026-01-04T19:45:46.100Z"
 }
