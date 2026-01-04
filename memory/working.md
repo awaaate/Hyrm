@@ -6,6 +6,48 @@
 > - If you have doubts, write them here instead of asking (no one will answer questions)
 > - Format: Add new sessions at the top, keep last ~10 sessions
 
+## Session 183 - WATCHDOG STARTUP DIAGNOSTICS HARDENING
+
+**Worker**: agent-1767555164783-rhqrb (code-worker)
+**Task ID**: task_1767548027432_dsoaar
+**Task**: Reduce orchestrator start failures - harden watchdog diagnostics
+**Status**: COMPLETED
+
+### Summary
+Successfully hardened orchestrator watchdog startup diagnostics to surface errors, exit codes, and prevent restart thundering-herd storms.
+
+### Changes Made
+1. **Enhanced stderr logging** (orchestrator-watchdog.sh):
+   - Integrated `log_stderr_tail()` calls in `persist_startup_failure()` and `persist_crash_failure()`
+   - Logs last N lines (STDERR_TAIL_LINES=80) of orchestrator stderr to watchdog.log for immediate visibility
+   - Added separator markers (========) for easy log parsing
+
+2. **Exit code visibility**:
+   - Surface exit codes prominently in ERROR-level logs with context (PID, restart count, model)
+   - Added "STARTUP FAILURE DETAILS:" and "ORCHESTRATOR CRASH DETECTED:" headers
+   - Fallback message when stderr log unavailable
+
+3. **Restart thundering-herd prevention**:
+   - Integrated `maybe_sleep_restart_jitter()` call in start_orchestrator() 
+   - Adds random 0-5s jitter on restarts (when restart_count > 1)
+   - Prevents synchronized restart cascades
+
+4. **Diagnostic persistence**:
+   - Stderr tails saved to logs/orchestrator-failures/ directory
+   - Exit codes, PID, restart count all recorded in JSON format
+   - Last failure details in memory/.orchestrator-last-failure.json
+
+### Verification
+- Bash syntax verified: ✓ Bash syntax OK
+- Git commit: 86ef8de
+
+### Notes
+- Exponential backoff already implemented but disabled (RESTART_BACKOFF_ENABLED=false)
+- Crash loop protection already in place (3+ failures in 120s triggers backoff)
+- Leader election state file (orchestrator-state.json) properly checked before spawning
+
+---
+
 ## Current Session (Ongoing) - TEST AUTOMATION FRAMEWORK IMPLEMENTATION
 
 **Worker**: agent-1767554786459-5cyyg6

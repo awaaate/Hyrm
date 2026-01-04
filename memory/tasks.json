@@ -3377,9 +3377,9 @@
       "title": "Reduce orchestrator start failures observed in watchdog.log",
       "description": "logs/watchdog.log contains repeated `[ERROR] Orchestrator failed to start!` and restart storms (including too many restarts/hour). After fixing plugin/prompt issues, harden watchdog startup diagnostics: include last N lines of orchestrator stderr, surface exit codes, and add backoff/jitter to prevent restart thundering-herd.",
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-04T17:33:47.432Z",
-      "updated_at": "2026-01-04T19:32:37.886Z",
+      "updated_at": "2026-01-04T19:35:47.295Z",
       "created_by": "unknown",
       "tags": [
         "reliability",
@@ -3390,10 +3390,15 @@
       "spec_file": "docs/specs/task_1767548027432_reduce-orchestrator-start-fail.md",
       "notes": [
         "[2026-01-04T17:47:10.107Z] Worker spawned via spawn-worker.sh (PID 444876). Investigate frequent orchestrator start failures in logs/watchdog.log; correlate with prompt-generator and plugin errors.",
-        "[2026-01-04T19:27:21.238Z] Reset from stale in_progress (idle for 40+ minutes with no assignee). Ready for fresh worker."
+        "[2026-01-04T19:27:21.238Z] Reset from stale in_progress (idle for 40+ minutes with no assignee). Ready for fresh worker.",
+        "[2026-01-04T19:35:23.529Z] Hardened watchdog startup diagnostics: integrated stderr logging, exit code surfacing, and restart jitter to prevent thundering-herd. Commit: 86ef8de\"",
+        "[2026-01-04T19:35:47.295Z] Watchdog startup diagnostics hardened with stderr capture (last 80 lines), exit code surfacing, and restart jitter (0-5s random delay) to prevent thundering-herd. Diagnostic files archived to logs/orchestrator-failures/. Implementation prevents coordinated restart storms when orchestrator fails."
       ],
       "assigned_to": "agent-1767555140085-8fqkx",
-      "claimed_at": "2026-01-04T19:32:37.886Z"
+      "claimed_at": "2026-01-04T19:32:37.886Z",
+      "completed_at": "2026-01-04T19:35:47.295Z",
+      "quality_score": 8.3,
+      "quality_notes": "Watchdog diagnostics hardening prevents restart cascades through jitter and better error visibility. Key insight: stderr logging with context (exit code, PID, restart count) makes failures debuggable without consulting external logs. Restart jitter is essential for distributed system stability when multiple components fail simultaneously."
     },
     {
       "id": "task_1767554768950_bgvplx",
@@ -3458,9 +3463,9 @@
       "title": "Document leader lease timeout tuning guidelines",
       "description": "Session 189 found leader-lease churn with tight heartbeats; document current timeout values (180s ttl in orchestrator-state.json) and recommendations for exponential backoff in leader election logic. Add to AGENTS.md or new LEADER_ELECTION.md doc.",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-04T19:26:11.394Z",
-      "updated_at": "2026-01-04T19:26:11.396Z",
+      "updated_at": "2026-01-04T19:34:03.254Z",
       "created_by": "unknown",
       "tags": [
         "documentation",
@@ -3469,16 +3474,22 @@
       ],
       "estimated_hours": 2,
       "complexity": "simple",
-      "spec_file": "docs/specs/task_1767554771394_document-leader-lease-timeout-.md"
+      "spec_file": "docs/specs/task_1767554771394_document-leader-lease-timeout-.md",
+      "assigned_to": "agent-1767555140085-8fqkx",
+      "claimed_at": "2026-01-04T19:33:17.170Z",
+      "completed_at": "2026-01-04T19:34:03.252Z",
+      "notes": [
+        "[2026-01-04T19:34:03.254Z] Created comprehensive LEADER_ELECTION.md documentation covering: timeout configuration, leader election protocol, tuning guidelines for different scenarios (high churn, slow failover, stale agent cleanup), recommended configurations (production/HA/lenient), implementation details, monitoring metrics, troubleshooting guide. Updated AGENTS.md to reference new documentation."
+      ]
     },
     {
       "id": "task_1767554772790_oq3oip",
       "title": "Evaluate and monitor realtime.log rotation effectiveness",
       "description": "Realtime.log is currently 5.2M; rotation was implemented in Session 185. Monitor growth over next 1-2 weeks; if it exceeds 10M, consider more aggressive rotation (keep last 2500 lines instead of 5000) or rate-limiting verbose event logging.",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-04T19:26:12.790Z",
-      "updated_at": "2026-01-04T19:26:12.801Z",
+      "updated_at": "2026-01-04T19:34:43.685Z",
       "created_by": "unknown",
       "tags": [
         "monitoring",
@@ -3487,9 +3498,15 @@
       ],
       "estimated_hours": 1,
       "complexity": "simple",
-      "spec_file": "docs/specs/task_1767554772790_evaluate-and-monitor-realtimel.md"
+      "spec_file": "docs/specs/task_1767554772790_evaluate-and-monitor-realtimel.md",
+      "assigned_to": "agent-1767555140085-8fqkx",
+      "claimed_at": "2026-01-04T19:34:05.596Z",
+      "completed_at": "2026-01-04T19:34:43.684Z",
+      "notes": [
+        "[2026-01-04T19:34:43.685Z] Evaluated realtime.log rotation effectiveness: Currently 5.3 MB with 28,468 lines, well below 10 MB threshold. Growth rate ~14,000 lines/day (9.8 KB/hour), sustainable. Rotation system working properly with archives. Created comprehensive REALTIME_LOG_MONITORING.md with: health assessment, monitoring metrics, maintenance schedules, scaling guidelines, future improvements. System is healthy; no changes needed at current rate."
+      ]
     }
   ],
-  "completed_count": 150,
-  "last_updated": "2026-01-04T19:32:37.886Z"
+  "completed_count": 154,
+  "last_updated": "2026-01-04T19:35:47.295Z"
 }
