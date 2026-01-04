@@ -27,7 +27,7 @@ import {
 } from "fs";
 import { join } from "path";
 import { readJson, writeJson, readJsonl } from "../../tools/shared/json-utils";
-import { MultiAgentCoordinator } from "../../tools/multi-agent-coordinator";
+import { MultiAgentCoordinator } from "../../tools/lib/coordinator";
 import { getModel, getModelFallback } from "../../tools/shared/models";
 import { formatToolsForRole, formatToolsCompact } from "../../tools/shared/tool-registry";
 
@@ -976,6 +976,24 @@ Coordinate work via agent_send() and agent_messages().
           output.output?.toLowerCase().includes("failed") ||
           output.output?.toLowerCase().includes("exception");
 
+        // === EDIT ERROR RECOVERY ===
+        // Inject helpful reminder when Edit tool fails
+        if (input.tool === "edit" && isError) {
+          const errorReminder = detectEditError(output);
+          if (errorReminder) {
+            const now = Date.now();
+            // Only inject if cooldown period has passed
+            if (now - lastEditErrorTime >= EDIT_ERROR_COOLDOWN) {
+              output.output += `\n\n${errorReminder}`;
+              lastEditErrorTime = now;
+              log("INFO", "Edit error recovery reminder injected", {
+                call_id: callId,
+                file: input.args?.filePath,
+              });
+            }
+          }
+        }
+
         // Create timing entry
         const timingEntry = {
           timestamp: new Date().toISOString(),
@@ -1338,7 +1356,7 @@ Read memory/working.md for full details.`);
 
 ## YOUR MISSION:
 1. Check for pending user messages and tasks
-2. If tasks exist: spawn workers with \`nohup opencode run "worker prompt" &\`
+2. If tasks exist: spawn workers with \`./spawn-worker.sh "prompt"\` or \`./spawn-worker.sh --task <task_id>\`
 3. Monitor progress, then exit gracefully when done
 4. Watchdog will restart you to continue the cycle
 
@@ -1367,6 +1385,105 @@ Keep sessions focused (~5-10 min). Delegate work to workers, don't do everything
       }
 
       return;
+    }
+
+    // === TASK CONTINUATION SYSTEM ===
+    // Auto-continue when session idle but pending tasks exist
+    // Only for non-orchestrator sessions (orchestrator handles its own tasks)
+    const isOrchestratorSession = detectedRole === "orchestrator" || !handoffEnabled;
+    
+    if (!isOrchestratorSession) {
+      try {
+        // Rate limiting: Check last continuation time
+        const lastContinuationPath = join(memoryDir, ".last-task-continuation.json");
+        const CONTINUATION_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
+        let canContinue = true;
+        
+        if (existsSync(lastContinuationPath)) {
+          const lastData = JSON.parse(readFileSync(lastContinuationPath, "utf-8"));
+          const timeSinceLastContinuation = Date.now() - lastData.timestamp;
+          if (timeSinceLastContinuation < CONTINUATION_COOLDOWN_MS) {
+            canContinue = false;
+            log("INFO", `Task continuation rate limited (${Math.round(timeSinceLastContinuation / 1000)}s since last, need ${Math.round(CONTINUATION_COOLDOWN_MS / 1000)}s)`);
+          }
+        }
+        
+        if (canContinue) {
+          // Check for pending tasks
+          const tasksPath = join(memoryDir, "tasks.json");
+          if (existsSync(tasksPath)) {
+            const tasksStore = JSON.parse(readFileSync(tasksPath, "utf-8"));
+            const pendingTasks = (tasksStore.tasks || []).filter((t: any) => t.status === "pending");
+            
+            if (pendingTasks.length > 0) {
+              log("INFO", `Session idle with ${pendingTasks.length} pending tasks - initiating auto-continuation`);
+              
+              // Get next priority task (basic priority sorting - task_next tool has more complex logic)
+              const priorityOrder: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
+              const sortedTasks = pendingTasks.sort((a: any, b: any) => {
+                return (priorityOrder[a.priority] || 4) - (priorityOrder[b.priority] || 4);
+              });
+              
+              const nextTask = sortedTasks[0];
+              log("INFO", `Auto-continuing with task: ${nextTask.title} (${nextTask.priority} priority)`);
+              
+              // Spawn worker to continue work
+              const workerPrompt = `You are a code-worker agent auto-spawned to continue work on pending tasks.
+
+IMMEDIATE ACTIONS:
+1. agent_register(role="code-worker")
+2. task_claim(task_id="${nextTask.id}")
+3. Work on the task: ${nextTask.title}
+
+TASK DETAILS:
+- Priority: ${nextTask.priority}
+- Description: ${nextTask.description || "See task title"}
+- ID: ${nextTask.id}
+
+When complete:
+- task_update(task_id="${nextTask.id}", status="completed", auto_assess=true)
+- agent_send(type="task_complete", payload={task_id: "${nextTask.id}", summary: "..."})`;
+
+              try {
+                const modelToUse = getModelFallback() || getModel();
+                const proc = Bun.spawn(
+                  ["opencode", "run", "--model", modelToUse, workerPrompt],
+                  {
+                    stdin: "ignore",
+                    stdout: "ignore",
+                    stderr: "ignore",
+                  }
+                );
+                proc.unref();
+                
+                // Update last continuation time
+                writeFileSync(
+                  lastContinuationPath,
+                  JSON.stringify({
+                    timestamp: Date.now(),
+                    task_id: nextTask.id,
+                    task_title: nextTask.title,
+                    session_id: event.properties.sessionID,
+                  }, null, 2)
+                );
+                
+                log("INFO", "Task continuation worker spawned", { 
+                  pid: proc.pid, 
+                  task_id: nextTask.id,
+                  task_title: nextTask.title,
+                  model: modelToUse
+                });
+              } catch (e) {
+                log("ERROR", "Failed to spawn task continuation worker", { error: String(e) });
+              }
+            } else {
+              log("INFO", "No pending tasks found - normal handoff");
+            }
+          }
+        }
+      } catch (error) {
+        log("WARN", "Task continuation check failed", { error: String(error) });
+      }
     }
 
     // Normal handoff - unregister and update working.md

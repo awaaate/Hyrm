@@ -248,9 +248,9 @@ Begin working on the task now.`;
       try {
         this.log('INFO', `Spawning worker for task: ${task.id}`);
         
-        // Spawn worker in background
+        // Spawn worker in background using spawn-worker.sh (handles quoting safely)
         execSync(
-          `nohup opencode run "${workerPrompt.replace(/"/g, '\\"')}" > /app/workspace/logs/worker-${task.id.slice(-8)}.log 2>&1 &`,
+          `/app/workspace/spawn-worker.sh "${workerPrompt.replace(/"/g, '\\"')}"`,
           { shell: '/bin/bash' }
         );
         

@@ -2719,9 +2719,9 @@
       "title": "Replace any types with proper Task interface in plugin tools",
       "description": "The plugin tools use (t: any) for task filtering/mapping operations when proper Task interface exists. Replace these any types with the Task type from shared/types.ts for better type safety. Focus on task-tools.ts (30+ occurrences), quality-tools.ts (15+ occurrences), and agent-tools.ts (12+ occurrences). Example: tasks.filter((t: any) => ...) should become tasks.filter((t: Task) => ...).",
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-03T14:45:40.533Z",
-      "updated_at": "2026-01-03T14:48:12.044Z",
+      "updated_at": "2026-01-03T14:52:49.516Z",
       "created_by": "ses_47bb868baffeyBO6vOsI3Oq6u4",
       "tags": [
         "refactor",
@@ -2730,9 +2730,294 @@
       ],
       "complexity": "moderate",
       "assigned_to": "agent-sI3Oq6u4",
-      "claimed_at": "2026-01-03T14:48:12.043Z"
+      "claimed_at": "2026-01-03T14:48:12.043Z",
+      "completed_at": "2026-01-03T14:52:49.497Z",
+      "quality_score": 6.8,
+      "quality_notes": "Auto-assessed"
+    },
+    {
+      "id": "task_1767458638685_y9w6it",
+      "title": "Run system liveness + smoke checks",
+      "description": "User reports system idle; run quick liveness checks (leader lease/heartbeats), validate CLI dashboard/monitor outputs, and report any regressions.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-03T16:43:58.685Z",
+      "updated_at": "2026-01-03T16:51:19.955Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "maintenance",
+        "healthcheck"
+      ],
+      "estimated_hours": 1,
+      "complexity": "simple",
+      "completed_at": "2026-01-03T16:51:19.946Z",
+      "notes": [
+        "[2026-01-03T16:51:19.947Z] Ran quick liveness checks: leader election healthy (agent-1767458509466-pcfkds epoch 5, TTL 180s), watchdog running, CLI status/agents/tasks responding. Noted frequent watchdog restarts earlier (11 this hour) but system currently stable."
+      ],
+      "quality_score": 6.9,
+      "quality_notes": "Auto-assessed"
+    },
+    {
+      "id": "task_1767458639057_wt0m51",
+      "title": "Reconcile memory status vs actual active work",
+      "description": "memory_status shows stale active_tasks. Audit where it's set and update mechanisms so status reflects reality after task completion/restart.",
+      "priority": "medium",
+      "status": "completed",
+      "created_at": "2026-01-03T16:43:59.057Z",
+      "updated_at": "2026-01-03T16:51:21.648Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "memory",
+        "status"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "completed_at": "2026-01-03T16:51:21.638Z",
+      "notes": [
+        "[2026-01-03T16:51:21.639Z] Reconciled memory vs actual state: memory/state.json status+active_tasks appear stale (last_updated 15:45Z) compared to current leader/orchestrator-state.json and agent-registry.json. Leader data lives in memory/orchestrator-state.json; agent-registry.json currently has leader:null. Recommend follow-up task to unify/refresh memory_status source of truth."
+      ],
+      "quality_score": 6.8,
+      "quality_notes": "Auto-assessed"
+    },
+    {
+      "id": "task_1767460703488_zvj1xx",
+      "title": "Investigate orchestrator leader-lease churn and frequent watchdog restarts",
+      "description": "Logs show repeated cycles where the orchestrator process exits and the leader lease expires ~55–60s later, triggering watchdog respawn. Root-cause the orchestrator exiting (shutdown signals / unhandled errors / idle lifecycle), ensure heartbeats reliably renew the lease before TTL, and align watchdog check interval with TTL.\n\nSuccess criteria:\n- Orchestrator remains running >30 minutes without watchdog respawn under idle load\n- Lease is renewed continuously (no ‘lease expired’ warnings during normal operation)\n- Add minimal diagnostic logging for shutdown reason and last heartbeat timestamp",
+      "priority": "critical",
+      "status": "completed",
+      "created_at": "2026-01-03T17:18:23.488Z",
+      "updated_at": "2026-01-03T17:22:19.701Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "watchdog",
+        "stability",
+        "leader-election"
+      ],
+      "complexity": "moderate",
+      "assigned_to": "agent-1767460906093-ieg80k",
+      "claimed_at": "2026-01-03T17:22:19.701Z",
+      "completed_at": "2026-01-04T10:01:00+00:00",
+      "notes": [
+        "[2026-01-04] Fixed in commit 174d07e - added releaseLeaderLease() to prevent infinite spawn loop"
+      ]
+    },
+    {
+      "id": "task_1767460703767_6hiynl",
+      "title": "Fix watchdog respawn failure: invalid stdio option passed to spawn",
+      "description": "memory/realtime.log includes: ‘Failed to re-spawn orchestrator’ with TypeError [ERR_INVALID_ARG_TYPE]: stdio must be an array of 'inherit', 'ignore', or null. Find the watchdog respawn code path and correct spawn options (stdio/env/detached) so respawns never fail.\n\nSuccess criteria:\n- No stdio-related spawn exceptions\n- Watchdog can successfully respawn orchestrator in a forced-kill test\n- Add a small unit/integration check if test harness exists",
+      "priority": "high",
+      "status": "cancelled",
+      "created_at": "2026-01-03T17:18:23.768Z",
+      "updated_at": "2026-01-04T10:01:00+00:00",
+      "created_by": "unknown",
+      "tags": [
+        "watchdog",
+        "bug",
+        "respawn"
+      ],
+      "complexity": "moderate",
+      "assigned_to": null,
+      "claimed_at": null,
+      "notes": [
+        "[2026-01-04] Cancelled - agent died. Issue not reproducible after leader-lease fix. Reopen if needed."
+      ]
+    },
+    {
+      "id": "task_1767460705391_1xaoof",
+      "title": "Investigate and fix plugin parse error: 'expected a command or assignment but got: Redirect'",
+      "description": "memory/realtime.log shows repeated plugin errors: ‘expected a command or assignment but got: \"Redirect\"’. Identify which tool/event emits this unexpected token, add input validation/sanitization, and ensure plugin errors are surfaced with actionable context (tool name + payload).\n\nSuccess criteria:\n- Error no longer appears in realtime.log during normal use\n- When unexpected input occurs, logs include source tool/hook and offending payload",
+      "priority": "high",
+      "status": "cancelled",
+      "created_at": "2026-01-03T17:18:25.391Z",
+      "updated_at": "2026-01-04T10:01:00+00:00",
+      "created_by": "unknown",
+      "tags": [
+        "plugin",
+        "bug",
+        "logging"
+      ],
+      "complexity": "moderate",
+      "assigned_to": null,
+      "claimed_at": null,
+      "notes": [
+        "[2026-01-04] Cancelled - agent died. Redirect error needs investigation but not blocking. Reopen if seen again."
+      ]
+    },
+    {
+      "id": "task_1767460707507_q5bin1",
+      "title": "Handle expired OAuth/API tokens gracefully (avoid crash/restart loops)",
+      "description": "memory/realtime.log shows session.error with 401 ‘OAuth token has expired’. Add a guardrail: detect auth failures, mark system status as blocked/degraded, pause expensive loops, and emit a clear operator action message (refresh token) instead of cascading failures.\n\nSuccess criteria:\n- On 401, orchestrator remains healthy and stops retry storms\n- A single clear error status is recorded (state + logs) with recovery steps",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-03T17:18:27.507Z",
+      "updated_at": "2026-01-03T17:18:27.507Z",
+      "created_by": "unknown",
+      "tags": [
+        "auth",
+        "resilience",
+        "ux"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "task_1767460709823_9305p0",
+      "title": "Implement scheduled external-resource ingest from docs/RESOURCES.md",
+      "description": "docs/RESOURCES.md recommends periodically fetching Simon Willison RSS + prompt libraries. Build a small scheduled ingest job that fetches configured RSS/URLs, extracts headlines/patterns, and stores summarized deltas into memory/knowledge-base.json with timestamps.\n\nSuccess criteria:\n- Runs without network failures causing crashes (timeouts/backoff)\n- Adds deduped entries to knowledge base\n- Exposes a CLI command to run ingest on-demand",
+      "priority": "low",
+      "status": "pending",
+      "created_at": "2026-01-03T17:18:29.823Z",
+      "updated_at": "2026-01-03T17:18:29.823Z",
+      "created_by": "unknown",
+      "tags": [
+        "research",
+        "rss",
+        "knowledge-base"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "task_1767520205269_rwoygc",
+      "title": "Implement orphaned tasks cleanup - release tasks when agent becomes stale",
+      "description": "When cleanupStaleAgents() removes a dead agent, also release any tasks assigned to it.\n\nImplementation:\n1. In multi-agent-coordinator.ts cleanupStaleAgents()\n2. Find tasks with status=in_progress and assigned_to=stale_agent_id\n3. Set those tasks to status=pending, clear assigned_to/claimed_at\n4. Log released tasks for visibility\n\nCurrently 3 tasks stuck assigned to dead agent agent-1767460906093-ieg80k",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-04T09:50:05.269Z",
+      "updated_at": "2026-01-04T10:09:28.448Z",
+      "created_by": "orchestrator",
+      "tags": [
+        "bug-fix",
+        "multi-agent",
+        "coordinator"
+      ],
+      "complexity": "simple",
+      "estimated_hours": 1,
+      "assigned_to": "agent-1767521206609-wjq7rn",
+      "claimed_at": "2026-01-04T10:06:46.906Z",
+      "completed_at": "2026-01-04T10:09:28.430Z",
+      "quality_score": 7.9,
+      "quality_notes": "Auto-assessed"
+    },
+    {
+      "id": "task_1767520206287_6bpixl",
+      "title": "Add Edit Error Recovery hook - inject reminder when Edit fails with oldString errors",
+      "description": "Add error recovery for Edit tool failures in plugin.\n\nImplementation:\n1. In tool.execute.after hook (.opencode/plugin/index.ts)\n2. Detect errors: oldString not found, found multiple times, must be different\n3. Append reminder: [EDIT ERROR] Read the file first before retrying\n\nReference: oh-my-opencode/src/hooks/edit-error-recovery/index.ts\nSimple: if (tool===edit && hasError) output.output += reminder",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-04T09:50:06.287Z",
+      "updated_at": "2026-01-04T10:08:15.574Z",
+      "created_by": "orchestrator",
+      "tags": [
+        "enhancement",
+        "plugin",
+        "error-handling"
+      ],
+      "complexity": "simple",
+      "estimated_hours": 0.5,
+      "assigned_to": "agent-1767521213362-l0kg5y",
+      "claimed_at": "2026-01-04T10:06:53.642Z",
+      "completed_at": "2026-01-04T10:08:15.566Z",
+      "notes": [
+        "[2026-01-04T10:08:15.569Z] Successfully implemented Edit Error Recovery hook in .opencode/plugin/index.ts\n\nFeatures:\n1. ✅ Detects Edit tool failures with error messages:\n   - \"oldString not found\"\n   - \"oldString found multiple times\"\n   - \"newString must be different\"\n\n2. ✅ Injects context-aware reminders with specific guidance:\n   - Reminds to use Read tool first\n   - Warns about line numbers being reference-only\n   - Suggests using larger context for unique matches\n   - Provides examples of common mistakes\n\n3. ✅ Rate limiting to prevent spam:\n   - Max 1 reminder per 5 minutes (cooldown period)\n   - Tracks last error time to avoid duplicate injections\n\n4. ✅ Logging integration:\n   - Logs reminder injection events to realtime.log\n   - Includes call_id and file path for debugging\n\n5. ✅ Tested with 5 test cases - all passing\n\nImplementation in tool.execute.after hook (line ~995-1015) detects errors and appends helpful reminder to output.output before returning to agent."
+      ],
+      "quality_score": 6.8,
+      "quality_notes": "Auto-assessed"
+    },
+    {
+      "id": "task_1767520206937_xbfnbz",
+      "title": "Implement Task Continuation - auto-continue when session idle with pending tasks",
+      "description": "Auto-continue orchestrator when session goes idle but tasks are pending.\n\nImplementation:\n1. Modify handleSessionIdle in .opencode/plugin/index.ts\n2. Before respawning, check memory/tasks.json for pending tasks\n3. If pending tasks exist, customize respawn prompt to work on them\n4. Optional: countdown toast (2s) for user cancellation\n\nReference: oh-my-opencode/src/hooks/todo-continuation-enforcer.ts\nSimpler: check tasks.json and modify respawn prompt accordingly",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2026-01-04T09:50:06.937Z",
+      "updated_at": "2026-01-04T10:08:47.504Z",
+      "created_by": "orchestrator",
+      "tags": [
+        "enhancement",
+        "plugin",
+        "autonomy"
+      ],
+      "complexity": "moderate",
+      "estimated_hours": 2,
+      "assigned_to": "agent-1767521220322-6ggubp",
+      "claimed_at": "2026-01-04T10:07:00.606Z",
+      "completed_at": "2026-01-04T10:08:47.500Z",
+      "notes": [
+        "[2026-01-04T10:08:47.501Z] Implemented Task Continuation system in .opencode/plugin/index.ts handleSessionIdle function. Features: 1) Detects when non-orchestrator sessions go idle with pending tasks, 2) Auto-spawns code-worker to claim and work on next priority task, 3) Rate limiting: max 1 continuation every 5 minutes (stored in .last-task-continuation.json), 4) Only triggers for normal worker sessions (orchestrator handles its own continuation), 5) Logs all continuation events to realtime.log. Worker spawned with proper prompt including task details and completion instructions."
+      ],
+      "quality_score": 8,
+      "quality_notes": "Auto-assessed"
+    },
+    {
+      "id": "task_1767520273725_sckp83",
+      "title": "Auto-create GitHub issue for every new task, branch on demand",
+      "description": "Automatically create a GitHub issue when any task is created in the system.\n\nImplementation:\n1. Modify task-manager.ts create() method\n2. After saving task to tasks.json, call createGitHubIssue(taskId)\n3. Store the issue URL/number in the task object\n4. Add optional flag --branch to also create a git branch\n5. Branch naming: task/<task_id_short>-<slugified-title>\n\nBenefits:\n- All work is tracked in GitHub\n- Easy to link PRs to tasks\n- Better visibility for external contributors\n- Enables GitHub project boards integration\n\nExisting code:\n- gh:issue command already exists in task-manager.ts\n- gh:branch command already exists\n- Just need to auto-trigger on create()",
+      "priority": "critical",
+      "status": "completed",
+      "created_at": "2026-01-04T09:51:13.726Z",
+      "updated_at": "2026-01-04T10:08:44.564Z",
+      "created_by": "orchestrator",
+      "tags": [
+        "critical",
+        "github",
+        "automation",
+        "task-manager"
+      ],
+      "complexity": "simple",
+      "estimated_hours": 1,
+      "assigned_to": "agent-1767521187231-phkqg",
+      "claimed_at": "2026-01-04T10:06:27.521Z",
+      "completed_at": "2026-01-04T10:08:44.555Z",
+      "quality_score": 7.8,
+      "quality_notes": "Auto-assessed"
+    },
+    {
+      "id": "task_1767520395465_2o5xy7",
+      "title": "Reorganize tools/ structure and auto-document CLIs for agent awareness",
+      "description": "Major reorganization of tools/ directory and auto-documentation system.\n\nSee full specification: docs/specs/task_1767520395465_tools-reorganization.md\n\nSummary:\n1. Reorganize tools/ into cli/, lib/, shared/\n2. Consolidate 20+ files into 8 unified CLIs\n3. Auto-generate documentation\n4. Create skill file for agent awareness\n5. Update all imports\n\nEstimated: 3-4 hours across 7 phases",
+      "priority": "critical",
+      "status": "in_progress",
+      "created_at": "2026-01-04T09:53:15.465Z",
+      "updated_at": "2026-01-04T10:06:35.441Z",
+      "created_by": "orchestrator",
+      "tags": [
+        "critical",
+        "refactoring",
+        "documentation",
+        "developer-experience"
+      ],
+      "complexity": "complex",
+      "estimated_hours": 4,
+      "spec_file": "docs/specs/task_1767520395465_tools-reorganization.md",
+      "assigned_to": "agent-1767521195249-9aan9",
+      "claimed_at": "2026-01-04T10:06:35.441Z"
+    },
+    {
+      "id": "task_1767520578520_78t9d5",
+      "title": "Create spec system - auto-generate spec.md for every task linked to GitHub issue",
+      "description": "Create automated spec system for all tasks.\n\nSee full specification: docs/specs/task_1767520578520_spec-system.md\n\nSummary:\n1. Every task gets docs/specs/task_<id>_<slug>.md\n2. Spec content = GitHub issue body (synced)\n3. Auto-generate on task creation\n4. Template for consistent format\n5. CLI commands: spec, spec:view, spec:sync\n\nDepends on: GitHub auto-issue task, Tools reorganization",
+      "priority": "critical",
+      "status": "pending",
+      "created_at": "2026-01-04T09:56:18.520Z",
+      "updated_at": "2026-01-04T09:56:18.520Z",
+      "created_by": "orchestrator",
+      "tags": [
+        "critical",
+        "automation",
+        "documentation",
+        "github"
+      ],
+      "complexity": "moderate",
+      "estimated_hours": 3,
+      "spec_file": "docs/specs/task_1767520578520_spec-system.md",
+      "depends_on": [
+        "task_1767520273725_sckp83",
+        "task_1767520395465_2o5xy7"
+      ]
     }
   ],
-  "completed_count": 131,
-  "last_updated": "2026-01-03T14:48:12.044Z"
+  "completed_count": 138,
+  "last_updated": "2026-01-04T10:09:28.435Z"
 }

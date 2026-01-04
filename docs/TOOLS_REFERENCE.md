@@ -1,483 +1,857 @@
-# Tools Reference
+# CLI Tools Reference
 
-Complete reference for all CLI tools in the multi-agent system. All tools are run with `bun tools/<tool>.ts [command]`.
+Auto-generated documentation for all CLI tools in the workspace.
+
+**Last Updated**: 2026-01-04T10:11:56.364Z
 
 ## Quick Reference
 
-| Tool | Purpose | Key Commands |
-|------|---------|--------------|
-| cli.ts | Unified CLI | status, agents, tasks, monitor |
-| realtime-monitor.ts | Live dashboard | d/a/m/t/l keys |
-| task-manager.ts | Task CRUD | summary, next, create |
-| user-message.ts | User messaging | send, list, unread |
+| Tool | Category | Description |
+|------|----------|-------------|
+| `debug-capture` | Legacy CLIs (root level) | Debug Capture Tool Captures command outputs and debug information for troublesho... |
+| `agent-performance-profiler` | Legacy CLIs (root level) | Agent Performance Profiler Comprehensive performance profiling and optimization ... |
+| `generate-orchestrator-prompt` | Legacy CLIs (root level) | Dynamic Orchestrator Prompt Generator Generates a structured prompt for the orch... |
+| `message-bus-manager` | Legacy CLIs (root level) | Message Bus Manager Manages the message bus with: - Automatic rotation to archiv... |
+| `quality-assessor` | Legacy CLIs (root level) | Task Quality Assessor Evaluates completed tasks across multiple quality dimensio... |
+| `critique-agent` | Legacy CLIs (root level) | Critique Agent Tool A specialized agent for code review, output analysis, debugg... |
+| `user-message` | Legacy CLIs (root level) | User Message System Allows users to send messages to the agent system that agent... |
+| `opencode-tracker` | Legacy CLIs (root level) | OpenCode Session Tracker (Primary Tool) The main tool for tracking and analyzing... |
+| `task-manager` | Legacy CLIs (root level) | Persistent Task Manager for Multi-Agent System Features: - Tasks persist across ... |
+| `cli` | Legacy CLIs (root level) | Unified CLI - Single Entry Point for All Tools The main CLI for interacting with... |
+| `agent-health-monitor` | Legacy CLIs (root level) | Agent Health Monitor Comprehensive health monitoring system for multi-agent coor... |
+| `task-router` | Legacy CLIs (root level) | Task Router Intelligently routes tasks to available worker agents based on: - Ag... |
+| `dashboard` | Legacy CLIs (root level) | OpenCode Interactive Dashboard v3.0 Terminal UI with timeline view for the multi... |
+| `agent-conversation-viewer` | Legacy CLIs (root level) | Agent Conversation Viewer View per-agent conversations including messages, tool ... |
+| `generate-worker-prompt` | Legacy CLIs (root level) | Worker Prompt Generator Generates focused, structured prompts for worker agents ... |
+| `git-integration` | Legacy CLIs (root level) | Git Integration Tool for Multi-Agent System Provides git-aware functionality for... |
+| `multi-agent-coordinator` | Legacy CLIs (root level) | Multi-Agent Coordination System Enables multiple OpenCode agents to work togethe... |
+| `generate-tools-docs` | Legacy CLIs (root level) | Auto-Documentation Generator for CLI Tools Scans all CLI tools in the workspace ... |
+| `session-summarizer` | Legacy CLIs (root level) | Session Summarizer Automatically summarizes completed sessions, extracting: - Ke... |
+| `working-memory-manager` | Legacy CLIs (root level) | Working Memory Manager Manages the working.md file and overall memory system wit... |
+| `system-message-config` | Legacy CLIs (root level) | System Message Configuration CLI Manage the dynamic system message injection for... |
+| `daily-report-generator` | Legacy CLIs (root level) | Daily Performance Report Generator Generates automated daily performance reports... |
+| `knowledge-extractor` | Legacy CLIs (root level) | Knowledge Extractor from OpenCode Session Storage Reads actual OpenCode sessions... |
+| `knowledge-deduplicator` | Legacy CLIs (root level) | Knowledge Deduplicator Analyzes and deduplicates the knowledge base: - Removes d... |
+| `realtime-monitor` | Legacy CLIs (root level) | Real-time System Monitor A comprehensive real-time monitoring CLI with: - File w... |
+| `dashboard` | Interactive UIs | OpenCode Interactive Dashboard v3.0 Terminal UI with timeline view for the multi... |
+| `realtime` | Interactive UIs | Real-time System Monitor A comprehensive real-time monitoring CLI with: - File w... |
+| `task-router` | Libraries | Task Router Intelligently routes tasks to available worker agents based on: - Ag... |
+| `prompt-generator` | Libraries | Prompt Generator Library Generates structured prompts for orchestrator and worke... |
+| `system-message-config` | Libraries | System Message Configuration CLI Manage the dynamic system message injection for... |
+| `coordinator` | Libraries | Multi-Agent Coordination System Enables multiple OpenCode agents to work togethe... |
 
 ---
 
-## CLI Principal
+## Legacy CLIs (root level)
 
-### cli.ts
-**Description**: Unified CLI entry point for all system operations.
+### `debug-capture`
 
-**Usage**: `bun tools/cli.ts [command]`
+Debug Capture Tool Captures command outputs and debug information for troubleshooting. run <command>   - Run a command and save its output
+
+**Usage**: `bun tools/debug-capture.ts <command>`
 
 **Commands**:
-- `status` - System overview (session, agents, tasks, quality)
-- `agents` - List all active agents
-- `tasks` - Show pending tasks
-- `messages` - View agent messages
-- `monitor` - Launch live dashboard
-- `interactive` - Interactive mode
-- `help` - Show all commands
 
-**Example**:
-```bash
-bun tools/cli.ts status
-bun tools/cli.ts agents
-```
+- `run`
+- `log`
+- `list`
+- `view`
+- `clean`
+
+**File**: [`tools/debug-capture.ts`](../tools/debug-capture.ts)
 
 ---
 
-## Agent Tools
+### `agent-performance-profiler`
 
-### agent-health-monitor.ts
-**Description**: Comprehensive health monitoring for multi-agent coordination. Tracks agent heartbeats, detects stale agents, and provides cleanup.
+Agent Performance Profiler Comprehensive performance profiling and optimization system for multi-agent coordination. Features:
 
-**Usage**: `bun tools/agent-health-monitor.ts [command]`
+**Usage**: `bun tools/agent-performance-profiler.ts <command>`
 
 **Commands**:
-- `status` - Show health status of all agents
-- `check` - Run a single health check
-- `monitor` - Start continuous monitoring
-- `metrics` - Show performance metrics
-- `cleanup` - Remove stale agents (>2 min inactive)
 
-**Example**:
-```bash
-bun tools/agent-health-monitor.ts status
-bun tools/agent-health-monitor.ts cleanup
-```
+- `profile`
+- `tools`
+- `agents`
+- `efficiency`
+- `errors`
+- `suggestions`
+- `export`
+
+**File**: [`tools/agent-performance-profiler.ts`](../tools/agent-performance-profiler.ts)
 
 ---
 
-### agent-conversation-viewer.ts
-**Description**: View per-agent conversations including messages, tool calls, and outputs.
+### `generate-orchestrator-prompt`
 
-**Usage**: `bun tools/agent-conversation-viewer.ts [command]`
+Dynamic Orchestrator Prompt Generator Generates a structured prompt for the orchestrator following Anthropic best practices: - Clear role definition with XML tags
+
+**Usage**: `bun bun tools/generate-orchestrator-prompt.ts > /tmp/orchestrator-prompt.txt`
+
+**File**: [`tools/generate-orchestrator-prompt.ts`](../tools/generate-orchestrator-prompt.ts)
+
+---
+
+### `message-bus-manager`
+
+Message Bus Manager Manages the message bus with: - Automatic rotation to archived files
+
+**Usage**: `bun bun tools/message-bus-manager.ts status          # Show current bus status`
 
 **Commands**:
-- `agents` - List all agents with activity summary
-- `view <agent_id>` - View full conversation for an agent
-- `stream` - Real-time stream of all agent activity
-- `tools <agent_id>` - Show tool calls for a specific agent
-- `timeline` - Show chronological activity across all agents
-- `export <agent_id>` - Export agent conversation as markdown
 
-**Example**:
-```bash
-bun tools/agent-conversation-viewer.ts agents
-bun tools/agent-conversation-viewer.ts view agent-123
-```
+- `status`
+- `rotate`
+- `compact`
+- `cleanup`
+- `search`
+- `stats`
+- `auto`
+
+**File**: [`tools/message-bus-manager.ts`](../tools/message-bus-manager.ts)
 
 ---
 
-### agent-performance-profiler.ts
-**Description**: Performance profiling and optimization for multi-agent coordination. Tracks tool execution times, context usage, and error patterns.
+### `quality-assessor`
 
-**Usage**: `bun tools/agent-performance-profiler.ts [command]`
+Task Quality Assessor Evaluates completed tasks across multiple quality dimensions: - Completeness: Did the task achieve its stated goal?
+
+**Usage**: `bun tools/quality-assessor.ts <command>`
 
 **Commands**:
-- `profile` - Show full performance profile
-- `tools` - Tool execution time analysis
-- `agents` - Per-agent performance breakdown
-- `efficiency` - Context usage efficiency report
-- `errors` - Error pattern analysis
-- `suggestions` - Get optimization suggestions
-- `history [days]` - Performance trends over time
-- `export` - Export metrics to JSON
 
-**Example**:
-```bash
-bun tools/agent-performance-profiler.ts profile
-bun tools/agent-performance-profiler.ts suggestions
-```
+- `assess`
+- `unassessed` - List unassessed completed tasks
+- `trends` - Show quality trends over time
+- `lessons` - Show lessons learned
+- `report` - Print quality summary report
+- `export` - Export all assessment data as JSON
+
+**File**: [`tools/quality-assessor.ts`](../tools/quality-assessor.ts)
 
 ---
 
-### multi-agent-coordinator.ts
-**Description**: Core coordination for multiple OpenCode agents. Manages agent registry, message bus, and task distribution.
+### `critique-agent`
 
-**Usage**: `bun tools/multi-agent-coordinator.ts [command]`
+Critique Agent Tool A specialized agent for code review, output analysis, debugging critique, and quality assessment. Writes detailed markdown critiques to memory/critiques/.
 
-**Features**:
-- Agent registry tracking (active/idle/working/blocked)
-- Message bus for inter-agent communication
-- File lock conflict handling
-- Task distribution coordination
-
----
-
-### critique-agent.ts
-**Description**: Specialized agent for code review, output analysis, and quality assessment. Writes detailed markdown critiques.
-
-**Usage**: `bun tools/critique-agent.ts [command]`
+**Usage**: `bun bun tools/critique-agent.ts code src/index.ts`
 
 **Commands**:
-- `code <file>` - Critique a code file with detailed feedback
-- `output <file>` - Analyze output/logs for issues
-- `task <task_id>` - Critique a completed task's implementation
-- `system` - System-wide critique and improvement suggestions
-- `review <pr_desc>` - Review changes described in text
-- `list` - List all critiques
-- `view <id>` - View a specific critique
-- `summary` - Summary of all critiques and patterns
 
-**Example**:
-```bash
-bun tools/critique-agent.ts code src/index.ts
-bun tools/critique-agent.ts system
-```
+- `critical`
+- `error`
+- `warning`
+- `info`
+- `code`
+- `output`
+- `task`
+- `system`
+- `review`
+- `list`
+- `view`
+- `summary`
+
+**File**: [`tools/critique-agent.ts`](../tools/critique-agent.ts)
 
 ---
 
-### message-bus-manager.ts
-**Description**: Manages the agent message bus with rotation, deduplication, and cleanup.
+### `user-message`
 
-**Usage**: `bun tools/message-bus-manager.ts [command]`
+User Message System Allows users to send messages to the agent system that agents can read and respond to. This creates a communication channel from user -> agents.
+
+**Usage**: `bun bun tools/user-message.ts send "Your message here"`
 
 **Commands**:
-- `status` - Show current bus status
-- `rotate` - Rotate to new archive file
-- `compact` - Remove old heartbeats, deduplicate
-- `cleanup [hours]` - Remove messages older than N hours
-- `search <query>` - Search across all archives
-- `stats` - Message statistics
 
-**Example**:
-```bash
-bun tools/message-bus-manager.ts status
-bun tools/message-bus-manager.ts compact
-```
+- `send`
+- `list`
+- `unread`
+- `mark-read`
+- `clear`
+- `watch`
+- `count`
+
+**File**: [`tools/user-message.ts`](../tools/user-message.ts)
 
 ---
 
-### generate-orchestrator-prompt.ts
-**Description**: Generates focused prompts for the orchestrator agent with current system state.
+### `opencode-tracker`
 
-**Usage**: `bun tools/generate-orchestrator-prompt.ts`
+OpenCode Session Tracker (Primary Tool) The main tool for tracking and analyzing OpenCode conversations. Reads from OpenCode's native storage at ~/.local/share/opencode/storage/
 
----
-
-### generate-worker-prompt.ts
-**Description**: Generates focused prompts for worker agents with task context.
-
-**Usage**: `bun tools/generate-worker-prompt.ts "<task>"`
-
----
-
-## Memory Tools
-
-### working-memory-manager.ts
-**Description**: Manages working.md with archival, search, and memory health analysis.
-
-**Usage**: `bun tools/working-memory-manager.ts [command]`
+**Usage**: `bun tools/opencode-tracker.ts <command>`
 
 **Commands**:
-- `status` - Show current status
-- `archive` - Archive old sessions (keeps last 5)
-- `search <query>` - Search archived sessions
-- `list` - List all archived sessions
-- `view <n>` - View specific archived session
-- `clean` - Clean up and optimize
-- `health` - Analyze memory system health
-- `prune` - Prune message bus and compress KB
 
-**Example**:
-```bash
-bun tools/working-memory-manager.ts health
-bun tools/working-memory-manager.ts archive
-```
+- `text`
+- `tool`
+- `tool-invocation`
+- `tool-result`
+- `reasoning`
+- `step-start`
+- `sessions`
+- `messages`
+- `view`
+- `tools`
+- `search`
+- `export`
+- `watch`
+- `stats`
+- `sync`
+- `learn`
+- `tree`
+- `tokens`
+
+**File**: [`tools/opencode-tracker.ts`](../tools/opencode-tracker.ts)
 
 ---
 
-### knowledge-extractor.ts
-**Description**: Extracts knowledge from OpenCode sessions including decisions, discoveries, and patterns.
+### `task-manager`
 
-**Usage**: `bun tools/knowledge-extractor.ts [command]`
+Persistent Task Manager for Multi-Agent System Features: - Tasks persist across sessions
+
+**Usage**: `bun tools/task-manager.ts <command>`
 
 **Commands**:
-- `extract` - Extract knowledge from recent sessions
 
-**Example**:
-```bash
-bun tools/knowledge-extractor.ts extract
-```
+- `create`
+- `status`
+- `next` - Get next available task
+- `summary` - Show task summary
+- `export` - Export to markdown
+- `list`
+- `search`
+- `gh:issue`
+- `gh:branch`
+- `gh:sync`
+- `view`
+
+**File**: [`tools/task-manager.ts`](../tools/task-manager.ts)
 
 ---
 
-### knowledge-deduplicator.ts
-**Description**: Analyzes and deduplicates the knowledge base. Removes duplicate insights, merges similar discoveries.
+### `cli`
 
-**Usage**: `bun tools/knowledge-deduplicator.ts [command]`
+Unified CLI - Single Entry Point for All Tools The main CLI for interacting with the multi-agent system. Delegates to specialized tools for complex operations.
+
+**Usage**: `bun bun tools/cli.ts [command] [args]`
 
 **Commands**:
-- `analyze` - Show analysis of duplicates
-- `dedupe` - Perform deduplication
-- `stats` - Show knowledge statistics
-- `top` - Show top insights and code artifacts
 
-**Example**:
-```bash
-bun tools/knowledge-deduplicator.ts analyze
-bun tools/knowledge-deduplicator.ts dedupe
-```
+- `status`
+- `agents`
+- `tasks`
+- `messages`
+- `send`
+- `create`
+- `claim`
+- `complete`
+- `refresh`
+- `clear`
+- `exit`
+- `quit`
+- `q`
+- `summary`
+- `tools`
+- `recent`
+- `slow`
+- `categories`
+- `export`
+- `task-create`
+- `create-task`
+- `task-claim`
+- `claim-task`
+- `task-complete`
+- `complete-task`
+- `user-messages`
+- `monitor`
+- `dashboard`
+- `dash`
+- `interactive`
+- `i`
+- `quality`
+- `conversations`
+- `conv`
+- `prune`
+- `health`
+- `bus`
+- `message-bus`
+- `memory`
+- `working`
+- `git`
+- `profile`
+- `perf`
+- `profiler`
+- `performance`
+- `recovery`
+- `checkpoints`
+- `recover`
+- `resume`
+- `timing`
+- `tool-timing`
+- `report`
+- `reports`
+- `daily-report`
+- `agent-conv`
+- `critique`
+- `review`
+- `cr`
+- `opencode`
+- `oc`
+- `tracker`
+- `watch`
+- `realtime`
+- `live`
+
+**File**: [`tools/cli.ts`](../tools/cli.ts)
 
 ---
 
-## Task Tools
+### `agent-health-monitor`
 
-### task-manager.ts
-**Description**: Persistent task manager for multi-agent system. Tasks survive across sessions.
+Agent Health Monitor Comprehensive health monitoring system for multi-agent coordination. Features:
 
-**Usage**: `bun tools/task-manager.ts [command]`
+**Usage**: `bun bun tools/agent-health-monitor.ts [command]`
 
 **Commands**:
-- `summary` - Show all tasks
-- `next` - Get next priority task
-- `create <title>` - Create new task
-- `complete <id>` - Mark task complete
-- `list [status]` - List tasks by status
 
-**Example**:
-```bash
-bun tools/task-manager.ts summary
-bun tools/task-manager.ts next
-```
+- `status`
+- `check`
+- `monitor`
+- `metrics`
+- `cleanup`
+
+**File**: [`tools/agent-health-monitor.ts`](../tools/agent-health-monitor.ts)
 
 ---
 
-### task-router.ts
-**Description**: Intelligently routes tasks to available worker agents based on availability, specialization, and load balancing.
+### `task-router`
 
-**Usage**: `bun tools/task-router.ts [command]`
+Task Router Intelligently routes tasks to available worker agents based on: - Agent availability and status
 
-**Features**:
-- Agent availability checking
-- Role-based task assignment
-- Priority-based routing
-- Load balancing across agents
-
----
-
-### quality-assessor.ts
-**Description**: Evaluates completed tasks across quality dimensions: completeness, code quality, efficiency, documentation, impact.
-
-**Usage**: `bun tools/quality-assessor.ts [command]`
-
-**Dimensions Tracked**:
-- Completeness (0-10)
-- Code Quality (0-10)
-- Efficiency (0-10)
-- Documentation (0-10)
-- Impact (0-10)
-
----
-
-## Session Tools
-
-### opencode-tracker.ts
-**Description**: Primary tool for tracking and analyzing OpenCode conversations. Reads from OpenCode's native storage.
-
-**Usage**: `bun tools/opencode-tracker.ts [command]`
+**Usage**: `bun tools/task-router.ts <command>`
 
 **Commands**:
-- `sessions [limit]` - List all sessions with metadata
-- `messages <sessionId>` - Show all messages for a session
-- `view <sessionId>` - Full conversation view with tool calls
-- `tools <sessionId>` - Show all tool calls with inputs/outputs
-- `search <query> [limit]` - Search across sessions
-- `export <sessionId>` - Export full conversation as JSON
-- `watch` - Watch for new messages in real-time
-- `stats` - Show statistics about all sessions
-- `sync` - Sync OpenCode sessions to memory system
-- `learn [limit]` - Extract learnings from recent sessions
 
-**Example**:
-```bash
-bun tools/opencode-tracker.ts sessions 20
-bun tools/opencode-tracker.ts search "error" 30
-bun tools/opencode-tracker.ts sync && bun tools/opencode-tracker.ts learn
-```
+- `route`
+- `spawn`
+- `stats`
+- `dashboard`
+
+**File**: [`tools/task-router.ts`](../tools/task-router.ts)
 
 ---
 
-### session-summarizer.ts
-**Description**: Automatically summarizes completed sessions, extracting key learnings, code changes, and quality metrics.
+### `dashboard`
 
-**Usage**: `bun tools/session-summarizer.ts [command]`
+OpenCode Interactive Dashboard v3.0 Terminal UI with timeline view for the multi-agent system. bun tools/dashboard.ts [mode]
+
+**Usage**: `bun bun tools/dashboard.ts [mode]`
 
 **Commands**:
-- `summarize [session-id]` - Summarize a session
-- `recent [count]` - Summarize recent sessions
-- `export` - Export all summaries
-- `stats` - Show summary statistics
 
-**Example**:
-```bash
-bun tools/session-summarizer.ts summarize
-bun tools/session-summarizer.ts recent 5
-```
+- `timeline`
+- `agents`
+- `tasks`
+- `sessions`
+- `tokens`
+- `logs`
+- `q`
+- `quit`
+- `n`
+- `new`
+- `m`
+- `msg`
+- `c`
+- `claim`
+- `r`
+- `refresh`
+- `h`
 
----
-
-## Monitor Tools
-
-### realtime-monitor.ts
-**Description**: Comprehensive real-time monitoring CLI with file watching, multiple view modes, and keyboard navigation.
-
-**Usage**: `bun tools/realtime-monitor.ts [mode]`
-
-**Modes**:
-- `dashboard` (default) - Full system overview
-- `agents` - Agent status only
-- `messages` - Agent messages stream
-- `tasks` - Task list
-- `logs` - Real-time log viewer
-- `all` - All sections in detail
-
-**Keyboard**:
-- `d` - Dashboard mode
-- `a` - Agents mode
-- `m` - Messages mode
-- `t` - Tasks mode
-- `l` - Logs mode
-- `q` - Quit
-
-**Example**:
-```bash
-bun tools/realtime-monitor.ts
-bun tools/realtime-monitor.ts agents
-```
+**File**: [`tools/dashboard.ts`](../tools/dashboard.ts)
 
 ---
 
-### daily-report-generator.ts
-**Description**: Generates automated daily performance reports with agent productivity, quality trends, and error patterns.
+### `agent-conversation-viewer`
 
-**Usage**: `bun tools/daily-report-generator.ts [command]`
+Agent Conversation Viewer View per-agent conversations including messages, tool calls, and outputs. Integrates with the multi-agent system to show what each agent is doing.
+
+**Usage**: `bun tools/agent-conversation-viewer.ts <command>`
 
 **Commands**:
-- (no args) - Generate today's report
-- `generate [date]` - Generate for specific date
-- `list` - List available reports
-- `view [date]` - View specific report
-- `summary` - Quick summary stats
-- `trends` - Show trends over time
 
-**Example**:
-```bash
-bun tools/daily-report-generator.ts
-bun tools/daily-report-generator.ts trends
-```
+- `broadcast`
+- `task_claim`
+- `task_complete`
+- `task_completed`
+- `task_available`
+- `direct`
+- `heartbeat`
+- `request_help`
+- `agents`
+- `list`
+- `view`
+- `show`
+- `conversation`
+- `tools`
+- `stream`
+- `watch`
+- `timeline`
+- `history`
+- `export`
+
+**File**: [`tools/agent-conversation-viewer.ts`](../tools/agent-conversation-viewer.ts)
 
 ---
 
-## CLI/Core Tools
+### `generate-worker-prompt`
 
-### user-message.ts
-**Description**: User-to-agent messaging system. Allows users to send messages that agents can read and respond to.
+Worker Prompt Generator Generates focused, structured prompts for worker agents following Anthropic best practices: - Clear role definition
 
-**Usage**: `bun tools/user-message.ts [command]`
+**Usage**: `bun bun tools/generate-worker-prompt.ts "Implement feature X"`
 
 **Commands**:
-- `send "message"` - Send a message to agents
-- `list` - View all messages
-- `unread` - View unread messages only
-- `mark-read <id>` - Mark a message as read
-- `clear` - Clear all messages
 
-**Example**:
-```bash
-bun tools/user-message.ts send "Please check the build"
-bun tools/user-message.ts list
-```
+- `code-worker`
+- `memory-worker`
+- `analysis-worker`
+
+**File**: [`tools/generate-worker-prompt.ts`](../tools/generate-worker-prompt.ts)
 
 ---
 
-### system-message-config.ts
-**Description**: Configure dynamic system message injection for OpenCode agents.
+### `git-integration`
 
-**Usage**: `bun tools/system-message-config.ts [command]`
+Git Integration Tool for Multi-Agent System Provides git-aware functionality for agents: - Track code changes made by agents
+
+**Usage**: `bun tools/git-integration.ts <command>`
 
 **Commands**:
-- `show` - Show current config
-- `enable <section>` - Enable a section
-- `disable <section>` - Disable a section
-- `add-custom "title" "content"` - Add custom section
-- `preview` - Preview system message
 
-**Example**:
-```bash
-bun tools/system-message-config.ts show
-bun tools/system-message-config.ts preview
-```
+- `status`
+- `diff`
+- `log`
+- `branches`
+- `branch`
+- `commit`
+- `auto-commit`
+- `search`
+- `changes`
+- `agent-commits`
+- `agent`
+- `stash`
+- `stash-pop`
+- `pop`
+- `summary`
+- `gh-status`
+- `github`
+- `issues`
+- `issue-task`
+- `branch-task`
+- `pr-task`
+
+**File**: [`tools/git-integration.ts`](../tools/git-integration.ts)
 
 ---
 
-### git-integration.ts
-**Description**: Git-aware functionality for agents. Tracks code changes, auto-commits, and manages branches.
+### `multi-agent-coordinator`
 
-**Usage**: `bun tools/git-integration.ts [command]`
+Multi-Agent Coordination System Enables multiple OpenCode agents to work together by: - Tracking active agents in a registry
+
+**Usage**: `bun tools/multi-agent-coordinator.ts <command>`
 
 **Commands**:
-- `status` - Show git status
-- `diff [file]` - Show current changes
-- `log [n]` - Show recent commits (default: 10)
-- `branches` - List branches
-- `commit <msg>` - Create commit with agent metadata
-- `auto-commit <task>` - Auto-commit for completed task
-- `search <query>` - Search commit history
-- `changes [since]` - Show changes since commit/date
-- `agent-commits` - Show commits made by agents
-- `stash` - Stash current changes
-- `stash-pop` - Pop stashed changes
 
-**Example**:
-```bash
-bun tools/git-integration.ts status
-bun tools/git-integration.ts log 20
-```
+- `register`
+- `status`
+- `messages`
+- `send`
+- `cleanup`
+- `health`
+- `prune-messages`
+
+**File**: [`tools/multi-agent-coordinator.ts`](../tools/multi-agent-coordinator.ts)
 
 ---
 
-### debug-capture.ts
-**Description**: Captures command outputs and debug information for troubleshooting.
+### `generate-tools-docs`
 
-**Usage**: `bun tools/debug-capture.ts [command]`
+Auto-Documentation Generator for CLI Tools Scans all CLI tools in the workspace and generates comprehensive documentation. Extracts commands, usage patterns, and descriptions from:
+
+**Usage**: `bun bun tools/generate-tools-docs.ts`
 
 **Commands**:
-- `run <command>` - Run a command and save its output
-- `log <message>` - Log a debug message with timestamp
-- `list [limit]` - List recent captured outputs
-- `view <id>` - View a specific capture
-- `clean [days]` - Clean old captures (default: 7 days)
 
-**Example**:
-```bash
-bun tools/debug-capture.ts run "bun tools/task-manager.ts summary"
-bun tools/debug-capture.ts list 20
-```
+- `command` - Match case statements: case 'command': or
+
+**File**: [`tools/generate-tools-docs.ts`](../tools/generate-tools-docs.ts)
 
 ---
 
-## Tool Categories Summary
+### `session-summarizer`
 
-| Category | Tools | Count |
-|----------|-------|-------|
-| CLI Principal | cli.ts | 1 |
-| Agent Tools | agent-health-monitor, agent-conversation-viewer, agent-performance-profiler, multi-agent-coordinator, critique-agent, message-bus-manager, generate-orchestrator-prompt, generate-worker-prompt | 8 |
-| Memory Tools | working-memory-manager, knowledge-extractor, knowledge-deduplicator | 3 |
-| Task Tools | task-manager, task-router, quality-assessor | 3 |
-| Session Tools | opencode-tracker, session-summarizer | 2 |
-| Monitor Tools | realtime-monitor, daily-report-generator | 2 |
-| CLI/Core Tools | user-message, system-message-config, git-integration, debug-capture | 4 |
-| **Total** | | **23** |
+Session Summarizer Automatically summarizes completed sessions, extracting: - Key learnings and decisions
+
+**Usage**: `bun bun tools/session-summarizer.ts summarize [session-id]   # Summarize a session`
+
+**Commands**:
+
+- `summarize`
+- `summarize-current`
+- `recent`
+- `stats`
+- `export`
+
+**File**: [`tools/session-summarizer.ts`](../tools/session-summarizer.ts)
+
+---
+
+### `working-memory-manager`
+
+Working Memory Manager Manages the working.md file and overall memory system with: - Archival of old session content to separate files
+
+**Usage**: `bun bun tools/working-memory-manager.ts status        # Show current status`
+
+**Commands**:
+
+- `status`
+- `archive`
+- `search`
+- `list`
+- `view`
+- `clean`
+- `health`
+- `prune`
+- `auto`
+- `rotate`
+- `rotate-sessions`
+- `rotate-realtime`
+
+**File**: [`tools/working-memory-manager.ts`](../tools/working-memory-manager.ts)
+
+---
+
+### `system-message-config`
+
+System Message Configuration CLI Manage the dynamic system message injection for OpenCode agents. Configure which sections appear in the agent's system prompt.
+
+**Usage**: `bun bun tools/system-message-config.ts show           # Show current config`
+
+**Commands**:
+
+- `show`
+- `preview`
+- `enable`
+- `disable`
+- `add-custom`
+- `remove-custom`
+- `set-priority`
+- `set-max-items`
+- `add-instruction`
+- `clear-instructions`
+
+**File**: [`tools/system-message-config.ts`](../tools/system-message-config.ts)
+
+---
+
+### `daily-report-generator`
+
+Daily Performance Report Generator Generates automated daily performance reports summarizing: - Agent productivity (tasks completed, tool calls, active time)
+
+**Usage**: `bun bun tools/daily-report-generator.ts                    # Generate today's report`
+
+**Commands**:
+
+- `generate`
+- `list`
+- `view`
+- `summary`
+- `trends`
+
+**File**: [`tools/daily-report-generator.ts`](../tools/daily-report-generator.ts)
+
+---
+
+### `knowledge-extractor`
+
+Knowledge Extractor from OpenCode Session Storage Reads actual OpenCode sessions from ~/.local/share/opencode/storage/ and extracts:
+
+**Usage**: `bun tools/knowledge-extractor.ts <command>`
+
+**Commands**:
+
+- `extract`
+- `session`
+
+**File**: [`tools/knowledge-extractor.ts`](../tools/knowledge-extractor.ts)
+
+---
+
+### `knowledge-deduplicator`
+
+Knowledge Deduplicator Analyzes and deduplicates the knowledge base: - Removes duplicate insights across sessions
+
+**Usage**: `bun bun tools/knowledge-deduplicator.ts analyze     # Show analysis of duplicates`
+
+**Commands**:
+
+- `analyze`
+- `dedupe`
+- `stats`
+- `top`
+
+**File**: [`tools/knowledge-deduplicator.ts`](../tools/knowledge-deduplicator.ts)
+
+---
+
+### `realtime-monitor`
+
+Real-time System Monitor A comprehensive real-time monitoring CLI with: - File watching for instant updates (no polling delay)
+
+**Usage**: `bun bun tools/realtime-monitor.ts [mode]`
+
+**Commands**:
+
+- `active`
+- `completed`
+- `orchestrator_active`
+- `working`
+- `in_progress`
+- `blocked`
+- `critical`
+- `error`
+- `idle`
+- `pending`
+- `high`
+- `medium`
+- `low`
+- `dashboard`
+- `agents`
+- `messages`
+- `tasks`
+- `logs`
+- `quality`
+- `all`
+- `s`
+- `n`
+- `o`
+- `\u001b`
+- `\x1b`
+- `d`
+- `a`
+- `m`
+- `t`
+- `l`
+- `q`
+- `i`
+- `r`
+
+**File**: [`tools/realtime-monitor.ts`](../tools/realtime-monitor.ts)
+
+---
+
+## Interactive UIs
+
+### `dashboard`
+
+OpenCode Interactive Dashboard v3.0 Terminal UI with timeline view for the multi-agent system. bun tools/dashboard.ts [mode]
+
+**Usage**: `bun bun tools/dashboard.ts [mode]`
+
+**Commands**:
+
+- `timeline`
+- `agents`
+- `tasks`
+- `sessions`
+- `tokens`
+- `logs`
+- `q`
+- `quit`
+- `n`
+- `new`
+- `m`
+- `msg`
+- `c`
+- `claim`
+- `r`
+- `refresh`
+- `h`
+
+**File**: [`tools/ui/dashboard.ts`](../tools/ui/dashboard.ts)
+
+---
+
+### `realtime`
+
+Real-time System Monitor A comprehensive real-time monitoring CLI with: - File watching for instant updates (no polling delay)
+
+**Usage**: `bun bun tools/realtime-monitor.ts [mode]`
+
+**Commands**:
+
+- `active`
+- `completed`
+- `orchestrator_active`
+- `working`
+- `in_progress`
+- `blocked`
+- `critical`
+- `error`
+- `idle`
+- `pending`
+- `high`
+- `medium`
+- `low`
+- `dashboard`
+- `agents`
+- `messages`
+- `tasks`
+- `logs`
+- `quality`
+- `all`
+- `s`
+- `n`
+- `o`
+- `\u001b`
+- `\x1b`
+- `d`
+- `a`
+- `m`
+- `t`
+- `l`
+- `q`
+- `i`
+- `r`
+
+**File**: [`tools/ui/realtime.ts`](../tools/ui/realtime.ts)
+
+---
+
+## Libraries
+
+### `task-router`
+
+Task Router Intelligently routes tasks to available worker agents based on: - Agent availability and status
+
+**Usage**: `bun tools/lib/task-router.ts <command>`
+
+**Commands**:
+
+- `route`
+- `spawn`
+- `stats`
+- `dashboard`
+
+**File**: [`tools/lib/task-router.ts`](../tools/lib/task-router.ts)
+
+---
+
+### `prompt-generator`
+
+Prompt Generator Library Generates structured prompts for orchestrator and worker agents following Anthropic best practices: - Clear role definition with XML tags
+
+**Usage**: `import { generateOrchestratorPrompt, generateWorkerPrompt } from './lib/prompt-generator';`
+
+**Commands**:
+
+- `code-worker`
+- `memory-worker`
+- `analysis-worker`
+
+**File**: [`tools/lib/prompt-generator.ts`](../tools/lib/prompt-generator.ts)
+
+---
+
+### `system-message-config`
+
+System Message Configuration CLI Manage the dynamic system message injection for OpenCode agents. Configure which sections appear in the agent's system prompt.
+
+**Usage**: `bun bun tools/system-message-config.ts show           # Show current config`
+
+**Commands**:
+
+- `show`
+- `preview`
+- `enable`
+- `disable`
+- `add-custom`
+- `remove-custom`
+- `set-priority`
+- `set-max-items`
+- `add-instruction`
+- `clear-instructions`
+
+**File**: [`tools/lib/system-message-config.ts`](../tools/lib/system-message-config.ts)
+
+---
+
+### `coordinator`
+
+Multi-Agent Coordination System Enables multiple OpenCode agents to work together by: - Tracking active agents in a registry
+
+**Usage**: `bun tools/lib/coordinator.ts <command>`
+
+**Commands**:
+
+- `register`
+- `status`
+- `messages`
+- `send`
+- `cleanup`
+- `health`
+- `prune-messages`
+
+**File**: [`tools/lib/coordinator.ts`](../tools/lib/coordinator.ts)
+
+---
+
+## Usage Notes
+
+### Running Tools
+
+All tools use `bun` as the runtime:
+
+```bash
+bun tools/<tool-name>.ts [command] [args]
+```
+
+### Common Patterns
+
+**Check help**:
+```bash
+bun tools/<tool>.ts --help
+```
+
+**Run with arguments**:
+```bash
+bun tools/task-manager.ts create "Task title" high
+```
+
+**Pipe output**:
+```bash
+bun tools/cli.ts status | grep -i error
+```
+
+### For Agents
+
+Agents can use these tools via the `bash` tool or by reading this documentation.
+
+**Example agent usage**:
+```typescript
+// Check system status
+await bash("bun tools/cli.ts status");
+
+// Create a task
+await bash('bun tools/task-manager.ts create "Fix bug" high');
+
+// View tasks
+await bash("bun tools/task-manager.ts summary");
+```
+
+## See Also
+
+- [AGENTS.md](../AGENTS.md) - Multi-agent system documentation
+- [tools/ui/README.md](../tools/ui/README.md) - Interactive UI documentation
+- [opencode.json](../opencode.json) - OpenCode configuration

@@ -430,10 +430,13 @@ function renderSessions(): void {
 function renderSessionDetail(): void {
   if (!viewingSession) return;
 
+  const sessionTitle = viewingSession.title || viewingSession.id || "Unknown Session";
+  const sessionDir = viewingSession.directory || "Unknown";
+  
   const stats = getOpenCodeSessionStats(viewingSession.id);
-  let content = `{bold}{magenta-fg}SESSION: ${viewingSession.title}{/magenta-fg}{/bold}\n`;
+  let content = `{bold}{magenta-fg}SESSION: ${sessionTitle}{/magenta-fg}{/bold}\n`;
   content += `{white-fg}${"─".repeat(65)}{/white-fg}\n`;
-  content += `{white-fg}ID: ${viewingSession.id} | Dir: ${viewingSession.directory}{/white-fg}\n`;
+  content += `{white-fg}ID: ${viewingSession.id} | Dir: ${sessionDir}{/white-fg}\n`;
   content += `{white-fg}Tokens: ${formatTokens(stats.tokens.total)} (in:${formatTokens(stats.tokens.input)} out:${formatTokens(stats.tokens.output)}){/white-fg}\n\n`;
 
   const messages = getOpenCodeMessagesForSession(viewingSession.id);
@@ -493,7 +496,7 @@ function renderSessionDetail(): void {
   content += `{bold}Summary:{/bold} Messages: ${messages.length} | Tools: ${toolCount} | Tokens: ${formatTokens(stats.tokens.total)}\n`;
 
   mainBox.setContent(content);
-  mainBox.setLabel(` Session: ${truncate(viewingSession.title, 30)} [ESC:Back] `);
+  mainBox.setLabel(` Session: ${truncate(viewingSession.title || viewingSession.id || "Unknown", 30)} [ESC:Back] `);
   detailBox.setContent(` {magenta-fg}Viewing session{/magenta-fg} | {bold}ESC{/bold} to go back | {bold}j/k{/bold} to scroll`);
 }
 

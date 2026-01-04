@@ -1,18 +1,63 @@
 {
   "agents": [
     {
-      "agent_id": "agent-1767450772105-d66vhu",
-      "session_id": "session-1767450772105",
-      "started_at": "2026-01-03T14:32:52.106Z",
-      "last_heartbeat": "2026-01-03T14:51:52.177Z",
-      "status": "working",
+      "agent_id": "agent-1767521025284-g52vg",
+      "session_id": "session-1767521025284",
+      "started_at": "2026-01-04T10:03:45.286Z",
+      "last_heartbeat": "2026-01-04T10:13:45.328Z",
+      "status": "active",
       "assigned_role": "orchestrator",
-      "pid": 211305,
-      "current_task": "Orchestrator mode - no handoff"
+      "pid": 287576,
+      "current_task": "Monitoring 5 active workers on critical/high priority tasks"
+    },
+    {
+      "agent_id": "agent-1767521187231-phkqg",
+      "session_id": "session-1767521187231",
+      "started_at": "2026-01-04T10:06:27.232Z",
+      "last_heartbeat": "2026-01-04T10:08:27.244Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 289930
+    },
+    {
+      "agent_id": "agent-1767521195249-9aan9",
+      "session_id": "session-1767521195249",
+      "started_at": "2026-01-04T10:06:35.250Z",
+      "last_heartbeat": "2026-01-04T10:13:35.275Z",
+      "status": "working",
+      "assigned_role": "code-worker",
+      "pid": 290175,
+      "current_task": "Reading spec and analyzing tools/ structure"
+    },
+    {
+      "agent_id": "agent-1767521206609-wjq7rn",
+      "session_id": "session-1767521206609",
+      "started_at": "2026-01-04T10:06:46.609Z",
+      "last_heartbeat": "2026-01-04T10:09:46.618Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 291058
+    },
+    {
+      "agent_id": "agent-1767521213362-l0kg5y",
+      "session_id": "session-1767521213362",
+      "started_at": "2026-01-04T10:06:53.363Z",
+      "last_heartbeat": "2026-01-04T10:08:23.800Z",
+      "status": "idle",
+      "assigned_role": "code-worker",
+      "pid": 291539
+    },
+    {
+      "agent_id": "agent-1767521220322-6ggubp",
+      "session_id": "session-1767521220322",
+      "started_at": "2026-01-04T10:07:00.323Z",
+      "last_heartbeat": "2026-01-04T10:09:00.336Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 292194
     }
   ],
   "leader": null,
-  "version": 1,
-  "last_updated": "2026-01-03T14:51:52.177Z",
-  "lock_version": 39
+  "last_updated": "2026-01-04T10:13:45.328Z",
+  "lock_version": 87
 }

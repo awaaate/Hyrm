@@ -376,12 +376,28 @@ check_leader_lease() {
         return 1  # No leader, OK to spawn
     fi
     
-    # Read leader state
+    # Read the file content once and validate it's proper JSON
+    local file_content
+    file_content=$(cat "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "")
+    
+    # Check if file is empty or too small to be valid
+    if [[ -z "$file_content" ]] || [[ ${#file_content} -lt 10 ]]; then
+        log "Orchestrator state file is empty or corrupted - no valid leader" "DEBUG"
+        return 1  # Corrupted, OK to spawn
+    fi
+    
+    # Validate JSON before parsing
+    if ! echo "$file_content" | jq -e '.' >/dev/null 2>&1; then
+        log "Orchestrator state file has invalid JSON - treating as no leader" "WARN"
+        return 1  # Invalid JSON, OK to spawn
+    fi
+    
+    # Read leader state from validated content
     local leader_id leader_epoch last_heartbeat ttl_ms
-    leader_id=$(jq -r '.leader_id // ""' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "")
-    leader_epoch=$(jq -r '.leader_epoch // 0' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "0")
-    last_heartbeat=$(jq -r '.last_heartbeat // ""' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "")
-    ttl_ms=$(jq -r '.ttl_ms // 180000' "$ORCHESTRATOR_STATE_FILE" 2>/dev/null || echo "180000")
+    leader_id=$(echo "$file_content" | jq -r '.leader_id // ""' 2>/dev/null || echo "")
+    leader_epoch=$(echo "$file_content" | jq -r '.leader_epoch // 0' 2>/dev/null || echo "0")
+    last_heartbeat=$(echo "$file_content" | jq -r '.last_heartbeat // ""' 2>/dev/null || echo "")
+    ttl_ms=$(echo "$file_content" | jq -r '.ttl_ms // 180000' 2>/dev/null || echo "180000")
     
     if [[ -z "$leader_id" ]] || [[ "$leader_id" == "null" ]]; then
         log "No leader registered in state file" "DEBUG"
@@ -726,15 +742,40 @@ get_pending_tasks() {
     fi
     
     # Get pending and in_progress tasks
-    jq -r '
+    local result
+    result=$(jq -r '
         .tasks // [] | 
         map(select(.status == "pending" or .status == "in_progress")) |
-        if length == 0 then "No pending tasks" 
+        if length == 0 then "" 
         else 
             map("- [\(.status)] \(.title // .description) (priority: \(.priority // "normal"))") | 
             join("\n")
         end
-    ' "$tasks_file" 2>/dev/null || echo "Error reading tasks"
+    ' "$tasks_file" 2>/dev/null || echo "")
+    
+    if [[ -z "$result" ]]; then
+        echo "No pending tasks. YOU MUST GENERATE IMPROVEMENT TASKS:
+
+## ANALYZE LOGS:
+1. cat logs/watchdog.log | tail -100 - Find errors/patterns
+2. grep -i error logs/*.log memory/*.log | tail -30
+
+## FIND TECH DEBT:  
+3. grep -r 'TODO\\|FIXME' tools/ plugins/ --include='*.ts' | head -20
+
+## STUDY DOCS FOR IMPROVEMENTS:
+4. cat docs/RESOURCES.md - External resources and research tasks
+5. cat docs/CODEBASE_ANALYSIS.md - Known issues to fix
+
+## CHECK EXTERNAL RESOURCES:
+6. Fetch https://simonwillison.net/atom/everything/ for AI news
+7. Fetch https://docs.anthropic.com/en/prompt-library/library for patterns
+
+Create tasks with task_create() for any findings.
+DO NOT sit idle - always be improving the system."
+    else
+        echo "$result"
+    fi
 }
 
 # ==============================================================================
@@ -787,22 +828,20 @@ DELEGATE, DON'T IMPLEMENT. Your job is to:
 </core_principle>
 
 <spawning_workers>
-Spawn workers using bash (NON-BLOCKING):
+Spawn workers using spawn-worker.sh (handles quoting safely):
 
 ```bash
-nohup opencode run '<worker_prompt>' > /dev/null 2>&1 &
+# Option 1: By task ID (RECOMMENDED)
+./spawn-worker.sh --task task_1234567890_abcdef
+
+# Option 2: With custom prompt
+./spawn-worker.sh "You are a WORKER. Task: [DESCRIPTION]"
 ```
 
-Worker prompt template:
-```
-You are a WORKER agent. 
-1. agent_register(role='worker')
-2. Task: [SPECIFIC TASK DESCRIPTION]
-3. When complete: agent_send(type='task_complete', payload={task_id, summary})
-4. Then exit normally (handoff enabled)
-```
-
-IMPORTANT: Always use nohup ... & for fire-and-forget spawning.
+IMPORTANT: 
+- Use spawn-worker.sh instead of raw nohup opencode run
+- It handles shell quoting issues with apostrophes and special characters
+- The --task option auto-generates worker prompts from task metadata
 </spawning_workers>
 
 <context>
@@ -848,7 +887,12 @@ TASK_EOF
 1. USER MESSAGES FIRST: If unread messages exist, spawn workers to handle them
 2. PENDING TASKS: Spawn workers for high-priority pending tasks
 3. MONITOR: Check agent_status() and agent_messages() for completions
-4. IDLE: If nothing to do, exit gracefully (watchdog restarts you)
+4. NO TASKS? GENERATE IMPROVEMENT TASKS:
+   - Run: cat logs/watchdog.log | tail -100 - analyze for errors/patterns
+   - Run: cat memory/coordination.log | tail -100 - check agent health
+   - Run: grep -r "TODO\|FIXME" tools/ plugins/ --include="*.ts" | head -20
+   - Create tasks with task_create() for any issues found
+5. After creating/spawning tasks, exit gracefully - watchdog will restart you to check progress
 </workflow>
 
 <available_tools>
@@ -1185,9 +1229,18 @@ run_watchdog() {
     log "Watchdog PID: $$"
     log "========================================="
     
-    # Initial start if not running
+    # Initial start - but ONLY if no healthy leader exists
     if ! is_orchestrator_running; then
-        start_orchestrator
+        # Check if a healthy leader already exists before spawning
+        if check_leader_lease; then
+            local current_leader
+            current_leader=$(get_leader_info)
+            log "Healthy leader already exists ($current_leader). Skipping spawn." "INFO"
+            update_status "leader_exists" "Healthy leader: $current_leader" 0
+            # Don't spawn - just monitor
+        else
+            start_orchestrator
+        fi
     else
         local pid=$(cat "$PIDFILE" 2>/dev/null)
         log "Orchestrator already running (PID: $pid)" "OK"

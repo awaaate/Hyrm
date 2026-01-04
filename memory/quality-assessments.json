@@ -4189,11 +4189,291 @@
         "auto_generated": true,
         "heuristic_base_score": 7
       }
+    },
+    {
+      "task_id": "task_1767451540532_6uap3r",
+      "task_title": "Replace any types with proper Task interface in plugin tools",
+      "assessed_at": "2026-01-03T14:52:49.513Z",
+      "assessed_by": "auto-assessment",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 6.869063867624871,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 7.1257475123967176,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 5.871725981968676,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 6.932362505246527,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7.227722328228182,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 6.8,
+      "lessons_learned": "Auto-assessed based on task completion metrics",
+      "metadata": {
+        "duration_minutes": 7,
+        "auto_generated": true,
+        "heuristic_base_score": 7.3
+      }
+    },
+    {
+      "task_id": "task_1767458638685_y9w6it",
+      "task_title": "Run system liveness + smoke checks",
+      "assessed_at": "2026-01-03T16:51:19.952Z",
+      "assessed_by": "auto-assessment",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 6.915212732756688,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 7.018524631643347,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 6.094762868271682,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 7.034638742220884,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7.232170198411974,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 6.9,
+      "lessons_learned": "Auto-assessed based on task completion metrics",
+      "metadata": {
+        "duration_minutes": 7,
+        "auto_generated": true,
+        "heuristic_base_score": 7.2
+      }
+    },
+    {
+      "task_id": "task_1767458639057_wt0m51",
+      "task_title": "Reconcile memory status vs actual active work",
+      "assessed_at": "2026-01-03T16:51:21.644Z",
+      "assessed_by": "auto-assessment",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 6.982127903914067,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 6.820074496136861,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 6.062878268447699,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 7.099351325759463,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7.077169397470126,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 6.8,
+      "lessons_learned": "Auto-assessed based on task completion metrics",
+      "metadata": {
+        "duration_minutes": 7,
+        "auto_generated": true,
+        "heuristic_base_score": 7
+      }
+    },
+    {
+      "task_id": "task_1767520206287_6bpixl",
+      "task_title": "Add Edit Error Recovery hook - inject reminder when Edit fails with oldString errors",
+      "assessed_at": "2026-01-04T10:08:15.572Z",
+      "assessed_by": "auto-assessment",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 7.127309772118167,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 7.050279486095417,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 5.753469830594482,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 6.849339652941294,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7.041493442371169,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 6.8,
+      "lessons_learned": "Auto-assessed based on task completion metrics",
+      "metadata": {
+        "duration_minutes": 18,
+        "auto_generated": true,
+        "heuristic_base_score": 7.2
+      }
+    },
+    {
+      "task_id": "task_1767520273725_sckp83",
+      "task_title": "Auto-create GitHub issue for every new task, branch on demand",
+      "assessed_at": "2026-01-04T10:08:44.562Z",
+      "assessed_by": "auto-assessment",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 7.864413155506286,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 7.95262375283749,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 6.819421798990195,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8.2360642831628,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7.924272847552337,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.8,
+      "lessons_learned": "Auto-assessed based on task completion metrics",
+      "metadata": {
+        "duration_minutes": 18,
+        "auto_generated": true,
+        "heuristic_base_score": 7.9
+      }
+    },
+    {
+      "task_id": "task_1767520206937_xbfnbz",
+      "task_title": "Implement Task Continuation - auto-continue when session idle with pending tasks",
+      "assessed_at": "2026-01-04T10:08:47.503Z",
+      "assessed_by": "auto-assessment",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8.141703175951157,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8.236752043849867,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 7.183062628708975,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8.051364139675593,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 7.909628707930754,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8,
+      "lessons_learned": "Auto-assessed based on task completion metrics",
+      "metadata": {
+        "duration_minutes": 19,
+        "auto_generated": true,
+        "heuristic_base_score": 7.8
+      }
+    },
+    {
+      "task_id": "task_1767520205269_rwoygc",
+      "task_title": "Implement orphaned tasks cleanup - release tasks when agent becomes stale",
+      "assessed_at": "2026-01-04T10:09:28.442Z",
+      "assessed_by": "auto-assessment",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 8.137879166958149,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 7.940787748785162,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 6.7733299152333455,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8.095058185705946,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8.04690985147282,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 7.9,
+      "lessons_learned": "Auto-assessed based on task completion metrics",
+      "metadata": {
+        "duration_minutes": 19,
+        "auto_generated": true,
+        "heuristic_base_score": 7.7
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 109,
-    "avg_overall_score": 8.111009174311924
+    "total_assessed": 116,
+    "avg_overall_score": 8.06120689655172
   },
-  "last_updated": "2026-01-03T14:42:17.889Z"
+  "last_updated": "2026-01-04T10:09:28.445Z"
 }

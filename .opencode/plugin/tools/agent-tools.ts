@@ -13,7 +13,7 @@
 import { tool } from "@opencode-ai/plugin";
 import { writeFileSync, existsSync, readFileSync, mkdirSync } from "fs";
 import { join } from "path";
-import { MultiAgentCoordinator } from "../../../tools/multi-agent-coordinator";
+import { MultiAgentCoordinator } from "../../../tools/lib/coordinator";
 
 export interface AgentToolsContext {
   coordinator: MultiAgentCoordinator | null;

@@ -23,6 +23,233 @@ import { readJson, writeJson } from "../../../tools/shared/json-utils";
 import { withFileLock } from "./file-lock";
 import type { Task, TaskStore } from "../../../tools/shared/types";
 
+// ============================================================================
+// GitHub CLI Integration Helpers
+// ============================================================================
+
+/**
+ * Check if gh CLI is available
+ */
+async function isGitHubCLIAvailable(): Promise<boolean> {
+  try {
+    const proc = Bun.spawn(['gh', '--version'], {
+      stdout: 'pipe',
+      stderr: 'pipe',
+    });
+    const exitCode = await proc.exited;
+    return exitCode === 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Check if we're in a git repository
+ */
+async function isGitRepository(): Promise<boolean> {
+  try {
+    const proc = Bun.spawn(['git', 'rev-parse', '--git-dir'], {
+      stdout: 'pipe',
+      stderr: 'pipe',
+    });
+    const exitCode = await proc.exited;
+    return exitCode === 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Run a shell command and return the result
+ */
+async function runCommand(cmd: string, args: string[]): Promise<{ success: boolean; stdout: string; stderr: string }> {
+  try {
+    const proc = Bun.spawn([cmd, ...args], {
+      stdout: 'pipe',
+      stderr: 'pipe',
+    });
+    
+    const stdout = await new Response(proc.stdout).text();
+    const stderr = await new Response(proc.stderr).text();
+    const exitCode = await proc.exited;
+    
+    return {
+      success: exitCode === 0,
+      stdout: stdout.trim(),
+      stderr: stderr.trim(),
+    };
+  } catch (error) {
+    return {
+      success: false,
+      stdout: '',
+      stderr: String(error),
+    };
+  }
+}
+
+/**
+ * Build issue body from task
+ */
+function buildIssueBody(task: Task): string {
+  let body = '';
+  
+  if (task.description) {
+    body += `${task.description}\n\n`;
+  }
+  
+  body += `## Task Metadata\n\n`;
+  body += `- **Task ID**: \`${task.id}\`\n`;
+  body += `- **Priority**: ${task.priority}\n`;
+  body += `- **Status**: ${task.status}\n`;
+  
+  if (task.complexity) {
+    body += `- **Complexity**: ${task.complexity}\n`;
+  }
+  
+  if (task.estimated_hours) {
+    body += `- **Estimated Hours**: ${task.estimated_hours}\n`;
+  }
+  
+  if (task.tags?.length) {
+    body += `- **Tags**: ${task.tags.join(', ')}\n`;
+  }
+  
+  if (task.depends_on?.length) {
+    body += `- **Dependencies**: ${task.depends_on.join(', ')}\n`;
+  }
+  
+  body += `\n---\n*Created via OpenCode task system*\n`;
+  
+  return body;
+}
+
+/**
+ * Slugify a title for branch naming
+ */
+function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 50);
+}
+
+/**
+ * Generate branch name from task
+ */
+function generateBranchName(task: Task): string {
+  const shortId = task.id.slice(-8);
+  const slug = slugify(task.title);
+  return `task/${task.priority}/${shortId}-${slug}`;
+}
+
+/**
+ * Create a GitHub issue from a task
+ */
+async function createGitHubIssue(task: Task, ctx: TaskToolsContext): Promise<{ success: boolean; issueNumber?: number; issueUrl?: string; error?: string }> {
+  // Check prerequisites
+  if (!(await isGitHubCLIAvailable())) {
+    ctx.log("WARN", "GitHub CLI (gh) not available, skipping issue creation");
+    return { success: false, error: "gh CLI not installed" };
+  }
+
+  if (!(await isGitRepository())) {
+    ctx.log("WARN", "Not a git repository, skipping issue creation");
+    return { success: false, error: "not a git repository" };
+  }
+
+  const body = buildIssueBody(task);
+  
+  // Try to create with labels first, fallback to no labels if labels don't exist
+  const labels = [`priority:${task.priority}`];
+  if (task.tags?.length) {
+    labels.push(...task.tags);
+  }
+
+  let args = [
+    'issue', 'create',
+    '--title', task.title,
+    '--body', body,
+  ];
+  
+  // Add labels
+  for (const label of labels) {
+    args.push('--label', label);
+  }
+
+  let result = await runCommand('gh', args);
+  
+  // If label error, retry without labels
+  if (!result.success && result.stderr.includes('not found')) {
+    ctx.log("INFO", "Some labels not found, creating issue without labels");
+    args = [
+      'issue', 'create',
+      '--title', task.title,
+      '--body', body,
+    ];
+    result = await runCommand('gh', args);
+  }
+  
+  if (!result.success) {
+    ctx.log("ERROR", `Failed to create GitHub issue: ${result.stderr}`);
+    return { success: false, error: result.stderr };
+  }
+
+  // Parse the issue URL from output (gh returns the URL)
+  const issueUrl = result.stdout;
+  const issueNumberMatch = issueUrl.match(/\/issues\/(\d+)$/);
+  const issueNumber = issueNumberMatch ? parseInt(issueNumberMatch[1], 10) : 0;
+
+  ctx.log("INFO", `Created GitHub issue #${issueNumber}: ${issueUrl}`);
+  
+  return {
+    success: true,
+    issueNumber,
+    issueUrl,
+  };
+}
+
+/**
+ * Create a git branch from a task
+ */
+async function createGitBranch(task: Task, ctx: TaskToolsContext): Promise<{ success: boolean; branch?: string; error?: string }> {
+  // Check prerequisites
+  if (!(await isGitRepository())) {
+    ctx.log("WARN", "Not a git repository, skipping branch creation");
+    return { success: false, error: "not a git repository" };
+  }
+
+  const branchName = generateBranchName(task);
+
+  // Check if branch already exists
+  const checkResult = await runCommand('git', ['rev-parse', '--verify', branchName]);
+  if (checkResult.success) {
+    ctx.log("INFO", `Branch already exists: ${branchName}`);
+    return {
+      success: true,
+      branch: branchName,
+    };
+  }
+
+  // Create and checkout the branch
+  const result = await runCommand('git', ['checkout', '-b', branchName]);
+  
+  if (!result.success) {
+    ctx.log("ERROR", `Failed to create branch: ${result.stderr}`);
+    return {
+      success: false,
+      error: result.stderr,
+    };
+  }
+
+  ctx.log("INFO", `Created and checked out branch: ${branchName}`);
+  
+  return {
+    success: true,
+    branch: branchName,
+  };
+}
+
 // Agent performance metrics types
 interface AgentPerformanceMetrics {
   agent_id: string;
@@ -392,11 +619,14 @@ Returns: Array of tasks sorted by priority (critical > high > medium > low).`,
 Example usage:
 - task_create(title="Fix login bug", priority="high", tags=["bug", "auth"])
 - task_create(title="Add tests", depends_on=["task_abc"], complexity="moderate")
+- task_create(title="New feature", create_github_issue=true, create_branch=true)
 
 Notes:
 - High/critical priority tasks are auto-broadcast to workers via message bus
 - Tasks with unmet dependencies start in "blocked" status
-- Use estimated_hours for better scheduling recommendations`,
+- Use estimated_hours for better scheduling recommendations
+- Automatically creates GitHub issue if create_github_issue=true and gh CLI available
+- Optionally creates git branch if create_branch=true`,
       args: {
         title: tool.schema.string().describe("Task title"),
         description: tool.schema
@@ -423,6 +653,14 @@ Notes:
           .enum(["trivial", "simple", "moderate", "complex", "epic"])
           .describe("Task complexity level (optional, defaults to moderate)")
           .optional(),
+        create_github_issue: tool.schema
+          .boolean()
+          .describe("Automatically create a GitHub issue for this task (default: false)")
+          .optional(),
+        create_branch: tool.schema
+          .boolean()
+          .describe("Automatically create a git branch for this task (default: false, requires create_github_issue=true)")
+          .optional(),
       },
       async execute({
         title,
@@ -432,6 +670,8 @@ Notes:
         depends_on = [],
         estimated_hours,
         complexity = "moderate",
+        create_github_issue = false,
+        create_branch = false,
       }) {
         try {
           const ctx = getContext();
@@ -493,6 +733,74 @@ Notes:
 
           ctx.log("INFO", `Task created: ${task.id}`, { title, priority });
 
+          // GitHub integration
+          let githubIssueCreated = false;
+          let githubBranchCreated = false;
+          let githubError: string | undefined;
+
+          if (create_github_issue) {
+            const issueResult = await createGitHubIssue(task, ctx);
+            if (issueResult.success) {
+              githubIssueCreated = true;
+              
+              // Update task with GitHub issue info
+              await withFileLock(
+                tasksPath,
+                ctx.agentId || ctx.currentSessionId || "task-tools:github",
+                async () => {
+                  const store = readJson(tasksPath, { tasks: [] });
+                  const taskToUpdate = store.tasks.find((t: Task) => t.id === task!.id);
+                  if (taskToUpdate) {
+                    taskToUpdate.github_issue_number = issueResult.issueNumber;
+                    taskToUpdate.github_issue_url = issueResult.issueUrl;
+                    taskToUpdate.notes = taskToUpdate.notes || [];
+                    taskToUpdate.notes.push(`[${new Date().toISOString()}] Created GitHub issue #${issueResult.issueNumber}`);
+                    taskToUpdate.updated_at = new Date().toISOString();
+                    store.last_updated = new Date().toISOString();
+                    writeJson(tasksPath, store);
+                    
+                    // Update task reference
+                    task!.github_issue_number = issueResult.issueNumber;
+                    task!.github_issue_url = issueResult.issueUrl;
+                  }
+                }
+              );
+
+              // Create branch if requested
+              if (create_branch) {
+                const branchResult = await createGitBranch(task, ctx);
+                if (branchResult.success) {
+                  githubBranchCreated = true;
+                  
+                  // Update task with branch info
+                  await withFileLock(
+                    tasksPath,
+                    ctx.agentId || ctx.currentSessionId || "task-tools:github",
+                    async () => {
+                      const store = readJson(tasksPath, { tasks: [] });
+                      const taskToUpdate = store.tasks.find((t: Task) => t.id === task!.id);
+                      if (taskToUpdate) {
+                        taskToUpdate.github_branch = branchResult.branch;
+                        taskToUpdate.notes = taskToUpdate.notes || [];
+                        taskToUpdate.notes.push(`[${new Date().toISOString()}] Created branch: ${branchResult.branch}`);
+                        taskToUpdate.updated_at = new Date().toISOString();
+                        store.last_updated = new Date().toISOString();
+                        writeJson(tasksPath, store);
+                        
+                        // Update task reference
+                        task!.github_branch = branchResult.branch;
+                      }
+                    }
+                  );
+                } else {
+                  githubError = branchResult.error;
+                }
+              }
+            } else {
+              githubError = issueResult.error;
+            }
+          }
+
           // Broadcast task availability for high-priority tasks
           if (priority === "critical" || priority === "high") {
             try {
@@ -507,6 +815,8 @@ Notes:
                   title: task.title,
                   priority: task.priority,
                   description: task.description,
+                  github_issue_number: task.github_issue_number,
+                  github_issue_url: task.github_issue_url,
                 },
                 read_by: [],
               };
@@ -523,8 +833,16 @@ Notes:
               id: task.id,
               title: task.title,
               priority: task.priority,
+              github_issue_number: task.github_issue_number,
+              github_issue_url: task.github_issue_url,
+              github_branch: task.github_branch,
             },
             broadcast: priority === "critical" || priority === "high",
+            github: {
+              issue_created: githubIssueCreated,
+              branch_created: githubBranchCreated,
+              error: githubError,
+            },
           });
         } catch (error) {
           return JSON.stringify({ success: false, error: String(error) });

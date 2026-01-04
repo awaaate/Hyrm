@@ -320,7 +320,7 @@ class MultiAgentCoordinator {
   }
 
   /**
-   * Clean up stale agents from the registry
+   * Clean up stale agents from the registry and release their orphaned tasks
    * Returns the number of agents cleaned up
    */
   cleanupStaleAgents(): number {
@@ -337,6 +337,10 @@ class MultiAgentCoordinator {
       return 0;
     }
     
+    // Release orphaned tasks assigned to stale agents
+    const staleAgentIds = staleAgents.map(a => a.agent_id);
+    const releasedTasksCount = this.releaseOrphanedTasks(staleAgentIds);
+    
     registry.agents = registry.agents.filter((agent) => {
       const lastHB = new Date(agent.last_heartbeat).getTime();
       return lastHB > staleThreshold;
@@ -348,8 +352,96 @@ class MultiAgentCoordinator {
     writeFileSync(REGISTRY_PATH, JSON.stringify(registry, null, 2));
     
     this.log("INFO", `Cleaned up ${staleAgents.length} stale agent(s): ${staleAgents.map(a => a.agent_id).join(", ")}`);
+    if (releasedTasksCount > 0) {
+      this.log("INFO", `Released ${releasedTasksCount} orphaned task(s) from stale agents`);
+    }
     
     return staleAgents.length;
+  }
+
+  /**
+   * Release tasks that are assigned to stale agents
+   * Returns the number of tasks released
+   */
+  private releaseOrphanedTasks(staleAgentIds: string[]): number {
+    const tasksPath = getMemoryPath("tasks.json");
+    
+    if (!existsSync(tasksPath)) {
+      return 0;
+    }
+    
+    try {
+      const tasksContent = readFileSync(tasksPath, "utf-8");
+      const tasksStore = JSON.parse(tasksContent);
+      
+      if (!tasksStore.tasks || !Array.isArray(tasksStore.tasks)) {
+        return 0;
+      }
+      
+      let releasedCount = 0;
+      const releasedTaskIds: string[] = [];
+      
+      // Find and release orphaned tasks
+      for (const task of tasksStore.tasks) {
+        if (
+          task.status === "in_progress" && 
+          task.assigned_to && 
+          staleAgentIds.includes(task.assigned_to)
+        ) {
+          // Save the stale agent ID before clearing it
+          const staleAgentId = task.assigned_to;
+          
+          // Release the task
+          task.status = "pending";
+          task.assigned_to = undefined;
+          task.claimed_at = undefined;
+          task.updated_at = new Date().toISOString();
+          
+          // Add note about the release
+          if (!task.notes) {
+            task.notes = [];
+          }
+          task.notes.push(
+            `[${new Date().toISOString()}] Released from stale agent ${staleAgentId} by cleanup`
+          );
+          
+          releasedCount++;
+          releasedTaskIds.push(task.id);
+          
+          this.log("INFO", `Released orphaned task ${task.id} (${task.title}) from stale agent ${staleAgentId}`);
+        }
+      }
+      
+      if (releasedCount > 0) {
+        // Write updated tasks back to file
+        tasksStore.last_updated = new Date().toISOString();
+        writeFileSync(tasksPath, JSON.stringify(tasksStore, null, 2));
+        
+        // Broadcast task_available messages for released tasks
+        for (const taskId of releasedTaskIds) {
+          const task = tasksStore.tasks.find((t: any) => t.id === taskId);
+          if (task) {
+            try {
+              this.sendMessage({
+                type: "task_available",
+                payload: {
+                  task_id: task.id,
+                  title: task.title,
+                  priority: task.priority,
+                },
+              });
+            } catch (e) {
+              this.log("WARN", `Failed to broadcast task_available for released task ${taskId}: ${e}`);
+            }
+          }
+        }
+      }
+      
+      return releasedCount;
+    } catch (error) {
+      this.log("ERROR", `Failed to release orphaned tasks: ${error}`);
+      return 0;
+    }
   }
 
   /**

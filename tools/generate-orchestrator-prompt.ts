@@ -124,7 +124,37 @@ ${pendingTasks.length > 5 ? `  ... and ${pendingTasks.length - 5} more` : ""}
   } else {
     taskSection = `
 <pending_tasks count="0">
-No pending tasks. Consider creating improvement tasks or checking for user requests.
+No pending tasks in queue.
+
+CRITICAL: When there are no pending tasks, you MUST generate improvement tasks using these sources:
+
+## 1. ANALYZE SYSTEM LOGS (find bugs/issues):
+- \`cat logs/watchdog.log | tail -100\` - Look for errors, patterns, frequent restarts
+- \`cat memory/coordination.log | tail -100\` - Check agent health, failed handoffs  
+- \`grep -i error logs/*.log memory/*.log | tail -30\` - Recent errors
+
+## 2. FIND TECH DEBT:
+- \`grep -r "TODO\\|FIXME\\|HACK" tools/ plugins/ --include="*.ts" | head -20\`
+- \`find . -name "*.ts" -newer memory/state.json -mmin -60\` - Recent changes to review
+
+## 3. STUDY DOCUMENTATION FOR IMPROVEMENTS (READ THESE):
+- \`cat docs/RESOURCES.md\` - External resources, RSS feeds, research tasks
+- \`cat docs/OPENCODE_ARCHITECTURE.md\` - System architecture to understand
+- \`cat docs/TOOLS_REFERENCE.md\` - Tool documentation gaps
+- \`cat docs/CODEBASE_ANALYSIS.md\` - Known issues and improvement areas
+
+## 4. CHECK EXTERNAL RESOURCES (from docs/RESOURCES.md):
+- Fetch https://simonwillison.net/atom/everything/ for AI news
+- Fetch https://docs.anthropic.com/en/prompt-library/library for prompt patterns
+- Look for new techniques to implement
+
+Based on findings, create tasks with task_create(). Examples:
+- "Fix frequent orchestrator restarts observed in watchdog.log"  
+- "Implement prompt pattern X from Anthropic's library"
+- "Research topic Y from Simon Willison's blog"
+- "Refactor [file] - found FIXME comment"
+
+DO NOT just sit idle. The system should always be improving.
 </pending_tasks>`;
   }
 
@@ -190,23 +220,27 @@ SINGLE-LEADER GUARANTEE:
 </leader_election>
 
 <spawning_workers>
-To spawn workers WITHOUT blocking (fire-and-forget):
+To spawn workers WITHOUT blocking (fire-and-forget), use spawn-worker.sh:
 
 \`\`\`bash
-nohup opencode run 'You are a WORKER. agent_register(role="worker"). Task: [DESCRIPTION]. When complete: agent_send(type="task_complete", payload={task_id, summary}).' > /dev/null 2>&1 &
+# Option 1: Spawn by task ID (RECOMMENDED - auto-generates prompt from task)
+./spawn-worker.sh --task task_1234567890_abcdef
+
+# Option 2: Spawn with custom prompt
+./spawn-worker.sh "You are a WORKER. agent_register(role='worker'). Task: [DESCRIPTION]"
 \`\`\`
 
-IMPORTANT: The native Task tool BLOCKS. Use bash with nohup for parallel work.
+IMPORTANT: 
+- The native Task tool BLOCKS. Use spawn-worker.sh for parallel work.
+- spawn-worker.sh handles shell quoting safely (no issues with apostrophes/special chars)
 
 Example good delegation:
 \`\`\`bash
-# Good: Clear task, specific deliverable, explicit completion criteria
-nohup opencode run 'You are a CODE-WORKER. 
-1. agent_register(role="code-worker")
-2. Task: Refactor the error handling in tools/cli.ts - consolidate try/catch blocks and add structured error logging
-3. Success criteria: All error paths log structured JSON, tests pass
-4. When done: agent_send(type="task_complete", payload={task_id: "xyz", summary: "...", files_changed: [...]})
-5. You CAN handoff after completion.' > /dev/null 2>&1 &
+# By task ID - cleanest approach
+./spawn-worker.sh --task task_1767520273725_sckp83
+
+# Or with inline prompt for ad-hoc work
+./spawn-worker.sh "You are a CODE-WORKER. Task: Refactor error handling in tools/cli.ts"
 \`\`\`
 </spawning_workers>
 
