@@ -1,8 +1,20 @@
 [
   {
-    "session_id": "ses_46c8026a2ffeuMtLpjJZ3fAUJ6",
-    "timestamp": 1767706188187,
+    "session_id": "ses_46c7c49acffeQBkeM3v6aHTgjL",
+    "timestamp": 1767706441329,
     "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46c8026a2ffeuMtLpjJZ3fAUJ6",
+    "timestamp": 1767706239981,
+    "messages": 12,
     "decisions": [],
     "discoveries": [],
     "code_created": [],
