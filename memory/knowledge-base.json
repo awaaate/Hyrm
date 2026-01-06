@@ -1,8 +1,50 @@
 [
   {
-    "session_id": "ses_46ba15a43ffeInfzbTzcA3iZ8c",
-    "timestamp": 1767720789485,
+    "session_id": "ses_46b95feceffelC1xlmIQucy5Ma",
+    "timestamp": 1767721533779,
     "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46b9ac3beffeBzFrIorJbCX9iJ",
+    "timestamp": 1767721297854,
+    "messages": 14,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [
+      "**all orchestrator leaders are expiring at exactly 240-250 seconds**, even though the heartbeat service is running. This is a **major issue** that nee"
+    ],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46ba10b5cffeVEULGBMdiZu7Jr",
+    "timestamp": 1767720972096,
+    "messages": 36,
+    "decisions": [],
+    "discoveries": [
+      "the script is looking at crash log directory which is 0MB."
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [
+      "`tar -czf` (creates tar.gz archives)"
+    ],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46ba15a43ffeInfzbTzcA3iZ8c",
+    "timestamp": 1767721018013,
+    "messages": 33,
     "decisions": [],
     "discoveries": [],
     "code_created": [],
