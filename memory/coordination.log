@@ -4549,3 +4549,11 @@
 2026-01-06T13:10:21.570Z [INFO] [agent-1767705018116-krqu28] File unlocked: /app/workspace/memory/orchestrator-state.json
 2026-01-06T13:10:25.127Z [INFO] [agent-1767705018116-krqu28] Status updated: working - Orchestrator mode - no handoff
 2026-01-06T13:10:35.283Z [INFO] [agent-1767705018116-krqu28] Message sent: direct to agent-1767557539707-gpscqs
+2026-01-06T13:11:18.121Z [INFO] [agent-1767705018116-krqu28] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:11:18.124Z [INFO] [agent-1767705018116-krqu28] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:11:18.129Z [INFO] [agent-1767705018116-krqu28] Cleaned up 1 stale agent(s): agent-1767704801658-0zsu6e
+2026-01-06T13:11:18.132Z [INFO] [agent-1767705018116-krqu28] Orchestrator heartbeat: cleaned up 1 stale agents
+2026-01-06T13:11:42.957Z [INFO] [agent-1767705018116-krqu28] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:11:42.964Z [INFO] [agent-1767705018116-krqu28] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:12:02.942Z [INFO] [agent-1767705122941-6ll11d] Agent registered: agent-1767705122941-6ll11d (role: code-worker)
+2026-01-06T13:12:02.943Z [INFO] [agent-1767705122941-6ll11d] Message sent: heartbeat (broadcast)

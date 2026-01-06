@@ -5,26 +5,17 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-06T13:10:13Z",
+      "last_heartbeat": "2026-01-06T13:11:13Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-1767704801658-0zsu6e",
-      "session_id": "session-1767704801658",
-      "started_at": "2026-01-06T13:06:41.659Z",
-      "last_heartbeat": "2026-01-06T13:09:08.590Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 1342
-    },
-    {
       "agent_id": "agent-E7MHtbkH",
       "session_id": "ses_46c92101dffeJ1vV9JE7MHtbkH",
       "started_at": "2026-01-06T13:10:14.837Z",
-      "last_heartbeat": "2026-01-06T13:10:14.839Z",
+      "last_heartbeat": "2026-01-06T13:11:14.842Z",
       "status": "active",
       "assigned_role": "code-worker",
       "pid": 8293
@@ -33,13 +24,22 @@
       "agent_id": "agent-1767705018116-krqu28",
       "session_id": "session-1767705018116",
       "started_at": "2026-01-06T13:10:18.116Z",
-      "last_heartbeat": "2026-01-06T13:10:25.127Z",
+      "last_heartbeat": "2026-01-06T13:11:18.120Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 8293,
       "current_task": "Orchestrator mode - no handoff"
+    },
+    {
+      "agent_id": "agent-1767705122941-6ll11d",
+      "session_id": "session-1767705122941",
+      "started_at": "2026-01-06T13:12:02.941Z",
+      "last_heartbeat": "2026-01-06T13:12:02.942Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 14210
     }
   ],
-  "last_updated": "2026-01-06T13:10:25.127Z",
-  "lock_version": 31
+  "last_updated": "2026-01-06T13:12:02.942Z",
+  "lock_version": 33
 }
