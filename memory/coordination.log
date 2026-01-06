@@ -4510,3 +4510,25 @@
 2026-01-04T20:28:26.436Z [INFO] [agent-1767558506434-lf7mo] Message sent: heartbeat (broadcast)
 2026-01-04T20:28:27.173Z [INFO] [agent-1767558507172-q7shz] Agent registered: agent-1767558507172-q7shz (role: code-worker)
 2026-01-04T20:28:27.175Z [INFO] [agent-1767558507172-q7shz] Message sent: heartbeat (broadcast)
+2026-01-04T20:28:40.728Z [INFO] [agent-1767558460716-f1bwe] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T20:28:40.733Z [INFO] [agent-1767558460716-f1bwe] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T20:37:58.245Z [INFO] [agent-1767548076931-m606mu] Message sent: heartbeat (broadcast)
+2026-01-04T20:38:01.332Z [INFO] [agent-1767558460716-f1bwe] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-04T20:38:01.342Z [INFO] [agent-1767558460716-f1bwe] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:06:05.683Z [INFO] [agent-irAfhmIt] Agent registered: agent-irAfhmIt (role: code-worker)
+2026-01-06T13:06:05.689Z [INFO] [agent-irAfhmIt] Message sent: heartbeat (broadcast)
+2026-01-06T13:06:05.690Z [INFO] [agent-irAfhmIt] Message sent: broadcast (broadcast)
+2026-01-06T13:06:14.389Z [INFO] [agent-1767704774388-qkyxn] Agent registered: agent-1767704774388-qkyxn (role: orchestrator)
+2026-01-06T13:06:14.390Z [INFO] [agent-1767704774388-qkyxn] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:06:14.390Z [WARN] [agent-1767704774388-qkyxn] Took over orchestrator leader lease from stale leader agent-1767558460716-f1bwe (epoch 3)
+2026-01-06T13:06:14.391Z [INFO] [agent-1767704774388-qkyxn] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:06:14.391Z [INFO] [agent-1767704774388-qkyxn] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:06:14.392Z [INFO] [agent-1767704774388-qkyxn] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:06:14.392Z [INFO] [agent-1767704774388-qkyxn] Message sent: heartbeat (broadcast)
+2026-01-06T13:06:14.498Z [INFO] [agent-1767704774388-qkyxn] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:06:14.499Z [INFO] [agent-1767704774388-qkyxn] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:06:18.431Z [INFO] [agent-1767704774388-qkyxn] Status updated: working - Orchestrator mode - no handoff
+2026-01-06T13:06:33.755Z [INFO] [agent-1767704774388-qkyxn] Message sent: direct to agent-1767557539707-gpscqs
+2026-01-06T13:06:41.659Z [INFO] [agent-1767704801658-0zsu6e] Agent registered: agent-1767704801658-0zsu6e (role: code-worker)
+2026-01-06T13:06:41.663Z [INFO] [agent-1767704801658-0zsu6e] Message sent: heartbeat (broadcast)
+2026-01-06T13:06:42.022Z [INFO] [agent-1767704801658-0zsu6e] Status updated: working - task_1767558067916_6d4dco - Add coordination.log rotation

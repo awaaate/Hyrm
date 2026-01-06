@@ -5,50 +5,42 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-04T20:28:25Z",
+      "last_heartbeat": "2026-01-06T13:07:04Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-zGqDik01",
-      "session_id": "ses_4754e56ebffeexZDSMzGqDik01",
-      "started_at": "2026-01-04T20:27:38.480Z",
-      "last_heartbeat": "2026-01-04T20:27:38.482Z",
+      "agent_id": "agent-irAfhmIt",
+      "session_id": "ses_46c95df17ffezCtvNoirAfhmIt",
+      "started_at": "2026-01-06T13:06:05.683Z",
+      "last_heartbeat": "2026-01-06T13:06:05.689Z",
       "status": "active",
       "assigned_role": "code-worker",
-      "pid": 711842
+      "pid": 219
     },
     {
-      "agent_id": "agent-1767558460716-f1bwe",
-      "session_id": "session-1767558460716",
-      "started_at": "2026-01-04T20:27:40.716Z",
-      "last_heartbeat": "2026-01-04T20:27:46.157Z",
+      "agent_id": "agent-1767704774388-qkyxn",
+      "session_id": "session-1767704774388",
+      "started_at": "2026-01-06T13:06:14.388Z",
+      "last_heartbeat": "2026-01-06T13:06:18.431Z",
       "status": "working",
       "assigned_role": "orchestrator",
-      "pid": 711842,
+      "pid": 219,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-1767558506434-lf7mo",
-      "session_id": "session-1767558506434",
-      "started_at": "2026-01-04T20:28:26.434Z",
-      "last_heartbeat": "2026-01-04T20:28:26.435Z",
-      "status": "active",
+      "agent_id": "agent-1767704801658-0zsu6e",
+      "session_id": "session-1767704801658",
+      "started_at": "2026-01-06T13:06:41.659Z",
+      "last_heartbeat": "2026-01-06T13:06:42.021Z",
+      "status": "working",
       "assigned_role": "code-worker",
-      "pid": 712698
-    },
-    {
-      "agent_id": "agent-1767558507172-q7shz",
-      "session_id": "session-1767558507172",
-      "started_at": "2026-01-04T20:28:27.173Z",
-      "last_heartbeat": "2026-01-04T20:28:27.174Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 712780
+      "pid": 1342,
+      "current_task": "task_1767558067916_6d4dco - Add coordination.log rotation"
     }
   ],
-  "last_updated": "2026-01-04T20:28:27.174Z",
-  "lock_version": 21
+  "last_updated": "2026-01-06T13:07:04Z",
+  "lock_version": 26
 }

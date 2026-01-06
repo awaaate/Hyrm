@@ -1,15 +1,33 @@
+[91m[1m| [0m[90m Bash     [0mRun test suite to verify system health
 
-[91m[1m| [0m[90m Bash     [0mCheck log file sizes and archives
-4508 memory/coordination.log
+▶ Running: Orchestrator respawn logic validation
+  File: tools/lib/orchestrator-respawn.test.ts
+bun test v1.3.5 (1e86cebd)
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [10.00ms]
+
+▶ Running: Spec file generator tests
+  File: tools/lib/spec-generator.test.ts
+bun test v1.3.5 (1e86cebd)
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [12.00ms]
+
+╔════════════════════════════════════════════╗
+║  Test Summary                              ║
+╚════════════════════════════════════════════╝
+
+  ✓ PASS - shared-utils
+  ✓ PASS - plugin-tools
+  ✓ PASS - plugin-integration
+  ✓ PASS - orchestrator-respawn
+  ✓ PASS - spec-generator
+
+Total: 5 passed, 0 failed
 
 
--rw-r--r-- 1 root root 490K Jan  4  2026 memory/coordination.log
-
-memory/realtime-archives/:
-total 4.5M
--rw-r--r-- 1 root root    0 Jan  4 16:39 realtime-2026-01-02T19-34-50-226Z.log
--rw-r--r-- 1 root root 4.5M Jan  4 19:52 realtime-2026-01-04T19-52-47-772Z.log
-[91m[1m| [0m[90m Bash     [0mCheck coordination.log line count
-[91m[1m| [0m[90m Bash     [0mSpawn worker for coordination.log rotation task[91m[1m| [0m[90m Bash     [0mSpawn worker for performance benchmarking task
-
-[94m[1m| [0m[90m git_status  [0mUnknown[94m[1m| [0m[90m memory_update  [0m{"action":"update_status","data":"Session 190 ACTIVE: Orchestrator leader (epoch 2, agent-1767558460716-f1bwe) registered. Spawned 2 workers for medium-priority tasks: coordination.log rotation (task_1767558067916_6d4dco) and performance benchmarking (task_1767558071507_779q2v). System healthy: 3 agents active, realtime.log rotation working (4.5MB archives), coordination.log 490K, tests passing. No critical issues detected."}

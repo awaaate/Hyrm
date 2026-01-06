@@ -1,8 +1,44 @@
 [
   {
-    "session_id": "ses_4754e56ebffeexZDSMzGqDik01",
-    "timestamp": 1767558457690,
+    "session_id": "ses_46c95df17ffezCtvNoirAfhmIt",
+    "timestamp": 1767704764707,
     "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4754da324ffeRWJUhs45kgCuv1",
+    "timestamp": 1767558515332,
+    "messages": 5,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4754da346ffejOf271CcOGsP0H",
+    "timestamp": 1767558515052,
+    "messages": 6,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_4754e56ebffeexZDSMzGqDik01",
+    "timestamp": 1767558514930,
+    "messages": 10,
     "decisions": [],
     "discoveries": [],
     "code_created": [],
