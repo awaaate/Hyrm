@@ -4733,3 +4733,8 @@ I see! There are duplicate fs imports on lines 25-28 and 29. Let me fix this by 
 [Memory] Context injected into system prompt (role: orchestrator)
 [Memory] Context injected into system prompt (role: orchestrator)
 The edit worked (it removed the duplicate imports), but the file has some existing TypeScript errors (mostly Bun type definitions). These are pre-existing and not caused by my change. The important thing is that I consolidated the fs imports correctly. Let me try committing again:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Import linting passed. Now let me do the final commit with all state updates:

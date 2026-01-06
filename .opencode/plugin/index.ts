@@ -486,13 +486,16 @@ export const MemoryPlugin: Plugin = async (ctx) => {
           const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
           const archivePath = join(archiveDir, `realtime-${timestamp}.log`);
           
-          // Write archived lines
-          writeFileSync(archivePath, toArchive.join("\n") + "\n");
-          
-          // Write rotated realtime.log with only recent lines
-          writeFileSync(logPath, toKeep.join("\n") + "\n");
-        }
-      }
+           // Write archived lines
+           writeFileSync(archivePath, toArchive.join("\n") + "\n");
+           
+           // Write rotated realtime.log with only recent lines
+           writeFileSync(logPath, toKeep.join("\n") + "\n");
+           
+           // After successful archiving, compress old archives if needed
+           compressOldArchives();
+         }
+       }
       
       // Log warning if file is approaching or exceeds 5MB
       if (fileSizeInMB > 4.5 && isPrimaryInstance()) {

@@ -5,7 +5,7 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-06T13:12:13Z",
+      "last_heartbeat": "2026-01-06T13:13:13Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
@@ -40,6 +40,6 @@
       "pid": 14210
     }
   ],
-  "last_updated": "2026-01-06T13:13:02.947Z",
+  "last_updated": "2026-01-06T13:13:13Z",
   "lock_version": 33
 }

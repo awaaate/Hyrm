@@ -6086,3 +6086,12 @@
 {"timestamp":"2026-01-06T13:13:05.059Z","session":"ses_46c92101dffeJ1vV9JE7MHtbkH","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46c92101dffeJ1vV9JE7MHtbkH","status":{"type":"busy"}}}}
 {"timestamp":"2026-01-06T13:13:05.214Z","session":"ses_46c92101dffeJ1vV9JE7MHtbkH","level":"INFO","message":"Detected agent role: orchestrator"}
 {"timestamp":"2026-01-06T13:13:05.219Z","session":"ses_46c92101dffeJ1vV9JE7MHtbkH","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46c92101dffeJ1vV9JE7MHtbkH","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T13:13:09.588Z","session":"ses_46c92101dffeJ1vV9JE7MHtbkH","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01EyDPCWZ9ATuiQMuxGE3w9v","duration_ms":797,"output_length":214,"success":true}}
+{"timestamp":"2026-01-06T13:13:09.600Z","session":"ses_46c92101dffeJ1vV9JE7MHtbkH","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46c92101dffeJ1vV9JE7MHtbkH","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T13:13:09.769Z","session":"ses_46c92101dffeJ1vV9JE7MHtbkH","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T13:13:09.776Z","session":"ses_46c92101dffeJ1vV9JE7MHtbkH","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46c92101dffeJ1vV9JE7MHtbkH","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T13:13:13Z","level":"INFO","message":"Heartbeat service starting","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T13:13:13Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T13:13:13Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T13:13:13Z","level":"INFO","message":"Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T13:13:13Z","level":"INFO","message":"Heartbeat service complete (success)","source":"heartbeat-service"}
