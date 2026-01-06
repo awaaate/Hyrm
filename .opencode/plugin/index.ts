@@ -384,10 +384,13 @@ export const MemoryPlugin: Plugin = async (ctx) => {
          return { success: false, originalSize, compressedSize: originalSize, ratio: 1 };
        }
 
-       // Read file and compress
+       // Read file and compress using zlib
        const content = readFileSync(archivePath);
        const compressedPath = archivePath + ".gz";
-       const compressed = Bun.gzipSync(content);
+       
+       // Import zlib for compression
+       const zlib = require("zlib");
+       const compressed = zlib.gzipSync(content);
        
        writeFileSync(compressedPath, compressed);
        
