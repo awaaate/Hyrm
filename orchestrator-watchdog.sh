@@ -1401,8 +1401,10 @@ stop_orchestrator() {
 
      log "Stopping orchestrator..."
 
-     # Stop heartbeat service first (it will try to read the lease)
-     bash tools/heartbeat-service.sh "memory/.heartbeat-service.pid" stop 2>&1 | tee -a "$LOGFILE" || true
+     # NOTE: Do NOT stop heartbeat service here!
+     # The heartbeat service is a persistent background service that should run continuously.
+     # It will automatically adapt to heartbeat for the new leader when it starts.
+     # Stopping it creates a gap that causes leader lease expiry (240-250s decay).
 
      if [[ -f "$PIDFILE" ]]; then
          local pid
@@ -1663,41 +1665,43 @@ run_watchdog() {
             continue
         fi
         
-        # Check if orchestrator is running
-        if ! is_orchestrator_running; then
-            # If we had a tracked PID, persist crash details before deciding what to do.
-            if [[ -f "$PIDFILE" ]]; then
-                local last_pid
-                last_pid=$(cat "$PIDFILE" 2>/dev/null || echo "0")
-                if [[ -n "$last_pid" ]] && [[ "$last_pid" != "0" ]]; then
-                    local last_exit
-                    last_exit=$(get_child_exit_code "$last_pid")
-                    persist_crash_failure "$last_pid" "$last_exit" "health_check: not running"
-                    rm -f "$PIDFILE" 2>/dev/null || true
-                    
-                    # CRITICAL: Stop heartbeat service when orchestrator dies
-                    # Otherwise it keeps renewing the lease and blocks respawn
-                    log "Stopping orphaned heartbeat service..." "DEBUG"
-                    bash tools/heartbeat-service.sh "memory/.heartbeat-service.pid" stop 2>/dev/null || true
-                fi
-            fi
+         # Check if orchestrator is running
+         if ! is_orchestrator_running; then
+             # If we had a tracked PID, persist crash details before deciding what to do.
+             if [[ -f "$PIDFILE" ]]; then
+                 local last_pid
+                 last_pid=$(cat "$PIDFILE" 2>/dev/null || echo "0")
+                 if [[ -n "$last_pid" ]] && [[ "$last_pid" != "0" ]]; then
+                     local last_exit
+                     last_exit=$(get_child_exit_code "$last_pid")
+                     persist_crash_failure "$last_pid" "$last_exit" "health_check: not running"
+                     rm -f "$PIDFILE" 2>/dev/null || true
+                     
+                     # NOTE: Do NOT stop heartbeat service here!
+                     # The heartbeat service is a persistent background service that should run continuously.
+                     # It correctly checks if the current agent is the leader before updating the lease.
+                     # Stopping it here creates a "heartbeat gap" during orchestrator restart,
+                     # causing leader leases to expire prematurely (240-250s).
+                     # The heartbeat service will automatically adapt to the new leader when it starts.
+                 fi
+             fi
 
-            # Before restarting, check if a healthy leader exists
-            # Another orchestrator might be running that we didn't start (e.g., from another watchdog instance)
-            if check_leader_lease; then
-                local current_leader
-                current_leader=$(get_leader_info)
-                log "Orchestrator not running locally but healthy leader exists ($current_leader). Skipping respawn." "INFO"
-                update_status "leader_exists" "Healthy leader: $current_leader" 0
-                # Continue monitoring without spawning
-            else
-                log "Orchestrator not running and no healthy leader - starting new orchestrator..." "WARN"
-                start_orchestrator || true
-                token_check_counter=0
-                memory_check_counter=0
-            fi
-            continue
-        fi
+             # Before restarting, check if a healthy leader exists
+             # Another orchestrator might be running that we didn't start (e.g., from another watchdog instance)
+             if check_leader_lease; then
+                 local current_leader
+                 current_leader=$(get_leader_info)
+                 log "Orchestrator not running locally but healthy leader exists ($current_leader). Skipping respawn." "INFO"
+                 update_status "leader_exists" "Healthy leader: $current_leader" 0
+                 # Continue monitoring without spawning
+             else
+                 log "Orchestrator not running and no healthy leader - starting new orchestrator..." "WARN"
+                 start_orchestrator || true
+                 token_check_counter=0
+                 memory_check_counter=0
+             fi
+             continue
+         fi
         
         # Periodic token limit check
         if [[ $token_check_counter -ge $TOKEN_CHECK_INTERVAL ]]; then
