@@ -23,8 +23,8 @@
 
 import { existsSync, readFileSync, writeFileSync, appendFileSync, watch, FSWatcher } from "fs";
 import { createInterface, Interface as ReadlineInterface } from "readline";
-import { readJson, readJsonl, writeJson, c, formatTimeShort, PATHS, truncate, padRight, getAllOpenCodeSessions, getOpenCodeSessionStats, getQualityStore, getLeaderInfo, logWarning, getErrorMessage } from "./shared";
-import type { UserMessage, SystemState, QualityStore, Task, TaskStore, OpenCodeSession, LeaderInfo } from "./shared/types";
+import { readJson, readJsonl, writeJson, c, formatTimeShort, PATHS, truncate, padRight, getAllOpenCodeSessions, getOpenCodeSessionStats, getQualityStore, getLeaderInfo, getStaleOrchestratorCount, getLeaderTransitionHistory, logWarning, getErrorMessage } from "./shared";
+import type { UserMessage, SystemState, QualityStore, Task, TaskStore, OpenCodeSession, LeaderInfo, LeaderTransition } from "./shared";
 
 // ANSI escape code prefix (for screen control)
 const ESC = "\x1b";
@@ -294,6 +294,8 @@ function renderDivider(title?: string): void {
 
 function renderLeaderSection(): void {
   const leaderInfo = getLeaderInfo();
+  const staleOrchestratorCount = getStaleOrchestratorCount();
+  const transitions = getLeaderTransitionHistory().slice(0, 3); // Show last 3 transitions
   
   renderDivider("LEADER");
   
@@ -311,13 +313,33 @@ function renderLeaderSection(): void {
     );
     if (leaderInfo.last_heartbeat) {
       const ttlSec = Math.round(leaderInfo.ttl_ms / 1000);
+      const ageMs = leaderInfo.age_ms;
+      const ageSec = Math.round(ageMs / 1000);
       console.log(
-        `    ${c.dim}HB: ${formatTimeShort(leaderInfo.last_heartbeat)} ago | TTL: ${ttlSec}s${c.reset}`
+        `    ${c.dim}Age: ${ageSec}s | TTL: ${ttlSec}s | HB: ${formatTimeShort(leaderInfo.last_heartbeat)} ago${c.reset}`
       );
     }
   } else {
     console.log(`  ${c.dim}No leader elected${c.reset}`);
   }
+  
+  if (staleOrchestratorCount > 0) {
+    console.log(`  ${c.yellow}${staleOrchestratorCount} stale orchestrator(s) detected${c.reset}`);
+  }
+  
+  // Show recent transitions
+  if (transitions.length > 0) {
+    console.log(`  ${c.dim}Recent transitions:${c.reset}`);
+    for (const transition of transitions) {
+      const timestamp = new Date(transition.timestamp).toLocaleTimeString();
+      const oldLeader = transition.old_leader ? truncate(transition.old_leader, 20) : "none";
+      const newLeader = truncate(transition.new_leader, 20);
+      console.log(
+        `    ${c.dim}${timestamp}${c.reset} ${oldLeader}→${newLeader} [E${transition.old_epoch}→E${transition.new_epoch}]`
+      );
+    }
+  }
+  
   console.log();
 }
 

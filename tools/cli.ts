@@ -41,6 +41,8 @@ import {
   sendUserMessage as sharedSendUserMessage,
   // Leader info
   getLeaderInfo,
+  getStaleOrchestratorCount,
+  getLeaderTransitionHistory,
   // Data fetchers
   getQualityStore,
 } from "./shared";
@@ -79,6 +81,8 @@ function showStatus(): void {
   const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
   const quality = getQualityStore();
   const userMsgs = readJsonl<UserMessage>(PATHS.userMessages);
+  const leaderInfo = getLeaderInfo();
+  const staleOrchestratorCount = getStaleOrchestratorCount();
   
   // Active agents (heartbeat within 2 min)
   const now = Date.now();
@@ -91,13 +95,23 @@ function showStatus(): void {
   ).length || 0;
   
   const unreadMsgs = userMsgs.filter((m: UserMessage) => !m.read).length;
+  
+  // Leader info formatting
+  const leaderHealthColor = leaderInfo.health === "fresh" ? c.green : 
+                            leaderInfo.health === "stale" ? c.red : c.dim;
+  const leaderHealthIcon = leaderInfo.health === "fresh" ? "●" : 
+                           leaderInfo.health === "stale" ? "○" : "?";
+  const leaderDisplay = leaderInfo.leader_id 
+    ? `${leaderHealthColor}${leaderHealthIcon}${c.reset} ${c.bright}${truncate(leaderInfo.leader_id, 30)}${c.reset} epoch ${leaderInfo.leader_epoch} ${leaderHealthColor}(${leaderInfo.health})${c.reset}`
+    : `${c.dim}No leader${c.reset}`;
 
   console.log(`
 ${c.bgBlue}${c.white}${c.bright}  OPENCODE SYSTEM STATUS  ${c.reset}
 
 ${c.cyan}SESSION${c.reset}     ${c.bright}${state.session_count || 0}${c.reset}
 ${c.cyan}STATUS${c.reset}      ${state.status === "orchestrator_active" ? c.green : c.yellow}${state.status || "unknown"}${c.reset}
-${c.cyan}AGENTS${c.reset}      ${c.bright}${activeAgents.length}${c.reset} active
+${c.cyan}LEADER${c.reset}      ${leaderDisplay}
+${c.cyan}AGENTS${c.reset}      ${c.bright}${activeAgents.length}${c.reset} active${staleOrchestratorCount > 0 ? ` ${c.yellow}(${staleOrchestratorCount} stale orch)${c.reset}` : ""}
 ${c.cyan}TASKS${c.reset}       ${c.bright}${pendingTasks}${c.reset} pending
 ${c.cyan}MESSAGES${c.reset}    ${unreadMsgs > 0 ? c.yellow + c.bright : c.dim}${unreadMsgs}${c.reset} unread from users
 ${c.cyan}QUALITY${c.reset}     ${c.bright}${quality.summary?.average_score?.toFixed(1) || "N/A"}${c.reset}/10 avg (${quality.summary?.trend || "stable"})
@@ -180,6 +194,34 @@ function showAgents(): void {
         console.log(`    ${c.dim}→ ${truncate(agent.current_task, 50)}${c.reset}`);
       }
     }
+  }
+  
+   console.log();
+}
+
+function showLeaderHistory(): void {
+  const transitions = getLeaderTransitionHistory();
+  
+  console.log(`\n${c.bright}${c.cyan}LEADER TRANSITION HISTORY (Last 24h)${c.reset}\n`);
+  console.log(`${c.dim}${"─".repeat(80)}${c.reset}`);
+  
+  if (transitions.length === 0) {
+    console.log(`${c.dim}No leader transitions in the last 24 hours${c.reset}\n`);
+    return;
+  }
+  
+  for (const transition of transitions) {
+    const timestamp = new Date(transition.timestamp).toLocaleTimeString();
+    const oldLeader = transition.old_leader ? truncate(transition.old_leader, 25) : "none";
+    const newLeader = truncate(transition.new_leader, 25);
+    
+    console.log(
+      `${c.dim}${timestamp}${c.reset} ` +
+      `${oldLeader} (E${transition.old_epoch}) ` +
+      `${c.cyan}→${c.reset} ` +
+      `${c.bright}${newLeader}${c.reset} (E${transition.new_epoch}) ` +
+      `${c.yellow}[${transition.reason}]${c.reset}`
+    );
   }
   
   console.log();
@@ -1054,6 +1096,10 @@ switch (command) {
     
   case "agents":
     showAgents();
+    break;
+    
+  case "leader-history":
+    showLeaderHistory();
     break;
     
   case "tasks":

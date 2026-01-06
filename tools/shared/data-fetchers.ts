@@ -305,6 +305,102 @@ export function isLeader(agentId: string): boolean {
   return info.leader_id === agentId && info.health === "fresh";
 }
 
+/**
+ * Get stale orchestrator count (non-leader orchestrators with old heartbeats).
+ * 
+ * @returns Number of stale orchestrator agents
+ */
+export function getStaleOrchestratorCount(): number {
+  const leaderInfo = getLeaderInfo();
+  const allAgents = getAllAgents();
+  const now = Date.now();
+  
+  return allAgents.filter((agent) => {
+    // Must be an orchestrator
+    if (agent.assigned_role !== "orchestrator") return false;
+    // Not the current leader
+    if (agent.agent_id === leaderInfo.leader_id) return false;
+    // Heartbeat older than 5 minutes (stale threshold)
+    const age = now - new Date(agent.last_heartbeat).getTime();
+    return age > STALENESS.AGENT_STALE;
+  }).length;
+}
+
+/**
+ * Leader transition event from realtime log.
+ */
+export interface LeaderTransition {
+  timestamp: string;
+  old_leader: string | null;
+  old_epoch: number;
+  new_leader: string;
+  new_epoch: number;
+  reason: "stale" | "election" | "startup";
+}
+
+/**
+ * Get leader transition history from the last 24 hours.
+ * 
+ * @returns Array of leader transitions sorted by timestamp (newest first)
+ */
+export function getLeaderTransitionHistory(): LeaderTransition[] {
+  const transitions: LeaderTransition[] = [];
+  const now = Date.now();
+  const oneDayMs = 24 * 60 * 60 * 1000;
+  
+  try {
+    if (!existsSync(PATHS.realtimeLog)) return transitions;
+    
+    const content = readFileSync(PATHS.realtimeLog, "utf-8");
+    const lines = content.trim().split("\n").filter(Boolean);
+    
+    // Track seen leader IDs to detect transitions
+    let lastLeaderId: string | null = null;
+    let lastEpoch = 0;
+    
+    for (const line of lines) {
+      try {
+        const entry = JSON.parse(line);
+        if (!entry.timestamp) continue;
+        
+        const entryTime = new Date(entry.timestamp).getTime();
+        if (now - entryTime > oneDayMs) continue; // Skip entries older than 24h
+        
+        // Detect stale leader messages as transitions
+        if (entry.message?.includes("Stale orchestrator leader")) {
+          const match = entry.message.match(/Leader (agent-[\w-]+) \(epoch (\d+)\)/);
+          if (match) {
+            const currentLeader = match[1];
+            const currentEpoch = parseInt(match[2], 10);
+            
+            // If we see a new leader mentioned as stale, someone else is taking over
+            if (lastLeaderId !== currentLeader) {
+              transitions.push({
+                timestamp: entry.timestamp,
+                old_leader: lastLeaderId,
+                old_epoch: lastEpoch,
+                new_leader: currentLeader,
+                new_epoch: currentEpoch,
+                reason: "stale",
+              });
+              lastLeaderId = currentLeader;
+              lastEpoch = currentEpoch;
+            }
+          }
+        }
+      } catch {
+        // Skip malformed JSON lines
+      }
+    }
+  } catch (error) {
+    logDebug("Failed to read leader transition history", { error: getErrorMessage(error) });
+  }
+  
+  return transitions.sort((a, b) => 
+    new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  );
+}
+
 // ============================================================================
 // Task Functions
 // ============================================================================

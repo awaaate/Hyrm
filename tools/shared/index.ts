@@ -172,6 +172,8 @@ export {
   getLeaderInfo,
   hasActiveLeader,
   isLeader,
+  getStaleOrchestratorCount,
+  getLeaderTransitionHistory,
   // Task functions
   getAllTasks,
   getTasksByStatus,
@@ -225,6 +227,7 @@ export type {
   OpenCodeSessionStatsResult,
   AggregateTokenStats,
   ToolCallInfo,
+  LeaderTransition,
 } from "./data-fetchers";
 
 // Actions - write operations
