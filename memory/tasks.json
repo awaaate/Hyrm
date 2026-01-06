@@ -3931,8 +3931,45 @@
       ],
       "quality_score": 9.3,
       "quality_notes": "Archive compression achieves 87% space savings with gzip - critical for long-term archive sustainability. Non-blocking implementation ensures zero impact on watchdog reliability. Threshold-based approach (500MB) is good preventative strategy. Monitoring growth rate (5KB/day) gives 40+ day runway before compression becomes necessary. This pattern (rotation + compression) is now established as best practice for log management infrastructure.\""
+    },
+    {
+      "id": "task_1767721256215_33no8z",
+      "title": "Implement real-time performance metrics widget for CLI dashboard",
+      "description": "Add real-time performance visualization to the CLI dashboard showing:\n1. Slowest operations in last hour (top 5)\n2. Success rate trends (operations per minute, error rate)\n3. Agent operation latencies (registration, messaging, task claims)\n4. Historical comparison (current hour vs 24h average)\n\nData source: memory/perf-metrics.jsonl (already being collected)\nIntegration: tools/cli.ts dashboard view\nExpected impact: Better observability into system performance, enables proactive optimization\n\nThis leverages the performance benchmarking infrastructure implemented in Session 193.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-06T17:40:56.215Z",
+      "updated_at": "2026-01-06T17:40:56.230Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "performance",
+        "monitoring",
+        "medium-priority"
+      ],
+      "estimated_hours": 4,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767721256215_implement-real-time-performanc.md"
+    },
+    {
+      "id": "task_1767721258692_igpwtr",
+      "title": "Add predictive alerting for log growth and archive management",
+      "description": "Implement trend analysis and predictive alerts for system logs:\n1. Monitor realtime.log and coordination.log growth rates\n2. Project when logs will reach 5MB rotation threshold based on current rate\n3. Monitor archive directory growth (currently 22KB compressed, growing ~5KB/day)\n4. Alert if growth rate exceeds expected (potential issue indicator)\n5. Add predictive warning: 'Archives will exceed 500MB in 30 days at current rate'\n\nSuccess criteria:\n- System can predict maintenance windows automatically\n- Alerts for unusual growth patterns (2x+ normal rate)\n- Integration with CLI status command showing projections\n\nThis adds proactive monitoring without requiring manual intervention.",
+      "priority": "low",
+      "status": "pending",
+      "created_at": "2026-01-06T17:40:58.692Z",
+      "updated_at": "2026-01-06T17:40:58.706Z",
+      "created_by": "unknown",
+      "tags": [
+        "monitoring",
+        "predictive",
+        "low-priority"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767721258692_add-predictive-alerting-for-lo.md"
     }
   ],
   "completed_count": 186,
-  "last_updated": "2026-01-06T17:36:20.602Z"
+  "last_updated": "2026-01-06T17:40:58.706Z"
 }
