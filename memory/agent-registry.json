@@ -5,7 +5,7 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-06T17:33:08Z",
+      "last_heartbeat": "2026-01-06T17:36:09Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
@@ -15,7 +15,7 @@
       "agent_id": "agent-zcA3iZ8c",
       "session_id": "ses_46ba15a43ffeInfzbTzcA3iZ8c",
       "started_at": "2026-01-06T17:33:10.074Z",
-      "last_heartbeat": "2026-01-06T17:33:10.079Z",
+      "last_heartbeat": "2026-01-06T17:36:10.088Z",
       "status": "active",
       "assigned_role": "code-worker",
       "pid": 186552
@@ -24,7 +24,7 @@
       "agent_id": "agent-1767720791911-og9bua",
       "session_id": "session-1767720791911",
       "started_at": "2026-01-06T17:33:11.911Z",
-      "last_heartbeat": "2026-01-06T17:33:19.082Z",
+      "last_heartbeat": "2026-01-06T17:36:11.926Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 186552,
@@ -34,12 +34,13 @@
       "agent_id": "agent-1767720812695-7ydzdi",
       "session_id": "session-1767720812695",
       "started_at": "2026-01-06T17:33:32.695Z",
-      "last_heartbeat": "2026-01-06T17:33:32.696Z",
-      "status": "active",
+      "last_heartbeat": "2026-01-06T17:35:32.713Z",
+      "status": "working",
       "assigned_role": "code-worker",
-      "pid": 187430
+      "pid": 187430,
+      "current_task": "Archive compression for diagnostic logs when exceeding 500MB"
     }
   ],
-  "last_updated": "2026-01-06T17:33:32.696Z",
-  "lock_version": 96
+  "last_updated": "2026-01-06T17:36:11.926Z",
+  "lock_version": 97
 }
