@@ -1635,19 +1635,29 @@ run_watchdog() {
         log "Orchestrator already running (PID: $pid)" "OK"
         update_status "running" "Orchestrator already running" $pid
         record_session_start
-    fi
-    
-    # Counters for periodic checks
-    local token_check_counter=0
-    local memory_check_counter=0
-    
-    # Main loop
-    while true; do
-        sleep $CHECK_INTERVAL
-        
-        # Increment counters
-        token_check_counter=$((token_check_counter + CHECK_INTERVAL))
-        memory_check_counter=$((memory_check_counter + CHECK_INTERVAL))
+     fi
+     
+     # Run initial cleanup of old diagnostic logs
+     log "Cleaning up old orchestrator diagnostics..." "INFO"
+     if bash tools/cleanup-orchestrator-logs.sh >/dev/null 2>&1; then
+         log "Diagnostic cleanup completed" "OK"
+     else
+         log "Diagnostic cleanup encountered errors (non-critical)" "WARN"
+     fi
+     
+     # Counters for periodic checks
+     local token_check_counter=0
+     local memory_check_counter=0
+     local cleanup_check_counter=0
+     
+     # Main loop
+     while true; do
+         sleep $CHECK_INTERVAL
+         
+         # Increment counters
+         token_check_counter=$((token_check_counter + CHECK_INTERVAL))
+         memory_check_counter=$((memory_check_counter + CHECK_INTERVAL))
+         cleanup_check_counter=$((cleanup_check_counter + CHECK_INTERVAL))
         
         # Check for rate limits before checking/restarting orchestrator
         # This prevents rapid restart loops during API rate limiting
@@ -1660,9 +1670,10 @@ run_watchdog() {
             fi
             wait_for_rate_limit
             start_orchestrator || true
-            token_check_counter=0
-            memory_check_counter=0
-            continue
+             token_check_counter=0
+             memory_check_counter=0
+             cleanup_check_counter=0
+             continue
         fi
         
          # Check if orchestrator is running
@@ -1695,12 +1706,13 @@ run_watchdog() {
                  update_status "leader_exists" "Healthy leader: $current_leader" 0
                  # Continue monitoring without spawning
              else
-                 log "Orchestrator not running and no healthy leader - starting new orchestrator..." "WARN"
-                 start_orchestrator || true
-                 token_check_counter=0
-                 memory_check_counter=0
-             fi
-             continue
+                  log "Orchestrator not running and no healthy leader - starting new orchestrator..." "WARN"
+                  start_orchestrator || true
+                  token_check_counter=0
+                  memory_check_counter=0
+                  cleanup_check_counter=0
+              fi
+              continue
          fi
         
         # Periodic token limit check
@@ -1723,15 +1735,26 @@ run_watchdog() {
                 start_orchestrator || true
                 continue
             fi
-        fi
-        
-        # Session timeout check
-        if ! check_session_timeout; then
-            log "Restarting due to session timeout" "WARN"
-            stop_orchestrator "session_timeout"
-            start_orchestrator || true
-            continue
-        fi
+         fi
+         
+         # Periodic diagnostic cleanup (every 6 hours)
+         CLEANUP_CHECK_INTERVAL=21600
+         if [[ $cleanup_check_counter -ge $CLEANUP_CHECK_INTERVAL ]]; then
+             cleanup_check_counter=0
+             if bash tools/cleanup-orchestrator-logs.sh >/dev/null 2>&1; then
+                 log "Periodic diagnostic cleanup completed" "OK"
+             else
+                 log "Periodic diagnostic cleanup encountered errors (non-critical)" "WARN"
+             fi
+         fi
+         
+         # Session timeout check
+         if ! check_session_timeout; then
+             log "Restarting due to session timeout" "WARN"
+             stop_orchestrator "session_timeout"
+             start_orchestrator || true
+             continue
+         fi
         
         # Update status to show we're monitoring
         local pid=$(cat "$PIDFILE" 2>/dev/null || echo 0)

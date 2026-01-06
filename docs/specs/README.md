@@ -702,3 +702,6 @@ Auto-generated index of task specs in `docs/specs/`.
 - [docs/specs/task_1767718407351_task-c.md](docs/specs/task_1767718407351_task-c.md)
 - [docs/specs/task_1767718407355_unified-task-1.md](docs/specs/task_1767718407355_unified-task-1.md)
 - [docs/specs/task_1767718407359_test.md](docs/specs/task_1767718407359_test.md)
+- [docs/specs/task_1767718744256_investigate-and-fix-leader-lea.md](docs/specs/task_1767718744256_investigate-and-fix-leader-lea.md)
+- [docs/specs/task_1767718747300_clean-up-accumulated-orchestra.md](docs/specs/task_1767718747300_clean-up-accumulated-orchestra.md)
+- [docs/specs/task_1767718748914_consolidate-heartbeat-service-.md](docs/specs/task_1767718748914_consolidate-heartbeat-service-.md)

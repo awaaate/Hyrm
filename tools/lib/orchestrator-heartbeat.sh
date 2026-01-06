@@ -18,6 +18,7 @@ cd /app/workspace
 REGISTRY_PATH="memory/agent-registry.json"
 LEASE_PATH="memory/orchestrator-state.json"
 HEARTBEAT_LOG="logs/orchestrator-heartbeat.log"
+HEARTBEAT_STATS="memory/heartbeat-stats.json"
 
 # Ensure log directory exists
 mkdir -p logs
@@ -165,6 +166,62 @@ BUNEOF
   fi
 }
 
+# Update heartbeat statistics file
+update_heartbeat_stats() {
+  local success="$1"
+  local agent_id="$2"
+  local error_msg="${3:-}"
+  
+  if [[ ! -f "$HEARTBEAT_STATS" ]]; then
+    # Initialize stats file
+    bun run --smol - > "$HEARTBEAT_STATS" << 'BUNEOF'
+const stats = {
+  last_update: new Date().toISOString(),
+  total_cycles: 0,
+  successful_cycles: 0,
+  failed_cycles: 0,
+  last_agent_id: null,
+  last_success: false,
+  last_error: null
+};
+console.log(JSON.stringify(stats, null, 2));
+BUNEOF
+  fi
+  
+  # Update stats with new cycle result
+  bun run --smol - "$success" "$agent_id" "$error_msg" > "$HEARTBEAT_STATS" << 'BUNEOF'
+const fs = require('fs');
+const statsPath = './memory/heartbeat-stats.json';
+const [success, agentId, errorMsg] = process.argv.slice(2);
+const isSuccess = success === 'true';
+
+try {
+  let stats = {};
+  if (fs.existsSync(statsPath)) {
+    stats = JSON.parse(fs.readFileSync(statsPath, 'utf-8'));
+  }
+  
+  stats.last_update = new Date().toISOString();
+  stats.total_cycles = (stats.total_cycles || 0) + 1;
+  if (isSuccess) {
+    stats.successful_cycles = (stats.successful_cycles || 0) + 1;
+    stats.last_success = true;
+    stats.last_error = null;
+  } else {
+    stats.failed_cycles = (stats.failed_cycles || 0) + 1;
+    stats.last_success = false;
+    stats.last_error = errorMsg;
+  }
+  stats.last_agent_id = agentId;
+  
+  fs.writeFileSync(statsPath, JSON.stringify(stats, null, 2));
+  console.log('OK');
+} catch (e) {
+  console.log('ERROR');
+}
+BUNEOF
+}
+
 # Main heartbeat function
 # Called once per cycle (typically every 60 seconds)
 perform_heartbeat() {
@@ -211,10 +268,13 @@ BUNEOF
   # Execute heartbeat with error handling
   if perform_heartbeat; then
     log_heartbeat "INFO" "Heartbeat service complete (success)"
+    update_heartbeat_stats "true" "$orchestrator_agent" ""
   else
     log_heartbeat "WARN" "Heartbeat service completed with errors (will retry next cycle)"
+    update_heartbeat_stats "false" "${orchestrator_agent:-UNKNOWN}" "Heartbeat failed"
   fi
 } 2>&1 || {
   # Catch any unhandled errors
   log_heartbeat "ERROR" "Heartbeat service failed with unhandled error"
+  update_heartbeat_stats "false" "UNKNOWN" "Unhandled error in heartbeat cycle"
 }

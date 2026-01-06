@@ -1,8 +1,54 @@
 [
   {
-    "session_id": "ses_46bc61d86ffesgH6F9ykMEL3nl",
-    "timestamp": 1767718380215,
+    "session_id": "ses_46bbcaa80ffe77sQZ8038bfycZ",
+    "timestamp": 1767718999476,
     "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46bc06d27ffeCwZqZw5mJTttk1",
+    "timestamp": 1767718923540,
+    "messages": 36,
+    "decisions": [],
+    "discoveries": [
+      "the heartbeat service is consistently being **STOPPED after ~240-250 seconds**.",
+      "the heartbeat service should only be stopped when we're sure NO leader is running.",
+      "the **watchdog is stopping the heartbeat service when the orchestrator process dies**, but it should",
+      "the **watchdog is stopping the heartbeat service when the orchestrator process dies**, but it should NOT do this if the",
+      "at line 1681 where it stops the heartbeat service."
+    ],
+    "code_created": [
+      "docs/HEARTBEAT_DECAY_FIX.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46bc15e0dffefdWwrX8kXthhJW",
+    "timestamp": 1767718795266,
+    "messages": 21,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [
+      "all leader leases expire around 240-250 seconds. This suggests the background heartbeat service isn't functioning properly, causing leaders to expire."
+    ],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46bc61d86ffesgH6F9ykMEL3nl",
+    "timestamp": 1767718438083,
+    "messages": 16,
     "decisions": [],
     "discoveries": [],
     "code_created": [],

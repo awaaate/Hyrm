@@ -601,3 +601,147 @@
 [2026-01-06T16:52:58+00:00] [OK] Orchestrator started with PID: 95949 (model: anthropic/claude-haiku-4-5)
 [2026-01-06T16:52:59Z] [INFO] Heartbeat service started (PID: 95970)
 [2026-01-06T16:53:04+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T16:55:05+00:00] [ERROR] =========================================
+[2026-01-06T16:55:05+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T16:55:05+00:00] [ERROR]   PID: 95949, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T16:55:05+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T165258Z.log
+[2026-01-06T16:55:05+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T165258Z.log ----
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: [91m[1m| [0m[90m Bash     [0mStage all changes for commit
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: On branch haiku/YOLO
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: Changes to be committed:
+[2026-01-06T16:55:05+00:00] [ERROR] stderr:   (use "git restore --staged <file>..." to unstage)
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   docs/specs/README.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407225_test-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407229_urgent-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407232_dependent-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407246_integration-test-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407250_prerequisite-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407252_dependent-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407263_high-priority-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407265_critical-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407268_task-with-missing-dependency.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407270_multi-dep-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407305_integration-test-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407310_critical-1.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407311_critical-2.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407319_task-a.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407321_task-b.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407323_task-c.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407338_e2e-test-feature.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407344_shared-task.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407347_task-a.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407349_task-b.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407351_task-c.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407355_unified-task-1.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   docs/specs/task_1767718407359_test.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   logs/heartbeat-service.log
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   logs/orchestrator-failures/crash-20260106T133506Z-pid93651.tail.log
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   logs/orchestrator-failures/orchestrator-stderr-20260106T133400Z.log
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   logs/orchestrator-failures/orchestrator-stderr-20260106T165258Z.log
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   logs/orchestrator-heartbeat.log
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   logs/watchdog-startup.log
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   logs/watchdog.log
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.handoff-state.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.heartbeat-service.pid
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.orchestrator-current-stderr.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.orchestrator-last-exit.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.orchestrator-last-failure.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.orchestrator.pid
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	deleted:    memory/.plugin-instances/plugin-1767706441252-emtm1q.lock
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	deleted:    memory/.plugin-instances/plugin-1767706441255-08l9r3.lock
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	deleted:    memory/.plugin-instances/plugin-1767706441256-4n2c8t.lock
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	deleted:    memory/.plugin-instances/plugin-1767706441257-c0pd4y.lock
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   memory/.plugin-instances/plugin-1767718380094-nde0u7.lock
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   memory/.plugin-instances/plugin-1767718380097-me45ku.lock
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   memory/.plugin-instances/plugin-1767718380098-9d0bk7.lock
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	new file:   memory/.plugin-instances/plugin-1767718380099-et20mu.lock
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.restart-count.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.token-usage.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.watchdog-status.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/.watchdog.pid
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/agent-registry.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/coordination.log
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/knowledge-base.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/message-bus.jsonl
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/metrics.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/orchestrator-state.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/realtime.log
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/session-summaries.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/sessions.jsonl
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/state.json
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/tool-timing.jsonl
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 	modified:   memory/working.md
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: 
+[2026-01-06T16:55:05+00:00] [ERROR] stderr: [94m[1m| [0m[90m git_commit  [0m{"message":"chore(session-196): orchestrator leadership established (epoch 9) - system fully healthy with 0 pending tasks, 206/206 tests passing, 145+ tasks assessed (8.1/10 avg)","add_all":false}
+[2026-01-06T16:55:05+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T16:55:05+00:00] [ERROR] =========================================
+[2026-01-06T16:55:05+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T16:55:06+00:00] [INFO] Healthy leader exists: agent-1767718383442-owl3f (epoch 9), lease valid for 147s
+[2026-01-06T16:55:06+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767718383442-owl3f:epoch9). Skipping respawn.
+[2026-01-06T16:56:06+00:00] [INFO] Healthy leader exists: agent-1767718383442-owl3f (epoch 9), lease valid for 86s
+[2026-01-06T16:56:06+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767718383442-owl3f:epoch9). Skipping respawn.
+[2026-01-06T16:57:06+00:00] [INFO] Healthy leader exists: agent-1767718383442-owl3f (epoch 9), lease valid for 26s
+[2026-01-06T16:57:06+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767718383442-owl3f:epoch9). Skipping respawn.
+[2026-01-06T16:58:07+00:00] [WARN] Leader lease expired 63s ago: agent-1767718383442-owl3f (epoch 9)
+[2026-01-06T16:58:07+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T16:58:07+00:00] [WARN] Leader lease expired 63s ago: agent-1767718383442-owl3f (epoch 9)
+[2026-01-06T16:58:07+00:00] [INFO] Applying restart jitter: 3s (restart #2)
+[2026-01-06T16:58:10+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-06T16:58:10+00:00] [OK] Orchestrator started with PID: 100170 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T16:58:11Z] [INFO] Heartbeat service started (PID: 100192)
+[2026-01-06T16:58:16+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T17:00:16+00:00] [ERROR] =========================================
+[2026-01-06T17:00:16+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T17:00:16+00:00] [ERROR]   PID: 100170, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T17:00:16+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T165810Z.log
+[2026-01-06T17:00:16+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T165810Z.log ----
+[2026-01-06T17:00:16+00:00] [ERROR] stderr: 
+[2026-01-06T17:00:16+00:00] [ERROR] stderr: 
+[2026-01-06T17:00:16+00:00] [ERROR] stderr: 
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:     },
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:     {
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "id": "task_1767718744256_z30xe8",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "title": "Investigate and fix leader lease decay pattern (240-250s expiry)",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "description": "CRITICAL: All orchestrator leader leases expire at ~240-250 seconds consistently despite background heartbeat service running. Investigation needed:\n\n1. Verify heartbeat script is actually updating orchestrator-state.json (currently unclear)\n2. Check if heartbeat service has the correct agent_id of current orchestrator\n3. Confirm heartbeat loop is executing every 60s or if it's being interrupted\n4. Verify file permissions on memory/orchestrator-state.json\n5. Check if the issue is missing agent_id in heartbeat service startup\n\nPattern observed:\n- Heartbeat service starts (PID 100192 at 16:58:11Z)\n- Leader expires exactly 240-250s later (16:58:07 + 240s = 16:59:47Z expected ~17:04:07Z actual)\n- Watchdog detects and respawns orchestrator\n- New orchestrator takes over with fresh epoch\n- Pattern repeats\n\nThis is the root cause of frequent orchestrator respawns (~2/hour instead of 0-1/hour target).\n\nSuccess criteria:\n- Leader lease remains valid for >180s (within TTL)\n- No more stale leader warnings in realtime.log\n- Orchestrator restarts drop to <1/hour",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr: --
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "estimated_hours": 2,
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "complexity": "moderate",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "spec_file": "docs/specs/task_1767718744256_investigate-and-fix-leader-lea.md"
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:     },
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:     {
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "id": "task_1767718747300_201gdd",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "title": "Clean up accumulated orchestrator crash logs and diagnostic artifacts",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "description": "System has accumulated 16+ crash log files and diagnostic artifacts since Jan 4. These are no longer needed and take up space in logs/orchestrator-failures/.\n\nCurrent artifacts:\n- 16 crash tail logs (~13-16KB each)\n- Multiple orchestrator-stderr logs\n- Old heartbeat and watchdog logs\n\nActions:\n1. Archive files older than 24 hours to memory/archives/diagnostics/\n2. Create archive script to automate cleanup of >24h old logs\n3. Update watchdog to call cleanup script on startup\n4. Set size limit (100MB) for orchestrator-failures/ directory\n\nThis will maintain a rolling window of recent diagnostics while freeing disk space.",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr: --
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "estimated_hours": 1,
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "complexity": "moderate",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "spec_file": "docs/specs/task_1767718747300_clean-up-accumulated-orchestra.md"
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:     },
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:     {
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "id": "task_1767718748914_aq74vm",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "title": "Consolidate heartbeat service management and add diagnostics",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "description": "Current heartbeat service implementation (tools/heartbeat-service.sh) lacks visibility into its health and success rate. Improvements needed:\n\n1. **Add heartbeat verification**: periodically check if orchestrator-state.json is being updated\n2. **Track success rate**: count how many heartbeats succeed vs fail per session\n3. **Diagnostic logging**: log what agent_id the service is using and whether updates succeed\n4. **Startup parameter validation**: ensure heartbeat service receives correct agent_id from orchestrator\n5. **Status command**: `bun tools/cli.ts heartbeat-status` to show service health, last update, next heartbeat time\n\nCurrent problem: It's unclear if heartbeat service is actually updating the lease or if the agent_id being passed is wrong.\n\nSuccess criteria:\n- Heartbeat service logs show successful updates every 60s\n- cli.ts heartbeat-status shows last update within past 60s\n- No more \"Leader lease not found\" warnings\n- Leader lease age remains <60s (not reaching 240s before renewal)",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr: --
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "estimated_hours": 1.5,
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "complexity": "moderate",
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:       "spec_file": "docs/specs/task_1767718748914_consolidate-heartbeat-service-.md"
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:     }
+[2026-01-06T17:00:16+00:00] [ERROR] stderr:   ],
+[2026-01-06T17:00:16+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T17:00:16+00:00] [ERROR] =========================================
+[2026-01-06T17:00:16+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T17:00:17+00:00] [INFO] Healthy leader exists: agent-1767718695458-vk4ncu (epoch 10), lease valid for 147s
+[2026-01-06T17:00:17+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767718695458-vk4ncu:epoch10). Skipping respawn.
+[2026-01-06T17:01:17+00:00] [INFO] Healthy leader exists: agent-1767718695458-vk4ncu (epoch 10), lease valid for 87s
+[2026-01-06T17:01:18+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767718695458-vk4ncu:epoch10). Skipping respawn.
+[2026-01-06T17:02:18+00:00] [INFO] Healthy leader exists: agent-1767718695458-vk4ncu (epoch 10), lease valid for 27s
+[2026-01-06T17:02:18+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767718695458-vk4ncu:epoch10). Skipping respawn.
+[2026-01-06T17:03:18+00:00] [WARN] Leader lease expired 62s ago: agent-1767718695458-vk4ncu (epoch 10)
+[2026-01-06T17:03:18+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T17:03:18+00:00] [WARN] Leader lease expired 63s ago: agent-1767718695458-vk4ncu (epoch 10)
+[2026-01-06T17:03:18+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-06T17:03:18+00:00] [OK] Orchestrator started with PID: 108677 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T17:03:19Z] [INFO] Heartbeat service started (PID: 108706)
+[2026-01-06T17:03:24+00:00] [OK] Orchestrator confirmed running
