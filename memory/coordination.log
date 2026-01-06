@@ -4779,3 +4779,19 @@
 2026-01-06T17:21:52.119Z [INFO] [agent-1767720105577-kt47qg] Status updated: working - Orchestrator mode - no handoff
 2026-01-06T17:22:45.587Z [INFO] [agent-1767720105577-kt47qg] File locked: /app/workspace/memory/orchestrator-state.json
 2026-01-06T17:22:45.591Z [INFO] [agent-1767720105577-kt47qg] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:23:33.126Z [INFO] [agent-HDYnzT0R] Agent unregistered: agent-HDYnzT0R
+2026-01-06T17:26:56.582Z [INFO] [agent-J1bBcP4J] Agent registered: agent-J1bBcP4J (role: code-worker)
+2026-01-06T17:26:56.593Z [INFO] [agent-J1bBcP4J] Message sent: heartbeat (broadcast)
+2026-01-06T17:26:56.594Z [INFO] [agent-J1bBcP4J] Message sent: broadcast (broadcast)
+2026-01-06T17:27:01.131Z [INFO] [agent-1767720421131-cm5br] Agent registered: agent-1767720421131-cm5br (role: orchestrator)
+2026-01-06T17:27:01.132Z [INFO] [agent-1767720421131-cm5br] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:27:01.132Z [WARN] [agent-1767720421131-cm5br] Took over orchestrator leader lease from stale leader agent-1767720105577-kt47qg (epoch 14)
+2026-01-06T17:27:01.133Z [INFO] [agent-1767720421131-cm5br] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:27:01.134Z [INFO] [agent-1767720421131-cm5br] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:27:01.134Z [INFO] [agent-1767720421131-cm5br] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:27:01.135Z [INFO] [agent-1767720421131-cm5br] Message sent: heartbeat (broadcast)
+2026-01-06T17:27:01.415Z [INFO] [agent-1767720421131-cm5br] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:27:01.416Z [INFO] [agent-1767720421131-cm5br] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:27:04.544Z [INFO] [agent-1767720421131-cm5br] Status updated: working - Orchestrator mode - no handoff
+2026-01-06T17:28:01.138Z [INFO] [agent-1767720421131-cm5br] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:28:01.139Z [INFO] [agent-1767720421131-cm5br] File unlocked: /app/workspace/memory/orchestrator-state.json
