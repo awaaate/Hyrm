@@ -3830,8 +3830,63 @@
       ],
       "quality_score": 8.7,
       "quality_notes": "Architecture documentation must be kept current with system changes; Session 192 learnings (single-leader, orphaned detection, log rotation) are well-verified and documented"
+    },
+    {
+      "id": "task_1767718744256_z30xe8",
+      "title": "Investigate and fix leader lease decay pattern (240-250s expiry)",
+      "description": "CRITICAL: All orchestrator leader leases expire at ~240-250 seconds consistently despite background heartbeat service running. Investigation needed:\n\n1. Verify heartbeat script is actually updating orchestrator-state.json (currently unclear)\n2. Check if heartbeat service has the correct agent_id of current orchestrator\n3. Confirm heartbeat loop is executing every 60s or if it's being interrupted\n4. Verify file permissions on memory/orchestrator-state.json\n5. Check if the issue is missing agent_id in heartbeat service startup\n\nPattern observed:\n- Heartbeat service starts (PID 100192 at 16:58:11Z)\n- Leader expires exactly 240-250s later (16:58:07 + 240s = 16:59:47Z expected ~17:04:07Z actual)\n- Watchdog detects and respawns orchestrator\n- New orchestrator takes over with fresh epoch\n- Pattern repeats\n\nThis is the root cause of frequent orchestrator respawns (~2/hour instead of 0-1/hour target).\n\nSuccess criteria:\n- Leader lease remains valid for >180s (within TTL)\n- No more stale leader warnings in realtime.log\n- Orchestrator restarts drop to <1/hour",
+      "priority": "critical",
+      "status": "pending",
+      "created_at": "2026-01-06T16:59:04.256Z",
+      "updated_at": "2026-01-06T16:59:04.275Z",
+      "created_by": "unknown",
+      "tags": [
+        "heartbeat",
+        "leader-election",
+        "orchestrator",
+        "bug"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767718744256_investigate-and-fix-leader-lea.md"
+    },
+    {
+      "id": "task_1767718747300_201gdd",
+      "title": "Clean up accumulated orchestrator crash logs and diagnostic artifacts",
+      "description": "System has accumulated 16+ crash log files and diagnostic artifacts since Jan 4. These are no longer needed and take up space in logs/orchestrator-failures/.\n\nCurrent artifacts:\n- 16 crash tail logs (~13-16KB each)\n- Multiple orchestrator-stderr logs\n- Old heartbeat and watchdog logs\n\nActions:\n1. Archive files older than 24 hours to memory/archives/diagnostics/\n2. Create archive script to automate cleanup of >24h old logs\n3. Update watchdog to call cleanup script on startup\n4. Set size limit (100MB) for orchestrator-failures/ directory\n\nThis will maintain a rolling window of recent diagnostics while freeing disk space.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-06T16:59:07.300Z",
+      "updated_at": "2026-01-06T16:59:07.313Z",
+      "created_by": "unknown",
+      "tags": [
+        "maintenance",
+        "logs",
+        "cleanup"
+      ],
+      "estimated_hours": 1,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767718747300_clean-up-accumulated-orchestra.md"
+    },
+    {
+      "id": "task_1767718748914_aq74vm",
+      "title": "Consolidate heartbeat service management and add diagnostics",
+      "description": "Current heartbeat service implementation (tools/heartbeat-service.sh) lacks visibility into its health and success rate. Improvements needed:\n\n1. **Add heartbeat verification**: periodically check if orchestrator-state.json is being updated\n2. **Track success rate**: count how many heartbeats succeed vs fail per session\n3. **Diagnostic logging**: log what agent_id the service is using and whether updates succeed\n4. **Startup parameter validation**: ensure heartbeat service receives correct agent_id from orchestrator\n5. **Status command**: `bun tools/cli.ts heartbeat-status` to show service health, last update, next heartbeat time\n\nCurrent problem: It's unclear if heartbeat service is actually updating the lease or if the agent_id being passed is wrong.\n\nSuccess criteria:\n- Heartbeat service logs show successful updates every 60s\n- cli.ts heartbeat-status shows last update within past 60s\n- No more \"Leader lease not found\" warnings\n- Leader lease age remains <60s (not reaching 240s before renewal)",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-06T16:59:08.914Z",
+      "updated_at": "2026-01-06T16:59:08.932Z",
+      "created_by": "unknown",
+      "tags": [
+        "heartbeat",
+        "diagnostics",
+        "monitoring"
+      ],
+      "estimated_hours": 1.5,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767718748914_consolidate-heartbeat-service-.md"
     }
   ],
   "completed_count": 179,
-  "last_updated": "2026-01-06T13:30:14.785Z"
+  "last_updated": "2026-01-06T16:59:08.932Z"
 }
