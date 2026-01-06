@@ -5423,11 +5423,87 @@
       "metadata": {
         "duration_minutes": 2449
       }
+    },
+    {
+      "task_id": "task_1767705496224_o403ev",
+      "task_title": "Establish orphaned task detection and recovery mechanism",
+      "assessed_at": "2026-01-06T13:24:54.617Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 9,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 9,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 9,
+      "lessons_learned": "Orphaned task detection via 2-hour inactivity timeout prevents long-term task loss. Integration at orchestrator startup ensures detection runs reliably. Try/catch error handling ensures feature doesn't break system. Recovery blocking allows manual review before respawn.",
+      "metadata": {
+        "duration_minutes": 5
+      }
+    },
+    {
+      "task_id": "task_1767705543082_95tozz",
+      "task_title": "Add dashboard visibility for current orchestrator leader and epoch",
+      "assessed_at": "2026-01-06T13:24:56.154Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 9,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 8,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 8,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 8.3,
+      "lessons_learned": "Leader visibility in monitoring tools critical for understanding single-leader model behavior. CLI enhancements should be paired with realtime monitor updates for consistency. New commands (leader-history) provide useful operational insights.",
+      "metadata": {
+        "duration_minutes": 5
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 141,
-    "avg_overall_score": 8.025531914893612
+    "total_assessed": 143,
+    "avg_overall_score": 8.03426573426573
   },
-  "last_updated": "2026-01-06T13:10:40.815Z"
+  "last_updated": "2026-01-06T13:24:56.156Z"
 }

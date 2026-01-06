@@ -422,3 +422,30 @@
 [2026-01-06T13:17:24+00:00] [OK] Orchestrator started with PID: 28863 (model: anthropic/claude-haiku-4-5)
 [2026-01-06T13:17:25Z] [INFO] Heartbeat service started (PID: 28892)
 [2026-01-06T13:17:30+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T13:21:30+00:00] [ERROR] =========================================
+[2026-01-06T13:21:30+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T13:21:30+00:00] [ERROR]   PID: 28863, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T13:21:30+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T131724Z.log
+[2026-01-06T13:21:30+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T131724Z.log ----
+[2026-01-06T13:21:30+00:00] [ERROR] stderr: [91m[1m| [0m[90m Bash     [0mWrite final session summary
+[2026-01-06T13:21:30+00:00] [ERROR] stderr: 
+[2026-01-06T13:21:30+00:00] [ERROR] stderr: [haiku/YOLO 46b3377] chore(session-192): final summary - leader elected, orphaned task handled, 4 improvement tasks created, 2 workers active, system healthy
+[2026-01-06T13:21:30+00:00] [ERROR] stderr:  1 file changed, 68 insertions(+)
+[2026-01-06T13:21:30+00:00] [ERROR] stderr: 
+[2026-01-06T13:21:30+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T13:21:30+00:00] [ERROR] =========================================
+[2026-01-06T13:21:30+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T13:21:31+00:00] [INFO] Healthy leader exists: agent-1767705447019-cpnlr4 (epoch 5), lease valid for 145s
+[2026-01-06T13:21:31+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767705447019-cpnlr4:epoch5). Skipping respawn.
+[2026-01-06T13:22:32+00:00] [INFO] Healthy leader exists: agent-1767705447019-cpnlr4 (epoch 5), lease valid for 84s
+[2026-01-06T13:22:32+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767705447019-cpnlr4:epoch5). Skipping respawn.
+[2026-01-06T13:23:32+00:00] [INFO] Healthy leader exists: agent-1767705447019-cpnlr4 (epoch 5), lease valid for 24s
+[2026-01-06T13:23:32+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767705447019-cpnlr4:epoch5). Skipping respawn.
+[2026-01-06T13:24:32+00:00] [WARN] Leader lease expired 65s ago: agent-1767705447019-cpnlr4 (epoch 5)
+[2026-01-06T13:24:32+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T13:24:32+00:00] [WARN] Leader lease expired 65s ago: agent-1767705447019-cpnlr4 (epoch 5)
+[2026-01-06T13:24:32+00:00] [INFO] Applying restart jitter: 4s (restart #4)
+[2026-01-06T13:24:36+00:00] [INFO] Starting orchestrator agent (restart #4 this hour)...
+[2026-01-06T13:24:36+00:00] [OK] Orchestrator started with PID: 71042 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T13:24:37Z] [INFO] Heartbeat service started (PID: 71063)
+[2026-01-06T13:24:42+00:00] [OK] Orchestrator confirmed running

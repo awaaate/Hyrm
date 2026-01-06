@@ -3751,28 +3751,43 @@
       "title": "Establish orphaned task detection and recovery mechanism",
       "description": "Implement automatic detection of tasks stuck in in_progress status for >2 hours with stale agent. Build recovery protocol: (1) Detect orphaned tasks on orchestrator startup, (2) Mark as blocked with recovery note, (3) Optionally respawn worker or mark as pending for re-assignment, (4) Alert via coordination.log. This prevents long-term task loss like task_1767558071507_779q2v (performance benchmarking).\",\n\"priority\":\"high\",\n\"tags\":[\"monitoring\",\"recovery\",\"reliability\"],\n\"complexity\":\"moderate\",\n\"estimated_hours\":2",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-06T13:18:16.224Z",
-      "updated_at": "2026-01-06T13:18:16.240Z",
+      "updated_at": "2026-01-06T13:24:56.628Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "moderate",
-      "spec_file": "docs/specs/task_1767705496224_establish-orphaned-task-detect.md"
+      "spec_file": "docs/specs/task_1767705496224_establish-orphaned-task-detect.md",
+      "completed_at": "2026-01-06T13:24:56.628Z",
+      "notes": [
+        "[2026-01-06T13:21:37.031Z] Implemented orphaned task detection and recovery mechanism in Session 192. Feature detects tasks stuck in in_progress for >2 hours with stale agents, marks as blocked with recovery notes, logs alerts. Runs on orchestrator startup. Tests pass (119/119). Git commit: eeafcd0\"",
+        "[2026-01-06T13:23:04.318Z] Implementation verified complete and fully documented. Feature automatically detects orphaned tasks (in_progress >2h with stale agent) on orchestrator startup, marks as blocked with recovery notes, and logs alerts for monitoring. All requirements met: (1) detection ✓, (2) recovery marking ✓, (3) optional respawn via task_update/task_spawn ✓, (4) realtime.log alerting ✓. Comprehensive documentation added to docs/ORPHANED_TASK_RECOVERY.md. All tests passing (119/119).\"",
+        "[2026-01-06T13:24:56.628Z] Orphaned task detection + recovery + comprehensive documentation completed. Feature active in production preventing task loss."
+      ],
+      "quality_score": 9,
+      "quality_notes": "Orphaned task detection via 2-hour inactivity timeout prevents long-term task loss. Integration at orchestrator startup ensures detection runs reliably. Try/catch error handling ensures feature doesn't break system. Recovery blocking allows manual review before respawn."
     },
     {
       "id": "task_1767705543082_95tozz",
       "title": "Add dashboard visibility for current orchestrator leader and epoch",
       "description": "Enhance CLI dashboard and realtime monitor to show orchestrator leader state. Currently system tracks leader internally but users see no visibility. Add: (1) Current leader ID and epoch in CLI status view, (2) Leader age (time on lease) in realtime monitor, (3) Stale orchestrator count, (4) Leader transition history in last 24h. Leverage existing orchestrator-state.json and agent-registry.json.\",\n\"priority\":\"medium\",\n\"tags\":[\"monitoring\",\"dashboard\",\"visibility\"],\n\"complexity\":\"simple\",\n\"estimated_hours\":1",
       "priority": "medium",
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2026-01-06T13:19:03.082Z",
-      "updated_at": "2026-01-06T13:19:19.856Z",
+      "updated_at": "2026-01-06T13:24:57.021Z",
       "created_by": "unknown",
       "tags": [],
       "complexity": "moderate",
       "spec_file": "docs/specs/task_1767705543082_add-dashboard-visibility-for-c.md",
       "assigned_to": "agent-1767705557287-rgxdkl",
-      "claimed_at": "2026-01-06T13:19:19.856Z"
+      "claimed_at": "2026-01-06T13:19:19.856Z",
+      "completed_at": "2026-01-06T13:24:57.017Z",
+      "notes": [
+        "[2026-01-06T13:23:36.157Z] Successfully implemented full orchestrator leader visibility for CLI and realtime monitor. Includes leader status in CLI status view, leader age display, stale orchestrator count, and 24-hour transition history. All tests passing (206/206). Git commit: 7d38776\"",
+        "[2026-01-06T13:24:57.021Z] Leader visibility successfully integrated into CLI and realtime monitor. New leader-history command provides useful diagnostics."
+      ],
+      "quality_score": 8.3,
+      "quality_notes": "Leader visibility in monitoring tools critical for understanding single-leader model behavior. CLI enhancements should be paired with realtime monitor updates for consistency. New commands (leader-history) provide useful operational insights."
     },
     {
       "id": "task_1767705544999_e8xw0v",
@@ -3801,6 +3816,6 @@
       "spec_file": "docs/specs/task_1767705546740_update-architecturemd-with-ses.md"
     }
   ],
-  "completed_count": 168,
-  "last_updated": "2026-01-06T13:19:19.856Z"
+  "completed_count": 173,
+  "last_updated": "2026-01-06T13:24:57.021Z"
 }

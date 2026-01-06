@@ -4584,3 +4584,33 @@
 2026-01-06T13:19:14.519Z [INFO] [agent-1767705554517-tlszxa] Message sent: heartbeat (broadcast)
 2026-01-06T13:19:17.288Z [INFO] [agent-1767705557287-rgxdkl] Agent registered: agent-1767705557287-rgxdkl (role: code-worker)
 2026-01-06T13:19:17.290Z [INFO] [agent-1767705557287-rgxdkl] Message sent: heartbeat (broadcast)
+2026-01-06T13:19:27.024Z [INFO] [agent-1767705447019-cpnlr4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:19:27.024Z [INFO] [agent-1767705447019-cpnlr4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:19:53.385Z [INFO] [agent-1767705593385-drwwtj] Agent registered: agent-1767705593385-drwwtj (role: code-worker)
+2026-01-06T13:19:53.387Z [INFO] [agent-1767705593385-drwwtj] Message sent: heartbeat (broadcast)
+2026-01-06T13:20:27.026Z [INFO] [agent-1767705447019-cpnlr4] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:20:27.027Z [INFO] [agent-1767705447019-cpnlr4] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:20:56.435Z [INFO] [agent-fmtrqZJb] Agent unregistered: agent-fmtrqZJb
+2026-01-06T13:21:45.795Z [INFO] [agent-1767705554517-tlszxa] Message sent: task_complete (broadcast)
+2026-01-06T13:22:11.260Z [INFO] [agent-1767705554517-tlszxa] Status updated: active
+2026-01-06T13:23:17.612Z [INFO] [agent-1767705593385-drwwtj] Message sent: task_complete (broadcast)
+2026-01-06T13:23:42.202Z [INFO] [agent-1767705557287-rgxdkl] Message sent: task_complete (broadcast)
+2026-01-06T13:23:55.386Z [INFO] [agent-1767705557287-rgxdkl] Status updated: active
+2026-01-06T13:24:38.271Z [INFO] [agent-tS1fjKtu] Agent registered: agent-tS1fjKtu (role: code-worker)
+2026-01-06T13:24:38.272Z [INFO] [agent-tS1fjKtu] Message sent: heartbeat (broadcast)
+2026-01-06T13:24:38.273Z [INFO] [agent-tS1fjKtu] Message sent: broadcast (broadcast)
+2026-01-06T13:24:42.830Z [INFO] [agent-1767705882830-ngqhk3] Agent registered: agent-1767705882830-ngqhk3 (role: orchestrator)
+2026-01-06T13:24:42.831Z [INFO] [agent-1767705882830-ngqhk3] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:24:42.831Z [WARN] [agent-1767705882830-ngqhk3] Took over orchestrator leader lease from stale leader agent-1767705447019-cpnlr4 (epoch 6)
+2026-01-06T13:24:42.832Z [INFO] [agent-1767705882830-ngqhk3] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:24:42.832Z [INFO] [agent-1767705882830-ngqhk3] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:24:42.833Z [INFO] [agent-1767705882830-ngqhk3] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:24:42.833Z [INFO] [agent-1767705882830-ngqhk3] Message sent: heartbeat (broadcast)
+2026-01-06T13:24:42.965Z [INFO] [agent-1767705882830-ngqhk3] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:24:42.965Z [INFO] [agent-1767705882830-ngqhk3] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:24:47.405Z [INFO] [agent-1767705882830-ngqhk3] Status updated: working - Orchestrator mode - no handoff
+2026-01-06T13:25:08.518Z [INFO] [agent-1767705908517-yi6xxn] Cleaning up 1 stale agent(s): agent-1767705593385-drwwtj
+2026-01-06T13:25:08.519Z [INFO] [agent-1767705908517-yi6xxn] Agent registered: agent-1767705908517-yi6xxn (role: code-worker)
+2026-01-06T13:25:08.520Z [INFO] [agent-1767705908517-yi6xxn] Message sent: heartbeat (broadcast)
+2026-01-06T13:25:08.734Z [INFO] [agent-1767705908732-5ogsce] Agent registered: agent-1767705908732-5ogsce (role: code-worker)
+2026-01-06T13:25:08.740Z [INFO] [agent-1767705908732-5ogsce] Message sent: heartbeat (broadcast)
