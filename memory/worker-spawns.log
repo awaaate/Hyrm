@@ -88,3 +88,5 @@
 [2026-01-06T17:06:22+00:00] Worker spawned: PID=126484
 [2026-01-06T17:06:23+00:00] Spawning worker: model=anthropic/claude-haiku-4-5 role=worker 
 [2026-01-06T17:06:23+00:00] Worker spawned: PID=126847
+[2026-01-06T17:33:29+00:00] Spawning worker: model=anthropic/claude-haiku-4-5 role=worker task=task_1767720530145_fbhwm6
+[2026-01-06T17:33:29+00:00] Worker spawned: PID=187430

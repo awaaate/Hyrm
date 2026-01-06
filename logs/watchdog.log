@@ -837,3 +837,48 @@
 [2026-01-06T17:26:55Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
 [2026-01-06T17:26:56Z] [INFO] Heartbeat service started (PID: 179108)
 [2026-01-06T17:27:01+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T17:30:01+00:00] [ERROR] =========================================
+[2026-01-06T17:30:01+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T17:30:01+00:00] [ERROR]   PID: 179076, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T17:30:01+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T172655Z.log
+[2026-01-06T17:30:01+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T172655Z.log ----
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: === System Status ===
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: 
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: Leader Status:
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: null
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: 
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: Task Summary:
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: 
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: [44m[37m[1m  OPENCODE SYSTEM STATUS  [0m
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: 
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: [36mSESSION[0m     [1m201[0m
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: [36mSTATUS[0m      [33mSession 201: Orchestrator leader (epoch 14) confirmed, system health verified excellent, 0 pending tasks remaining, created 1 strategic improvement task (archive compression), all critical infrastructure operational and verified working correctly[0m
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: [36mLEADER[0m      [32m●[0m [1magent-1767720421131-cm5br[0m epoch 14 [32m(fresh)[0m
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: [36mAGENTS[0m      [1m3[0m active
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: [36mTASKS[0m       [1m1[0m pending
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: [36mMESSAGES[0m    [2m0[0m unread from users
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: [36mQUALITY[0m     [1m8.1[0m/10 avg (stable)
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: 
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: [2mLast updated: 5:29:04 PM[0m
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: 
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: 
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: 
+[2026-01-06T17:30:01+00:00] [ERROR] stderr: 
+[2026-01-06T17:30:01+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T17:30:01+00:00] [ERROR] =========================================
+[2026-01-06T17:30:01+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T17:30:02+00:00] [INFO] Healthy leader exists: agent-1767720421131-cm5br (epoch 14), lease valid for 148s
+[2026-01-06T17:30:03+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767720421131-cm5br:epoch14). Skipping respawn.
+[2026-01-06T17:31:03+00:00] [INFO] Healthy leader exists: agent-1767720421131-cm5br (epoch 14), lease valid for 87s
+[2026-01-06T17:31:03+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767720421131-cm5br:epoch14). Skipping respawn.
+[2026-01-06T17:32:03+00:00] [INFO] Healthy leader exists: agent-1767720421131-cm5br (epoch 14), lease valid for 27s
+[2026-01-06T17:32:03+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767720421131-cm5br:epoch14). Skipping respawn.
+[2026-01-06T17:33:03+00:00] [WARN] Leader lease expired 62s ago: agent-1767720421131-cm5br (epoch 14)
+[2026-01-06T17:33:03+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T17:33:03+00:00] [WARN] Leader lease expired 62s ago: agent-1767720421131-cm5br (epoch 14)
+[2026-01-06T17:33:03+00:00] [INFO] Applying restart jitter: 5s (restart #5)
+[2026-01-06T17:33:08+00:00] [INFO] Starting orchestrator agent (restart #5 this hour)...
+[2026-01-06T17:33:08+00:00] [OK] Orchestrator started with PID: 186552 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T17:33:08Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
+[2026-01-06T17:33:09Z] [INFO] Heartbeat service started (PID: 186584)
+[2026-01-06T17:33:14+00:00] [OK] Orchestrator confirmed running

@@ -1,10 +1,10 @@
 {
-  "recorded_at": "2026-01-06T17:23:48+00:00",
-  "pid": 174046,
+  "recorded_at": "2026-01-06T17:30:01+00:00",
+  "pid": 179076,
   "exit_code": 0,
   "kind": "crash",
   "reason": "health_check: not running",
-  "extra_file": "logs/orchestrator-failures/crash-20260106T172348Z-pid174046.tail.log",
+  "extra_file": "logs/orchestrator-failures/crash-20260106T173001Z-pid179076.tail.log",
   "stop_requested": false,
   "stop_reason": "",
   "stop_requested_at": ""

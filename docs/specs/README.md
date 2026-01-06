@@ -728,3 +728,4 @@ Auto-generated index of task specs in `docs/specs/`.
 - [docs/specs/task_1767720472341_task-c.md](docs/specs/task_1767720472341_task-c.md)
 - [docs/specs/task_1767720472345_unified-task-1.md](docs/specs/task_1767720472345_unified-task-1.md)
 - [docs/specs/task_1767720472349_test.md](docs/specs/task_1767720472349_test.md)
+- [docs/specs/task_1767720530145_archive-compression-for-diagno.md](docs/specs/task_1767720530145_archive-compression-for-diagno.md)

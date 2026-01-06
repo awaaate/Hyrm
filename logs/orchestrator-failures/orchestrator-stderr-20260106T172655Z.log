@@ -1,8 +1,23 @@
-[91m[1m| [0m[90m Bash     [0mCheck for errors in coordination log
+=== System Status ===
+
+Leader Status:
+null
+
+Task Summary:
+
+[44m[37m[1m  OPENCODE SYSTEM STATUS  [0m
+
+[36mSESSION[0m     [1m201[0m
+[36mSTATUS[0m      [33mSession 201: Orchestrator leader (epoch 14) confirmed, system health verified excellent, 0 pending tasks remaining, created 1 strategic improvement task (archive compression), all critical infrastructure operational and verified working correctly[0m
+[36mLEADER[0m      [32m●[0m [1magent-1767720421131-cm5br[0m epoch 14 [32m(fresh)[0m
+[36mAGENTS[0m      [1m3[0m active
+[36mTASKS[0m       [1m1[0m pending
+[36mMESSAGES[0m    [2m0[0m unread from users
+[36mQUALITY[0m     [1m8.1[0m/10 avg (stable)
+
+[2mLast updated: 5:29:04 PM[0m
 
 
-2026-01-06T17:17:32.647Z [WARN] [agent-1767719852645-7mmpl] Took over orchestrator leader lease from stale leader agent-1767719002320-eastle (epoch 12)
-2026-01-06T17:21:45.579Z [WARN] [agent-1767720105577-kt47qg] Took over orchestrator leader lease from stale leader agent-1767719852645-7mmpl (epoch 13)
-2026-01-06T17:27:01.132Z [WARN] [agent-1767720421131-cm5br] Took over orchestrator leader lease from stale leader agent-1767720105577-kt47qg (epoch 14)
 
-[92m[1m| [0m[90m Edit     [0mmemory/working.md
+
+[91m[1m| [0m[90m Bash     [0mFinal system status check
