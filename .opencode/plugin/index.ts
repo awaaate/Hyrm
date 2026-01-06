@@ -511,13 +511,56 @@ export const MemoryPlugin: Plugin = async (ctx) => {
         };
         appendFileSync(logPath, JSON.stringify(logEntry) + "\n");
       }
-    } catch (error) {
-      // Silent fail - don't break logging if rotation check fails
-      // This ensures the logging system itself remains resilient
-    }
-  };
+     } catch (error) {
+       // Silent fail - don't break logging if rotation check fails
+       // This ensures the logging system itself remains resilient
+     }
+   };
 
-  // Real-time logger
+   // Record growth metrics for predictive alerting
+   // Tracks log sizes and growth rates periodically
+   const recordGrowthMetrics = (): void => {
+     try {
+       const realtimePath = join(memoryDir, "realtime.log");
+       const coordinationPath = join(memoryDir, "coordination.log");
+       const metricsPath = join(memoryDir, "growth-metrics.jsonl");
+
+       interface GrowthMetricEntry {
+         timestamp: number;
+         realtime_size_bytes: number;
+         coordination_size_bytes: number;
+         realtime_lines: number;
+         coordination_lines: number;
+       }
+
+       // Collect current sizes
+       const realtimeStats = existsSync(realtimePath) ? statSync(realtimePath) : null;
+       const coordinationStats = existsSync(coordinationPath) ? statSync(coordinationPath) : null;
+
+       if (!realtimeStats || !coordinationStats) return;
+
+       // Count lines
+       const realtimeContent = readFileSync(realtimePath, "utf-8");
+       const coordinationContent = readFileSync(coordinationPath, "utf-8");
+       const realtimeLines = realtimeContent.split("\n").length - 1;
+       const coordinationLines = coordinationContent.split("\n").length - 1;
+
+       const metric: GrowthMetricEntry = {
+         timestamp: Date.now(),
+         realtime_size_bytes: realtimeStats.size,
+         coordination_size_bytes: coordinationStats.size,
+         realtime_lines: realtimeLines,
+         coordination_lines: coordinationLines,
+       };
+
+       // Append to metrics file
+       appendFileSync(metricsPath, JSON.stringify(metric) + "\n");
+     } catch (error) {
+       // Silent fail - metrics tracking shouldn't break anything
+     }
+   };
+
+   // Real-time logger
   // Only writes to file if this is the primary instance (prevents 4x duplicate logging)
   const log = (
     level: "INFO" | "WARN" | "ERROR",
@@ -1669,18 +1712,21 @@ Read memory/working.md for full details.`);
        log("WARN", "Failed to check orchestrator leader lease", { error: String(error) });
      }
 
-    // Message bus auto-maintenance (background)
-    log("INFO", "Starting message bus maintenance (background)");
-    ctx.$`bun ${join(ctx.directory, "tools/message-bus-manager.ts")} auto`
-      .quiet()
-      .then((result) =>
-        log("INFO", "Message bus maintenance completed", {
-          result: result.stdout,
-        })
-      )
-      .catch((e) =>
-        log("WARN", "Message bus maintenance failed", { error: String(e) })
-      );
+     // Record growth metrics for predictive alerting
+     recordGrowthMetrics();
+
+     // Message bus auto-maintenance (background)
+     log("INFO", "Starting message bus maintenance (background)");
+     ctx.$`bun ${join(ctx.directory, "tools/message-bus-manager.ts")} auto`
+       .quiet()
+       .then((result) =>
+         log("INFO", "Message bus maintenance completed", {
+           result: result.stdout,
+         })
+       )
+       .catch((e) =>
+         log("WARN", "Message bus maintenance failed", { error: String(e) })
+       );
 
     // Auto-register agent with detected role (or "general" if not detected yet)
     try {

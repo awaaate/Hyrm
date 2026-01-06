@@ -4874,3 +4874,9 @@
 2026-01-06T17:50:47.412Z [INFO] [agent-1767721845146-oahsxa] File locked: /app/workspace/memory/orchestrator-state.json
 2026-01-06T17:50:47.412Z [INFO] [agent-1767721845146-oahsxa] File unlocked: /app/workspace/memory/orchestrator-state.json
 2026-01-06T17:50:51.491Z [INFO] [agent-1767721845146-oahsxa] Status updated: working - Orchestrator mode - no handoff
+2026-01-06T17:51:42.629Z [INFO] [agent-1767721902628-rs70gb] Cleaning up 1 stale agent(s): agent-1767721579668-oszieh
+2026-01-06T17:51:42.630Z [INFO] [agent-1767721902628-rs70gb] Agent registered: agent-1767721902628-rs70gb (role: code-worker)
+2026-01-06T17:51:42.632Z [INFO] [agent-1767721902628-rs70gb] Message sent: heartbeat (broadcast)
+2026-01-06T17:51:45.151Z [INFO] [agent-1767721845146-oahsxa] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:51:45.155Z [INFO] [agent-1767721845146-oahsxa] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:52:12.484Z [INFO] [agent-7ceBF3Sr] Agent unregistered: agent-7ceBF3Sr

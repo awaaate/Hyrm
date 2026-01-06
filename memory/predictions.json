@@ -1,0 +1,37 @@
+{
+  "realtime_log": {
+    "current_size_mb": 1.5961494445800781,
+    "current_lines": 8715,
+    "growth_rate_kb_hour": 0,
+    "growth_rate_lines_day": 0,
+    "days_to_threshold_5mb": null,
+    "estimated_maintenance_window": "No growth data",
+    "growth_trend": "normal",
+    "anomaly_factor": 1,
+    "path": "/app/workspace/memory/realtime.log"
+  },
+  "coordination_log": {
+    "current_size_mb": 0.5181169509887695,
+    "current_lines": 4882,
+    "growth_rate_kb_hour": 0,
+    "growth_rate_lines_day": 0,
+    "days_to_threshold_5mb": null,
+    "estimated_maintenance_window": "No growth data",
+    "growth_trend": "normal",
+    "anomaly_factor": 1,
+    "path": "/app/workspace/memory/coordination.log"
+  },
+  "archives": {
+    "growth_status": "Sustainable growth rate",
+    "estimated_days_to_500mb": 102400
+  },
+  "alerts": [
+    {
+      "timestamp": 1767722102136,
+      "type": "healthy",
+      "severity": "info",
+      "message": "All log growth within normal parameters"
+    }
+  ],
+  "last_updated": 1767722102136
+}

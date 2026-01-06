@@ -208,12 +208,24 @@ function showPerfWidget(): string {
     }
     
     return outputLines.join("\n");
+   } catch (error) {
+     return `${c.red}Error loading performance metrics: ${getErrorMessage(error)}${c.reset}`;
+   }
+ }
+
+function showPredictiveAlerts(): string {
+  try {
+    // Import predictive analyzer
+    const { generatePredictiveReport, formatPredictionReport } = require("./lib/predictive-analyzer");
+    const report = generatePredictiveReport();
+    
+    return formatPredictionReport(report);
   } catch (error) {
-    return `${c.red}Error loading performance metrics: ${getErrorMessage(error)}${c.reset}`;
+    return `${c.dim}Predictive alerts unavailable${c.reset}`;
   }
 }
-
-function showStatus(): void {
+ 
+ function showStatus(): void {
    const state = readJson<SystemState>(PATHS.state, {} as SystemState);
    const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
    const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
@@ -254,11 +266,14 @@ ${c.cyan}TASKS${c.reset}       ${c.bright}${pendingTasks}${c.reset} pending
 ${c.cyan}MESSAGES${c.reset}    ${unreadMsgs > 0 ? c.yellow + c.bright : c.dim}${unreadMsgs}${c.reset} unread from users
 ${c.cyan}QUALITY${c.reset}     ${c.bright}${quality.summary?.average_score?.toFixed(1) || "N/A"}${c.reset}/10 avg (${quality.summary?.trend || "stable"})
 
-${c.dim}Last updated: ${new Date().toLocaleTimeString()}${c.reset}
+    ${c.dim}Last updated: ${new Date().toLocaleTimeString()}${c.reset}
 `);
-   
-   // Show performance widget
-   console.log(showPerfWidget());
+    
+    // Show performance widget
+    console.log(showPerfWidget());
+    
+    // Show predictive alerts
+    console.log(showPredictiveAlerts());
 }
 
 function showAgents(): void {

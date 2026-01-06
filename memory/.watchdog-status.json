@@ -1,8 +1,8 @@
 {
-    "status": "running",
-    "last_check": "2026-01-06T17:50:47+00:00",
-    "orchestrator_pid": 212161,
-    "details": "Orchestrator healthy",
+    "status": "leader_exists",
+    "last_check": "2026-01-06T17:54:49+00:00",
+    "orchestrator_pid": 0,
+    "details": "Healthy leader: agent-1767721845146-oahsxa:epoch18",
     "watchdog_pid": 95821,
     "restarts_this_hour": 8,
     "token_usage": 0,
