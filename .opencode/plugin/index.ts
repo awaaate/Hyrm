@@ -1452,6 +1452,104 @@ Read memory/working.md for full details.`);
   // EVENT HANDLERS (Internal)
   // ============================================================================
 
+  /**
+   * Detect orphaned tasks: tasks stuck in_progress for >2 hours with stale agents
+   * Recovery: Mark as blocked with note, log alert, available for re-assignment
+   */
+  function detectOrphanedTasks(memoryDir: string) {
+    const tasksPath = join(memoryDir, "tasks.json");
+    const registryPath = join(memoryDir, "agent-registry.json");
+
+    if (!existsSync(tasksPath) || !existsSync(registryPath)) {
+      return;
+    }
+
+    try {
+      const tasks = JSON.parse(readFileSync(tasksPath, "utf-8"));
+      const registry = JSON.parse(readFileSync(registryPath, "utf-8"));
+
+      // Build set of active agent IDs
+      const activeAgentIds = new Set(
+        registry.agents.map((agent: any) => agent.agent_id)
+      );
+
+      // Find orphaned tasks
+      const now = Date.now();
+      const ORPHAN_THRESHOLD_MS = 2 * 60 * 60 * 1000; // 2 hours
+      const orphanedTasks: any[] = [];
+
+      for (const task of tasks.tasks || []) {
+        // Only check in_progress tasks
+        if (task.status !== "in_progress") {
+          continue;
+        }
+
+        // Must have a claimed_at timestamp
+        if (!task.claimed_at) {
+          continue;
+        }
+
+        const claimedTime = new Date(task.claimed_at).getTime();
+        const ageMs = now - claimedTime;
+
+        // Check if task is old and assigned to stale agent
+        if (ageMs > ORPHAN_THRESHOLD_MS && !activeAgentIds.has(task.assigned_to)) {
+          orphanedTasks.push({
+            id: task.id,
+            title: task.title,
+            age: Math.round(ageMs / 1000 / 60), // minutes
+            assignedTo: task.assigned_to,
+          });
+        }
+      }
+
+      // Log alerts and mark tasks as blocked
+      if (orphanedTasks.length > 0) {
+        log(
+          "WARN",
+          `Detected ${orphanedTasks.length} orphaned task(s) - in_progress >2h with stale agent(s)`,
+          {
+            tasks: orphanedTasks.map((t) => ({
+              id: t.id,
+              title: t.title,
+              age_minutes: t.age,
+              assigned_to: t.assignedTo,
+            })),
+          }
+        );
+
+        // Mark each orphaned task as blocked with recovery note
+        let tasksModified = false;
+        for (const task of tasks.tasks || []) {
+          const orphaned = orphanedTasks.find((o) => o.id === task.id);
+          if (orphaned) {
+            task.status = "blocked";
+            task.updated_at = new Date().toISOString();
+            const recoveryNote = `[${new Date().toISOString()}] Orphaned task recovery: Task was in_progress for ${orphaned.age} minutes with stale agent ${orphaned.assignedTo}. Marked as blocked - ready for re-assignment or respawn.`;
+            if (!task.notes) {
+              task.notes = [];
+            }
+            task.notes.push(recoveryNote);
+            tasksModified = true;
+          }
+        }
+
+        // Write back if any tasks were modified
+        if (tasksModified) {
+          writeFileSync(tasksPath, JSON.stringify(tasks, null, 2));
+          log("INFO", `Marked ${orphanedTasks.length} orphaned task(s) as blocked`);
+        }
+      }
+    } catch (error) {
+      // Silently fail - log WARN only if error, don't crash startup
+      log(
+        "WARN",
+        "Failed to detect orphaned tasks - file corruption or parse error",
+        { error: String(error) }
+      );
+    }
+  }
+
   async function handleSessionCreated(event: any) {
     currentSessionStart = new Date();
     currentSessionId = event.properties.info.id;
@@ -1534,27 +1632,34 @@ Read memory/working.md for full details.`);
       log("WARN", "Failed to clean up stale agents", { error: String(error) });
     }
 
-    // Check for stale orchestrator leader lease
-    const orchestratorStatePath = join(memoryDir, "orchestrator-state.json");
-    try {
-      if (existsSync(orchestratorStatePath)) {
-        const lease = JSON.parse(readFileSync(orchestratorStatePath, "utf-8"));
-        const now = Date.now();
-        const leaseAge = now - new Date(lease.last_heartbeat).getTime();
-        const ttl = lease.ttl_ms || 180000; // 3 minutes default
+     // Detect orphaned tasks (stuck in_progress with stale agent)
+     try {
+       detectOrphanedTasks(memoryDir);
+     } catch (error) {
+       log("WARN", "Failed to detect orphaned tasks", { error: String(error) });
+     }
 
-        if (leaseAge > ttl) {
-          log(
-            "WARN",
-            `Stale orchestrator leader lease detected! ` +
-            `Leader ${lease.leader_id} (epoch ${lease.leader_epoch}) hasn't updated in ${Math.round(leaseAge / 1000)}s. ` +
-            `New orchestrator should take over via leader election.`
-          );
-        }
-      }
-    } catch (error) {
-      log("WARN", "Failed to check orchestrator leader lease", { error: String(error) });
-    }
+     // Check for stale orchestrator leader lease
+     const orchestratorStatePath = join(memoryDir, "orchestrator-state.json");
+     try {
+       if (existsSync(orchestratorStatePath)) {
+         const lease = JSON.parse(readFileSync(orchestratorStatePath, "utf-8"));
+         const now = Date.now();
+         const leaseAge = now - new Date(lease.last_heartbeat).getTime();
+         const ttl = lease.ttl_ms || 180000; // 3 minutes default
+
+         if (leaseAge > ttl) {
+           log(
+             "WARN",
+             `Stale orchestrator leader lease detected! ` +
+             `Leader ${lease.leader_id} (epoch ${lease.leader_epoch}) hasn't updated in ${Math.round(leaseAge / 1000)}s. ` +
+             `New orchestrator should take over via leader election.`
+           );
+         }
+       }
+     } catch (error) {
+       log("WARN", "Failed to check orchestrator leader lease", { error: String(error) });
+     }
 
     // Message bus auto-maintenance (background)
     log("INFO", "Starting message bus maintenance (background)");
