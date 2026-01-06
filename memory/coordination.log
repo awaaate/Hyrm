@@ -4898,3 +4898,10 @@
 2026-01-06T17:56:47.505Z [INFO] [agent-1767722207503-xm844q] Message sent: heartbeat (broadcast)
 2026-01-06T17:56:55.200Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
 2026-01-06T17:56:55.205Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:57:51.857Z [INFO] [agent-1767722207503-xm844q] Message sent: task_complete (broadcast)
+2026-01-06T17:57:55.210Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:57:55.222Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:57:55.226Z [INFO] [agent-1767722155190-d1vq9u] Cleaned up 1 stale agent(s): agent-1767721902628-rs70gb
+2026-01-06T17:57:55.227Z [INFO] [agent-1767722155190-d1vq9u] Orchestrator heartbeat: cleaned up 1 stale agents
+2026-01-06T17:58:55.217Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:58:55.225Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json

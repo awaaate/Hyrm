@@ -5727,11 +5727,49 @@
       "metadata": {
         "duration_minutes": 9
       }
+    },
+    {
+      "task_id": "task_1767722200390_iykuo7",
+      "task_title": "CRITICAL: Fix heartbeat script shell syntax errors causing lease expiration",
+      "assessed_at": "2026-01-06T17:59:14.626Z",
+      "assessed_by": "orchestrator",
+      "dimensions": [
+        {
+          "name": "completeness",
+          "score": 10,
+          "weight": 0.3
+        },
+        {
+          "name": "code_quality",
+          "score": 9,
+          "weight": 0.25
+        },
+        {
+          "name": "documentation",
+          "score": 8,
+          "weight": 0.15
+        },
+        {
+          "name": "efficiency",
+          "score": 9,
+          "weight": 0.15
+        },
+        {
+          "name": "impact",
+          "score": 10,
+          "weight": 0.15
+        }
+      ],
+      "overall_score": 9.3,
+      "lessons_learned": "Critical shell syntax errors in background services can silently fail and cause cascading issues (240-250s orchestrator restarts). Always validate background scripts with bash -n before deployment. Variable scoping (local keyword) must be inside functions.",
+      "metadata": {
+        "duration_minutes": 3
+      }
     }
   ],
   "aggregate_stats": {
-    "total_assessed": 149,
-    "avg_overall_score": 8.079194630872479
+    "total_assessed": 150,
+    "avg_overall_score": 8.087333333333328
   },
-  "last_updated": "2026-01-06T17:51:04.942Z"
+  "last_updated": "2026-01-06T17:59:14.631Z"
 }

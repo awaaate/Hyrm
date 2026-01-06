@@ -1,6 +1,21 @@
 
-root      224926  0.0  0.0   3784  2724 ?        Ss   17:56   0:00 /usr/bin/bash -c sleep 5 && ps aux | grep "PID: 223906" | head -2
-root      225115  0.0  0.0   3092  1360 ?        S    17:57   0:00 grep PID: 223906
 
 
-[91m[1m| [0m[90m Bash     [0mCheck if worker is still running
+Check 1: Worker still running... sleeping 10s
+Check 2: Worker still running... sleeping 10s
+Check 3: Worker still running... sleeping 10s
+Check 4: Worker still running... sleeping 10s
+Check 5: Worker still running... sleeping 10s
+Check 6: Worker still running... sleeping 10s
+Check 7: Worker still running... sleeping 10s
+Check 8: Worker still running... sleeping 10s
+Check 9: Worker still running... sleeping 10s
+Check 10: Worker still running... sleeping 10s
+Check 11: Worker still running... sleeping 10s
+Check 12: Worker still running... sleeping 10s
+Monitor timed out
+[91m[1m| [0m[90m Bash     [0mMonitor for worker completion (with timeout)[94m[1m| [0m[90m agent_messages  [0m{"mark_read":false}
+[94m[1m| [0m[90m agent_messages  [0m{"mark_read":true}
+
+[94m[1m| [0m[90m task_update  [0m{"task_id":"task_1767722200390_iykuo7","status":"completed"}
+[94m[1m| [0m[90m quality_assess  [0m{"task_id":"task_1767722200390_iykuo7","completeness":10,"code_quality":9,"documentation":8,"efficiency":9,"impact":10,"lessons_learned":"Critical shell syntax errors in background services can silently fail and cause cascading issues (240-250s orchestrator restarts). Always validate background scripts with bash -n before deployment. Variable scoping (local keyword) must be inside functions."}
