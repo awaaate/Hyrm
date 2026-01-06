@@ -86,3 +86,4 @@
 {"id":"umsg_1767541963707_8hvdii","from":"user","message":"remove all your pending/inprogress task they are obsote","timestamp":"2026-01-04T15:52:43.707Z","priority":"normal","read":true,"read_at":"2026-01-04T15:56:43.773Z","read_by":"agent"}
 {"id":"umsg_1767542988250_f9zbxg","from":"user","message":"fix the current record on the jsons, agent regsitry or leader json","timestamp":"2026-01-04T16:09:48.251Z","priority":"normal","read":true,"read_at":"2026-01-04T16:16:54.462Z","read_by":"agent"}
 {"id":"umsg_1767543981654_qqesc5","from":"user","message":"check why session number is not incrementing","timestamp":"2026-01-04T16:26:21.654Z","priority":"normal","read":true,"read_at":"2026-01-04T16:58:25.206Z","read_by":"agent"}
+{"id":"umsg_1767705962971_jolv3v","from":"user","message":"when done with you task. stop","timestamp":"2026-01-06T13:26:02.971Z","priority":"normal","read":false}

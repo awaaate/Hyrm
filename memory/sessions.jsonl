@@ -200,3 +200,4 @@
 {"type":"session_start","timestamp":"2026-01-06T13:17:25.230Z","session_id":"ses_46c8b7f26ffeqHLLsYfmtrqZJb"}
 {"type":"session_end","timestamp":"2026-01-06T13:20:56.436Z","session_id":"ses_46c8b7f26ffeqHLLsYfmtrqZJb","duration_ms":211206,"tool_calls":56}
 {"type":"session_start","timestamp":"2026-01-06T13:24:38.261Z","session_id":"ses_46c84e366ffe9REYUatS1fjKtu"}
+{"type":"file_edit","timestamp":"2026-01-06T13:25:25.371Z","file":"/app/workspace/memory/working.md"}

@@ -4614,3 +4614,6 @@
 2026-01-06T13:25:08.520Z [INFO] [agent-1767705908517-yi6xxn] Message sent: heartbeat (broadcast)
 2026-01-06T13:25:08.734Z [INFO] [agent-1767705908732-5ogsce] Agent registered: agent-1767705908732-5ogsce (role: code-worker)
 2026-01-06T13:25:08.740Z [INFO] [agent-1767705908732-5ogsce] Message sent: heartbeat (broadcast)
+2026-01-06T13:25:42.837Z [INFO] [agent-1767705882830-ngqhk3] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:25:42.838Z [INFO] [agent-1767705882830-ngqhk3] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:26:02.065Z [INFO] [agent-1767705908517-yi6xxn] Message sent: task_complete (broadcast)
