@@ -5,7 +5,7 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-06T17:05:18Z",
+      "last_heartbeat": "2026-01-06T17:11:43Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
@@ -15,7 +15,7 @@
       "agent_id": "agent-038bfycZ",
       "session_id": "ses_46bbcaa80ffe77sQZ8038bfycZ",
       "started_at": "2026-01-06T17:03:20.032Z",
-      "last_heartbeat": "2026-01-06T17:05:20.043Z",
+      "last_heartbeat": "2026-01-06T17:12:20.066Z",
       "status": "active",
       "assigned_role": "code-worker",
       "pid": 108677
@@ -24,31 +24,31 @@
       "agent_id": "agent-1767719002320-eastle",
       "session_id": "session-1767719002320",
       "started_at": "2026-01-06T17:03:22.320Z",
-      "last_heartbeat": "2026-01-06T17:05:22.327Z",
+      "last_heartbeat": "2026-01-06T17:12:22.350Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 108677,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-1767719029048-i0bpgn",
-      "session_id": "session-1767719029048",
-      "started_at": "2026-01-06T17:03:49.049Z",
-      "last_heartbeat": "2026-01-06T17:05:49.057Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 109688
-    },
-    {
       "agent_id": "agent-1767719030178-psrnm",
       "session_id": "session-1767719030178",
       "started_at": "2026-01-06T17:03:50.179Z",
-      "last_heartbeat": "2026-01-06T17:05:50.186Z",
+      "last_heartbeat": "2026-01-06T17:10:50.203Z",
       "status": "active",
       "assigned_role": "code-worker",
       "pid": 109579
+    },
+    {
+      "agent_id": "agent-1767719188301-mwlg55",
+      "session_id": "session-1767719188302",
+      "started_at": "2026-01-06T17:06:28.303Z",
+      "last_heartbeat": "2026-01-06T17:11:55.533Z",
+      "status": "active",
+      "assigned_role": "worker",
+      "pid": 126484
     }
   ],
-  "last_updated": "2026-01-06T17:05:50.186Z",
-  "lock_version": 72
+  "last_updated": "2026-01-06T17:12:22.350Z",
+  "lock_version": 78
 }

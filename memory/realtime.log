@@ -7045,3 +7045,199 @@
 {"timestamp":"2026-01-06T17:06:08.740Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
 {"timestamp":"2026-01-06T17:06:08.745Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
 {"timestamp":"2026-01-06T17:06:08.847Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.updated","data":{"properties":{"info":{"id":"ses_46bbcaa80ffe77sQZ8038bfycZ","version":"1.0.223","projectID":"3af2427cefcbf59fc25e480cb5095a5041b9dc6a","directory":"/app/workspace","title":"Debugging orchestrator heartbeat lease expiration","time":{"created":1767718999423,"updated":1767719168847},"summary":{"additions":null,"deletions":null,"files":39}}}}}
+{"timestamp":"2026-01-06T17:06:14.342Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: task_claim","data":{"tool":"task_claim","call_id":"toolu_01AedMMvrh2NtbDE79m4LPxz","duration_ms":18,"output_length":1294,"success":true}}
+{"timestamp":"2026-01-06T17:06:14.437Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: task_claim","data":{"tool":"task_claim","call_id":"toolu_01Trw4hSEcE6MA2BFzSSjCGN","duration_ms":10,"output_length":917,"success":true}}
+{"timestamp":"2026-01-06T17:06:14.693Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:06:14.786Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:06:14.790Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:06:18Z","level":"INFO","message":"Heartbeat service starting","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:06:18Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:06:18Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:06:18Z","level":"INFO","message":"Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:06:18Z","level":"INFO","message":"Heartbeat service complete (success)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:06:22.082Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01RaTUueP2RdnwVZPPXYV8tG","duration_ms":57,"output_length":29,"success":true}}
+{"timestamp":"2026-01-06T17:06:23.009Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_0155LcrQkWCWKRgbD8FmQnYC","duration_ms":22,"output_length":29,"success":true}}
+{"timestamp":"2026-01-06T17:06:23.403Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:06:23.500Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:06:23.506Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:07:07.295Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01RrG7bRid4wb2MDy4jq5oji","duration_ms":40031,"output_length":36,"success":true}}
+{"timestamp":"2026-01-06T17:07:07.556Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:07:07.678Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:07:07.687Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:07:10.755Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: agent_status","data":{"tool":"agent_status","call_id":"toolu_011mbWE9WPvQAkTxMCMyNtmD","duration_ms":5,"output_length":1317,"success":true}}
+{"timestamp":"2026-01-06T17:07:11.077Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:07:11.183Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:07:11.188Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:07:18Z","level":"INFO","message":"Heartbeat service starting","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:07:18Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:07:18Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:07:18Z","level":"INFO","message":"Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:07:18Z","level":"INFO","message":"Heartbeat service complete (success)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:13.935Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01AviyuWsdF3ToDeGuxLSkAF","duration_ms":60007,"output_length":43,"success":true}}
+{"timestamp":"2026-01-06T17:08:14.132Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:08:14.253Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:08:14.261Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:08:17.228Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: agent_messages","data":{"tool":"agent_messages","call_id":"toolu_01J26nbCKmTBborYpQDQPaGd","duration_ms":0,"output_length":1619,"success":true}}
+{"timestamp":"2026-01-06T17:08:17.474Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:08:17.566Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:08:17.571Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:08:18Z","level":"INFO","message":"=== Heartbeat service cycle started ===","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:19Z","level":"DEBUG","message":"Starting heartbeat cycle for agent: agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:19Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:19Z","level":"DEBUG","message":"✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:19Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:19Z","level":"DEBUG","message":"✓ Updated leader lease for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:19Z","level":"INFO","message":"Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"INFO","message":"=== Heartbeat service cycle started ===","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"DEBUG","message":"Starting heartbeat cycle for agent: agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"DEBUG","message":"✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"DEBUG","message":"✓ Updated leader lease for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"INFO","message":"Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"INFO","message":"✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=47ms)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"WARN","message":"Failed to update stats: ","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"ERROR","message":"✗ Heartbeat service CRASHED - unhandled error in heartbeat cycle","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:43Z","level":"WARN","message":"Failed to run stats update script","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"INFO","message":"=== Heartbeat service cycle started ===","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"DEBUG","message":"Starting heartbeat cycle for agent: agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"DEBUG","message":"✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"DEBUG","message":"✓ Updated leader lease for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"INFO","message":"Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"INFO","message":"✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=52ms)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"WARN","message":"Failed to update stats: ","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"ERROR","message":"✗ Heartbeat service CRASHED - unhandled error in heartbeat cycle","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:08:52Z","level":"WARN","message":"Failed to run stats update script","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:06.106Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_017NC4HRew9EPFYXUS4owjsn","duration_ms":45015,"output_length":41,"success":true}}
+{"timestamp":"2026-01-06T17:09:06.336Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:09:06.440Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:09:06.449Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:09:08.900Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: agent_messages","data":{"tool":"agent_messages","call_id":"toolu_019rV9j6NsyYSm4GXmrjWeCr","duration_ms":0,"output_length":3445,"success":false}}
+{"timestamp":"2026-01-06T17:09:09.155Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:09:09.265Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:09:09.271Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:09:27Z","level":"INFO","message":"=== Heartbeat service cycle started ===","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:27Z","level":"DEBUG","message":"Starting heartbeat cycle for agent: agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:27Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:27Z","level":"DEBUG","message":"✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:27Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:27Z","level":"DEBUG","message":"✓ Updated leader lease for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:27Z","level":"INFO","message":"Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:27Z","level":"INFO","message":"✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=79ms)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:27Z","level":"DEBUG","message":"Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:43Z","level":"INFO","message":"=== Heartbeat service cycle started ===","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:43Z","level":"DEBUG","message":"Starting heartbeat cycle for agent: agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:43Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:43Z","level":"DEBUG","message":"✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:43Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:43Z","level":"DEBUG","message":"✓ Updated leader lease for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:43Z","level":"INFO","message":"Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:43Z","level":"INFO","message":"✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=59ms)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:09:43Z","level":"DEBUG","message":"Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:13.571Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01PcsJUa3MKg3V2qzS7V7kae","duration_ms":60018,"output_length":42,"success":true}}
+{"timestamp":"2026-01-06T17:10:13.795Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:10:13.917Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:10:13.925Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:10:16.534Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: agent_messages","data":{"tool":"agent_messages","call_id":"toolu_01QUHA4us9vKaHahHWFaRjcN","duration_ms":0,"output_length":3445,"success":false}}
+{"timestamp":"2026-01-06T17:10:16.788Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:10:16.893Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:10:16.899Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:10:19.141Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: agent_status","data":{"tool":"agent_status","call_id":"toolu_01Tjif71CzJgpwyk3GLpqo4X","duration_ms":14,"output_length":1164,"success":true}}
+{"timestamp":"2026-01-06T17:10:19.509Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:10:19.608Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:10:19.613Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:10:27Z","level":"INFO","message":"=== Heartbeat service cycle started ===","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:27Z","level":"DEBUG","message":"Starting heartbeat cycle for agent: agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:27Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:27Z","level":"DEBUG","message":"✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:27Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:27Z","level":"DEBUG","message":"✓ Updated leader lease for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:27Z","level":"INFO","message":"Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:27Z","level":"INFO","message":"✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=31ms)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:27Z","level":"DEBUG","message":"Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:43Z","level":"INFO","message":"=== Heartbeat service cycle started ===","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:43Z","level":"DEBUG","message":"Starting heartbeat cycle for agent: agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:43Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:43Z","level":"DEBUG","message":"✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:43Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:43Z","level":"DEBUG","message":"✓ Updated leader lease for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:43Z","level":"INFO","message":"Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:43Z","level":"INFO","message":"✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=47ms)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:10:43Z","level":"DEBUG","message":"Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:22.771Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01TSyF1obphzuzhD8ozF55Fx","duration_ms":60027,"output_length":48,"success":true}}
+{"timestamp":"2026-01-06T17:11:23.015Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:23.132Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:11:23.139Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:25.250Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: agent_messages","data":{"tool":"agent_messages","call_id":"toolu_01CeB4H5dqrsBTbuwerkbzKD","duration_ms":1,"output_length":3445,"success":false}}
+{"timestamp":"2026-01-06T17:11:25.490Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:25.590Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:11:25.595Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:27Z","level":"INFO","message":"=== Heartbeat service cycle started ===","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:27Z","level":"DEBUG","message":"Starting heartbeat cycle for agent: agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:27Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:27Z","level":"DEBUG","message":"✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:27Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:27Z","level":"DEBUG","message":"✓ Updated leader lease for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:27Z","level":"INFO","message":"Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:27Z","level":"INFO","message":"✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=57ms)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:27Z","level":"DEBUG","message":"Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:30.615Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: task_update","data":{"tool":"task_update","call_id":"toolu_01VBV4C6qzF4YJNJwy5ytASZ","duration_ms":28,"output_length":202,"success":true}}
+{"timestamp":"2026-01-06T17:11:31.913Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: quality_assess","data":{"tool":"quality_assess","call_id":"toolu_01Nid4foiCVG5crmaAJ34csC","duration_ms":12,"output_length":568,"success":false}}
+{"timestamp":"2026-01-06T17:11:32.299Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:32.393Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:11:32.398Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:34.648Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01L9yuUTvku5spJhwT2sKbiw","duration_ms":3,"output_length":4756,"success":true}}
+{"timestamp":"2026-01-06T17:11:34.932Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:35.024Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:11:35.029Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:37.788Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01BfXvPS1soFhkMrnVfM8e9v","duration_ms":15,"output_length":82,"success":true}}
+{"timestamp":"2026-01-06T17:11:38.024Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:38.132Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:11:38.137Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:39.837Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: task_list","data":{"tool":"task_list","call_id":"toolu_019iA9AfxmHVMrYhdKPRNM5M","duration_ms":1,"output_length":37,"success":true}}
+{"timestamp":"2026-01-06T17:11:40.102Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:40.220Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:11:40.231Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:42.426Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01PLFoQFYQCykFz3437gJoiD","duration_ms":12,"output_length":1275,"success":true}}
+{"timestamp":"2026-01-06T17:11:42.702Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:42.800Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:11:42.806Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:43Z","level":"INFO","message":"=== Heartbeat service cycle started ===","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:43Z","level":"DEBUG","message":"Starting heartbeat cycle for agent: agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:43Z","level":"DEBUG","message":"Updated agent agent-1767557539707-gpscqs heartbeat in registry","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:43Z","level":"DEBUG","message":"✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:43Z","level":"DEBUG","message":"Not the leader, skipping lease refresh","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:43Z","level":"DEBUG","message":"✓ Updated leader lease for agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:43Z","level":"INFO","message":"Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:43Z","level":"INFO","message":"✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=54ms)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:43Z","level":"DEBUG","message":"Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)","source":"heartbeat-service"}
+{"timestamp":"2026-01-06T17:11:45.697Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01N3CkGdL5i8rTTjKK6qD9Wk","duration_ms":4,"output_length":1912,"success":true}}
+{"timestamp":"2026-01-06T17:11:45.939Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:11:46.034Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:11:46.039Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:03.307Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_016ADCFSVHLCNzToDHsW6JoB","duration_ms":15017,"output_length":55,"success":true}}
+{"timestamp":"2026-01-06T17:12:03.535Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:03.632Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:12:03.637Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:05.005Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: agent_messages","data":{"tool":"agent_messages","call_id":"toolu_0172K98LWr3S2hWKW7xFgqWi","duration_ms":1,"output_length":1727,"success":true}}
+{"timestamp":"2026-01-06T17:12:05.268Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:05.364Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:12:05.368Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:09.705Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: quality_assess","data":{"tool":"quality_assess","call_id":"toolu_01GvqifJj5EtyYbXSCRRerm5","duration_ms":18,"output_length":604,"success":true}}
+{"timestamp":"2026-01-06T17:12:09.935Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:10.041Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:12:10.048Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:13.993Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_0153rXqfwZjeDS5EzWAwUbtX","duration_ms":115,"output_length":1863,"success":true}}
+{"timestamp":"2026-01-06T17:12:14.170Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:14.270Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:12:14.275Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:17.346Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01MBv7LDVEY2U6MxGXGx7nE9","duration_ms":22,"output_length":0,"success":true}}
+{"timestamp":"2026-01-06T17:12:17.602Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:17.694Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:12:17.699Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:22.919Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Tool executed: bash","data":{"tool":"bash","call_id":"toolu_01WrY2t71vXVAeTBU7vzNAgf","duration_ms":23,"output_length":98,"success":true}}
+{"timestamp":"2026-01-06T17:12:23.536Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}
+{"timestamp":"2026-01-06T17:12:23.633Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Detected agent role: orchestrator"}
+{"timestamp":"2026-01-06T17:12:23.639Z","session":"ses_46bbcaa80ffe77sQZ8038bfycZ","level":"INFO","message":"Event: session.status","data":{"properties":{"sessionID":"ses_46bbcaa80ffe77sQZ8038bfycZ","status":{"type":"busy"}}}}

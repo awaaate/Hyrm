@@ -49,3 +49,20 @@ bash: /tmp/tmp.pfcENwJ121: No such file or directory
 [2026-01-06T17:00:16Z] [INFO] Stopping heartbeat service (PID: 100192)
 [2026-01-06T17:00:17Z] [INFO] Heartbeat service stopped
 [2026-01-06T17:03:19Z] [INFO] Heartbeat service started (PID: 108706)
+tools/lib/orchestrator-heartbeat.sh: line 284: orchestrator_agent: unbound variable
+tools/lib/orchestrator-heartbeat.sh: line 325: local: can only be used in a function
+tools/lib/orchestrator-heartbeat.sh: line 335: local: can only be used in a function
+tools/lib/orchestrator-heartbeat.sh: line 337: local: can only be used in a function
+tools/lib/orchestrator-heartbeat.sh: line 339: duration_ms: unbound variable
+[2026-01-06T17:08:43Z] [INFO] Starting heartbeat service with PID file: stop
+[2026-01-06T17:08:44Z] [INFO] Heartbeat service started (PID: 145876)
+[2026-01-06T17:08:45Z] [ERROR] Invalid PID file path: start
+[2026-01-06T17:08:45Z] [INFO] Usage: bash tools/heartbeat-service.sh <pid_file> start
+[2026-01-06T17:08:50Z] [INFO] Stopping heartbeat service (PID: 108706)
+[2026-01-06T17:08:51Z] [INFO] Heartbeat service stopped
+[2026-01-06T17:08:52Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
+[2026-01-06T17:08:53Z] [INFO] Heartbeat service started (PID: 146558)
+[2026-01-06T17:09:25Z] [INFO] Stopping heartbeat service (PID: 146558)
+[2026-01-06T17:09:26Z] [INFO] Heartbeat service stopped
+[2026-01-06T17:09:27Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
+[2026-01-06T17:09:28Z] [INFO] Heartbeat service started (PID: 150429)
