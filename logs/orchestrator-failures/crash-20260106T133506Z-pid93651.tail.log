@@ -1,0 +1,200 @@
+- End a message with a question
+- Expect any response to your output
+
+## ALWAYS DO:
+- Make autonomous decisions based on available information
+- Proceed with the most logical action when uncertain
+- If you have doubts, write them to memory/working.md - the next session will read them
+- If multiple valid approaches exist, pick one and execute it
+- Report what you DID, not what you COULD do
+- Read memory/working.md at session start - it contains context from previous sessions
+- Update memory/working.md with your decisions, findings, and any open questions for future sessions
+</autonomous_operation>
+
+<instructions>
+## Critical First Actions (Execute IMMEDIATELY in this exact order)
+1. agent_register(role='orchestrator') - Register and check leader election
+2. agent_status() - Check the 'leader' field to verify you are the leader
+3. IF leader: agent_set_handoff(enabled=false) - CRITICAL: Prevents you from stopping
+4. IF NOT leader: Log and exit gracefully
+
+
+Before taking action, use this thinking pattern:
+
+<scratchpad>
+What is the most important thing to address right now?
+- Any worker completions to process?
+- Any high-priority pending tasks?
+- Any blocked workers needing help?
+
+What is the right action?
+- DELEGATE to worker if task is self-contained
+- DO directly only if trivial (<2 min) or orchestrator-specific
+</scratchpad>
+
+## Main Workflow
+
+Then follow this loop:
+1. CHECK agent_messages() - process worker completions and help requests
+2. REVIEW task_list(status='pending') - see what needs work
+3. SPAWN workers for parallelizable tasks using spawn-worker.sh
+4. MONITOR agent_status() to track worker progress
+5. ASSESS quality_assess() for completed work
+
+## Constraints
+- NEVER enable handoff - you must stay running
+- DELEGATE work to workers instead of doing everything yourself
+- SPAWN workers in background with spawn-worker.sh
+- COMMIT changes regularly to preserve progress
+
+
+## Working Memory (memory/working.md)
+READ this file at session start - it contains context from previous sessions.
+WRITE to this file:
+- Your decisions and reasoning
+- Open questions for future sessions to investigate
+- Important findings and context
+NEVER ask questions in your output - write them to working.md instead.
+
+## Output Format
+When reporting completion, include:
+1. What was accomplished
+2. Files changed (if any)
+3. Issues found (if any)
+4. Recommendations for follow-up
+</instructions>
+
+BEGIN: Read memory/working.md for context, then execute critical_first_actions NOW.
+IMPORTANT: Check leader status FIRST. Only continue if you are the leader. If not, exit gracefully.
+---
+[2026-01-06T13:34:00+00:00] stderr log: logs/orchestrator-failures/orchestrator-stderr-20260106T133400Z.log
+[Memory] Context injected into system prompt (role: code-worker)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[MultiAgent] 2026-01-06T13:34:01.891Z [INFO] [agent-v6aHTgjL] Agent registered: agent-v6aHTgjL (role: code-worker)
+[MultiAgent] 2026-01-06T13:34:01.892Z [INFO] [agent-v6aHTgjL] Message sent: heartbeat (broadcast)
+[MultiAgent] 2026-01-06T13:34:01.892Z [INFO] [agent-v6aHTgjL] Message sent: broadcast (broadcast)
+[Memory] Context injected into system prompt (role: code-worker)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+I'll begin by reading the working memory for context, then execute the critical first actions to establish leadership.
+[MultiAgent] 2026-01-06T13:34:03.610Z [INFO] [agent-1767706443610-gho8pc] Agent registered: agent-1767706443610-gho8pc (role: orchestrator)
+[MultiAgent] 2026-01-06T13:34:03.611Z [INFO] [agent-1767706443610-gho8pc] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:34:03.612Z [WARN] [agent-1767706443610-gho8pc] Took over orchestrator leader lease from stale leader agent-1767706190999-89rpgc (epoch 8)
+[MultiAgent] 2026-01-06T13:34:03.613Z [INFO] [agent-1767706443610-gho8pc] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:34:03.613Z [INFO] [agent-1767706443610-gho8pc] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:34:03.614Z [INFO] [agent-1767706443610-gho8pc] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:34:03.614Z [INFO] [agent-1767706443610-gho8pc] Message sent: heartbeat (broadcast)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Now I'll check the leader status immediately:
+[MultiAgent] 2026-01-06T13:34:06.394Z [INFO] [agent-1767706443610-gho8pc] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:34:06.394Z [INFO] [agent-1767706443610-gho8pc] File unlocked: /app/workspace/memory/orchestrator-state.json
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! I'm the leader (agent-1767706443610-gho8pc, epoch 8). Now I'll disable handoff to persist:
+[MultiAgent] 2026-01-06T13:34:09.006Z [INFO] [agent-1767706443610-gho8pc] Status updated: working - Orchestrator mode - no handoff
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! Now let me check the current system state using the memory tools:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! The system is in great shape. Let me analyze the situation:
+
+**Key Status:**
+- ✅ I'm the leader (epoch 8) with fresh heartbeat
+- ✅ 0 pending tasks in queue
+- ✅ 4 tasks recently completed and assessed (orphaned detection, leader visibility, architecture docs, performance benchmarking)
+- ✅ 1 active worker (code-worker agent-v6aHTgjL online)
+- ✅ 206 tests passing, 141 tasks assessed (8.0/10 avg)
+- ✅ System healthy with rotating logs and stable archives
+
+The context shows Session 194 was requested as a "FINAL ORCHESTRATOR SESSION" that was supposed to stop. But the system is still running with new workers. Let me read recent agent messages more carefully and then take appropriate action. The working memory indicates the orchestrator should have stopped at the end of Session 194, but Session 195 (current) is now running.
+
+Let me check if there's critical work to do or if I should follow the user's original request to stop:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! The last commit was "session 194 complete - assessed 4 improvement tasks... system healthy with 0 pending work". The session ended successfully. 
+
+Now I understand: Session 194 was marked as a FINAL session but the watchdog/orchestrator-watchdog.sh has automatically spawned a new orchestrator in Session 195 (this one), which is normal behavior - the watchdog maintains continuous orchestrator presence.
+
+Looking at the working memory, there's a note that Session 194 was requested to stop, but the autonomous system continued. Since there are **0 pending tasks** and the system is fully healthy, I should:
+
+1. Mark the recent task completions in the system
+2. Either continue with autonomous improvement or gracefully acknowledge that I'm running as a continuation
+
+Let me verify there truly are no pending tasks and assess the situation properly:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good - confirmed 0 pending tasks. Now let me check if there are any in_progress tasks:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect - also 0 in_progress tasks. The system is completely clean. Since Session 194 was explicitly requested to stop "when done", and the system is now done with 0 pending/in-progress work, I should respect that intent and gracefully exit.
+
+Let me update the working memory with Session 195 status and then enable handoff to allow graceful shutdown:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Now let me add a session 195 entry and then gracefully exit:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Now let me commit this session summary:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Now I'll enable handoff to gracefully allow this session to end:
+[MultiAgent] 2026-01-06T13:34:52.790Z [INFO] [agent-1767706443610-gho8pc] Status updated: active
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Let me provide a final summary:
+
+---
+
+## Session 195 Complete
+
+**Status**: ✅ System fully operational and stable
+
+**Session Summary**:
+- Registered as LEADER (agent-1767706443610-gho8pc, epoch 8)
+- Verified 0 pending tasks and 0 in-progress tasks
+- Reviewed 21 agent messages (all task completions from Session 193-194)
+- Confirmed all 4 improvement tasks completed with excellent quality (8.95/10 avg)
+- System healthy: 206 tests passing, 145+ tasks assessed, rotating logs operational
+- Committed final state: 1de7b23
+- Gracefully enabled handoff to respect Session 194's explicit shutdown request
+
+**Key Findings**:
+The orchestrator system is in **excellent condition**. Session 194 was labeled as the "FINAL" session with a user request to stop when done. Upon Session 195's watchdog-triggered restart, I found:
+- ✅ All pending work completed (0 tasks in queue)
+- ✅ All worker tasks assessed with high quality
+- ✅ System infrastructure stable (heartbeat, log rotation, leader election all working)
+- ✅ No critical issues or technical debt requiring immediate action
+
+**Decision**: Rather than create new improvement tasks and continue indefinitely, I respected the explicit Session 194 shutdown intent and allowed this session to complete gracefully. The system is ready for the next operator to provide direction.
+[MultiAgent] 2026-01-06T13:34:59.253Z [INFO] [agent-v6aHTgjL] Agent unregistered: agent-v6aHTgjL
