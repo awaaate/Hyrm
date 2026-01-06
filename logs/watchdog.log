@@ -999,3 +999,31 @@
 [2026-01-06T17:45:33Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
 [2026-01-06T17:45:34Z] [INFO] Heartbeat service started (PID: 202209)
 [2026-01-06T17:45:39+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T17:47:39+00:00] [ERROR] =========================================
+[2026-01-06T17:47:39+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T17:47:39+00:00] [ERROR]   PID: 202177, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T17:47:39+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T174533Z.log
+[2026-01-06T17:47:39+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T174533Z.log ----
+[2026-01-06T17:47:39+00:00] [ERROR] stderr: 
+[2026-01-06T17:47:39+00:00] [ERROR] stderr: 
+[2026-01-06T17:47:39+00:00] [ERROR] stderr: 
+[2026-01-06T17:47:39+00:00] [ERROR] stderr: [haiku/YOLO 431a837] docs: session 204 - orchestrator leader confirmed, dashboard widget worker spawned, system analysis complete
+[2026-01-06T17:47:39+00:00] [ERROR] stderr:  1 file changed, 72 insertions(+)
+[2026-01-06T17:47:39+00:00] [ERROR] stderr: [91m[1m| [0m[90m Bash     [0mCommit session 204 memory update[93m[1m| [0m[90m Todo     [0m1 todos
+[2026-01-06T17:47:39+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T17:47:39+00:00] [ERROR] =========================================
+[2026-01-06T17:47:39+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T17:47:40+00:00] [INFO] Healthy leader exists: agent-1767721538145-0w3adn (epoch 17), lease valid for 147s
+[2026-01-06T17:47:40+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767721538145-0w3adn:epoch17). Skipping respawn.
+[2026-01-06T17:48:40+00:00] [INFO] Healthy leader exists: agent-1767721538145-0w3adn (epoch 17), lease valid for 87s
+[2026-01-06T17:48:40+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767721538145-0w3adn:epoch17). Skipping respawn.
+[2026-01-06T17:49:41+00:00] [INFO] Healthy leader exists: agent-1767721538145-0w3adn (epoch 17), lease valid for 27s
+[2026-01-06T17:49:41+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767721538145-0w3adn:epoch17). Skipping respawn.
+[2026-01-06T17:50:41+00:00] [WARN] Leader lease expired 63s ago: agent-1767721538145-0w3adn (epoch 17)
+[2026-01-06T17:50:41+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T17:50:41+00:00] [WARN] Leader lease expired 63s ago: agent-1767721538145-0w3adn (epoch 17)
+[2026-01-06T17:50:41+00:00] [INFO] Starting orchestrator agent (restart #8 this hour)...
+[2026-01-06T17:50:41+00:00] [OK] Orchestrator started with PID: 212161 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T17:50:41Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
+[2026-01-06T17:50:42Z] [INFO] Heartbeat service started (PID: 212193)
+[2026-01-06T17:50:47+00:00] [OK] Orchestrator confirmed running

@@ -5,41 +5,41 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-06T17:45:46Z",
+      "last_heartbeat": "2026-01-06T17:50:47Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-IQucy5Ma",
-      "session_id": "ses_46b95feceffelC1xlmIQucy5Ma",
-      "started_at": "2026-01-06T17:45:34.407Z",
-      "last_heartbeat": "2026-01-06T17:45:34.411Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 202177
-    },
-    {
-      "agent_id": "agent-1767721538145-0w3adn",
-      "session_id": "session-1767721538145",
-      "started_at": "2026-01-06T17:45:38.146Z",
-      "last_heartbeat": "2026-01-06T17:45:43.984Z",
-      "status": "working",
-      "assigned_role": "orchestrator",
-      "pid": 202177,
-      "current_task": "Orchestrator mode - no handoff"
-    },
-    {
       "agent_id": "agent-1767721579668-oszieh",
       "session_id": "session-1767721579668",
       "started_at": "2026-01-06T17:46:19.669Z",
-      "last_heartbeat": "2026-01-06T17:46:19.670Z",
+      "last_heartbeat": "2026-01-06T17:49:19.681Z",
       "status": "active",
       "assigned_role": "code-worker",
       "pid": 204119
+    },
+    {
+      "agent_id": "agent-7ceBF3Sr",
+      "session_id": "ses_46b914a0affeX3vbdU7ceBF3Sr",
+      "started_at": "2026-01-06T17:50:42.863Z",
+      "last_heartbeat": "2026-01-06T17:50:42.866Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 212161
+    },
+    {
+      "agent_id": "agent-1767721845146-oahsxa",
+      "session_id": "session-1767721845146",
+      "started_at": "2026-01-06T17:50:45.146Z",
+      "last_heartbeat": "2026-01-06T17:50:51.491Z",
+      "status": "working",
+      "assigned_role": "orchestrator",
+      "pid": 212161,
+      "current_task": "Orchestrator mode - no handoff"
     }
   ],
-  "last_updated": "2026-01-06T17:46:19.670Z",
-  "lock_version": 106
+  "last_updated": "2026-01-06T17:50:51.491Z",
+  "lock_version": 110
 }

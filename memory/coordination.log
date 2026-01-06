@@ -4855,3 +4855,22 @@
 2026-01-06T17:45:43.984Z [INFO] [agent-1767721538145-0w3adn] Status updated: working - Orchestrator mode - no handoff
 2026-01-06T17:46:19.669Z [INFO] [agent-1767721579668-oszieh] Agent registered: agent-1767721579668-oszieh (role: code-worker)
 2026-01-06T17:46:19.671Z [INFO] [agent-1767721579668-oszieh] Message sent: heartbeat (broadcast)
+2026-01-06T17:46:38.162Z [INFO] [agent-1767721538145-0w3adn] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:46:38.169Z [INFO] [agent-1767721538145-0w3adn] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:46:40.185Z [INFO] [agent-1767721538145-0w3adn] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:46:40.188Z [INFO] [agent-1767721538145-0w3adn] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:47:25.215Z [INFO] [agent-IQucy5Ma] Agent unregistered: agent-IQucy5Ma
+2026-01-06T17:49:38.166Z [INFO] [agent-1767721579668-oszieh] Message sent: task_complete (broadcast)
+2026-01-06T17:50:42.863Z [INFO] [agent-7ceBF3Sr] Agent registered: agent-7ceBF3Sr (role: code-worker)
+2026-01-06T17:50:42.868Z [INFO] [agent-7ceBF3Sr] Message sent: heartbeat (broadcast)
+2026-01-06T17:50:42.869Z [INFO] [agent-7ceBF3Sr] Message sent: broadcast (broadcast)
+2026-01-06T17:50:45.146Z [INFO] [agent-1767721845146-oahsxa] Agent registered: agent-1767721845146-oahsxa (role: orchestrator)
+2026-01-06T17:50:45.147Z [INFO] [agent-1767721845146-oahsxa] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:50:45.148Z [WARN] [agent-1767721845146-oahsxa] Took over orchestrator leader lease from stale leader agent-1767721538145-0w3adn (epoch 18)
+2026-01-06T17:50:45.148Z [INFO] [agent-1767721845146-oahsxa] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:50:45.149Z [INFO] [agent-1767721845146-oahsxa] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:50:45.150Z [INFO] [agent-1767721845146-oahsxa] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:50:45.150Z [INFO] [agent-1767721845146-oahsxa] Message sent: heartbeat (broadcast)
+2026-01-06T17:50:47.412Z [INFO] [agent-1767721845146-oahsxa] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:50:47.412Z [INFO] [agent-1767721845146-oahsxa] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T17:50:51.491Z [INFO] [agent-1767721845146-oahsxa] Status updated: working - Orchestrator mode - no handoff
