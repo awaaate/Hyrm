@@ -1,8 +1,18 @@
+[91m[1m| [0m[90m Bash     [0mFinal test verification
+
+ 8 expect() calls
+Ran 4 tests across 1 file. [9.00ms]
+
+╔════════════════════════════════════════════╗
+║  Test Summary                              ║
+╚════════════════════════════════════════════╝
+
+  ✓ PASS - shared-utils
+  ✓ PASS - plugin-tools
+  ✓ PASS - plugin-integration
+  ✓ PASS - orchestrator-respawn
+  ✓ PASS - spec-generator
+
+Total: 5 passed, 0 failed
 
 
-
-[1;33m🔍 Running ESLint import linting...[0m
-[0;32m✅ Import linting passed[0m
-[haiku/YOLO e97f867] fix: consolidate duplicate fs imports in plugin index.ts
- 15 files changed, 352 insertions(+), 83 deletions(-)
-[91m[1m| [0m[90m Bash     [0mCommit import consolidation fix

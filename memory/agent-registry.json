@@ -5,41 +5,50 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-06T13:13:13Z",
+      "last_heartbeat": "2026-01-06T13:19:24Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-E7MHtbkH",
-      "session_id": "ses_46c92101dffeJ1vV9JE7MHtbkH",
-      "started_at": "2026-01-06T13:10:14.837Z",
-      "last_heartbeat": "2026-01-06T13:12:14.844Z",
+      "agent_id": "agent-fmtrqZJb",
+      "session_id": "ses_46c8b7f26ffeqHLLsYfmtrqZJb",
+      "started_at": "2026-01-06T13:17:25.234Z",
+      "last_heartbeat": "2026-01-06T13:19:25.240Z",
       "status": "active",
       "assigned_role": "code-worker",
-      "pid": 8293
+      "pid": 28863
     },
     {
-      "agent_id": "agent-1767705018116-krqu28",
-      "session_id": "session-1767705018116",
-      "started_at": "2026-01-06T13:10:18.116Z",
-      "last_heartbeat": "2026-01-06T13:12:18.128Z",
+      "agent_id": "agent-1767705447019-cpnlr4",
+      "session_id": "session-1767705447019",
+      "started_at": "2026-01-06T13:17:27.019Z",
+      "last_heartbeat": "2026-01-06T13:18:27.024Z",
       "status": "working",
       "assigned_role": "orchestrator",
-      "pid": 8293,
+      "pid": 28863,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-1767705122941-6ll11d",
-      "session_id": "session-1767705122941",
-      "started_at": "2026-01-06T13:12:02.941Z",
-      "last_heartbeat": "2026-01-06T13:13:02.947Z",
+      "agent_id": "agent-1767705554517-tlszxa",
+      "session_id": "session-1767705554517",
+      "started_at": "2026-01-06T13:19:14.518Z",
+      "last_heartbeat": "2026-01-06T13:19:14.518Z",
       "status": "active",
       "assigned_role": "code-worker",
-      "pid": 14210
+      "pid": 33224
+    },
+    {
+      "agent_id": "agent-1767705557287-rgxdkl",
+      "session_id": "session-1767705557287",
+      "started_at": "2026-01-06T13:19:17.287Z",
+      "last_heartbeat": "2026-01-06T13:19:17.290Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 33681
     }
   ],
-  "last_updated": "2026-01-06T13:13:13Z",
-  "lock_version": 33
+  "last_updated": "2026-01-06T13:19:25.240Z",
+  "lock_version": 39
 }

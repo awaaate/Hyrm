@@ -1,6 +1,6 @@
 {
-  "started_at": "2026-01-06T13:10:13+00:00",
-  "pid": 8293,
+  "started_at": "2026-01-06T13:17:24+00:00",
+  "pid": 28863,
   "model": "anthropic/claude-haiku-4-5",
-  "stderr_log": "logs/orchestrator-failures/orchestrator-stderr-20260106T131013Z.log"
+  "stderr_log": "logs/orchestrator-failures/orchestrator-stderr-20260106T131724Z.log"
 }

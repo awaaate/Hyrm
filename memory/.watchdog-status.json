@@ -1,10 +1,10 @@
 {
     "status": "running",
-    "last_check": "2026-01-06T13:12:19+00:00",
-    "orchestrator_pid": 8293,
+    "last_check": "2026-01-06T13:18:30+00:00",
+    "orchestrator_pid": 28863,
     "details": "Monitoring active",
     "watchdog_pid": 96,
-    "restarts_this_hour": 2,
+    "restarts_this_hour": 3,
     "token_usage": 0,
     "token_limit": 150000,
     "model": "anthropic/claude-haiku-4-5",

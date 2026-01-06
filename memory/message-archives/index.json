@@ -110,8 +110,26 @@
       "agents": [
         null
       ]
+    },
+    {
+      "filename": "messages-2026-01-06T13-17-25-259Z.jsonl",
+      "startDate": "2026-01-04T17:33:45.504Z",
+      "endDate": "2026-01-06T13:17:25.239Z",
+      "messageCount": 76,
+      "types": [
+        "task_available",
+        "task_completed",
+        "task_complete",
+        "broadcast",
+        "task_claim",
+        "heartbeat",
+        "direct"
+      ],
+      "agents": [
+        null
+      ]
     }
   ],
-  "lastUpdated": "2026-01-04T17:30:57.686Z",
-  "totalMessages": 1870
+  "lastUpdated": "2026-01-06T13:17:25.260Z",
+  "totalMessages": 1946
 }

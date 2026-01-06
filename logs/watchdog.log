@@ -382,3 +382,43 @@
 [2026-01-06T13:10:13+00:00] [OK] Orchestrator started with PID: 8293 (model: anthropic/claude-haiku-4-5)
 [2026-01-06T13:10:14Z] [INFO] Heartbeat service started (PID: 8322)
 [2026-01-06T13:10:19+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T13:14:19+00:00] [ERROR] =========================================
+[2026-01-06T13:14:19+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T13:14:19+00:00] [ERROR]   PID: 8293, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T13:14:19+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T131013Z.log
+[2026-01-06T13:14:19+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T131013Z.log ----
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: [91m[1m| [0m[90m Bash     [0mFinal test verification
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: 
+[2026-01-06T13:14:19+00:00] [ERROR] stderr:  8 expect() calls
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: Ran 4 tests across 1 file. [9.00ms]
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: 
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: ╔════════════════════════════════════════════╗
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: ║  Test Summary                              ║
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: ╚════════════════════════════════════════════╝
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: 
+[2026-01-06T13:14:19+00:00] [ERROR] stderr:   ✓ PASS - shared-utils
+[2026-01-06T13:14:19+00:00] [ERROR] stderr:   ✓ PASS - plugin-tools
+[2026-01-06T13:14:19+00:00] [ERROR] stderr:   ✓ PASS - plugin-integration
+[2026-01-06T13:14:19+00:00] [ERROR] stderr:   ✓ PASS - orchestrator-respawn
+[2026-01-06T13:14:19+00:00] [ERROR] stderr:   ✓ PASS - spec-generator
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: 
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: Total: 5 passed, 0 failed
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: 
+[2026-01-06T13:14:19+00:00] [ERROR] stderr: 
+[2026-01-06T13:14:19+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T13:14:19+00:00] [ERROR] =========================================
+[2026-01-06T13:14:20+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T13:14:21+00:00] [INFO] Healthy leader exists: agent-1767705018116-krqu28 (epoch 4), lease valid for 147s
+[2026-01-06T13:14:21+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767705018116-krqu28:epoch4). Skipping respawn.
+[2026-01-06T13:15:21+00:00] [INFO] Healthy leader exists: agent-1767705018116-krqu28 (epoch 4), lease valid for 86s
+[2026-01-06T13:15:21+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767705018116-krqu28:epoch4). Skipping respawn.
+[2026-01-06T13:16:21+00:00] [INFO] Healthy leader exists: agent-1767705018116-krqu28 (epoch 4), lease valid for 26s
+[2026-01-06T13:16:21+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767705018116-krqu28:epoch4). Skipping respawn.
+[2026-01-06T13:17:21+00:00] [WARN] Leader lease expired 63s ago: agent-1767705018116-krqu28 (epoch 4)
+[2026-01-06T13:17:21+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T13:17:21+00:00] [WARN] Leader lease expired 63s ago: agent-1767705018116-krqu28 (epoch 4)
+[2026-01-06T13:17:21+00:00] [INFO] Applying restart jitter: 2s (restart #3)
+[2026-01-06T13:17:23+00:00] [INFO] Starting orchestrator agent (restart #3 this hour)...
+[2026-01-06T13:17:24+00:00] [OK] Orchestrator started with PID: 28863 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T13:17:25Z] [INFO] Heartbeat service started (PID: 28892)
+[2026-01-06T13:17:30+00:00] [OK] Orchestrator confirmed running

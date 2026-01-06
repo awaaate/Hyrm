@@ -207,3 +207,23 @@
 [2026-01-06T13:13:13Z] [DEBUG] Not the leader, skipping lease refresh
 [2026-01-06T13:13:13Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
 [2026-01-06T13:13:13Z] [INFO] Heartbeat service complete (success)
+[2026-01-06T13:14:13Z] [INFO] Heartbeat service starting
+[2026-01-06T13:14:13Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T13:14:13Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T13:14:13Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
+[2026-01-06T13:14:13Z] [INFO] Heartbeat service complete (success)
+[2026-01-06T13:17:24Z] [INFO] Heartbeat service starting
+[2026-01-06T13:17:24Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T13:17:24Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T13:17:24Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
+[2026-01-06T13:17:24Z] [INFO] Heartbeat service complete (success)
+[2026-01-06T13:18:24Z] [INFO] Heartbeat service starting
+[2026-01-06T13:18:24Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T13:18:24Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T13:18:24Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
+[2026-01-06T13:18:24Z] [INFO] Heartbeat service complete (success)
+[2026-01-06T13:19:24Z] [INFO] Heartbeat service starting
+[2026-01-06T13:19:24Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T13:19:24Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T13:19:24Z] [INFO] Heartbeat cycle complete (agent: agent-1767557539707-gpscqs)
+[2026-01-06T13:19:24Z] [INFO] Heartbeat service complete (success)
