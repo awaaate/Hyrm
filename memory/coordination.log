@@ -4557,3 +4557,7 @@
 2026-01-06T13:11:42.964Z [INFO] [agent-1767705018116-krqu28] File unlocked: /app/workspace/memory/orchestrator-state.json
 2026-01-06T13:12:02.942Z [INFO] [agent-1767705122941-6ll11d] Agent registered: agent-1767705122941-6ll11d (role: code-worker)
 2026-01-06T13:12:02.943Z [INFO] [agent-1767705122941-6ll11d] Message sent: heartbeat (broadcast)
+2026-01-06T13:12:18.129Z [INFO] [agent-1767705018116-krqu28] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:12:18.134Z [INFO] [agent-1767705018116-krqu28] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:12:44.516Z [INFO] [agent-1767705018116-krqu28] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:12:44.522Z [INFO] [agent-1767705018116-krqu28] File unlocked: /app/workspace/memory/orchestrator-state.json

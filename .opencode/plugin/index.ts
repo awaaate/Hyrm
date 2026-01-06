@@ -25,8 +25,11 @@ import {
   readdirSync,
   unlinkSync,
   statSync,
+  createReadStream,
+  createWriteStream,
 } from "fs";
 import { join } from "path";
+import { createGzip } from "zlib";
 import { readJson, writeJson, readJsonl } from "../../tools/shared/json-utils";
 import { MultiAgentCoordinator } from "../../tools/lib/coordinator";
 import { getModel, getModelFallback } from "../../tools/shared/models";
@@ -365,9 +368,95 @@ export const MemoryPlugin: Plugin = async (ctx) => {
     return "other";
   };
 
-  // Check if realtime.log needs rotation and rotate if necessary
-  // Rotate when file exceeds 5MB threshold
-  const checkAndRotateRealtimeLog = (): void => {
+   // Compress an archive file with gzip
+   // Returns compression stats (original size, compressed size, ratio)
+   const compressArchiveFile = (archivePath: string): { success: boolean; originalSize: number; compressedSize: number; ratio: number } => {
+     try {
+       if (!existsSync(archivePath)) {
+         return { success: false, originalSize: 0, compressedSize: 0, ratio: 0 };
+       }
+
+       const originalStats = statSync(archivePath);
+       const originalSize = originalStats.size;
+       
+       // Skip if already compressed
+       if (archivePath.endsWith(".gz")) {
+         return { success: false, originalSize, compressedSize: originalSize, ratio: 1 };
+       }
+
+       // Read file and compress
+       const content = readFileSync(archivePath);
+       const compressedPath = archivePath + ".gz";
+       const compressed = Bun.gzipSync(content);
+       
+       writeFileSync(compressedPath, compressed);
+       
+       const compressedStats = statSync(compressedPath);
+       const compressedSize = compressedStats.size;
+       const ratio = compressedSize / originalSize;
+       
+       // Remove original after successful compression
+       unlinkSync(archivePath);
+       
+       return { success: true, originalSize, compressedSize, ratio };
+     } catch (error) {
+       // Silent fail - compression errors shouldn't break the system
+       return { success: false, originalSize: 0, compressedSize: 0, ratio: 0 };
+     }
+   };
+
+   // Compress old archives, keeping last N uncompressed for fast access
+   const compressOldArchives = (): void => {
+     try {
+       const archiveDir = join(memoryDir, "realtime-archives");
+       if (!existsSync(archiveDir)) return;
+       
+       const files = readdirSync(archiveDir)
+         .filter(f => f.startsWith("realtime-") && f.endsWith(".log"))
+         .sort()
+         .reverse(); // Most recent first
+       
+       // Keep last 5 uncompressed, compress the rest
+       const KEEP_UNCOMPRESSED = 5;
+       const toCompress = files.slice(KEEP_UNCOMPRESSED);
+       
+       let totalOriginalSize = 0;
+       let totalCompressedSize = 0;
+       let compressedCount = 0;
+       
+       for (const file of toCompress) {
+         const filePath = join(archiveDir, file);
+         const stats = compressArchiveFile(filePath);
+         
+         if (stats.success) {
+           totalOriginalSize += stats.originalSize;
+           totalCompressedSize += stats.compressedSize;
+           compressedCount++;
+         }
+       }
+       
+       // Log compression results if any files were compressed
+       if (compressedCount > 0 && isPrimaryInstance()) {
+         const savedBytes = totalOriginalSize - totalCompressedSize;
+         const savedMB = (savedBytes / (1024 * 1024)).toFixed(2);
+         const avgRatio = (totalCompressedSize / totalOriginalSize * 100).toFixed(1);
+         
+         const logEntry = {
+           timestamp: new Date().toISOString(),
+           session: currentSessionId,
+           level: "INFO",
+           message: `Archive compression completed: ${compressedCount} files compressed, ${savedMB}MB saved (${avgRatio}% of original)`,
+         };
+         appendFileSync(logPath, JSON.stringify(logEntry) + "\n");
+       }
+     } catch (error) {
+       // Silent fail - compression errors shouldn't break the system
+     }
+   };
+
+   // Check if realtime.log needs rotation and rotate if necessary
+   // Rotate when file exceeds 5MB threshold
+   const checkAndRotateRealtimeLog = (): void => {
     try {
       if (!existsSync(logPath)) return;
       

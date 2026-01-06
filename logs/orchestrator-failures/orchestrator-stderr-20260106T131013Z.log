@@ -1,4 +1,17 @@
-[91m[1m| [0m[90m Bash     [0mSpawn archive compression worker proactively
-Worker spawned (PID: 14210)
 
 
+
+[1;33m🔍 Running ESLint import linting...[0m
+[0;31m❌ ESLint import errors found:[0m
+    28:8   error    'fs' imported multiple times                                                                             import/no-duplicates
+    29:53  error    'fs' imported multiple times                                                                             import/no-duplicates
+
+[0;31mFix import errors before committing:[0m
+  - Check that all imported modules are installed
+  - Verify import paths are correct
+  - Remove duplicate imports
+
+[1;33mRun this command to see all errors:[0m
+  npx eslint .opencode/plugin/index.ts
+[91m[1m| [0m[90m Bash     [0mFinal commit for session 191[96m[1m| [0m[90m Read     [0m.opencode/plugin/index.ts
+[92m[1m| [0m[90m Edit     [0m.opencode/plugin/index.ts
