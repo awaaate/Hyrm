@@ -9,7 +9,8 @@
  * - Coordinating task distribution
  */
 
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync, statSync } from "fs";
+import { join } from "path";
 import { PATHS, MEMORY_DIR, getMemoryPath } from "../shared";
 
 // Use centralized paths from shared/paths.ts
@@ -1033,9 +1034,59 @@ class MultiAgentCoordinator {
     return true;
   }
 
+  /**
+   * Check and rotate coordination.log if it exceeds size threshold
+   * Keeps last 10k lines and archives older entries with timestamp
+   */
+  private checkAndRotateCoordinationLog(): void {
+    try {
+      if (!existsSync(COORDINATION_LOG)) return;
+
+      const stats = statSync(COORDINATION_LOG);
+      const fileSizeInBytes = stats.size;
+      const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+      const ROTATION_THRESHOLD_MB = 5;
+
+      // Rotate if file exceeds threshold
+      if (fileSizeInMB > ROTATION_THRESHOLD_MB) {
+        const content = readFileSync(COORDINATION_LOG, "utf-8");
+        const lines = content.trim().split("\n").filter(l => l);
+
+        // Keep last 10000 lines, archive the rest
+        if (lines.length > 10000) {
+          const keepCount = 10000;
+          const toArchive = lines.slice(0, -keepCount);
+          const toKeep = lines.slice(-keepCount);
+
+          // Create archive directory if it doesn't exist
+          const archiveDir = join(MEMORY_DIR, "coordination-archives");
+          if (!existsSync(archiveDir)) {
+            mkdirSync(archiveDir, { recursive: true });
+          }
+
+          // Create timestamped archive file
+          const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+          const archivePath = join(archiveDir, `coordination-${timestamp}.log`);
+
+          // Write archived lines
+          writeFileSync(archivePath, toArchive.join("\n") + "\n");
+
+          // Write rotated coordination.log with only recent lines
+          writeFileSync(COORDINATION_LOG, toKeep.join("\n") + "\n");
+        }
+      }
+    } catch (error) {
+      // Silent fail - don't break logging if rotation check fails
+      // This ensures the logging system itself remains resilient
+    }
+  }
+
   private log(level: "INFO" | "WARN" | "ERROR", message: string): void {
     const timestamp = new Date().toISOString();
     const logEntry = `${timestamp} [${level}] [${this.agentId}] ${message}\n`;
+    
+    // Check and rotate log if necessary before appending
+    this.checkAndRotateCoordinationLog();
     
     if (existsSync(COORDINATION_LOG)) {
       const content = readFileSync(COORDINATION_LOG, "utf-8");
