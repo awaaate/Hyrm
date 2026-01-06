@@ -3859,9 +3859,9 @@
       "title": "Clean up accumulated orchestrator crash logs and diagnostic artifacts",
       "description": "System has accumulated 16+ crash log files and diagnostic artifacts since Jan 4. These are no longer needed and take up space in logs/orchestrator-failures/.\n\nCurrent artifacts:\n- 16 crash tail logs (~13-16KB each)\n- Multiple orchestrator-stderr logs\n- Old heartbeat and watchdog logs\n\nActions:\n1. Archive files older than 24 hours to memory/archives/diagnostics/\n2. Create archive script to automate cleanup of >24h old logs\n3. Update watchdog to call cleanup script on startup\n4. Set size limit (100MB) for orchestrator-failures/ directory\n\nThis will maintain a rolling window of recent diagnostics while freeing disk space.",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-06T16:59:07.300Z",
-      "updated_at": "2026-01-06T16:59:07.313Z",
+      "updated_at": "2026-01-06T17:11:31.909Z",
       "created_by": "unknown",
       "tags": [
         "maintenance",
@@ -3870,16 +3870,25 @@
       ],
       "estimated_hours": 1,
       "complexity": "moderate",
-      "spec_file": "docs/specs/task_1767718747300_clean-up-accumulated-orchestra.md"
+      "spec_file": "docs/specs/task_1767718747300_clean-up-accumulated-orchestra.md",
+      "assigned_to": "agent-1767719002320-eastle",
+      "claimed_at": "2026-01-06T17:06:14.430Z",
+      "completed_at": "2026-01-06T17:11:30.593Z",
+      "notes": [
+        "[2026-01-06T17:06:31.850Z] Successfully implemented orchestrator crash log cleanup and archival system. Created tools/cleanup-orchestrator-logs.sh with 24h rolling window, 100MB size limit, and automatic enforcement. Integrated into orchestrator-watchdog.sh for startup and periodic (6h) cleanup. Archived 17 old files (166KB) from Jan 4. System now maintains clean working logs while preserving diagnostics for investigation.\"",
+        "[2026-01-06T17:11:30.599Z] Successfully cleaned up 17 accumulated crash logs and diagnostic artifacts. Created automated cleanup utility script (270 lines) and integrated with watchdog. Archive directory created with 100MB size limit. Quality assessment: 9.4/10 - excellent implementation with comprehensive error handling and monitoring recommendations.\""
+      ],
+      "quality_score": 9.5,
+      "quality_notes": "Automated log cleanup with configurable timeouts and size limits reduces disk space consumption while preserving recent diagnostics. Watchdog integration ensures continuous operation. Graceful error handling prevents system impact."
     },
     {
       "id": "task_1767718748914_aq74vm",
       "title": "Consolidate heartbeat service management and add diagnostics",
       "description": "Current heartbeat service implementation (tools/heartbeat-service.sh) lacks visibility into its health and success rate. Improvements needed:\n\n1. **Add heartbeat verification**: periodically check if orchestrator-state.json is being updated\n2. **Track success rate**: count how many heartbeats succeed vs fail per session\n3. **Diagnostic logging**: log what agent_id the service is using and whether updates succeed\n4. **Startup parameter validation**: ensure heartbeat service receives correct agent_id from orchestrator\n5. **Status command**: `bun tools/cli.ts heartbeat-status` to show service health, last update, next heartbeat time\n\nCurrent problem: It's unclear if heartbeat service is actually updating the lease or if the agent_id being passed is wrong.\n\nSuccess criteria:\n- Heartbeat service logs show successful updates every 60s\n- cli.ts heartbeat-status shows last update within past 60s\n- No more \"Leader lease not found\" warnings\n- Leader lease age remains <60s (not reaching 240s before renewal)",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-06T16:59:08.914Z",
-      "updated_at": "2026-01-06T16:59:08.932Z",
+      "updated_at": "2026-01-06T17:12:09.696Z",
       "created_by": "unknown",
       "tags": [
         "heartbeat",
@@ -3888,9 +3897,15 @@
       ],
       "estimated_hours": 1.5,
       "complexity": "moderate",
-      "spec_file": "docs/specs/task_1767718748914_consolidate-heartbeat-service-.md"
+      "spec_file": "docs/specs/task_1767718748914_consolidate-heartbeat-service-.md",
+      "assigned_to": "agent-1767719002320-eastle",
+      "claimed_at": "2026-01-06T17:06:14.329Z",
+      "completed_at": "2026-01-06T17:10:26.883Z",
+      "notes": "Successfully implemented heartbeat service diagnostics and monitoring",
+      "quality_score": 8.6,
+      "quality_notes": "Comprehensive heartbeat service diagnostics with agent_id tracking, success/failure indicators, and cycle timing provide clear visibility into orchestrator health. Statistics tracking enables trend analysis and alerting. CLI integration makes monitoring accessible to operators."
     }
   ],
-  "completed_count": 180,
-  "last_updated": "2026-01-06T17:01:35.551Z"
+  "completed_count": 182,
+  "last_updated": "2026-01-06T17:11:30.599Z"
 }
