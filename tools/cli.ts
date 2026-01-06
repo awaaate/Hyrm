@@ -46,16 +46,6 @@ import {
   // Data fetchers
   getQualityStore,
 } from "./shared";
-import {
-  // Heartbeat utilities
-  getHeartbeatStatus,
-  getHeartbeatHealthSummary,
-  analyzeHeartbeatLogs,
-  isHeartbeatServiceRunning,
-  getHeartbeatServicePid,
-  getLeaseAge,
-  getOrchestratorState,
-} from "./shared/heartbeat-utils";
 import type { 
   ToolTiming, 
   Agent, 
@@ -448,74 +438,6 @@ function showQuality(): void {
   }
   
   console.log();
-}
-
-function showHeartbeatStatus(): void {
-  const status = getHeartbeatStatus();
-  const logs = analyzeHeartbeatLogs();
-  const orchState = getOrchestratorState();
-  
-  console.log(`\n${c.bright}${c.cyan}HEARTBEAT SERVICE STATUS${c.reset}\n`);
-  console.log(`${c.dim}${"─".repeat(80)}${c.reset}\n`);
-  
-  // Service status
-  const serviceStatus = status.service_running 
-    ? `${c.green}✓ RUNNING${c.reset} (PID: ${c.bright}${status.service_pid}${c.reset})`
-    : `${c.red}✗ NOT RUNNING${c.reset}`;
-  console.log(`${c.cyan}Service:${c.reset}        ${serviceStatus}`);
-  
-  // Leader info
-  if (status.leader_id && status.leader_id !== "UNKNOWN") {
-    console.log(`${c.cyan}Leader:${c.reset}         ${c.bright}${truncate(status.leader_id, 50)}${c.reset} (epoch ${status.leader_epoch})`);
-  }
-  
-  // Lease health
-  const leaseColor = status.lease_healthy ? c.green : c.red;
-  const leaseStatus = status.lease_healthy 
-    ? `${c.green}✓ HEALTHY${c.reset}`
-    : `${c.red}✗ EXPIRED${c.reset}`;
-  console.log(`${c.cyan}Lease:${c.reset}         ${leaseStatus}`);
-  
-  // Last update
-  if (status.last_update !== "NEVER") {
-    const age = status.last_update_age_ms;
-    const ageStr = age >= 0 ? `${Math.round(age / 1000)}s ago` : "unknown";
-    const ageColor = age >= 0 && age < 65000 ? c.green : age >= 0 && age < 120000 ? c.yellow : c.red;
-    console.log(`${c.cyan}Last Update:${c.reset}    ${c.bright}${status.last_update}${c.reset} (${ageColor}${ageStr}${c.reset})`);
-  } else {
-    console.log(`${c.cyan}Last Update:${c.reset}    ${c.red}NEVER${c.reset}`);
-  }
-  
-  // TTL and age
-  console.log(`${c.cyan}TTL:${c.reset}            ${Math.round(status.lease_ttl_ms / 1000)}s`);
-  if (status.lease_age_ms >= 0) {
-    console.log(`${c.cyan}Lease Age:${c.reset}     ${Math.round(status.lease_age_ms / 1000)}s`);
-  }
-  
-  // Success metrics
-  const total = logs.success + logs.failure;
-  if (total > 0) {
-    const successRate = Math.round((logs.success / total) * 100);
-    const rateColor = successRate >= 95 ? c.green : successRate >= 80 ? c.yellow : c.red;
-    console.log(`${c.cyan}Success Rate:${c.reset}  ${rateColor}${successRate}%${c.reset} (${logs.success} OK, ${logs.failure} failed)`);
-  }
-  
-  // Expected frequency
-  console.log(`${c.cyan}Frequency:${c.reset}     Every ${Math.round(1 / status.update_frequency_hz)}s`);
-  
-  // Error summary
-  if (Object.keys(logs.error_types).length > 0) {
-    console.log(`\n${c.bright}Recent Errors:${c.reset}\n`);
-    for (const [error, count] of Object.entries(logs.error_types)) {
-      console.log(`  ${c.yellow}${error}${c.reset}: ${count} occurrence${count > 1 ? 's' : ''}`);
-    }
-  }
-  
-  console.log();
-  
-  // Health summary
-  const summary = getHeartbeatHealthSummary();
-  console.log(`${c.bright}Summary:${c.reset} ${summary}\n`);
 }
 
 function pruneMessages(olderThanHours: number = 24): void {
@@ -1166,6 +1088,7 @@ ${c.cyan}View Commands:${c.reset}
   ${c.bright}user-messages${c.reset}       User messages
   ${c.bright}quality${c.reset}             Quality metrics
   ${c.bright}health${c.reset}              Agent health status
+  ${c.bright}heartbeat${c.reset}           Heartbeat service diagnostics
 
 ${c.cyan}OpenCode Sessions:${c.reset}
   ${c.bright}oc${c.reset} sessions [n]     List OpenCode sessions
