@@ -1,7 +1,7 @@
 [
   {
-    "session_id": "ses_46bbcaa80ffe77sQZ8038bfycZ",
-    "timestamp": 1767718999476,
+    "session_id": "ses_46babd5aaffePatiCEHDYnzT0R",
+    "timestamp": 1767720102542,
     "messages": 2,
     "decisions": [],
     "discoveries": [],
@@ -10,6 +10,103 @@
     "key_insights": [],
     "techniques": [],
     "solutions": []
+  },
+  {
+    "session_id": "ses_46bafb250ffeYy7IFG6olqkuSl",
+    "timestamp": 1767719899837,
+    "messages": 13,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46bb9dabbffeP6tDCmEwB9o6Vu",
+    "timestamp": 1767719339464,
+    "messages": 31,
+    "decisions": [],
+    "discoveries": [
+      "the system already has a **complete, well-implemented, and fully operational solution** in place."
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46bb9ddd8ffeKc7puWqlK4cSSF",
+    "timestamp": 1767719515821,
+    "messages": 68,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "comprehensive heartbeat service diagnostics and consolidation."
+    ]
+  },
+  {
+    "session_id": "ses_46bbc3ef5ffeWAV76ThxX5jCzh",
+    "timestamp": 1767719217371,
+    "messages": 44,
+    "decisions": [],
+    "discoveries": [
+      "on this system, today is Jan 6, so `-mtime +1` means \"modified more than 1 day ago\" which should inc"
+    ],
+    "code_created": [
+      "tools/cleanup-orchestrator-logs.sh"
+    ],
+    "problems_solved": [],
+    "key_insights": [
+      "the `-mtime +1` flag looks for files modified more than 1 day ago."
+    ],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46bbc40dcffeukZDDveKDhh3Df",
+    "timestamp": 1767719436869,
+    "messages": 79,
+    "decisions": [],
+    "discoveries": [
+      "I'm trying to redirect stdout to the file while the bun command is still running.",
+      "the modified version has syntax errors.",
+      "the heartbeat script writes to the log via redirect in the background.",
+      "`bun run --smol` doesn't work the same way as bun.",
+      "the analyzeHeartbeatLogs function is reading the old logs."
+    ],
+    "code_created": [
+      "tools/shared/heartbeat-utils.ts"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "comprehensive heartbeat service diagnostics and monitoring to address the critical \"Leader lease not found\" warnings and"
+    ]
+  },
+  {
+    "session_id": "ses_46bbcaa80ffe77sQZ8038bfycZ",
+    "timestamp": 1767719615182,
+    "messages": 65,
+    "decisions": [],
+    "discoveries": [
+      "the watchdog was incorrectly stopping the heartbeat service during orchestrator restarts, creating g"
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "removed those stop calls from orchestrator-watchdog.sh (lines 1405, 1681). Commit: 8f6b809.",
+      "heartbeat service diagnostics and monitoring\"."
+    ]
   },
   {
     "session_id": "ses_46bc06d27ffeCwZqZw5mJTttk1",

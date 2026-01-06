@@ -5,50 +5,32 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-06T17:11:43Z",
+      "last_heartbeat": "2026-01-06T17:22:44Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-038bfycZ",
-      "session_id": "ses_46bbcaa80ffe77sQZ8038bfycZ",
-      "started_at": "2026-01-06T17:03:20.032Z",
-      "last_heartbeat": "2026-01-06T17:12:20.066Z",
+      "agent_id": "agent-HDYnzT0R",
+      "session_id": "ses_46babd5aaffePatiCEHDYnzT0R",
+      "started_at": "2026-01-06T17:21:43.373Z",
+      "last_heartbeat": "2026-01-06T17:22:43.381Z",
       "status": "active",
       "assigned_role": "code-worker",
-      "pid": 108677
+      "pid": 174046
     },
     {
-      "agent_id": "agent-1767719002320-eastle",
-      "session_id": "session-1767719002320",
-      "started_at": "2026-01-06T17:03:22.320Z",
-      "last_heartbeat": "2026-01-06T17:12:22.350Z",
+      "agent_id": "agent-1767720105577-kt47qg",
+      "session_id": "session-1767720105577",
+      "started_at": "2026-01-06T17:21:45.577Z",
+      "last_heartbeat": "2026-01-06T17:22:45.586Z",
       "status": "working",
       "assigned_role": "orchestrator",
-      "pid": 108677,
+      "pid": 174046,
       "current_task": "Orchestrator mode - no handoff"
-    },
-    {
-      "agent_id": "agent-1767719030178-psrnm",
-      "session_id": "session-1767719030178",
-      "started_at": "2026-01-06T17:03:50.179Z",
-      "last_heartbeat": "2026-01-06T17:10:50.203Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 109579
-    },
-    {
-      "agent_id": "agent-1767719188301-mwlg55",
-      "session_id": "session-1767719188302",
-      "started_at": "2026-01-06T17:06:28.303Z",
-      "last_heartbeat": "2026-01-06T17:11:55.533Z",
-      "status": "active",
-      "assigned_role": "worker",
-      "pid": 126484
     }
   ],
-  "last_updated": "2026-01-06T17:12:22.350Z",
-  "lock_version": 78
+  "last_updated": "2026-01-06T17:22:45.586Z",
+  "lock_version": 87
 }

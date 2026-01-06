@@ -5579,7 +5579,7 @@
     {
       "task_id": "task_1767718747300_201gdd",
       "task_title": "Clean up accumulated orchestrator crash logs and diagnostic artifacts",
-      "assessed_at": "2026-01-06T17:11:31.903Z",
+      "assessed_at": "2026-01-06T17:22:08.305Z",
       "assessed_by": "orchestrator",
       "dimensions": [
         {
@@ -5609,7 +5609,7 @@
         }
       ],
       "overall_score": 9.5,
-      "lessons_learned": "Automated log cleanup with configurable timeouts and size limits reduces disk space consumption while preserving recent diagnostics. Watchdog integration ensures continuous operation. Graceful error handling prevents system impact.",
+      "lessons_learned": "Automated cleanup requires non-blocking integration into watchdog to prevent failures from affecting orchestrator. Archive-then-cleanup pattern is safer than in-place cleanup. 24-hour retention window provides operational visibility.",
       "metadata": {
         "duration_minutes": 12
       }
@@ -5617,7 +5617,7 @@
     {
       "task_id": "task_1767718748914_aq74vm",
       "task_title": "Consolidate heartbeat service management and add diagnostics",
-      "assessed_at": "2026-01-06T17:12:09.691Z",
+      "assessed_at": "2026-01-06T17:22:07.049Z",
       "assessed_by": "orchestrator",
       "dimensions": [
         {
@@ -5647,7 +5647,7 @@
         }
       ],
       "overall_score": 8.6,
-      "lessons_learned": "Comprehensive heartbeat service diagnostics with agent_id tracking, success/failure indicators, and cycle timing provide clear visibility into orchestrator health. Statistics tracking enables trend analysis and alerting. CLI integration makes monitoring accessible to operators.",
+      "lessons_learned": "Heartbeat service success tracking requires both diagnostic logging and CLI visibility. Separated concerns: service handles updates, CLI tool provides monitoring interface. Agent_id tracking is critical for debugging.",
       "metadata": {
         "duration_minutes": 11
       }
@@ -5657,5 +5657,5 @@
     "total_assessed": 147,
     "avg_overall_score": 8.064625850340132
   },
-  "last_updated": "2026-01-06T17:12:09.693Z"
+  "last_updated": "2026-01-06T17:22:08.307Z"
 }

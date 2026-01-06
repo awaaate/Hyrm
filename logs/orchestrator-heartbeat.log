@@ -410,3 +410,156 @@
 [2026-01-06T17:11:43Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
 [2026-01-06T17:11:43Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=54ms)
 [2026-01-06T17:11:43Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:12:27Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:12:27Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:12:27Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:12:27Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:12:27Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:12:27Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:12:27Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:12:27Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=30ms)
+[2026-01-06T17:12:27Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:12:43Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:12:43Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:12:43Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:12:43Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:12:43Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:12:43Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:12:43Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:12:43Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=71ms)
+[2026-01-06T17:12:43Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:13:28Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:13:28Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:13:28Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:13:28Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:13:28Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:13:28Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:13:28Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:13:28Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=66ms)
+[2026-01-06T17:13:28Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:13:43Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:13:43Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:13:43Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:13:43Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:13:43Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:13:43Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:13:43Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:13:43Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=60ms)
+[2026-01-06T17:13:43Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:14:43Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:14:44Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:14:44Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:14:44Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:14:44Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:14:44Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:14:44Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:14:44Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=65ms)
+[2026-01-06T17:14:44Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:15:44Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:15:44Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:15:44Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:15:44Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:15:44Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:15:44Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:15:44Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:15:44Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=111ms)
+[2026-01-06T17:15:44Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:16:44Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:16:44Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:16:44Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:16:44Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:16:44Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:16:44Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:16:44Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:16:44Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=62ms)
+[2026-01-06T17:16:44Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:17:28Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:17:28Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:17:28Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:17:28Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:17:28Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:17:28Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:17:28Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:17:28Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=25ms)
+[2026-01-06T17:17:28Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:17:44Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:17:44Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:17:44Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:17:44Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:17:44Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:17:44Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:17:44Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:17:44Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=62ms)
+[2026-01-06T17:17:44Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:18:28Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:18:28Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:18:28Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:18:28Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:18:28Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:18:28Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:18:28Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:18:28Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=70ms)
+[2026-01-06T17:18:28Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:18:44Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:18:44Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:18:44Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:18:44Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:18:44Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:18:44Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:18:44Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:18:44Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=64ms)
+[2026-01-06T17:18:44Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:19:44Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:19:44Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:19:44Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:19:44Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:19:44Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:19:44Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:19:44Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:19:44Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=61ms)
+[2026-01-06T17:19:44Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:20:44Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:20:44Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:20:44Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:20:44Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:20:44Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:20:44Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:20:44Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:20:44Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=68ms)
+[2026-01-06T17:20:44Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:21:41Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:21:41Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:21:41Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:21:41Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:21:41Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:21:41Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:21:41Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:21:41Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=29ms)
+[2026-01-06T17:21:41Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:21:44Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:21:44Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:21:44Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:21:44Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:21:44Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:21:44Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:21:44Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:21:44Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=34ms)
+[2026-01-06T17:21:44Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:22:41Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:22:42Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:22:42Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:22:42Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:22:42Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:22:42Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:22:42Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:22:42Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=63ms)
+[2026-01-06T17:22:42Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)
+[2026-01-06T17:22:44Z] [INFO] === Heartbeat service cycle started ===
+[2026-01-06T17:22:44Z] [DEBUG] Starting heartbeat cycle for agent: agent-1767557539707-gpscqs
+[2026-01-06T17:22:44Z] [DEBUG] Updated agent agent-1767557539707-gpscqs heartbeat in registry
+[2026-01-06T17:22:44Z] [DEBUG] ✓ Updated agent registry heartbeat for agent-1767557539707-gpscqs
+[2026-01-06T17:22:44Z] [DEBUG] Not the leader, skipping lease refresh
+[2026-01-06T17:22:44Z] [DEBUG] ✓ Updated leader lease for agent-1767557539707-gpscqs
+[2026-01-06T17:22:44Z] [INFO] Heartbeat cycle complete: registry=OK lease=OK agent=agent-1767557539707-gpscqs
+[2026-01-06T17:22:44Z] [INFO] ✓ Heartbeat cycle SUCCESS (agent=agent-1767557539707-gpscqs status=success duration=30ms)
+[2026-01-06T17:22:44Z] [DEBUG] Updated heartbeat stats (success=true, agent=agent-1767557539707-gpscqs)

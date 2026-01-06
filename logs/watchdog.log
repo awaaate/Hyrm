@@ -745,3 +745,67 @@
 [2026-01-06T17:03:18+00:00] [OK] Orchestrator started with PID: 108677 (model: anthropic/claude-haiku-4-5)
 [2026-01-06T17:03:19Z] [INFO] Heartbeat service started (PID: 108706)
 [2026-01-06T17:03:24+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T17:14:26+00:00] [ERROR] =========================================
+[2026-01-06T17:14:26+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T17:14:26+00:00] [ERROR]   PID: 108677, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T17:14:26+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T170318Z.log
+[2026-01-06T17:14:26+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T170318Z.log ----
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: 
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: 
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: === FINAL SYSTEM STATUS ===
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: Pending Tasks: 0
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: Test Status: 119/119 passing
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: Quality Assessments: tracking
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: Leader: epoch 11 (agent-1767719002320-eastle)
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: 
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: Recent Commits:
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: 436104e docs: session 199 complete - orchestrator coordination summary and learnings
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: e9d9c30 chore: session 199 - 2 workers completed heartbeat and cleanup tasks (quality: 8.6/10, 9.5/10)
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: 56ad620 feat(heartbeat): consolidate service management with enhanced diagnostics
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: b9a4501 feat: add heartbeat service diagnostics and monitoring
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: ccda0a7 feat: implement orchestrator crash log cleanup and archival
+[2026-01-06T17:14:26+00:00] [ERROR] stderr: 
+[2026-01-06T17:14:26+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T17:14:26+00:00] [ERROR] =========================================
+[2026-01-06T17:14:26+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T17:14:27+00:00] [INFO] Healthy leader exists: agent-1767719002320-eastle (epoch 11), lease valid for 144s
+[2026-01-06T17:14:27+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767719002320-eastle:epoch11). Skipping respawn.
+[2026-01-06T17:15:27+00:00] [INFO] Healthy leader exists: agent-1767719002320-eastle (epoch 11), lease valid for 84s
+[2026-01-06T17:15:27+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767719002320-eastle:epoch11). Skipping respawn.
+[2026-01-06T17:16:28+00:00] [INFO] Healthy leader exists: agent-1767719002320-eastle (epoch 11), lease valid for 24s
+[2026-01-06T17:16:28+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767719002320-eastle:epoch11). Skipping respawn.
+[2026-01-06T17:17:28+00:00] [WARN] Leader lease expired 65s ago: agent-1767719002320-eastle (epoch 11)
+[2026-01-06T17:17:28+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T17:17:28+00:00] [WARN] Leader lease expired 66s ago: agent-1767719002320-eastle (epoch 11)
+[2026-01-06T17:17:28+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-06T17:17:28+00:00] [OK] Orchestrator started with PID: 171269 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T17:17:28Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
+[2026-01-06T17:17:29Z] [INFO] Heartbeat service started (PID: 171301)
+[2026-01-06T17:17:34+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T17:18:34+00:00] [ERROR] =========================================
+[2026-01-06T17:18:34+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T17:18:34+00:00] [ERROR]   PID: 171269, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T17:18:34+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T171728Z.log
+[2026-01-06T17:18:34+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T171728Z.log ----
+[2026-01-06T17:18:34+00:00] [ERROR] stderr: [91m[1m| [0m[90m Bash     [0mCommit working memory update
+[2026-01-06T17:18:34+00:00] [ERROR] stderr: 
+[2026-01-06T17:18:34+00:00] [ERROR] stderr: [haiku/YOLO c510e34] chore: session 200 - orchestrator leader confirmed, system healthy with 0 pending tasks
+[2026-01-06T17:18:34+00:00] [ERROR] stderr:  1 file changed, 97 insertions(+)
+[2026-01-06T17:18:34+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T17:18:34+00:00] [ERROR] =========================================
+[2026-01-06T17:18:34+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T17:18:35+00:00] [INFO] Healthy leader exists: agent-1767719852645-7mmpl (epoch 12), lease valid for 146s
+[2026-01-06T17:18:35+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767719852645-7mmpl:epoch12). Skipping respawn.
+[2026-01-06T17:19:36+00:00] [INFO] Healthy leader exists: agent-1767719852645-7mmpl (epoch 12), lease valid for 86s
+[2026-01-06T17:19:36+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767719852645-7mmpl:epoch12). Skipping respawn.
+[2026-01-06T17:20:36+00:00] [INFO] Healthy leader exists: agent-1767719852645-7mmpl (epoch 12), lease valid for 26s
+[2026-01-06T17:20:36+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767719852645-7mmpl:epoch12). Skipping respawn.
+[2026-01-06T17:21:36+00:00] [WARN] Leader lease expired 63s ago: agent-1767719852645-7mmpl (epoch 12)
+[2026-01-06T17:21:36+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T17:21:36+00:00] [WARN] Leader lease expired 64s ago: agent-1767719852645-7mmpl (epoch 12)
+[2026-01-06T17:21:36+00:00] [INFO] Applying restart jitter: 5s (restart #3)
+[2026-01-06T17:21:41+00:00] [INFO] Starting orchestrator agent (restart #3 this hour)...
+[2026-01-06T17:21:41+00:00] [OK] Orchestrator started with PID: 174046 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T17:21:41Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
+[2026-01-06T17:21:42Z] [INFO] Heartbeat service started (PID: 174078)
+[2026-01-06T17:21:47+00:00] [OK] Orchestrator confirmed running

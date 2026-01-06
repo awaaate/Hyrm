@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-01-06T17:12:09.702Z",
+  "last_updated": "2026-01-06T17:22:21.799Z",
   "agents": {
     "agent-1767302507934-2c671j": {
       "agent_id": "agent-1767302507934-2c671j",
@@ -799,16 +799,18 @@
     },
     "agent-1767719002320-eastle": {
       "agent_id": "agent-1767719002320-eastle",
-      "tasks_completed": 2,
+      "tasks_completed": 5,
       "tasks_claimed": 2,
-      "total_duration_ms": 333581,
-      "avg_duration_ms": 166791,
+      "total_duration_ms": 3229143,
+      "avg_duration_ms": 645829,
       "quality_scores": [
         9.5,
-        8.6
+        8.6,
+        8.6,
+        9.5
       ],
       "avg_quality": 9.05,
-      "last_activity": "2026-01-06T17:12:09.702Z",
+      "last_activity": "2026-01-06T17:22:21.799Z",
       "first_seen": "2026-01-06T17:06:14.339Z"
     }
   }
