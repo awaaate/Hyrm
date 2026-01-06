@@ -3963,9 +3963,9 @@
       "title": "Add predictive alerting for log growth and archive management",
       "description": "Implement trend analysis and predictive alerts for system logs:\n1. Monitor realtime.log and coordination.log growth rates\n2. Project when logs will reach 5MB rotation threshold based on current rate\n3. Monitor archive directory growth (currently 22KB compressed, growing ~5KB/day)\n4. Alert if growth rate exceeds expected (potential issue indicator)\n5. Add predictive warning: 'Archives will exceed 500MB in 30 days at current rate'\n\nSuccess criteria:\n- System can predict maintenance windows automatically\n- Alerts for unusual growth patterns (2x+ normal rate)\n- Integration with CLI status command showing projections\n\nThis adds proactive monitoring without requiring manual intervention.",
       "priority": "low",
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-01-06T17:40:58.692Z",
-      "updated_at": "2026-01-06T17:40:58.706Z",
+      "updated_at": "2026-01-06T17:55:22.326Z",
       "created_by": "unknown",
       "tags": [
         "monitoring",
@@ -3974,9 +3974,32 @@
       ],
       "estimated_hours": 3,
       "complexity": "moderate",
-      "spec_file": "docs/specs/task_1767721258692_add-predictive-alerting-for-lo.md"
+      "spec_file": "docs/specs/task_1767721258692_add-predictive-alerting-for-lo.md",
+      "completed_at": "2026-01-06T17:55:22.325Z",
+      "notes": [
+        "[2026-01-06T17:55:22.326Z] Predictive alerting system fully implemented and tested. All requirements met. Commit: e622833\""
+      ]
+    },
+    {
+      "id": "task_1767722200390_iykuo7",
+      "title": "CRITICAL: Fix heartbeat script shell syntax errors causing lease expiration",
+      "description": "CRITICAL: The orchestrator heartbeat service is failing with shell syntax errors that cause leader lease to expire every 240-250 seconds.\n\nRoot cause found in tools/lib/orchestrator-heartbeat.sh:\n- Lines 325, 335, 337: Uses `local` keyword outside of function context (main block starts at line 317)\n- Line 284: References `orchestrator_agent` variable that's not in scope\n- Line 339: References `duration_ms` before it's defined in the error handler\n\nThese errors cause the heartbeat script to crash on every cycle, which means:\n1. Leader lease never gets updated\n2. Watchdog detects lease expiry after 240-250s\n3. Watchdog spawns new orchestrator with epoch+1\n4. Pattern repeats continuously (2-3 restarts/hour)\n\nEvidence in logs:\n- tools/lib/orchestrator-heartbeat.sh: line 284: orchestrator_agent: unbound variable\n- tools/lib/orchestrator-heartbeat.sh: line 325: local: can only be used in a function\n- tools/lib/orchestrator-heartbeat.sh: line 335: local: can only be used in a function\n- logs/heartbeat-service.log shows repeated failures\n\nSolution needed:\n1. Wrap main code block in a proper function or remove `local` keywords in main block\n2. Fix variable scoping (move variable definitions outside main block)\n3. Add proper error handling to prevent crashes\n4. Test that heartbeat updates occur every 60s without errors\n5. Verify leader lease stays valid for full TTL (180s+)\n\nSuccess criteria:\n- Heartbeat script runs without shell errors\n- Leader lease updates visible in realtime.log every 60s\n- Orchestrator leaders stay active for >180s (not 240-250s expiry)\n- Orchestrator restart rate drops from 2-3/hour to <1/hour",
+      "priority": "critical",
+      "status": "pending",
+      "created_at": "2026-01-06T17:56:40.390Z",
+      "updated_at": "2026-01-06T17:56:40.407Z",
+      "created_by": "unknown",
+      "tags": [
+        "heartbeat",
+        "orchestrator",
+        "critical-bug",
+        "shell-syntax"
+      ],
+      "estimated_hours": 0.5,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767722200390_critical-fix-heartbeat-script-.md"
     }
   ],
-  "completed_count": 188,
-  "last_updated": "2026-01-06T17:51:09.696Z"
+  "completed_count": 189,
+  "last_updated": "2026-01-06T17:56:40.407Z"
 }

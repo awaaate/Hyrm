@@ -1,0 +1,6 @@
+
+root      224926  0.0  0.0   3784  2724 ?        Ss   17:56   0:00 /usr/bin/bash -c sleep 5 && ps aux | grep "PID: 223906" | head -2
+root      225115  0.0  0.0   3092  1360 ?        S    17:57   0:00 grep PID: 223906
+
+
+[91m[1m| [0m[90m Bash     [0mCheck if worker is still running

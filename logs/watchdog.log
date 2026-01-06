@@ -1045,3 +1045,12 @@
 [2026-01-06T17:53:49+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767721845146-oahsxa:epoch18). Skipping respawn.
 [2026-01-06T17:54:49+00:00] [INFO] Healthy leader exists: agent-1767721845146-oahsxa (epoch 18), lease valid for 25s
 [2026-01-06T17:54:49+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767721845146-oahsxa:epoch18). Skipping respawn.
+[2026-01-06T17:55:49+00:00] [WARN] Leader lease expired 64s ago: agent-1767721845146-oahsxa (epoch 18)
+[2026-01-06T17:55:49+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T17:55:49+00:00] [WARN] Leader lease expired 64s ago: agent-1767721845146-oahsxa (epoch 18)
+[2026-01-06T17:55:49+00:00] [INFO] Applying restart jitter: 1s (restart #9)
+[2026-01-06T17:55:50+00:00] [INFO] Starting orchestrator agent (restart #9 this hour)...
+[2026-01-06T17:55:50+00:00] [OK] Orchestrator started with PID: 222262 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T17:55:51Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
+[2026-01-06T17:55:52Z] [INFO] Heartbeat service started (PID: 222294)
+[2026-01-06T17:55:57+00:00] [OK] Orchestrator confirmed running

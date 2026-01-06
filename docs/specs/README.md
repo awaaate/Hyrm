@@ -731,3 +731,4 @@ Auto-generated index of task specs in `docs/specs/`.
 - [docs/specs/task_1767720530145_archive-compression-for-diagno.md](docs/specs/task_1767720530145_archive-compression-for-diagno.md)
 - [docs/specs/task_1767721256215_implement-real-time-performanc.md](docs/specs/task_1767721256215_implement-real-time-performanc.md)
 - [docs/specs/task_1767721258692_add-predictive-alerting-for-lo.md](docs/specs/task_1767721258692_add-predictive-alerting-for-lo.md)
+- [docs/specs/task_1767722200390_critical-fix-heartbeat-script-.md](docs/specs/task_1767722200390_critical-fix-heartbeat-script-.md)

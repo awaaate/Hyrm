@@ -314,30 +314,39 @@ BUNEOF
 }
 
 # Main entry point with error handling
-{
-   start_time=$(date +%s%N)
-   
-   log_heartbeat "INFO" "=== Heartbeat service cycle started ==="
-   
-   # Execute heartbeat with error handling
-   HEARTBEAT_AGENT=""
-   HEARTBEAT_STATUS="unknown"
-   
-   if perform_heartbeat; then
-     end_time=$(date +%s%N)
-     duration_ms=$(( (end_time - start_time) / 1000000 ))
-     
-     log_heartbeat "INFO" "✓ Heartbeat cycle SUCCESS (agent=$HEARTBEAT_AGENT status=$HEARTBEAT_STATUS duration=${duration_ms}ms)"
-     update_heartbeat_stats "true" "${HEARTBEAT_AGENT:-UNKNOWN}" ""
-   else
-     end_time=$(date +%s%N)
-     duration_ms=$(( (end_time - start_time) / 1000000 ))
+main_heartbeat_cycle() {
+  local start_time
+  local end_time
+  local duration_ms
+  
+  start_time=$(date +%s%N)
+  
+  log_heartbeat "INFO" "=== Heartbeat service cycle started ==="
+  
+  # Execute heartbeat with error handling
+  HEARTBEAT_AGENT=""
+  HEARTBEAT_STATUS="unknown"
+  
+  if perform_heartbeat; then
+    end_time=$(date +%s%N)
+    duration_ms=$(( (end_time - start_time) / 1000000 ))
+    
+    log_heartbeat "INFO" "✓ Heartbeat cycle SUCCESS (agent=$HEARTBEAT_AGENT status=$HEARTBEAT_STATUS duration=${duration_ms}ms)"
+    update_heartbeat_stats "true" "${HEARTBEAT_AGENT:-UNKNOWN}" ""
+  else
+    end_time=$(date +%s%N)
+    duration_ms=$(( (end_time - start_time) / 1000000 ))
     
     log_heartbeat "WARN" "✗ Heartbeat cycle FAILED (agent=$HEARTBEAT_AGENT status=$HEARTBEAT_STATUS duration=${duration_ms}ms will retry next cycle)"
     update_heartbeat_stats "false" "${HEARTBEAT_AGENT:-UNKNOWN}" "$HEARTBEAT_STATUS"
   fi
-} 2>&1 || {
+}
+
+# Execute main cycle with error handling
+if main_heartbeat_cycle 2>&1; then
+  : # Success, do nothing
+else
   # Catch any unhandled errors
   log_heartbeat "ERROR" "✗ Heartbeat service CRASHED - unhandled error in heartbeat cycle"
   update_heartbeat_stats "false" "UNKNOWN" "Unhandled error in heartbeat cycle"
-}
+fi
