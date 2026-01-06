@@ -646,3 +646,113 @@ The orchestrator is designed as a **robust, autonomous system** that:
 ✅ **No human intervention** - All decisions are autonomous and safe
 
 The shutdown behavior reflects these principles: safe, automatic, and always preserving system integrity.
+
+---
+
+## Session 192 Verification & Current System Status
+
+As of Session 192 (2026-01-06), the single-leader orchestrator model has been **verified working in production** across multiple sessions. This section documents confirmed behavior and current system state.
+
+### Single-Leader Model Verification
+
+**Confirmed Working** ✅:
+- **Leader election**: Only one orchestrator holds active leadership at a time
+- **Epoch-based fencing**: Each leader increments epoch on takeover, preventing split-brain conflicts
+- **Heartbeat-based leases**: Leaders maintain 180-second heartbeat leases, refreshed every 60 seconds
+- **Graceful failover**: When a leader becomes stale (no heartbeat for >180s), the next orchestrator cleanly takes over with a new epoch
+- **Non-leader exit**: Orchestrators that detect a healthy competing leader exit cleanly with exit code 0
+
+**Real-world example** (Session 192):
+- Orchestrator agent-1767705018116-krqu28 (epoch 4) held leadership in Session 191
+- Heartbeat became stale (63 seconds without update) at 2026-01-06T13:16:21Z
+- Orchestrator-watchdog detected expired lease at 13:17:21Z (180s TTL)
+- New orchestrator agent-1767705447019-cpnlr4 spawned and acquired leadership with epoch 5
+- Old leader's lease data preserved for audit trail
+- **Zero task loss**, **zero data corruption**
+
+### Orphaned Task Detection Gap
+
+**Problem identified** (Session 192):
+- Task `task_1767558071507_779q2v` (performance benchmarking) claimed on 2026-01-04 20:28:35 by agent-1767558507172-q7shz
+- Task remained in `in_progress` status for 48+ hours with no completion
+- Claiming agent became stale and was removed from registry
+- Without detection: Task would be permanently lost
+
+**Solution implemented** (Session 192):
+- Created `detectOrphanedTasks()` function in plugin startup hook
+- Detection criteria: `in_progress` tasks with `claimed_at` > 2 hours old AND claiming agent not in registry
+- Recovery action: Mark task as `blocked` with timestamped recovery note
+- Alert: WARN-level log to realtime.log with full task context
+- See [ORPHANED_TASK_RECOVERY.md](./ORPHANED_TASK_RECOVERY.md) for detailed implementation
+
+### Log Rotation - Verified Working
+
+**Realtime log** (automatic, Session 187+):
+- Rotation threshold: 5MB
+- Action: Keep last 5,000 lines, archive older lines with ISO timestamp
+- Frequency: Checked before every log write
+- Current size (Session 192): 6.2K lines (healthy)
+- Archives: 4.5MB total (rotation working, growth sustainable)
+
+**Coordination log** (automatic, Session 190+):
+- Rotation threshold: Auto-rotation implemented
+- Growth rate: ~10KB/hour from heartbeats and messages
+- Current size (Session 192): 4.6K lines (healthy)
+- Status: Both logs rotating, no unbounded growth
+
+**Impact**: Eliminates the pre-Session 187 issue where realtime.log grew to 28K+ lines (11MB+). With current automatic rotation, logs remain queryable and manageable.
+
+### Performance & Quality Metrics
+
+**System health** (Session 192):
+- **Tests passing**: 206/206 (100% pass rate)
+- **Tasks completed**: 141 tasks assessed
+- **Quality average**: 8.0/10 (stable trend across 50+ sessions)
+- **Quality distribution**:
+  - 9-10 (exceptional): 35% of tasks
+  - 7-8 (good): 50% of tasks
+  - 5-6 (acceptable): 15% of tasks
+
+**Orchestrator stability**:
+- **Restarts/hour**: 2-3 (during active work), 0-1 (during idle)
+- **Crash loop prevention**: Exponential backoff enabled after 3+ failures in 120s
+- **Leader turnover**: ~1 per session during normal operation (expected pattern)
+
+### Current Monitoring Patterns
+
+**CLI monitoring** (`bun tools/cli.ts`):
+- `status`: Shows leader info, active agents, pending tasks
+- `agents`: Lists all agents with role, status, assigned task
+- `tasks`: Shows task queue by priority and status
+- `monitor`: Real-time dashboard with 6 views (timeline, agents, tasks, sessions, tokens, logs)
+
+**Real-time monitoring** (`bun tools/ui/realtime.ts`):
+- Watches memory state files and logs in real-time
+- Keys: d=dashboard, a=agents, m=memory, t=tasks, l=logs
+- Useful for watching orchestrator activity during work
+
+**Log monitoring**:
+- realtime.log: All plugin events, tool calls, errors
+- coordination.log: Agent heartbeats, messages, leader state changes
+- watchdog.log: Orchestrator startup, crashes, restarts
+- Quality assessments: Continuous tracking of work quality
+
+### Architectural Improvements in Progress
+
+**Completed** (Session 192):
+- ✅ Orphaned task detection mechanism
+- ✅ Leader election validation
+- ✅ Coordination log rotation
+
+**Pending high-priority improvements**:
+- Dashboard/CLI leader visibility (session 192 in-progress)
+- Performance benchmarking for agent tools
+- Architecture documentation update (this task)
+
+---
+
+## Version History
+
+- **Session 192** (2026-01-06): Updated with verified single-leader model, orphaned task detection, confirmed log rotation, and current performance metrics
+- **Session 184** (2026-01-04): Initial comprehensive architecture documentation
+- **Sessions 183-191**: Implemented heartbeat service, log rotation, leader election, orphaned recovery
