@@ -43,6 +43,7 @@ import { createQualityTools } from "./tools/quality-tools";
 import { createUserMessageTools } from "./tools/user-message-tools";
 import { createRecoveryTools } from "./tools/recovery-tools";
 import { createGitTools } from "./tools/git-tools";
+import { initializePerformanceTracker } from "./tools/perf-wrapper";
 
 // ============================================================================
 // CONFIGURATION & CONSTANTS
@@ -995,6 +996,13 @@ Coordinate work via agent_send() and agent_messages().
     agentId: coordinator ? (coordinator as any).agentId : undefined,
     log,
   });
+
+  // ============================================================================
+  // INITIALIZE PERFORMANCE TRACKING
+  // ============================================================================
+
+  // Initialize performance tracker for benchmarking agent/task operations
+  initializePerformanceTracker(memoryDir, currentSessionId || undefined);
 
   // ============================================================================
   // CREATE MODULAR TOOLS
