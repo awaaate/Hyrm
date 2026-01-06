@@ -8,9 +8,11 @@ set -e
 # Configuration
 CRASH_LOG_DIR="logs/orchestrator-failures"
 ARCHIVE_DIR="memory/archives/diagnostics"
+COMPRESSED_ARCHIVE_DIR="memory/archives/compressed-archives"
 ARCHIVE_AGE_HOURS=24        # Files older than 24 hours get archived
 ARCHIVE_AGE_DAYS=1          # -mtime +1 means files modified before 24 hours ago
 SIZE_LIMIT_MB=100           # Maximum size of crash log directory
+ARCHIVE_COMPRESSION_THRESHOLD_MB=500  # Compress archives when exceeding this size
 DRY_RUN=${1:-""}
 
 # Color codes for output
@@ -45,6 +47,7 @@ if [ ! -d "$CRASH_LOG_DIR" ]; then
 fi
 
 mkdir -p "$ARCHIVE_DIR"
+mkdir -p "$COMPRESSED_ARCHIVE_DIR"
 
 # Step 1: Archive files older than 24 hours
 log_info "Scanning for crash logs older than $ARCHIVE_AGE_HOURS hours..."
@@ -138,15 +141,90 @@ ARCHIVE_SIZE_MB=$((ARCHIVE_SIZE_KB / 1024))
 
 log_info "Archive directory size: ${ARCHIVE_SIZE_MB}MB"
 
-if [ "$ARCHIVE_SIZE_MB" -gt 500 ]; then
-  log_info "Archive directory growing - consider running compression (when >1GB, gzip old archives)"
+COMPRESSED_COUNT=0
+COMPRESSED_SIZE_KB=0
+ORIGINAL_SIZE_KB=0
+
+if [ "$ARCHIVE_SIZE_MB" -gt "$ARCHIVE_COMPRESSION_THRESHOLD_MB" ]; then
+  log_info "Archive directory exceeds ${ARCHIVE_COMPRESSION_THRESHOLD_MB}MB threshold - compressing old archives..."
+  
+  # Find all uncompressed .archived files (not .tar.gz) and compress them
+  while IFS= read -r file; do
+    if [ -z "$file" ]; then
+      continue
+    fi
+    
+    # Skip already compressed files
+    if [[ "$file" == *.tar.gz ]]; then
+      log_debug "Skipping already compressed: $file"
+      continue
+    fi
+    
+    file_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null)
+    original_size_kb=$((file_size / 1024))
+    base_name=$(basename "$file")
+    
+    # Create compressed filename (remove .archived if present, add .tar.gz)
+    compressed_name="${base_name%.archived}.tar.gz"
+    compressed_path="$COMPRESSED_ARCHIVE_DIR/$compressed_name"
+    
+    log_debug "Compressing: $file (${original_size_kb}KB) → $compressed_path"
+    
+    if [ "$DRY_RUN" != "--dry-run" ]; then
+      # Create tar.gz archive with single file
+      if tar -czf "$compressed_path" -C "$(dirname "$file")" "$(basename "$file")" 2>/dev/null; then
+        # Get compressed size
+        compressed_size=$(stat -f%z "$compressed_path" 2>/dev/null || stat -c%s "$compressed_path" 2>/dev/null)
+        compressed_size_kb=$((compressed_size / 1024))
+        
+        # Calculate compression ratio (handle very small files)
+        if [ "$original_size_kb" -gt 0 ]; then
+          compression_ratio=$(( (100 * (original_size_kb - compressed_size_kb)) / original_size_kb ))
+        else
+          compression_ratio=0
+        fi
+        
+        # Remove original file only after successful compression
+        rm "$file"
+        
+        COMPRESSED_COUNT=$((COMPRESSED_COUNT + 1))
+        COMPRESSED_SIZE_KB=$((COMPRESSED_SIZE_KB + compressed_size_kb))
+        ORIGINAL_SIZE_KB=$((ORIGINAL_SIZE_KB + original_size_kb))
+        
+        log_debug "Compressed: ${original_size_kb}KB → ${compressed_size_kb}KB (${compression_ratio}% reduction)"
+      else
+        log_warn "Failed to compress $file - skipping"
+      fi
+    else
+      COMPRESSED_COUNT=$((COMPRESSED_COUNT + 1))
+      COMPRESSED_SIZE_KB=$((COMPRESSED_SIZE_KB + (original_size_kb / 10)))  # Estimate ~90% savings
+      ORIGINAL_SIZE_KB=$((ORIGINAL_SIZE_KB + original_size_kb))
+    fi
+  done < <(find "$ARCHIVE_DIR" -type f -name "*.archived" 2>/dev/null)
+  
+  if [ "$COMPRESSED_COUNT" -gt 0 ]; then
+    savings_kb=$((ORIGINAL_SIZE_KB - COMPRESSED_SIZE_KB))
+    log_info "Compression complete: $COMPRESSED_COUNT files compressed"
+    log_info "  Original: ${ORIGINAL_SIZE_KB}KB → Compressed: ${COMPRESSED_SIZE_KB}KB (Saved: ${savings_kb}KB)"
+  else
+    log_info "No uncompressed archives found to compress"
+  fi
+else
+  log_debug "Archive directory size (${ARCHIVE_SIZE_MB}MB) below compression threshold (${ARCHIVE_COMPRESSION_THRESHOLD_MB}MB)"
 fi
 
 # Summary
 if [ "$DRY_RUN" = "--dry-run" ]; then
   log_info "DRY RUN: Would have archived $ARCHIVED_COUNT files (${ARCHIVED_SIZE}KB)"
+  if [ "$COMPRESSED_COUNT" -gt 0 ]; then
+    log_info "DRY RUN: Would have compressed $COMPRESSED_COUNT files (${ORIGINAL_SIZE_KB}KB → ${COMPRESSED_SIZE_KB}KB)"
+  fi
 else
   log_info "Cleanup complete: archived $ARCHIVED_COUNT files (${ARCHIVED_SIZE}KB)"
+  if [ "$COMPRESSED_COUNT" -gt 0 ]; then
+    savings_kb=$((ORIGINAL_SIZE_KB - COMPRESSED_SIZE_KB))
+    log_info "Compression complete: $COMPRESSED_COUNT files compressed (Saved: ${savings_kb}KB)"
+  fi
 fi
 
 exit 0

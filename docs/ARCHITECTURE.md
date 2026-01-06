@@ -418,6 +418,15 @@ The coordination.log tracks agent messages, heartbeats, and leadership changes. 
 - coordination.log: Keep all (grows slowly, space-efficient)
 - watchdog.log: Keep all (size-limited by rotation in watchdog.sh)
 
+**Archive compression** (automatic, Session 202+):
+- Compression trigger: Archive directory exceeds 500MB
+- Method: gzip tar archives (`.archived` → `.tar.gz`)
+- Location: `memory/archives/compressed-archives/`
+- Compression ratio: 80-90% (e.g., 216KB → 22KB with 17 files)
+- Execution: Runs as part of periodic cleanup in watchdog (every 6 hours)
+- Safety: Non-blocking, failures silently logged, original files only removed after successful compression
+- Benefits: Maintains 40+ day operational runway while preserving full diagnostic history
+
 ## State File Persistence
 
 ### Critical State Files
