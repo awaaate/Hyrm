@@ -319,3 +319,66 @@
 [2026-01-06T13:06:04+00:00] [OK] Orchestrator started with PID: 219 (model: anthropic/claude-haiku-4-5)
 [2026-01-06T13:06:05Z] [INFO] Heartbeat service started (PID: 251)
 [2026-01-06T13:06:10+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T13:08:10+00:00] [ERROR] =========================================
+[2026-01-06T13:08:10+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T13:08:10+00:00] [ERROR]   PID: 219, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T13:08:10+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T130604Z.log
+[2026-01-06T13:08:10+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T130604Z.log ----
+[2026-01-06T13:08:10+00:00] [ERROR] stderr: 
+[2026-01-06T13:08:10+00:00] [ERROR] stderr: 
+[2026-01-06T13:08:10+00:00] [ERROR] stderr: 
+[2026-01-06T13:08:10+00:00] [ERROR] stderr: [haiku/YOLO 6e23318] chore: session 190 start - orchestrator leader registered (epoch 3), spawned coordination.log rotation worker, nudged non-leader orchestrator to exit
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  64 files changed, 2308 insertions(+), 86 deletions(-)
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514517_test-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514522_urgent-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514524_dependent-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514538_integration-test-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514543_prerequisite-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514545_dependent-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514554_high-priority-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514557_critical-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514559_task-with-missing-dependency.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514561_multi-dep-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514603_integration-test-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514607_critical-1.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514609_critical-2.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514616_task-a.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514618_task-b.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514620_task-c.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514636_e2e-test-feature.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514641_shared-task.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514644_task-a.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514646_task-b.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514647_task-c.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514651_unified-task-1.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767558514655_test.md
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 logs/orchestrator-failures/orchestrator-stderr-20260106T130604Z.log
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  delete mode 100644 memory/.plugin-instances/plugin-1767558457568-z7wqgx.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  delete mode 100644 memory/.plugin-instances/plugin-1767558503518-xhon0u.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  delete mode 100644 memory/.plugin-instances/plugin-1767558503522-l1kogl.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  delete mode 100644 memory/.plugin-instances/plugin-1767558503524-ifdrmx.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  delete mode 100644 memory/.plugin-instances/plugin-1767558503546-eawpjx.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  delete mode 100644 memory/.plugin-instances/plugin-1767558503552-lv2y4s.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  delete mode 100644 memory/.plugin-instances/plugin-1767558503569-j4y498.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  delete mode 100644 memory/.plugin-instances/plugin-1767558503571-msz5rq.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  delete mode 100644 memory/.plugin-instances/plugin-1767558503573-2x098c.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 memory/.plugin-instances/plugin-1767704764592-advmn9.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 memory/.plugin-instances/plugin-1767704798885-aydmlo.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 memory/.plugin-instances/plugin-1767704798888-kdq57o.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 memory/.plugin-instances/plugin-1767704798889-xckb9x.lock
+[2026-01-06T13:08:10+00:00] [ERROR] stderr:  create mode 100644 memory/.plugin-instances/plugin-1767704798890-ucdi0y.lock
+[2026-01-06T13:08:10+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T13:08:10+00:00] [ERROR] =========================================
+[2026-01-06T13:08:10+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T13:08:11+00:00] [INFO] Healthy leader exists: agent-1767704774388-qkyxn (epoch 3), lease valid for 92s
+[2026-01-06T13:08:11+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767704774388-qkyxn:epoch3). Skipping respawn.
+[2026-01-06T13:09:11+00:00] [INFO] Healthy leader exists: agent-1767704774388-qkyxn (epoch 3), lease valid for 32s
+[2026-01-06T13:09:11+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767704774388-qkyxn:epoch3). Skipping respawn.
+[2026-01-06T13:10:12+00:00] [WARN] Leader lease expired 57s ago: agent-1767704774388-qkyxn (epoch 3)
+[2026-01-06T13:10:12+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T13:10:12+00:00] [WARN] Leader lease expired 57s ago: agent-1767704774388-qkyxn (epoch 3)
+[2026-01-06T13:10:12+00:00] [INFO] Applying restart jitter: 1s (restart #2)
+[2026-01-06T13:10:13+00:00] [INFO] Starting orchestrator agent (restart #2 this hour)...
+[2026-01-06T13:10:13+00:00] [OK] Orchestrator started with PID: 8293 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T13:10:14Z] [INFO] Heartbeat service started (PID: 8322)
+[2026-01-06T13:10:19+00:00] [OK] Orchestrator confirmed running

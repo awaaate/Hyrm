@@ -1,0 +1,9 @@
+
+
+
+ea78120 feat: implement coordination.log rotation to prevent unbounded growth
+6e23318 chore: session 190 start - orchestrator leader registered (epoch 3), spawned coordination.log rotation worker, nudged non-leader orchestrator to exit
+90ea553 chore: session 190 start - orchestrator registered as leader, spawned 2 workers for coordination.log rotation and performance benchmarking
+5d42c5f chore(session-189): update orchestrator crash analysis - clarify exit code 137
+a894bc8 docs: add comprehensive orchestrator lifecycle and shutdown behavior documentation
+[91m[1m| [0m[90m Bash     [0mCheck recent commits

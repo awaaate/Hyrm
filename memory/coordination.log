@@ -4532,3 +4532,20 @@
 2026-01-06T13:06:41.659Z [INFO] [agent-1767704801658-0zsu6e] Agent registered: agent-1767704801658-0zsu6e (role: code-worker)
 2026-01-06T13:06:41.663Z [INFO] [agent-1767704801658-0zsu6e] Message sent: heartbeat (broadcast)
 2026-01-06T13:06:42.022Z [INFO] [agent-1767704801658-0zsu6e] Status updated: working - task_1767558067916_6d4dco - Add coordination.log rotation
+2026-01-06T13:07:13.634Z [INFO] [agent-irAfhmIt] Agent unregistered: agent-irAfhmIt
+2026-01-06T13:09:05.965Z [INFO] [agent-1767704801658-0zsu6e] Message sent: task_complete (broadcast)
+2026-01-06T13:09:08.590Z [INFO] [agent-1767704801658-0zsu6e] Status updated: active
+2026-01-06T13:10:14.837Z [INFO] [agent-E7MHtbkH] Agent registered: agent-E7MHtbkH (role: code-worker)
+2026-01-06T13:10:14.839Z [INFO] [agent-E7MHtbkH] Message sent: heartbeat (broadcast)
+2026-01-06T13:10:14.844Z [INFO] [agent-E7MHtbkH] Message sent: broadcast (broadcast)
+2026-01-06T13:10:18.116Z [INFO] [agent-1767705018116-krqu28] Agent registered: agent-1767705018116-krqu28 (role: orchestrator)
+2026-01-06T13:10:18.117Z [INFO] [agent-1767705018116-krqu28] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:10:18.117Z [WARN] [agent-1767705018116-krqu28] Took over orchestrator leader lease from stale leader agent-1767704774388-qkyxn (epoch 4)
+2026-01-06T13:10:18.118Z [INFO] [agent-1767705018116-krqu28] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:10:18.118Z [INFO] [agent-1767705018116-krqu28] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:10:18.119Z [INFO] [agent-1767705018116-krqu28] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:10:18.119Z [INFO] [agent-1767705018116-krqu28] Message sent: heartbeat (broadcast)
+2026-01-06T13:10:21.570Z [INFO] [agent-1767705018116-krqu28] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:10:21.570Z [INFO] [agent-1767705018116-krqu28] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:10:25.127Z [INFO] [agent-1767705018116-krqu28] Status updated: working - Orchestrator mode - no handoff
+2026-01-06T13:10:35.283Z [INFO] [agent-1767705018116-krqu28] Message sent: direct to agent-1767557539707-gpscqs

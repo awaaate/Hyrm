@@ -1,0 +1,200 @@
+## NEVER DO (These will cause the system to hang forever):
+- Ask questions like 'Would you like me to...?'
+- Ask for confirmation like 'Should I proceed?'
+- Ask for clarification like 'Can you tell me more?'
+- Wait for user input or response
+- Say 'Let me know if you want...'
+- Request feedback or opinions
+- Ask which option to choose - CHOOSE ONE AND DO IT
+- End a message with a question
+- Expect any response to your output
+
+## ALWAYS DO:
+- Make autonomous decisions based on available information
+- Proceed with the most logical action when uncertain
+- If you have doubts, write them to memory/working.md - the next session will read them
+- If multiple valid approaches exist, pick one and execute it
+- Report what you DID, not what you COULD do
+- Read memory/working.md at session start - it contains context from previous sessions
+- Update memory/working.md with your decisions, findings, and any open questions for future sessions
+</autonomous_operation>
+
+<instructions>
+## Critical First Actions (Execute IMMEDIATELY in this exact order)
+1. agent_register(role='orchestrator') - Register and check leader election
+2. agent_status() - Check the 'leader' field to verify you are the leader
+3. IF leader: agent_set_handoff(enabled=false) - CRITICAL: Prevents you from stopping
+4. IF NOT leader: Log and exit gracefully
+
+
+Before taking action, use this thinking pattern:
+
+<scratchpad>
+What is the most important thing to address right now?
+- Any worker completions to process?
+- Any high-priority pending tasks?
+- Any blocked workers needing help?
+
+What is the right action?
+- DELEGATE to worker if task is self-contained
+- DO directly only if trivial (<2 min) or orchestrator-specific
+</scratchpad>
+
+## Main Workflow
+
+Then follow this loop:
+1. CHECK agent_messages() - process worker completions and help requests
+2. REVIEW task_list(status='pending') - see what needs work
+3. SPAWN workers for parallelizable tasks using spawn-worker.sh
+4. MONITOR agent_status() to track worker progress
+5. ASSESS quality_assess() for completed work
+
+## Constraints
+- NEVER enable handoff - you must stay running
+- DELEGATE work to workers instead of doing everything yourself
+- SPAWN workers in background with spawn-worker.sh
+- COMMIT changes regularly to preserve progress
+
+
+## Working Memory (memory/working.md)
+READ this file at session start - it contains context from previous sessions.
+WRITE to this file:
+- Your decisions and reasoning
+- Open questions for future sessions to investigate
+- Important findings and context
+NEVER ask questions in your output - write them to working.md instead.
+
+## Output Format
+When reporting completion, include:
+1. What was accomplished
+2. Files changed (if any)
+3. Issues found (if any)
+4. Recommendations for follow-up
+</instructions>
+
+BEGIN: Read memory/working.md for context, then execute critical_first_actions NOW.
+IMPORTANT: Check leader status FIRST. Only continue if you are the leader. If not, exit gracefully.
+---
+[2026-01-06T13:06:04+00:00] stderr log: logs/orchestrator-failures/orchestrator-stderr-20260106T130604Z.log
+[Memory] Context injected into system prompt (role: code-worker)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[MultiAgent] 2026-01-06T13:06:05.683Z [INFO] [agent-irAfhmIt] Agent registered: agent-irAfhmIt (role: code-worker)
+[MultiAgent] 2026-01-06T13:06:05.689Z [INFO] [agent-irAfhmIt] Message sent: heartbeat (broadcast)
+[MultiAgent] 2026-01-06T13:06:05.690Z [INFO] [agent-irAfhmIt] Message sent: broadcast (broadcast)
+[Memory] Context injected into system prompt (role: code-worker)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+I'll start by reading the working memory for context, then execute the critical first actions.
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good. I have comprehensive context from sessions 183-189. Now let me execute the critical first actions:
+
+1. Register as orchestrator and check leader election
+2. Check if I'm the leader
+3. If yes, disable handoff to stay persistent
+4. If no, exit gracefully
+[MultiAgent] 2026-01-06T13:06:14.389Z [INFO] [agent-1767704774388-qkyxn] Agent registered: agent-1767704774388-qkyxn (role: orchestrator)
+[MultiAgent] 2026-01-06T13:06:14.390Z [INFO] [agent-1767704774388-qkyxn] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:06:14.390Z [WARN] [agent-1767704774388-qkyxn] Took over orchestrator leader lease from stale leader agent-1767558460716-f1bwe (epoch 3)
+[MultiAgent] 2026-01-06T13:06:14.391Z [INFO] [agent-1767704774388-qkyxn] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:06:14.391Z [INFO] [agent-1767704774388-qkyxn] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:06:14.392Z [INFO] [agent-1767704774388-qkyxn] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:06:14.392Z [INFO] [agent-1767704774388-qkyxn] Message sent: heartbeat (broadcast)
+[MultiAgent] 2026-01-06T13:06:14.498Z [INFO] [agent-1767704774388-qkyxn] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T13:06:14.499Z [INFO] [agent-1767704774388-qkyxn] File unlocked: /app/workspace/memory/orchestrator-state.json
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! I'm the leader (agent-1767704774388-qkyxn, epoch 3). Now I'll disable handoff to stay persistent:
+[MultiAgent] 2026-01-06T13:06:18.431Z [INFO] [agent-1767704774388-qkyxn] Status updated: working - Orchestrator mode - no handoff
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! I'm registered as the leader orchestrator and will persist. Now let me check the current system state and process any pending work:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! I have good visibility. Let me analyze the situation and create a plan:
+
+**Current Status:**
+- 2 pending tasks (medium and low priority)
+- 1 active non-leader orchestrator (agent-1767557539707-gpscqs - should be retired)
+- 1 active code-worker (agent-irAfhmIt - healthy)
+- Recent activity shows multiple task completions and good momentum
+- System health is good: tests passing, leader election working, realtime.log rotation implemented
+
+Let me create a structured plan:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Now let me execute the plan. First, nudge the non-leader orchestrator:
+[MultiAgent] 2026-01-06T13:06:33.755Z [INFO] [agent-1767704774388-qkyxn] Message sent: direct to agent-1767557539707-gpscqs
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good. Now let me spawn a worker for the coordination.log rotation task. This is medium priority and self-contained:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Worker spawned (PID 1342). Now let me update the todo and check on system status, then update working memory:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good! Now let me update working.md with Session 190 context and complete my todos:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Now let me complete the todo list and commit the session start:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! Session is committed. Now I'll enter my main coordination loop to monitor workers and handle completions. Let me check if there are any agent messages about completions:
+
+**Session 190 Status Report:**
+
+✅ **Session Started Successfully**
+- Registered as LEADER (agent-1767704774388-qkyxn, epoch 3)
+- Handoff disabled for persistence
+- Single-leader model working correctly
+
+✅ **Initial Actions Completed**
+- Nudged non-leader orchestrator (agent-1767557539707-gpscqs) to exit gracefully
+- Spawned worker for coordination.log rotation (task_1767558067916_6d4dco, PID 1342)
+- Updated working memory with session context
+- Committed session start state
+
+**Current System State:**
+- 3 agents active (1 leader, 1 code-worker, 1 legacy orchestrator exiting)
+- 2 pending tasks: coordination.log rotation (in progress), archive compression (LOW)
+- 206 tests passing (100%)
+- System healthy, realtime.log rotation working
+- Quality metrics: 130+ tasks assessed, 8.0+/10 avg
+
+**Orchestrator in Monitoring Mode:**
+
+I'm now continuously monitoring for:
+1. Worker completion messages from coordination.log rotation task
+2. Any blocking issues or help requests from workers
+3. System health status
+4. Upcoming task completions to assess quality
+
+The system is functioning autonomously with proper delegation. I will continue monitoring and coordinating work as tasks complete.
+[MultiAgent] 2026-01-06T13:07:13.634Z [INFO] [agent-irAfhmIt] Agent unregistered: agent-irAfhmIt

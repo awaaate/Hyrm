@@ -1,8 +1,36 @@
 [
   {
-    "session_id": "ses_46c95df17ffezCtvNoirAfhmIt",
-    "timestamp": 1767704764707,
+    "session_id": "ses_46c92101dffeJ1vV9JE7MHtbkH",
+    "timestamp": 1767705014300,
     "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46c95592bffePDSVm4gakEmFK9",
+    "timestamp": 1767704948958,
+    "messages": 37,
+    "decisions": [],
+    "discoveries": [
+      "elsewhere in the file, not my change."
+    ],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [
+      "rotation check + archive + keep last 10k lines"
+    ],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46c95df17ffezCtvNoirAfhmIt",
+    "timestamp": 1767704826098,
+    "messages": 12,
     "decisions": [],
     "discoveries": [],
     "code_created": [],
