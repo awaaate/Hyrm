@@ -449,3 +449,57 @@
 [2026-01-06T13:24:36+00:00] [OK] Orchestrator started with PID: 71042 (model: anthropic/claude-haiku-4-5)
 [2026-01-06T13:24:37Z] [INFO] Heartbeat service started (PID: 71063)
 [2026-01-06T13:24:42+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T13:26:43+00:00] [ERROR] =========================================
+[2026-01-06T13:26:43+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T13:26:43+00:00] [ERROR]   PID: 71042, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T13:26:43+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T132436Z.log
+[2026-01-06T13:26:43+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T132436Z.log ----
+[2026-01-06T13:26:43+00:00] [ERROR] stderr: 
+[2026-01-06T13:26:43+00:00] [ERROR] stderr: [1;33m🔍 Running ESLint import linting...[0m
+[2026-01-06T13:26:43+00:00] [ERROR] stderr: [0;32m✅ Import linting passed[0m
+[2026-01-06T13:26:43+00:00] [ERROR] stderr: [haiku/YOLO 51fc4b6] chore: session 193 continued - orchestrator monitoring, workers active
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  42 files changed, 2432 insertions(+), 21 deletions(-)
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929658_test-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929662_urgent-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929664_dependent-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929679_integration-test-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929683_prerequisite-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929685_dependent-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929696_high-priority-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929698_critical-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929701_task-with-missing-dependency.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929703_multi-dep-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929741_integration-test-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929745_critical-1.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929747_critical-2.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929754_task-a.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929757_task-b.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929760_task-c.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929775_e2e-test-feature.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929780_shared-task.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929783_task-a.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929785_task-b.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929787_task-c.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929792_unified-task-1.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 docs/specs/task_1767705929796_test.md
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 tools/perf-reporter.ts
+[2026-01-06T13:26:43+00:00] [ERROR] stderr:  create mode 100644 tools/shared/perf-tracker.ts
+[2026-01-06T13:26:43+00:00] [ERROR] stderr: 
+[2026-01-06T13:26:43+00:00] [ERROR] stderr: [92m[1m| [0m[90m Edit     [0mmemory/working.md
+[2026-01-06T13:26:43+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T13:26:43+00:00] [ERROR] =========================================
+[2026-01-06T13:26:43+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T13:26:44+00:00] [INFO] Healthy leader exists: agent-1767705882830-ngqhk3 (epoch 6), lease valid for 148s
+[2026-01-06T13:26:44+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767705882830-ngqhk3:epoch6). Skipping respawn.
+[2026-01-06T13:27:44+00:00] [INFO] Healthy leader exists: agent-1767705882830-ngqhk3 (epoch 6), lease valid for 88s
+[2026-01-06T13:27:44+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767705882830-ngqhk3:epoch6). Skipping respawn.
+[2026-01-06T13:28:44+00:00] [INFO] Healthy leader exists: agent-1767705882830-ngqhk3 (epoch 6), lease valid for 28s
+[2026-01-06T13:28:44+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767705882830-ngqhk3:epoch6). Skipping respawn.
+[2026-01-06T13:29:44+00:00] [WARN] Leader lease expired 62s ago: agent-1767705882830-ngqhk3 (epoch 6)
+[2026-01-06T13:29:45+00:00] [WARN] Orchestrator not running and no healthy leader - starting new orchestrator...
+[2026-01-06T13:29:45+00:00] [WARN] Leader lease expired 62s ago: agent-1767705882830-ngqhk3 (epoch 6)
+[2026-01-06T13:29:45+00:00] [INFO] Applying restart jitter: 2s (restart #5)
+[2026-01-06T13:29:47+00:00] [INFO] Starting orchestrator agent (restart #5 this hour)...
+[2026-01-06T13:29:47+00:00] [OK] Orchestrator started with PID: 91442 (model: anthropic/claude-haiku-4-5)
+[2026-01-06T13:29:48Z] [INFO] Heartbeat service started (PID: 91471)
+[2026-01-06T13:29:53+00:00] [OK] Orchestrator confirmed running

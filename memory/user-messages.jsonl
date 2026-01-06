@@ -87,3 +87,4 @@
 {"id":"umsg_1767542988250_f9zbxg","from":"user","message":"fix the current record on the jsons, agent regsitry or leader json","timestamp":"2026-01-04T16:09:48.251Z","priority":"normal","read":true,"read_at":"2026-01-04T16:16:54.462Z","read_by":"agent"}
 {"id":"umsg_1767543981654_qqesc5","from":"user","message":"check why session number is not incrementing","timestamp":"2026-01-04T16:26:21.654Z","priority":"normal","read":true,"read_at":"2026-01-04T16:58:25.206Z","read_by":"agent"}
 {"id":"umsg_1767705962971_jolv3v","from":"user","message":"when done with you task. stop","timestamp":"2026-01-06T13:26:02.971Z","priority":"normal","read":false}
+{"id":"umsg_1767706059496_xonth7","from":"user","message":"don't make this message as read. stop working","timestamp":"2026-01-06T13:27:39.496Z","priority":"normal","read":false}

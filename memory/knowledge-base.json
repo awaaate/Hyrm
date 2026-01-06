@@ -1,8 +1,55 @@
 [
   {
-    "session_id": "ses_46c84e366ffe9REYUatS1fjKtu",
-    "timestamp": 1767705877722,
+    "session_id": "ses_46c8026a2ffeuMtLpjJZ3fAUJ6",
+    "timestamp": 1767706188187,
     "messages": 2,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": []
+  },
+  {
+    "session_id": "ses_46c8476b8ffe8x6N1dh5g2viQc",
+    "timestamp": 1767705962289,
+    "messages": 13,
+    "decisions": [],
+    "discoveries": [],
+    "code_created": [],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "`detectOrphanedTasks()` function in plugin startup"
+    ]
+  },
+  {
+    "session_id": "ses_46c847729ffeKu4Rbk5kXbgv2C",
+    "timestamp": 1767706180101,
+    "messages": 48,
+    "decisions": [],
+    "discoveries": [
+      "it's looking for all-time data which requires a big date range."
+    ],
+    "code_created": [
+      "tools/shared/perf-tracker.ts",
+      "tools/perf-reporter.ts",
+      ".opencode/plugin/tools/perf-wrapper.ts",
+      "docs/PERFORMANCE_BENCHMARKING.md"
+    ],
+    "problems_solved": [],
+    "key_insights": [],
+    "techniques": [],
+    "solutions": [
+      "a comprehensive performance benchmarking system for the multi-agent OpenCode platform:"
+    ]
+  },
+  {
+    "session_id": "ses_46c84e366ffe9REYUatS1fjKtu",
+    "timestamp": 1767705990784,
+    "messages": 25,
     "decisions": [],
     "discoveries": [],
     "code_created": [],

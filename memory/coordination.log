@@ -4617,3 +4617,18 @@
 2026-01-06T13:25:42.837Z [INFO] [agent-1767705882830-ngqhk3] File locked: /app/workspace/memory/orchestrator-state.json
 2026-01-06T13:25:42.838Z [INFO] [agent-1767705882830-ngqhk3] File unlocked: /app/workspace/memory/orchestrator-state.json
 2026-01-06T13:26:02.065Z [INFO] [agent-1767705908517-yi6xxn] Message sent: task_complete (broadcast)
+2026-01-06T13:26:38.910Z [INFO] [agent-tS1fjKtu] Agent unregistered: agent-tS1fjKtu
+2026-01-06T13:29:39.634Z [INFO] [agent-1767705908732-5ogsce] Message sent: task_complete (broadcast)
+2026-01-06T13:29:48.767Z [INFO] [agent-JZ3fAUJ6] Agent registered: agent-JZ3fAUJ6 (role: code-worker)
+2026-01-06T13:29:48.768Z [INFO] [agent-JZ3fAUJ6] Message sent: heartbeat (broadcast)
+2026-01-06T13:29:48.769Z [INFO] [agent-JZ3fAUJ6] Message sent: broadcast (broadcast)
+2026-01-06T13:29:50.999Z [INFO] [agent-1767706190999-89rpgc] Agent registered: agent-1767706190999-89rpgc (role: orchestrator)
+2026-01-06T13:29:51.000Z [INFO] [agent-1767706190999-89rpgc] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:29:51.001Z [WARN] [agent-1767706190999-89rpgc] Took over orchestrator leader lease from stale leader agent-1767705882830-ngqhk3 (epoch 7)
+2026-01-06T13:29:51.002Z [INFO] [agent-1767706190999-89rpgc] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:29:51.003Z [INFO] [agent-1767706190999-89rpgc] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:29:51.004Z [INFO] [agent-1767706190999-89rpgc] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:29:51.004Z [INFO] [agent-1767706190999-89rpgc] Message sent: heartbeat (broadcast)
+2026-01-06T13:29:53.383Z [INFO] [agent-1767706190999-89rpgc] File locked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:29:53.384Z [INFO] [agent-1767706190999-89rpgc] File unlocked: /app/workspace/memory/orchestrator-state.json
+2026-01-06T13:29:57.919Z [INFO] [agent-1767706190999-89rpgc] Status updated: working - Orchestrator mode - no handoff

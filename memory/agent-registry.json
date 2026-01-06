@@ -5,59 +5,41 @@
       "agent_id": "agent-1767557539707-gpscqs",
       "session_id": "session-1767557539707",
       "started_at": "2026-01-04T20:12:19.708Z",
-      "last_heartbeat": "2026-01-06T13:25:36Z",
+      "last_heartbeat": "2026-01-06T13:29:47Z",
       "status": "working",
       "assigned_role": "orchestrator",
       "pid": 656016,
       "current_task": "Orchestrator mode - no handoff"
     },
     {
-      "agent_id": "agent-1767705557287-rgxdkl",
-      "session_id": "session-1767705557287",
-      "started_at": "2026-01-06T13:19:17.287Z",
-      "last_heartbeat": "2026-01-06T13:23:55.386Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 33681
-    },
-    {
-      "agent_id": "agent-tS1fjKtu",
-      "session_id": "ses_46c84e366ffe9REYUatS1fjKtu",
-      "started_at": "2026-01-06T13:24:38.269Z",
-      "last_heartbeat": "2026-01-06T13:25:38.274Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 71042
-    },
-    {
-      "agent_id": "agent-1767705882830-ngqhk3",
-      "session_id": "session-1767705882830",
-      "started_at": "2026-01-06T13:24:42.830Z",
-      "last_heartbeat": "2026-01-06T13:25:42.837Z",
-      "status": "working",
-      "assigned_role": "orchestrator",
-      "pid": 71042,
-      "current_task": "Orchestrator mode - no handoff"
-    },
-    {
-      "agent_id": "agent-1767705908517-yi6xxn",
-      "session_id": "session-1767705908517",
-      "started_at": "2026-01-06T13:25:08.518Z",
-      "last_heartbeat": "2026-01-06T13:26:08.521Z",
-      "status": "active",
-      "assigned_role": "code-worker",
-      "pid": 72142
-    },
-    {
       "agent_id": "agent-1767705908732-5ogsce",
       "session_id": "session-1767705908732",
       "started_at": "2026-01-06T13:25:08.733Z",
-      "last_heartbeat": "2026-01-06T13:26:08.740Z",
+      "last_heartbeat": "2026-01-06T13:29:08.752Z",
       "status": "active",
       "assigned_role": "code-worker",
       "pid": 72082
+    },
+    {
+      "agent_id": "agent-JZ3fAUJ6",
+      "session_id": "ses_46c8026a2ffeuMtLpjJZ3fAUJ6",
+      "started_at": "2026-01-06T13:29:48.766Z",
+      "last_heartbeat": "2026-01-06T13:29:48.768Z",
+      "status": "active",
+      "assigned_role": "code-worker",
+      "pid": 91442
+    },
+    {
+      "agent_id": "agent-1767706190999-89rpgc",
+      "session_id": "session-1767706190999",
+      "started_at": "2026-01-06T13:29:50.999Z",
+      "last_heartbeat": "2026-01-06T13:29:57.918Z",
+      "status": "working",
+      "assigned_role": "orchestrator",
+      "pid": 91442,
+      "current_task": "Orchestrator mode - no handoff"
     }
   ],
-  "last_updated": "2026-01-06T13:26:08.740Z",
-  "lock_version": 48
+  "last_updated": "2026-01-06T13:29:57.918Z",
+  "lock_version": 52
 }
