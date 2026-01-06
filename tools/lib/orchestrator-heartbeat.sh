@@ -172,37 +172,44 @@ update_heartbeat_stats() {
   local agent_id="$2"
   local error_msg="${3:-}"
   
-  if [[ ! -f "$HEARTBEAT_STATS" ]]; then
-    # Initialize stats file
-    bun run --smol - > "$HEARTBEAT_STATS" << 'BUNEOF'
-const stats = {
-  last_update: new Date().toISOString(),
-  total_cycles: 0,
-  successful_cycles: 0,
-  failed_cycles: 0,
-  last_agent_id: null,
-  last_success: false,
-  last_error: null
-};
-console.log(JSON.stringify(stats, null, 2));
-BUNEOF
-  fi
+  # Use a temporary file for the script
+  local temp_script
+  temp_script=$(mktemp)
   
-  # Update stats with new cycle result
-  bun run --smol - "$success" "$agent_id" "$error_msg" > "$HEARTBEAT_STATS" << 'BUNEOF'
+  cat > "$temp_script" << 'BUNEOF'
 const fs = require('fs');
 const statsPath = './memory/heartbeat-stats.json';
 const [success, agentId, errorMsg] = process.argv.slice(2);
 const isSuccess = success === 'true';
 
 try {
-  let stats = {};
+  let stats = {
+    last_update: new Date().toISOString(),
+    total_cycles: 0,
+    successful_cycles: 0,
+    failed_cycles: 0,
+    last_agent_id: null,
+    last_success: false,
+    last_error: null,
+    last_heartbeat_timestamp: null
+  };
+  
   if (fs.existsSync(statsPath)) {
-    stats = JSON.parse(fs.readFileSync(statsPath, 'utf-8'));
+    try {
+      const existing = JSON.parse(fs.readFileSync(statsPath, 'utf-8'));
+      // Only use existing if it has the expected structure
+      if (existing && typeof existing === 'object' && 'total_cycles' in existing) {
+        stats = existing;
+      }
+    } catch (e) {
+      // File is corrupted, start fresh
+    }
   }
   
   stats.last_update = new Date().toISOString();
   stats.total_cycles = (stats.total_cycles || 0) + 1;
+  stats.last_heartbeat_timestamp = new Date().toISOString();
+  
   if (isSuccess) {
     stats.successful_cycles = (stats.successful_cycles || 0) + 1;
     stats.last_success = true;
@@ -210,25 +217,41 @@ try {
   } else {
     stats.failed_cycles = (stats.failed_cycles || 0) + 1;
     stats.last_success = false;
-    stats.last_error = errorMsg;
+    stats.last_error = errorMsg || 'Unknown error';
   }
   stats.last_agent_id = agentId;
   
   fs.writeFileSync(statsPath, JSON.stringify(stats, null, 2));
   console.log('OK');
 } catch (e) {
-  console.log('ERROR');
+  console.log(`ERROR: ${e.message}`);
 }
 BUNEOF
+
+  # Execute the script with bun
+  if bun "$temp_script" "$success" "$agent_id" "$error_msg" > /dev/null 2>&1; then
+    log_heartbeat "DEBUG" "Updated heartbeat stats (success=$success, agent=$agent_id)"
+    rm -f "$temp_script"
+    return 0
+  else
+    log_heartbeat "WARN" "Failed to update stats"
+    rm -f "$temp_script"
+    return 1
+  fi
 }
 
 # Main heartbeat function
 # Called once per cycle (typically every 60 seconds)
+# Sets global variables: HEARTBEAT_AGENT, HEARTBEAT_STATUS
 perform_heartbeat() {
+  HEARTBEAT_AGENT=""
+  HEARTBEAT_STATUS="unknown"
+  
   # Try to find the orchestrator agent ID from the registry
   # We look for the first agent with role "orchestrator"
   if [[ ! -f "$REGISTRY_PATH" ]]; then
     # Registry doesn't exist yet, nothing to heartbeat
+    HEARTBEAT_STATUS="no_registry"
     return 0
   fi
   
@@ -251,30 +274,70 @@ BUNEOF
   
   if [[ -z "$orchestrator_agent" ]]; then
     # No orchestrator found, nothing to do
+    HEARTBEAT_STATUS="no_orchestrator"
     return 0
   fi
   
-  # Update both the registry and the lease
-  update_agent_heartbeat "$orchestrator_agent" || true
-  update_leader_lease "$orchestrator_agent" || true
+  HEARTBEAT_AGENT="$orchestrator_agent"
   
-  log_heartbeat "INFO" "Heartbeat cycle complete (agent: $orchestrator_agent)"
+  # Log diagnostic info at start
+  log_heartbeat "DEBUG" "Starting heartbeat cycle for agent: $orchestrator_agent"
+  
+  # Update both the registry and the lease
+  local registry_ok=0
+  local lease_ok=0
+  
+  if update_agent_heartbeat "$orchestrator_agent"; then
+    registry_ok=1
+    log_heartbeat "DEBUG" "✓ Updated agent registry heartbeat for $orchestrator_agent"
+  else
+    log_heartbeat "WARN" "✗ Failed to update agent registry for $orchestrator_agent"
+  fi
+  
+  if update_leader_lease "$orchestrator_agent"; then
+    lease_ok=1
+    log_heartbeat "DEBUG" "✓ Updated leader lease for $orchestrator_agent"
+  else
+    log_heartbeat "DEBUG" "Leader lease not updated (not leader or not found)"
+  fi
+  
+  # Success requires at least registry update (lease may fail if not leader)
+  if [[ $registry_ok -eq 1 ]]; then
+    HEARTBEAT_STATUS="success"
+    log_heartbeat "INFO" "Heartbeat cycle complete: registry=OK lease=$([ $lease_ok -eq 1 ] && echo 'OK' || echo 'SKIPPED') agent=$orchestrator_agent"
+    return 0
+  else
+    HEARTBEAT_STATUS="failure"
+    log_heartbeat "WARN" "Heartbeat cycle failed: registry_ok=$registry_ok lease_ok=$lease_ok agent=$orchestrator_agent"
+    return 1
+  fi
 }
 
 # Main entry point with error handling
 {
-  log_heartbeat "INFO" "Heartbeat service starting"
-  
-  # Execute heartbeat with error handling
-  if perform_heartbeat; then
-    log_heartbeat "INFO" "Heartbeat service complete (success)"
-    update_heartbeat_stats "true" "$orchestrator_agent" ""
-  else
-    log_heartbeat "WARN" "Heartbeat service completed with errors (will retry next cycle)"
-    update_heartbeat_stats "false" "${orchestrator_agent:-UNKNOWN}" "Heartbeat failed"
+   start_time=$(date +%s%N)
+   
+   log_heartbeat "INFO" "=== Heartbeat service cycle started ==="
+   
+   # Execute heartbeat with error handling
+   HEARTBEAT_AGENT=""
+   HEARTBEAT_STATUS="unknown"
+   
+   if perform_heartbeat; then
+     end_time=$(date +%s%N)
+     duration_ms=$(( (end_time - start_time) / 1000000 ))
+     
+     log_heartbeat "INFO" "✓ Heartbeat cycle SUCCESS (agent=$HEARTBEAT_AGENT status=$HEARTBEAT_STATUS duration=${duration_ms}ms)"
+     update_heartbeat_stats "true" "${HEARTBEAT_AGENT:-UNKNOWN}" ""
+   else
+     end_time=$(date +%s%N)
+     duration_ms=$(( (end_time - start_time) / 1000000 ))
+    
+    log_heartbeat "WARN" "✗ Heartbeat cycle FAILED (agent=$HEARTBEAT_AGENT status=$HEARTBEAT_STATUS duration=${duration_ms}ms will retry next cycle)"
+    update_heartbeat_stats "false" "${HEARTBEAT_AGENT:-UNKNOWN}" "$HEARTBEAT_STATUS"
   fi
 } 2>&1 || {
   # Catch any unhandled errors
-  log_heartbeat "ERROR" "Heartbeat service failed with unhandled error"
+  log_heartbeat "ERROR" "✗ Heartbeat service CRASHED - unhandled error in heartbeat cycle"
   update_heartbeat_stats "false" "UNKNOWN" "Unhandled error in heartbeat cycle"
 }

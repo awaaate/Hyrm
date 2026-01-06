@@ -158,6 +158,24 @@ export type {
   ToolRegistry,
 } from "./tool-registry";
 
+// Heartbeat utilities
+export {
+  isHeartbeatServiceRunning,
+  getHeartbeatServicePid,
+  getOrchestratorState,
+  getLeaseAge,
+  isLeaseHealthy,
+  getHeartbeatStatus,
+  analyzeHeartbeatLogs,
+  recordHeartbeatUpdate,
+  getHeartbeatHealthSummary,
+} from "./heartbeat-utils";
+
+export type {
+  HeartbeatStats,
+  HeartbeatHistory,
+} from "./heartbeat-utils";
+
 // Data fetchers - centralized data access
 export {
   // Agent functions

@@ -35,6 +35,13 @@ log_heartbeat_svc() {
 
 # Start heartbeat service in background
 start_heartbeat_service() {
+  # Validate parameters
+  if [[ -z "$HEARTBEAT_PIDFILE" ]] || [[ "$HEARTBEAT_PIDFILE" == "start" ]]; then
+    log_heartbeat_svc "ERROR" "Invalid PID file path: $HEARTBEAT_PIDFILE"
+    log_heartbeat_svc "INFO" "Usage: bash tools/heartbeat-service.sh <pid_file> start"
+    return 1
+  fi
+  
   if [[ -f "$HEARTBEAT_PIDFILE" ]]; then
     local old_pid
     old_pid=$(cat "$HEARTBEAT_PIDFILE")
@@ -42,10 +49,12 @@ start_heartbeat_service() {
       log_heartbeat_svc "WARN" "Heartbeat service already running (PID: $old_pid)"
       return 1
     else
-      log_heartbeat_svc "INFO" "Cleaning up stale PID file"
+      log_heartbeat_svc "INFO" "Cleaning up stale PID file: $HEARTBEAT_PIDFILE"
       rm -f "$HEARTBEAT_PIDFILE"
     fi
   fi
+  
+  log_heartbeat_svc "INFO" "Starting heartbeat service with PID file: $HEARTBEAT_PIDFILE"
   
   # Start the heartbeat loop in the background
   # Use nohup so it survives session termination
@@ -148,7 +157,20 @@ case "${2:-start}" in
     check_status
     ;;
   *)
-    echo "Usage: $0 <pid_file> {start|stop|status}"
+    echo "Heartbeat Service Manager"
+    echo ""
+    echo "Usage: bash $0 <pid_file> {start|stop|status}"
+    echo ""
+    echo "Parameters:"
+    echo "  pid_file    Path to store process ID (e.g., memory/.heartbeat-service.pid)"
+    echo "  command     start   - Start the heartbeat service"
+    echo "              stop    - Stop the heartbeat service"
+    echo "              status  - Check if service is running"
+    echo ""
+    echo "Examples:"
+    echo "  bash tools/heartbeat-service.sh memory/.heartbeat-service.pid start"
+    echo "  bash tools/heartbeat-service.sh memory/.heartbeat-service.pid stop"
+    echo "  bash tools/heartbeat-service.sh memory/.heartbeat-service.pid status"
     exit 1
     ;;
 esac

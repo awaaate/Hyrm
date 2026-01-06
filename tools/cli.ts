@@ -46,6 +46,16 @@ import {
   // Data fetchers
   getQualityStore,
 } from "./shared";
+import {
+  // Heartbeat utilities
+  getHeartbeatStatus,
+  getHeartbeatHealthSummary,
+  analyzeHeartbeatLogs,
+  isHeartbeatServiceRunning,
+  getHeartbeatServicePid,
+  getLeaseAge,
+  getOrchestratorState,
+} from "./shared/heartbeat-utils";
 import type { 
   ToolTiming, 
   Agent, 
@@ -200,31 +210,78 @@ function showAgents(): void {
 }
 
 function showLeaderHistory(): void {
-  const transitions = getLeaderTransitionHistory();
-  
-  console.log(`\n${c.bright}${c.cyan}LEADER TRANSITION HISTORY (Last 24h)${c.reset}\n`);
-  console.log(`${c.dim}${"─".repeat(80)}${c.reset}`);
-  
-  if (transitions.length === 0) {
-    console.log(`${c.dim}No leader transitions in the last 24 hours${c.reset}\n`);
-    return;
-  }
-  
-  for (const transition of transitions) {
-    const timestamp = new Date(transition.timestamp).toLocaleTimeString();
-    const oldLeader = transition.old_leader ? truncate(transition.old_leader, 25) : "none";
-    const newLeader = truncate(transition.new_leader, 25);
-    
-    console.log(
-      `${c.dim}${timestamp}${c.reset} ` +
-      `${oldLeader} (E${transition.old_epoch}) ` +
-      `${c.cyan}→${c.reset} ` +
-      `${c.bright}${newLeader}${c.reset} (E${transition.new_epoch}) ` +
-      `${c.yellow}[${transition.reason}]${c.reset}`
-    );
-  }
-  
-  console.log();
+   const transitions = getLeaderTransitionHistory();
+   
+   console.log(`\n${c.bright}${c.cyan}LEADER TRANSITION HISTORY (Last 24h)${c.reset}\n`);
+   console.log(`${c.dim}${"─".repeat(80)}${c.reset}`);
+   
+   if (transitions.length === 0) {
+     console.log(`${c.dim}No leader transitions in the last 24 hours${c.reset}\n`);
+     return;
+   }
+   
+   for (const transition of transitions) {
+     const timestamp = new Date(transition.timestamp).toLocaleTimeString();
+     const oldLeader = transition.old_leader ? truncate(transition.old_leader, 25) : "none";
+     const newLeader = truncate(transition.new_leader, 25);
+     
+     console.log(
+       `${c.dim}${timestamp}${c.reset} ` +
+       `${oldLeader} (E${transition.old_epoch}) ` +
+       `${c.cyan}→${c.reset} ` +
+       `${c.bright}${newLeader}${c.reset} (E${transition.new_epoch}) ` +
+       `${c.yellow}[${transition.reason}]${c.reset}`
+     );
+   }
+   
+   console.log();
+}
+
+function showHeartbeatStatus(): void {
+   // Lazy load heartbeat utilities to avoid import errors
+   const { getHeartbeatStatus, analyzeHeartbeatLogs, isHeartbeatServiceRunning, getHeartbeatServicePid } = require("./shared/heartbeat-utils.ts");
+   
+   const status = getHeartbeatStatus();
+   const logs = analyzeHeartbeatLogs();
+   const heartbeatStatsPath = join(PATHS.state.split("state.json")[0], "heartbeat-stats.json");
+   const stats = readJson<any>(heartbeatStatsPath, {
+     total_cycles: 0,
+     successful_cycles: 0,
+     failed_cycles: 0,
+     last_update: "NEVER",
+     last_agent_id: null,
+     last_success: false,
+     last_error: null
+   });
+   
+   // Service status color
+   const serviceColor = status.service_running ? c.green : c.red;
+   const serviceIcon = status.service_running ? "●" : "○";
+   
+   // Lease health color
+   const leaseColor = status.lease_healthy ? c.green : c.red;
+   const leaseIcon = status.lease_healthy ? "✓" : "✗";
+   
+   console.log(`
+${c.bgBlue}${c.white}${c.bright}  HEARTBEAT SERVICE STATUS  ${c.reset}
+
+${c.cyan}SERVICE${c.reset}     ${serviceColor}${serviceIcon}${c.reset} ${status.service_running ? `Running (PID: ${status.service_pid})` : "NOT RUNNING"}
+${c.cyan}LEADER${c.reset}      ${c.bright}${truncate(status.leader_id, 30)}${c.reset} (epoch ${status.leader_epoch})
+${c.cyan}LEASE${c.reset}       ${leaseIcon} ${status.lease_healthy ? c.green : c.red}${status.lease_healthy ? "HEALTHY" : "UNHEALTHY"}${c.reset}
+${c.cyan}LEASE AGE${c.reset}   ${status.last_update_age_ms >= 0 ? `${Math.round(status.last_update_age_ms / 1000)}s` : "UNKNOWN"}
+${c.cyan}TTL${c.reset}         ${status.lease_ttl_ms}ms
+${c.cyan}UPDATED${c.reset}     ${status.last_update}
+
+${c.cyan}STATISTICS${c.reset}
+  Total cycles: ${c.bright}${stats.total_cycles}${c.reset}
+  Successful: ${c.green}${stats.successful_cycles}${c.reset}
+  Failed: ${stats.failed_cycles > 0 ? c.red : c.dim}${stats.failed_cycles}${c.reset}
+  Success rate: ${stats.total_cycles > 0 ? c.bright + Math.round((stats.successful_cycles / stats.total_cycles) * 100) + "%" : "N/A"}${c.reset}
+  Last status: ${stats.last_success ? c.green + "SUCCESS" : c.red + "FAILURE"}${c.reset}
+  Last error: ${stats.last_error ? c.yellow + stats.last_error : c.dim + "none"}${c.reset}
+
+${c.dim}Last updated: ${new Date().toLocaleTimeString()}${c.reset}
+`);
 }
 
 function showTasks(filter?: string): void {
@@ -391,6 +448,74 @@ function showQuality(): void {
   }
   
   console.log();
+}
+
+function showHeartbeatStatus(): void {
+  const status = getHeartbeatStatus();
+  const logs = analyzeHeartbeatLogs();
+  const orchState = getOrchestratorState();
+  
+  console.log(`\n${c.bright}${c.cyan}HEARTBEAT SERVICE STATUS${c.reset}\n`);
+  console.log(`${c.dim}${"─".repeat(80)}${c.reset}\n`);
+  
+  // Service status
+  const serviceStatus = status.service_running 
+    ? `${c.green}✓ RUNNING${c.reset} (PID: ${c.bright}${status.service_pid}${c.reset})`
+    : `${c.red}✗ NOT RUNNING${c.reset}`;
+  console.log(`${c.cyan}Service:${c.reset}        ${serviceStatus}`);
+  
+  // Leader info
+  if (status.leader_id && status.leader_id !== "UNKNOWN") {
+    console.log(`${c.cyan}Leader:${c.reset}         ${c.bright}${truncate(status.leader_id, 50)}${c.reset} (epoch ${status.leader_epoch})`);
+  }
+  
+  // Lease health
+  const leaseColor = status.lease_healthy ? c.green : c.red;
+  const leaseStatus = status.lease_healthy 
+    ? `${c.green}✓ HEALTHY${c.reset}`
+    : `${c.red}✗ EXPIRED${c.reset}`;
+  console.log(`${c.cyan}Lease:${c.reset}         ${leaseStatus}`);
+  
+  // Last update
+  if (status.last_update !== "NEVER") {
+    const age = status.last_update_age_ms;
+    const ageStr = age >= 0 ? `${Math.round(age / 1000)}s ago` : "unknown";
+    const ageColor = age >= 0 && age < 65000 ? c.green : age >= 0 && age < 120000 ? c.yellow : c.red;
+    console.log(`${c.cyan}Last Update:${c.reset}    ${c.bright}${status.last_update}${c.reset} (${ageColor}${ageStr}${c.reset})`);
+  } else {
+    console.log(`${c.cyan}Last Update:${c.reset}    ${c.red}NEVER${c.reset}`);
+  }
+  
+  // TTL and age
+  console.log(`${c.cyan}TTL:${c.reset}            ${Math.round(status.lease_ttl_ms / 1000)}s`);
+  if (status.lease_age_ms >= 0) {
+    console.log(`${c.cyan}Lease Age:${c.reset}     ${Math.round(status.lease_age_ms / 1000)}s`);
+  }
+  
+  // Success metrics
+  const total = logs.success + logs.failure;
+  if (total > 0) {
+    const successRate = Math.round((logs.success / total) * 100);
+    const rateColor = successRate >= 95 ? c.green : successRate >= 80 ? c.yellow : c.red;
+    console.log(`${c.cyan}Success Rate:${c.reset}  ${rateColor}${successRate}%${c.reset} (${logs.success} OK, ${logs.failure} failed)`);
+  }
+  
+  // Expected frequency
+  console.log(`${c.cyan}Frequency:${c.reset}     Every ${Math.round(1 / status.update_frequency_hz)}s`);
+  
+  // Error summary
+  if (Object.keys(logs.error_types).length > 0) {
+    console.log(`\n${c.bright}Recent Errors:${c.reset}\n`);
+    for (const [error, count] of Object.entries(logs.error_types)) {
+      console.log(`  ${c.yellow}${error}${c.reset}: ${count} occurrence${count > 1 ? 's' : ''}`);
+    }
+  }
+  
+  console.log();
+  
+  // Health summary
+  const summary = getHeartbeatHealthSummary();
+  console.log(`${c.bright}Summary:${c.reset} ${summary}\n`);
 }
 
 function pruneMessages(olderThanHours: number = 24): void {
@@ -1272,15 +1397,21 @@ switch (command) {
     showRecovery();
     break;
     
-  case "recover":
-  case "resume":
-    recoverSession(args[1]);
-    break;
-    
-  case "timing":
-  case "tool-timing":
-    showToolTiming(args[1] || "summary");
-    break;
+   case "recover":
+   case "resume":
+     recoverSession(args[1]);
+     break;
+     
+   case "heartbeat":
+   case "heartbeat-status":
+   case "hb":
+     showHeartbeatStatus();
+     break;
+     
+   case "timing":
+   case "tool-timing":
+     showToolTiming(args[1] || "summary");
+     break;
     
   case "report":
   case "reports":
