@@ -75,37 +75,175 @@ ${lines.map(l => {
 }
 
 // Commands
-function showStatus(): void {
-  const state = readJson<SystemState>(PATHS.state, {} as SystemState);
-  const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
-  const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
-  const quality = getQualityStore();
-  const userMsgs = readJsonl<UserMessage>(PATHS.userMessages);
-  const leaderInfo = getLeaderInfo();
-  const staleOrchestratorCount = getStaleOrchestratorCount();
-  
-  // Active agents (heartbeat within 2 min)
-  const now = Date.now();
-  const activeAgents = registry.agents?.filter((a: Agent) => 
-    now - new Date(a.last_heartbeat).getTime() < 2 * 60 * 1000
-  ) || [];
-  
-  const pendingTasks = tasks.tasks?.filter((t: Task) => 
-    t.status === "pending" || t.status === "in_progress"
-  ).length || 0;
-  
-  const unreadMsgs = userMsgs.filter((m: UserMessage) => !m.read).length;
-  
-  // Leader info formatting
-  const leaderHealthColor = leaderInfo.health === "fresh" ? c.green : 
-                            leaderInfo.health === "stale" ? c.red : c.dim;
-  const leaderHealthIcon = leaderInfo.health === "fresh" ? "●" : 
-                           leaderInfo.health === "stale" ? "○" : "?";
-  const leaderDisplay = leaderInfo.leader_id 
-    ? `${leaderHealthColor}${leaderHealthIcon}${c.reset} ${c.bright}${truncate(leaderInfo.leader_id, 30)}${c.reset} epoch ${leaderInfo.leader_epoch} ${leaderHealthColor}(${leaderInfo.health})${c.reset}`
-    : `${c.dim}No leader${c.reset}`;
+function showPerfWidget(): string {
+  // Load performance metrics from last hour and 24 hours
+  const metricsPath = join(MEMORY_DIR, "perf-metrics.jsonl");
+  if (!existsSync(metricsPath)) {
+    return `${c.dim}No performance metrics available${c.reset}`;
+  }
 
-  console.log(`
+  interface PerfMetric {
+    timestamp: string;
+    operation_type: string;
+    duration_ms: number;
+    success: boolean;
+  }
+
+  try {
+    const content = readFileSync(metricsPath, "utf-8");
+    const metricLines = content.trim().split("\n").filter(l => l.length > 0);
+    
+    const now = Date.now();
+    const oneHourAgo = now - 60 * 60 * 1000;
+    const oneDayAgo = now - 24 * 60 * 60 * 1000;
+    
+    const metrics: PerfMetric[] = metricLines.map(line => {
+      try {
+        return JSON.parse(line);
+      } catch {
+        return null;
+      }
+    }).filter(m => m !== null) as PerfMetric[];
+    
+    const lastHour = metrics.filter(m => new Date(m.timestamp).getTime() > oneHourAgo);
+    const last24h = metrics.filter(m => new Date(m.timestamp).getTime() > oneDayAgo);
+    
+    if (lastHour.length === 0) {
+      return `${c.dim}No performance metrics in last hour${c.reset}`;
+    }
+    
+    // Get slowest operations
+    const slowestOps = [...lastHour]
+      .sort((a, b) => b.duration_ms - a.duration_ms)
+      .slice(0, 5);
+    
+    // Calculate success rate
+    const totalOps = lastHour.length;
+    const successOps = lastHour.filter(m => m.success).length;
+    const successRate = ((successOps / totalOps) * 100).toFixed(1);
+    
+    // Get operation type statistics
+    const opStats = new Map<string, { count: number; avgMs: number; success: number }>();
+    for (const m of lastHour) {
+      const key = m.operation_type;
+      const current = opStats.get(key) || { count: 0, avgMs: 0, success: 0 };
+      const newAvg = (current.avgMs * current.count + m.duration_ms) / (current.count + 1);
+      opStats.set(key, {
+        count: current.count + 1,
+        avgMs: newAvg,
+        success: current.success + (m.success ? 1 : 0),
+      });
+    }
+    
+    // Agent-specific latencies
+    const agentOps = ['agent_register', 'agent_send', 'agent_messages'];
+    const agentLatencies: Record<string, { count: number; avgMs: number }> = {};
+    
+    for (const opType of agentOps) {
+      const ops = lastHour.filter(m => m.operation_type === opType);
+      if (ops.length > 0) {
+        const avg = ops.reduce((sum, m) => sum + m.duration_ms, 0) / ops.length;
+        agentLatencies[opType] = { count: ops.length, avgMs: avg };
+      }
+    }
+    
+    // Calculate 24h average for comparison
+    const last24hAvg = last24h.length > 0 
+      ? last24h.reduce((sum, m) => sum + m.duration_ms, 0) / last24h.length 
+      : 0;
+    const lastHourAvg = lastHour.reduce((sum, m) => sum + m.duration_ms, 0) / lastHour.length;
+    const avgChange = last24hAvg > 0 
+      ? (((lastHourAvg - last24hAvg) / last24hAvg) * 100).toFixed(1)
+      : "0.0";
+    
+    // Format output
+    const outputLines: string[] = [];
+    outputLines.push(`\n${c.bright}${c.cyan}PERFORMANCE METRICS (Last Hour)${c.reset}`);
+    outputLines.push(`${c.dim}${"─".repeat(80)}${c.reset}`);
+    
+    // Success rate and throughput
+    outputLines.push(
+      `${c.cyan}Success Rate${c.reset}  ${c.bright}${successRate}%${c.reset} (${successOps}/${totalOps} ops) ` +
+      `${c.cyan}Avg Latency${c.reset}  ${c.bright}${lastHourAvg.toFixed(2)}ms${c.reset} ` +
+      `${avgChange > "0" ? c.yellow : c.green}(${avgChange > "0" ? "+" : ""}${avgChange}% vs 24h avg)${c.reset}`
+    );
+    
+    // Slowest operations
+    outputLines.push(`\n${c.bright}${c.yellow}Top 5 Slowest Operations${c.reset}`);
+    for (let i = 0; i < slowestOps.length; i++) {
+      const op = slowestOps[i];
+      const timestamp = new Date(op.timestamp).toLocaleTimeString();
+      const statusIcon = op.success ? "✓" : "✗";
+      outputLines.push(
+        `  ${c.yellow}${i + 1}${c.reset}. ${op.operation_type.padEnd(20)} ` +
+        `${c.bright}${op.duration_ms.toFixed(0)}ms${c.reset} ${statusIcon} ${c.dim}${timestamp}${c.reset}`
+      );
+    }
+    
+    // Agent operation latencies
+    if (Object.keys(agentLatencies).length > 0) {
+      outputLines.push(`\n${c.bright}${c.magenta}Agent Operation Latencies${c.reset}`);
+      for (const [opType, stats] of Object.entries(agentLatencies)) {
+        const color = stats.avgMs < 50 ? c.green : stats.avgMs < 150 ? c.yellow : c.red;
+        outputLines.push(
+          `  ${opType.padEnd(20)} ${color}${stats.avgMs.toFixed(2)}ms${c.reset} (${stats.count} calls)`
+        );
+      }
+    }
+    
+    // Operations breakdown
+    const topOps = Array.from(opStats.entries())
+      .sort((a, b) => b[1].count - a[1].count)
+      .slice(0, 5);
+    
+    if (topOps.length > 0) {
+      outputLines.push(`\n${c.bright}${c.magenta}Top Operations${c.reset}`);
+      for (const [opType, stats] of topOps) {
+        const rate = ((stats.success / stats.count) * 100).toFixed(0);
+        outputLines.push(
+          `  ${opType.padEnd(20)} ${c.bright}${stats.count}${c.reset} calls, ` +
+          `${stats.avgMs.toFixed(2)}ms avg, ${rate}% success`
+        );
+      }
+    }
+    
+    return outputLines.join("\n");
+  } catch (error) {
+    return `${c.red}Error loading performance metrics: ${getErrorMessage(error)}${c.reset}`;
+  }
+}
+
+function showStatus(): void {
+   const state = readJson<SystemState>(PATHS.state, {} as SystemState);
+   const registry = readJson<AgentRegistry>(PATHS.agentRegistry, { agents: [], last_updated: "" });
+   const tasks = readJson<TaskStore>(PATHS.tasks, { tasks: [], version: "", completed_count: 0, last_updated: "" });
+   const quality = getQualityStore();
+   const userMsgs = readJsonl<UserMessage>(PATHS.userMessages);
+   const leaderInfo = getLeaderInfo();
+   const staleOrchestratorCount = getStaleOrchestratorCount();
+   
+   // Active agents (heartbeat within 2 min)
+   const now = Date.now();
+   const activeAgents = registry.agents?.filter((a: Agent) => 
+     now - new Date(a.last_heartbeat).getTime() < 2 * 60 * 1000
+   ) || [];
+   
+   const pendingTasks = tasks.tasks?.filter((t: Task) => 
+     t.status === "pending" || t.status === "in_progress"
+   ).length || 0;
+   
+   const unreadMsgs = userMsgs.filter((m: UserMessage) => !m.read).length;
+   
+   // Leader info formatting
+   const leaderHealthColor = leaderInfo.health === "fresh" ? c.green : 
+                             leaderInfo.health === "stale" ? c.red : c.dim;
+   const leaderHealthIcon = leaderInfo.health === "fresh" ? "●" : 
+                            leaderInfo.health === "stale" ? "○" : "?";
+   const leaderDisplay = leaderInfo.leader_id 
+     ? `${leaderHealthColor}${leaderHealthIcon}${c.reset} ${c.bright}${truncate(leaderInfo.leader_id, 30)}${c.reset} epoch ${leaderInfo.leader_epoch} ${leaderHealthColor}(${leaderInfo.health})${c.reset}`
+     : `${c.dim}No leader${c.reset}`;
+
+   console.log(`
 ${c.bgBlue}${c.white}${c.bright}  OPENCODE SYSTEM STATUS  ${c.reset}
 
 ${c.cyan}SESSION${c.reset}     ${c.bright}${state.session_count || 0}${c.reset}
@@ -118,6 +256,9 @@ ${c.cyan}QUALITY${c.reset}     ${c.bright}${quality.summary?.average_score?.toFi
 
 ${c.dim}Last updated: ${new Date().toLocaleTimeString()}${c.reset}
 `);
+   
+   // Show performance widget
+   console.log(showPerfWidget());
 }
 
 function showAgents(): void {
@@ -1334,6 +1475,12 @@ switch (command) {
    case "timing":
    case "tool-timing":
      showToolTiming(args[1] || "summary");
+     break;
+     
+   case "perf-widget":
+   case "perf-metrics":
+   case "perf-dash":
+     console.log(showPerfWidget());
      break;
     
   case "report":
