@@ -1054,3 +1054,113 @@
 [2026-01-06T17:55:51Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
 [2026-01-06T17:55:52Z] [INFO] Heartbeat service started (PID: 222294)
 [2026-01-06T17:55:57+00:00] [OK] Orchestrator confirmed running
+[2026-01-06T18:00:57+00:00] [ERROR] =========================================
+[2026-01-06T18:00:57+00:00] [ERROR] ORCHESTRATOR CRASH DETECTED:
+[2026-01-06T18:00:57+00:00] [ERROR]   PID: 222262, Exit Code: 0, Reason: health_check: not running
+[2026-01-06T18:00:57+00:00] [ERROR]   Stderr Log: logs/orchestrator-failures/orchestrator-stderr-20260106T175550Z.log
+[2026-01-06T18:00:57+00:00] [ERROR] ---- Orchestrator stderr tail (last 80 lines): logs/orchestrator-failures/orchestrator-stderr-20260106T175550Z.log ----
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: 
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: 
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: 
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: 
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╔═══════════════════════════════════════════════════════════════════════════════╗
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                      SESSION 206 COMPLETION SUMMARY                          ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╠═══════════════════════════════════════════════════════════════════════════════╣
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  ORCHESTRATOR: agent-1767722155190-d1vq9u (LEADER, epoch 19)                ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  STATUS: ACTIVE - All critical work complete, system stable                  ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  SESSION: 206 (started 17:55:55Z)                                            ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╠═══════════════════════════════════════════════════════════════════════════════╣
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║ CRITICAL ISSUE IDENTIFIED & FIXED                                            ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╠═══════════════════════════════════════════════════════════════════════════════╣
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Problem: 240-250 second orchestrator leader lease expiry pattern            ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║           Caused 2-3 orchestrator restarts per hour                          ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Root Cause: Heartbeat script had shell syntax errors                        ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║              - Lines 325, 335, 337: 'local' outside function                 ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║              - Line 284: unbound variable orchestrator_agent                 ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║              - Caused heartbeat cycle to crash every 60s                     ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║              - Result: Leader lease never updated → 240-250s expiry         ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Solution: Refactored heartbeat script                                       ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║            - Moved 'local' declarations into function scope                  ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║            - Fixed all variable scoping                                      ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║            - Bash syntax: PASS ✓                                             ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║            - Tests: 119/119 PASS ✓                                           ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║            - Quality: 9.3/10 ✓                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Expected Impact:                                                            ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║    - Heartbeat script runs without errors every 60s                          ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║    - Leader lease updates correctly                                          ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║    - Orchestrator restart rate: 2-3/hour → <1/hour                          ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╠═══════════════════════════════════════════════════════════════════════════════╣
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║ SYSTEM STATUS                                                                 ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╠═══════════════════════════════════════════════════════════════════════════════╣
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Pending Tasks:        0 ✓                                                   ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  In-Progress Tasks:    0 ✓                                                   ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Active Agents:        4 (1 leader + 3 workers) ✓                            ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Leader Election:      Working (epoch 19) ✓                                  ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Infrastructure:       All operational ✓                                     ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Tests:                119/119 passing (100%) ✓                              ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  Git Status:           Clean + critical fix committed ✓                      ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╠═══════════════════════════════════════════════════════════════════════════════╣
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║ COMMITS THIS SESSION                                                          ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╠═══════════════════════════════════════════════════════════════════════════════╣
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  fcf4c1c - fix(orchestrator): critical heartbeat script shell syntax errors  ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  c4aa5d4 - chore: session 206 complete - critical heartbeat script fix      ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╠═══════════════════════════════════════════════════════════════════════════════╣
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║ NEXT SESSION PRIORITIES                                                       ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╠═══════════════════════════════════════════════════════════════════════════════╣
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  1. Monitor orchestrator restart rate - should drop significantly            ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  2. Verify leader lease stays valid for >180 seconds                         ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  3. Check heartbeat-service.log for clean 60s cycles without errors          ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  4. Confirm realtime.log shows heartbeat updates every 60s                   ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  5. If stable for 24h+, validate fix as successful                           ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  If restart rate improved: Mission accomplished! System much more stable.    ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║  If issues persist: Investigate deeper (may be other root causes).           ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ║                                                                               ║
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: ╚═══════════════════════════════════════════════════════════════════════════════╝
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: 
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: [94m[1m| [0m[90m agent_status  [0mUnknown
+[2026-01-06T18:00:57+00:00] [ERROR] stderr: 
+[2026-01-06T18:00:57+00:00] [ERROR] ---- end stderr tail ----
+[2026-01-06T18:00:57+00:00] [ERROR] =========================================
+[2026-01-06T18:00:57+00:00] [DEBUG] Stopping orphaned heartbeat service...
+[2026-01-06T18:00:59+00:00] [INFO] Healthy leader exists: agent-1767722155190-d1vq9u (epoch 19), lease valid for 146s
+[2026-01-06T18:00:59+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767722155190-d1vq9u:epoch19). Skipping respawn.
+[2026-01-06T18:01:59+00:00] [INFO] Healthy leader exists: agent-1767722155190-d1vq9u (epoch 19), lease valid for 86s
+[2026-01-06T18:01:59+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767722155190-d1vq9u:epoch19). Skipping respawn.
+[2026-01-06T18:02:59+00:00] [INFO] Healthy leader exists: agent-1767722155190-d1vq9u (epoch 19), lease valid for 25s
+[2026-01-06T18:02:59+00:00] [INFO] Orchestrator not running locally but healthy leader exists (agent-1767722155190-d1vq9u:epoch19). Skipping respawn.
+[2026-01-06T18:03:54+00:00] [WARN] Received shutdown signal
+[2026-01-06T18:03:54+00:00] [INFO] Stopping watchdog...
+[2026-01-06T18:03:54+00:00] [INFO] Stopping orchestrator...
+[2026-01-06T18:03:54Z] [WARN] Heartbeat service not running (no PID file)
+[2026-01-06T18:03:54+00:00] [OK] Orchestrator stopped
+[2026-01-06T18:03:54+00:00] [OK] Watchdog stopped
+[2026-01-07T13:59:24+00:00] [INFO] =========================================
+[2026-01-07T13:59:24+00:00] [INFO] Orchestrator Watchdog v3.0 started
+[2026-01-07T13:59:24+00:00] [INFO] Check interval: 60s
+[2026-01-07T13:59:24+00:00] [INFO] Max restarts/hour: 20
+[2026-01-07T13:59:24+00:00] [INFO] Token limit: 150000
+[2026-01-07T13:59:24+00:00] [INFO] Model: anthropic/claude-haiku-4-5
+[2026-01-07T13:59:24+00:00] [INFO] Watchdog PID: 21
+[2026-01-07T13:59:24+00:00] [INFO] =========================================
+[2026-01-07T13:59:24+00:00] [WARN] Leader lease expired 71789s ago: agent-1767722155190-d1vq9u (epoch 19)
+[2026-01-07T13:59:24+00:00] [WARN] Leader lease expired 71789s ago: agent-1767722155190-d1vq9u (epoch 19)
+[2026-01-07T13:59:24+00:00] [INFO] Starting orchestrator agent (restart #1 this hour)...
+[2026-01-07T13:59:24+00:00] [OK] Orchestrator started with PID: 149 (model: anthropic/claude-haiku-4-5)
+[2026-01-07T13:59:25Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
+[2026-01-07T13:59:26Z] [INFO] Heartbeat service started (PID: 173)
+[2026-01-07T13:59:31+00:00] [OK] Orchestrator confirmed running
+[2026-01-07T13:59:31+00:00] [INFO] Cleaning up old orchestrator diagnostics...
+[2026-01-07T13:59:31+00:00] [OK] Diagnostic cleanup completed

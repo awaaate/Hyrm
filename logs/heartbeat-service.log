@@ -98,3 +98,8 @@ tools/lib/orchestrator-heartbeat.sh: line 339: duration_ms: unbound variable
 [2026-01-06T17:52:48Z] [INFO] Heartbeat service stopped
 [2026-01-06T17:55:51Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
 [2026-01-06T17:55:52Z] [INFO] Heartbeat service started (PID: 222294)
+[2026-01-06T18:00:57Z] [INFO] Stopping heartbeat service (PID: 222294)
+[2026-01-06T18:00:58Z] [INFO] Heartbeat service stopped
+[2026-01-06T18:03:54Z] [WARN] Heartbeat service not running (no PID file)
+[2026-01-07T13:59:25Z] [INFO] Starting heartbeat service with PID file: memory/.heartbeat-service.pid
+[2026-01-07T13:59:26Z] [INFO] Heartbeat service started (PID: 173)

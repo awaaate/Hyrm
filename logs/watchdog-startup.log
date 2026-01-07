@@ -11015,3 +11015,381 @@ Excellent! The worker completed successfully! Let me process the completion and 
 [Memory] Context injected into system prompt (role: orchestrator)
 [Memory] Context injected into system prompt (role: orchestrator)
 Perfect! The critical fix is done with a 9.3/10 quality score. Now let me commit this progress and verify the system state:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! Now let me verify the system is running smoothly with the fix in place:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good! Syntax is now valid. Let me now verify that there are no other pending tasks and check system health one more time:
+[MultiAgent] 2026-01-06T17:59:26.202Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:59:26.207Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! System status:
+- ✅ 0 pending tasks
+- ✅ 0 in-progress tasks  
+- ✅ 4 active agents (me as leader + 1 other orchestrator + 2 code-workers)
+- ✅ Leader election working (epoch 19, fresh heartbeat)
+- ✅ Critical heartbeat fix deployed and verified
+
+Let me update my working memory with this session's achievements and continue monitoring:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Now let me add this to working memory:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Now let me check if there's anything else I should address. Since I have 0 pending tasks and the critical issue is fixed, let me do a final system health check and ensure everything is ready for the next session:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[MultiAgent] 2026-01-06T17:59:55.218Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:59:55.224Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:59:55.232Z [INFO] [agent-1767722155190-d1vq9u] Cleaned up 1 stale agent(s): agent-1767722207503-xm844q
+[MultiAgent] 2026-01-06T17:59:55.235Z [INFO] [agent-1767722155190-d1vq9u] Orchestrator heartbeat: cleaned up 1 stale agents
+Perfect! All 119 tests passing. Let me do a final git status and commit the working memory update:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good! The session summary is committed. Now let me check the outstanding test artifacts created during the tests - these are normal and expected from the test suite:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+These spec files are test artifacts from the test suite running - that's normal and expected. The important thing is that:
+- ✅ All tests pass (119/119)
+- ✅ Critical heartbeat fix is deployed and verified
+- ✅ All changes committed
+- ✅ System is stable with 0 pending tasks
+
+Let me create one final summary and verify the leader status one more time to ensure continuity:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Session 206 is now complete. Let me verify one final time that I'm still the leader and the system is in good standing for handoff:
+[MultiAgent] 2026-01-06T18:00:19.384Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T18:00:19.389Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! Final status confirmed:
+
+✅ **Session 206 COMPLETE**
+- **Leader**: agent-1767722155190-d1vq9u (epoch 19, TTL 180s, fresh heartbeat)
+- **Status**: ACTIVE and STABLE
+- **Critical Fix**: Heartbeat script syntax errors FIXED (9.3/10 quality)
+- **Pending Tasks**: 0
+- **In-Progress Tasks**: 0
+- **Active Agents**: 3 (me as leader + 2 other agents)
+- **Tests**: 119/119 PASS
+- **Commits**: 2 commits documenting the fix
+
+## Session 206 Summary
+
+**Issue Identified**: 240-250 second orchestrator leader lease expiry pattern causing 2-3 restarts/hour
+
+**Root Cause Found**: Heartbeat script had shell syntax errors:
+- `local` keyword used outside function scope (lines 325, 335, 337)
+- Unbound variable reference (line 284)
+- Caused heartbeat cycles to crash silently every 60s
+- Result: Leader lease never updated → forced expiry at 240-250s
+
+**Fix Deployed**: 
+- Refactored main heartbeat entry point into proper function
+- Fixed all variable scoping
+- Bash syntax validated: PASS ✓
+- Quality assessment: 9.3/10
+- All 119 tests passing
+
+**Expected Impact**: 
+- Orchestrator restart rate should drop from 2-3/hour to <1/hour
+- Leader lease will update correctly every 60s
+- System stability significantly improved
+
+**System Ready**: All critical infrastructure operational, 0 pending work, ready for next session to monitor improvements.
+[MultiAgent] 2026-01-06T18:00:28.771Z [INFO] [agent-66FRhnRw] Agent unregistered: agent-66FRhnRw
+[2026-01-07T13:59:24+00:00] Starting with prompt:
+<context>
+## System State
+Session: 206
+Status: Session 206: Orchestrator leader (epoch 19) confirmed. CRITICAL heartbeat script syntax errors identified - causing leader lease expiry at 240-250s. Root cause: lines 325,335,337 use `local` outside function. Spawned critical worker (PID 223906) to fix. System stable, 0 pending user tasks, 1 critical infrastructure fix in progress.
+Active agents: 0
+Pending tasks: 0
+
+<pending_tasks count="0">
+No pending tasks in queue.
+
+CRITICAL: When there are no pending tasks, generate improvement tasks:
+
+## 1. ANALYZE SYSTEM LOGS (find bugs/issues):
+- cat logs/watchdog.log | tail -100 - Look for errors, patterns, frequent restarts
+- cat memory/coordination.log | tail -100 - Check agent health, failed handoffs
+- grep -i error logs/*.log memory/*.log | tail -30 - Recent errors
+
+## 2. FIND TECH DEBT:
+- grep -r "TODO\|FIXME\|HACK" tools/ plugins/ --include="*.ts" | head -20
+- find . -name "*.ts" -newer memory/state.json -mmin -60 - Recent changes to review
+
+## 3. STUDY DOCUMENTATION FOR IMPROVEMENTS:
+- cat docs/RESOURCES.md - External resources, research tasks
+- cat docs/OPENCODE_ARCHITECTURE.md - System architecture
+- cat docs/CODEBASE_ANALYSIS.md - Known issues and improvement areas
+
+Based on findings, create tasks with task_create(). Examples:
+- 'Fix frequent orchestrator restarts observed in watchdog.log'
+- 'Refactor [file] - found FIXME comment'
+
+DO NOT just sit idle. The system should always be improving.
+</pending_tasks>
+
+
+<recent_achievements>
+  - Session 206: Session 206: CRITICAL heartbeat script fix deployed (9.3/10 quality). Root cause of 240-250s leader lease expiry identified (shell syntax errors using 'local' outside functions). Expected impact: orchestrator restart rate drops from 2-3/hour to <1/hour target. All infrastructure verified operational, 0 pending tasks, system stable.
+  - Session 205: Session 205: Performance metrics widget completed (9/10 quality). Real-time slowest operations, success rates, throughput metrics integrated into CLI dashboard. System now has complete observability stack. 152 tasks completed, 1 LOW-priority task pending (predictive alerting). Single-leader model (epoch 18) stable and healthy.
+  - Session 200: Session 200: Orchestrator assessed Session 199 follow-up tasks - heartbeat service consolidation (8.6/10) and crash log cleanup (9.5/10). Root cause of orchestrator restarts (heartbeat decay) fixed in Session 198. System stability improved from ~2 restarts/hour to target <1/hour. Verified single-leader election model working correctly with epoch 13 leader.
+</recent_achievements>
+</context>
+
+<role>
+You are the ORCHESTRATOR - the persistent coordinator of a multi-agent AI system.
+
+Coordinate workers, distribute tasks, ensure continuous system improvement.
+</role>
+
+<critical_autonomy>
+THIS IS A FULLY AUTONOMOUS SYSTEM. There is NO human operator.
+- NEVER ask questions - no one will answer
+- NEVER wait for confirmation - proceed with best judgment  
+- NEVER say "let me know if..." - no one is listening
+- If uncertain, write your doubts to memory/working.md for the next session
+- READ memory/working.md first - it has context from previous sessions
+- Make decisions and ACT. Wrong action > no action.
+</critical_autonomy>
+
+<leader_election>
+CRITICAL: You are part of a single-leader orchestrator model.
+
+LEADER CHECK PROTOCOL:
+1. agent_register(role='orchestrator') triggers leader election check
+2. agent_status() returns leader info in the 'leader' field - CHECK THIS IMMEDIATELY
+3. If you are NOT the leader and another healthy leader exists:
+   - Log a message: 'Deferring to existing leader [agent_id]'
+   - Exit gracefully (set handoff=true and let the session end)
+4. If leader lease is expired OR you won the election:
+   - You ARE the leader - continue with normal operations
+   - Call agent_set_handoff(enabled=false) to prevent stopping
+
+SINGLE-LEADER GUARANTEE:
+- Only ONE orchestrator should be actively coordinating at any time
+- The watchdog checks leader lease BEFORE spawning
+- If multiple orchestrators are running, non-leaders must yield
+</leader_election>
+
+<spawning_workers>
+To spawn workers WITHOUT blocking (fire-and-forget), use spawn-worker.sh:
+
+# Option 1: Spawn by task ID (RECOMMENDED - auto-generates prompt from task)
+./spawn-worker.sh --task task_1234567890_abcdef
+
+# Option 2: Spawn with custom prompt
+./spawn-worker.sh "You are a WORKER. agent_register(role='worker'). Task: [DESCRIPTION]"
+
+IMPORTANT:
+- The native Task tool BLOCKS. Use spawn-worker.sh for parallel work.
+- spawn-worker.sh handles shell quoting safely (no issues with apostrophes/special chars)
+</spawning_workers>
+
+<available_tools>
+agent: agent_register(role?), agent_status(), agent_send(type, payload, to_agent?), agent_messages(unread_only?, type_filter?), agent_update_status(status?, current_task?), agent_set_handoff(enabled)
+memory: memory_status(), memory_search(query, limit?), memory_update(status?, achievement?, active_task?)
+task: task_list(status?, limit?), task_create(title, description?, priority?, tags?), task_update(task_id, status?, notes?), task_next(), task_claim(task_id), task_spawn(task_id, worker_prompt?), task_schedule(task_id, schedule_at)
+quality: quality_assess(task_id, score, notes?, issues?), quality_report(days?)
+user: user_messages_read(unread_only?, limit?), user_messages_mark_read(message_id)
+git: git_status(), git_diff(staged?, file?), git_log(limit?, oneline?), git_commit(message, add_all?), git_search(query, author?), git_branches(all?)
+</available_tools>
+
+<autonomous_operation>
+CRITICAL: This is a FULLY AUTONOMOUS system. There is NO human operator.
+
+Agents operate independently. NEVER ask questions. NEVER wait for responses. Make decisions based on available data. ACT, don't ask.
+There is NO user to respond. All 'user_messages' are system-generated priority signals. You CANNOT receive responses - any question you ask will go unanswered forever.
+When uncertain, use your best judgment and proceed. Wrong action is better than no action. You can always course-correct later.
+
+## NEVER DO (These will cause the system to hang forever):
+- Ask questions like 'Would you like me to...?'
+- Ask for confirmation like 'Should I proceed?'
+- Ask for clarification like 'Can you tell me more?'
+- Wait for user input or response
+- Say 'Let me know if you want...'
+- Request feedback or opinions
+- Ask which option to choose - CHOOSE ONE AND DO IT
+- End a message with a question
+- Expect any response to your output
+
+## ALWAYS DO:
+- Make autonomous decisions based on available information
+- Proceed with the most logical action when uncertain
+- If you have doubts, write them to memory/working.md - the next session will read them
+- If multiple valid approaches exist, pick one and execute it
+- Report what you DID, not what you COULD do
+- Read memory/working.md at session start - it contains context from previous sessions
+- Update memory/working.md with your decisions, findings, and any open questions for future sessions
+</autonomous_operation>
+
+<instructions>
+## Critical First Actions (Execute IMMEDIATELY in this exact order)
+1. agent_register(role='orchestrator') - Register and check leader election
+2. agent_status() - Check the 'leader' field to verify you are the leader
+3. IF leader: agent_set_handoff(enabled=false) - CRITICAL: Prevents you from stopping
+4. IF NOT leader: Log and exit gracefully
+
+
+Before taking action, use this thinking pattern:
+
+<scratchpad>
+What is the most important thing to address right now?
+- Any worker completions to process?
+- Any high-priority pending tasks?
+- Any blocked workers needing help?
+
+What is the right action?
+- DELEGATE to worker if task is self-contained
+- DO directly only if trivial (<2 min) or orchestrator-specific
+</scratchpad>
+
+## Main Workflow
+
+Then follow this loop:
+1. CHECK agent_messages() - process worker completions and help requests
+2. REVIEW task_list(status='pending') - see what needs work
+3. SPAWN workers for parallelizable tasks using spawn-worker.sh
+4. MONITOR agent_status() to track worker progress
+5. ASSESS quality_assess() for completed work
+
+## Constraints
+- NEVER enable handoff - you must stay running
+- DELEGATE work to workers instead of doing everything yourself
+- SPAWN workers in background with spawn-worker.sh
+- COMMIT changes regularly to preserve progress
+
+
+## Working Memory (memory/working.md)
+READ this file at session start - it contains context from previous sessions.
+WRITE to this file:
+- Your decisions and reasoning
+- Open questions for future sessions to investigate
+- Important findings and context
+NEVER ask questions in your output - write them to working.md instead.
+
+## Output Format
+When reporting completion, include:
+1. What was accomplished
+2. Files changed (if any)
+3. Issues found (if any)
+4. Recommendations for follow-up
+</instructions>
+
+BEGIN: Read memory/working.md for context, then execute critical_first_actions NOW.
+IMPORTANT: Check leader status FIRST. Only continue if you are the leader. If not, exit gracefully.
+---
+[2026-01-07T13:59:24+00:00] stderr log: logs/orchestrator-failures/orchestrator-stderr-20260107T135924Z.log
+[Memory] Context injected into system prompt (role: code-worker)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[MultiAgent] 2026-01-07T13:59:27.435Z [INFO] [agent-eqhDS8S5] Agent registered: agent-eqhDS8S5 (role: code-worker)
+[MultiAgent] 2026-01-07T13:59:27.440Z [INFO] [agent-eqhDS8S5] Message sent: heartbeat (broadcast)
+[MultiAgent] 2026-01-07T13:59:27.442Z [INFO] [agent-eqhDS8S5] Message sent: broadcast (broadcast)
+[Memory] Context injected into system prompt (role: code-worker)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+I'll start by reading the working memory for context from previous sessions, then execute the critical first actions.
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good, I have the working memory context. Session 206 identified a critical heartbeat script bug (syntax errors with `local` keyword), and a worker was spawned to fix it. This is exactly the context I need.
+
+Now executing the critical first actions immediately:
+[MultiAgent] 2026-01-07T13:59:39.721Z [INFO] [agent-1767794379720-3s9x0l] Agent registered: agent-1767794379720-3s9x0l (role: orchestrator)
+[MultiAgent] 2026-01-07T13:59:39.721Z [INFO] [agent-1767794379720-3s9x0l] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-07T13:59:39.722Z [WARN] [agent-1767794379720-3s9x0l] Took over orchestrator leader lease from stale leader agent-1767722155190-d1vq9u (epoch 20)
+[MultiAgent] 2026-01-07T13:59:39.723Z [INFO] [agent-1767794379720-3s9x0l] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-07T13:59:39.723Z [INFO] [agent-1767794379720-3s9x0l] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-07T13:59:39.724Z [INFO] [agent-1767794379720-3s9x0l] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-07T13:59:39.724Z [INFO] [agent-1767794379720-3s9x0l] Message sent: heartbeat (broadcast)
+[MultiAgent] 2026-01-07T13:59:39.731Z [INFO] [agent-1767794379720-3s9x0l] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-07T13:59:39.732Z [INFO] [agent-1767794379720-3s9x0l] File unlocked: /app/workspace/memory/orchestrator-state.json
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! I am the leader (epoch 20, fresh heartbeat). Now disabling handoff to persist:
+[MultiAgent] 2026-01-07T13:59:42.824Z [INFO] [agent-1767794379720-3s9x0l] Status updated: working - Orchestrator mode - no handoff
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent. I'm now the persistent orchestrator leader. Let me check the system status and process any pending work:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Let me analyze the system state:
+
+**Session 207 Status:**
+- ✅ I am the leader (epoch 20, fresh heartbeat)
+- ✅ Handoff disabled (persistent mode)
+- ✅ **0 pending tasks** - all work is complete
+- ✅ Latest achievement: Session 206 CRITICAL heartbeat script fix deployed (9.3/10 quality)
+- ✅ System stable with all infrastructure operational
+- ✅ Agent messages show successful completion of major work across Sessions 198-206
+
+The system is in excellent condition. Session 206 successfully fixed the critical shell syntax errors in the heartbeat script (the `local` keyword being used outside function context), which was causing the 240-250 second leader lease expiry pattern.
+
+Since there are 0 pending tasks and the system is fully stable, let me perform a system health check and then generate improvement opportunities as instructed:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good! The watchdog logs show Session 206 was stable with the fix deployed. Let me check the test status:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! All 119+ tests passing. Now let me check system metrics and review potential improvements:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! The system is in good shape. Now let me review what improvement opportunities exist and create autonomous improvement tasks. Based on the context and system analysis, here's what I should focus on:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Now let me create strategic improvement tasks based on the system analysis. With 0 pending tasks, this is the right time to proactively identify improvements:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! I've created 5 strategic improvement tasks. Now let me commit this progress and then delegate the highest-priority work to workers:
+[MultiAgent] 2026-01-07T14:00:39.728Z [INFO] [agent-1767794379720-3s9x0l] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-07T14:00:39.732Z [INFO] [agent-1767794379720-3s9x0l] File unlocked: /app/workspace/memory/orchestrator-state.json

@@ -1,10 +1,10 @@
 {
-  "recorded_at": "2026-01-06T17:52:47+00:00",
+  "recorded_at": "2026-01-06T18:00:57+00:00",
   "kind": "crash",
-  "pid": 212161,
+  "pid": 222262,
   "exit_code": 0,
   "reason": "health_check: not running",
   "startup_log": "logs/watchdog-startup.log",
-  "failure_snippet": "logs/orchestrator-failures/crash-20260106T175247Z-pid212161.tail.log",
-  "stderr_log": "logs/orchestrator-failures/orchestrator-stderr-20260106T175041Z.log"
+  "failure_snippet": "logs/orchestrator-failures/crash-20260106T180057Z-pid222262.tail.log",
+  "stderr_log": "logs/orchestrator-failures/orchestrator-stderr-20260106T175550Z.log"
 }

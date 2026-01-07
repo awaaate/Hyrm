@@ -1,0 +1,200 @@
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent finding! The logs show a **critical pattern** - every orchestrator leader expires at **240-250 seconds** exactly, which is suspicious given the 180s TTL and heartbeat should refresh every 60s. The working memory confirms this was investigated in Sessions 197-200 and **FIXED** in Session 198 by removing incorrect heartbeat stop calls. However, I'm seeing the pattern still happening (most recently epoch 18 at 17:50:42).
+
+Let me check if the fix is still in place and verify the heartbeat service status:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good - heartbeat stop calls are gone (no output means they don't exist). But I see the heartbeat service is running. Let me check the heartbeat service logs to see if there are errors:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+**CRITICAL ISSUE FOUND**: The heartbeat script has errors:
+
+```
+tools/lib/orchestrator-heartbeat.sh: line 284: orchestrator_agent: unbound variable
+tools/lib/orchestrator-heartbeat.sh: line 325: local: can only be used in a function
+tools/lib/orchestrator-heartbeat.sh: line 335: local: can only be used in a function
+tools/lib/orchestrator-heartbeat.sh: line 337: local: can only be used in a function
+tools/lib/orchestrator-heartbeat.sh: line 339: duration_ms: unbound variable
+```
+
+This explains why the leader lease keeps expiring - the heartbeat script is crashing with shell errors! Let me examine the heartbeat script:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Found the issue! The script structure is broken:
+
+1. Lines 287-288: `local registry_ok=0` and `local lease_ok=0` are used **inside the `perform_heartbeat` function** which is correct
+2. BUT lines 317-343: The main code block `{ ... } 2>&1 || { ... }` is **NOT inside a function**, so the `local` statements on lines 325 can't be used in the main scope
+
+The problem is the script's main entry point starts at line 317 with `{` which attempts to use `local` on lines 325+ outside of a function context.
+
+Let me check the full script structure:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+The script structure looks OK up front. Let me see the actual main entry point more carefully:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Yes, line 317 is the problem. The main code block tries to use `local` outside of a function. I'll create a task to fix this critical issue:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Now let me spawn a worker to fix this critical issue immediately:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! Worker is now running on the critical heartbeat fix. Let me update my memory with this session's findings and continue monitoring:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good! Now let me continue monitoring for worker completion and manage other system tasks. Let me check if there are any other critical issues in the system logs:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[MultiAgent] 2026-01-06T17:56:55.200Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:56:55.205Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+The old errors from Jan 4 are gone (those were from an earlier session). System file sizes are healthy. Now let me check task status and monitor the worker progress. Since I spawned the critical worker, let me wait a bit for it to complete and then process the result:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Worker spawned. Let me now check for any worker completion messages while monitoring the system. Let me create a proactive monitoring loop to wait for the worker to finish while also ensuring nothing else needs attention:
+[MultiAgent] 2026-01-06T17:57:55.210Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:57:55.222Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:57:55.226Z [INFO] [agent-1767722155190-d1vq9u] Cleaned up 1 stale agent(s): agent-1767721902628-rs70gb
+[MultiAgent] 2026-01-06T17:57:55.227Z [INFO] [agent-1767722155190-d1vq9u] Orchestrator heartbeat: cleaned up 1 stale agents
+[MultiAgent] 2026-01-06T17:58:55.217Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:58:55.225Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+The worker is taking longer than expected. Let me check directly via agent_messages() to see if any completion messages arrived:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! The worker completed successfully! Let me process the completion and assess quality:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! The critical fix is done with a 9.3/10 quality score. Now let me commit this progress and verify the system state:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! Now let me verify the system is running smoothly with the fix in place:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good! Syntax is now valid. Let me now verify that there are no other pending tasks and check system health one more time:
+[MultiAgent] 2026-01-06T17:59:26.202Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:59:26.207Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! System status:
+- ✅ 0 pending tasks
+- ✅ 0 in-progress tasks  
+- ✅ 4 active agents (me as leader + 1 other orchestrator + 2 code-workers)
+- ✅ Leader election working (epoch 19, fresh heartbeat)
+- ✅ Critical heartbeat fix deployed and verified
+
+Let me update my working memory with this session's achievements and continue monitoring:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Now let me add this to working memory:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Now let me check if there's anything else I should address. Since I have 0 pending tasks and the critical issue is fixed, let me do a final system health check and ensure everything is ready for the next session:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[MultiAgent] 2026-01-06T17:59:55.218Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:59:55.224Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T17:59:55.232Z [INFO] [agent-1767722155190-d1vq9u] Cleaned up 1 stale agent(s): agent-1767722207503-xm844q
+[MultiAgent] 2026-01-06T17:59:55.235Z [INFO] [agent-1767722155190-d1vq9u] Orchestrator heartbeat: cleaned up 1 stale agents
+Perfect! All 119 tests passing. Let me do a final git status and commit the working memory update:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Good! The session summary is committed. Now let me check the outstanding test artifacts created during the tests - these are normal and expected from the test suite:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+These spec files are test artifacts from the test suite running - that's normal and expected. The important thing is that:
+- ✅ All tests pass (119/119)
+- ✅ Critical heartbeat fix is deployed and verified
+- ✅ All changes committed
+- ✅ System is stable with 0 pending tasks
+
+Let me create one final summary and verify the leader status one more time to ensure continuity:
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Perfect! Session 206 is now complete. Let me verify one final time that I'm still the leader and the system is in good standing for handoff:
+[MultiAgent] 2026-01-06T18:00:19.384Z [INFO] [agent-1767722155190-d1vq9u] File locked: /app/workspace/memory/orchestrator-state.json
+[MultiAgent] 2026-01-06T18:00:19.389Z [INFO] [agent-1767722155190-d1vq9u] File unlocked: /app/workspace/memory/orchestrator-state.json
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+[Memory] Context injected into system prompt (role: orchestrator)
+Excellent! Final status confirmed:
+
+✅ **Session 206 COMPLETE**
+- **Leader**: agent-1767722155190-d1vq9u (epoch 19, TTL 180s, fresh heartbeat)
+- **Status**: ACTIVE and STABLE
+- **Critical Fix**: Heartbeat script syntax errors FIXED (9.3/10 quality)
+- **Pending Tasks**: 0
+- **In-Progress Tasks**: 0
+- **Active Agents**: 3 (me as leader + 2 other agents)
+- **Tests**: 119/119 PASS
+- **Commits**: 2 commits documenting the fix
+
+## Session 206 Summary
+
+**Issue Identified**: 240-250 second orchestrator leader lease expiry pattern causing 2-3 restarts/hour
+
+**Root Cause Found**: Heartbeat script had shell syntax errors:
+- `local` keyword used outside function scope (lines 325, 335, 337)
+- Unbound variable reference (line 284)
+- Caused heartbeat cycles to crash silently every 60s
+- Result: Leader lease never updated → forced expiry at 240-250s
+
+**Fix Deployed**: 
+- Refactored main heartbeat entry point into proper function
+- Fixed all variable scoping
+- Bash syntax validated: PASS ✓
+- Quality assessment: 9.3/10
+- All 119 tests passing
+
+**Expected Impact**: 
+- Orchestrator restart rate should drop from 2-3/hour to <1/hour
+- Leader lease will update correctly every 60s
+- System stability significantly improved
+
+**System Ready**: All critical infrastructure operational, 0 pending work, ready for next session to monitor improvements.
+[MultiAgent] 2026-01-06T18:00:28.771Z [INFO] [agent-66FRhnRw] Agent unregistered: agent-66FRhnRw

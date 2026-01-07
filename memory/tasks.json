@@ -4004,8 +4004,100 @@
       ],
       "quality_score": 9.3,
       "quality_notes": "Critical shell syntax errors in background services can silently fail and cause cascading issues (240-250s orchestrator restarts). Always validate background scripts with bash -n before deployment. Variable scoping (local keyword) must be inside functions."
+    },
+    {
+      "id": "task_1767794422689_fwfy90",
+      "title": "Monitor and validate Session 206 heartbeat fix effectiveness",
+      "description": "Session 206 deployed a critical fix for shell syntax errors in orchestrator-heartbeat.sh (removed 'local' keywords outside function context). This task is to monitor the fix's effectiveness over the next 24+ hours and validate that the orchestrator restart rate drops from 2-3/hour to target <1/hour.\n\nKey metrics to track:\n1. Orchestrator restart rate in watchdog.log (should drop significantly)\n2. Leader lease validity - should stay >180s (previously expired at 240-250s)\n3. Heartbeat service log cycles - should show successful updates every 60s\n4. realtime.log heartbeat entries - should appear regularly without errors\n5. System stability - no unexpected crashes or stale leader warnings\n\nSuccess criteria:\n- Orchestrator restart rate <1/hour (down from 2-3/hour)\n- No more stale leader lease expiry patterns at 240-250s\n- Heartbeat service runs clean cycles every 60s\n- System remains stable for 24+ hour period\n\nThis is a validation/monitoring task, not a code change task.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-07T14:00:22.689Z",
+      "updated_at": "2026-01-07T14:00:22.709Z",
+      "created_by": "unknown",
+      "tags": [
+        "monitoring",
+        "validation",
+        "heartbeat",
+        "stability"
+      ],
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767794422689_monitor-and-validate-session-2.md"
+    },
+    {
+      "id": "task_1767794425688_fm9cel",
+      "title": "Implement automated orchestrator health dashboard widget",
+      "description": "Create a new CLI dashboard widget to display orchestrator health metrics in real-time:\n\n1. Current leader visibility (ID, epoch, age, heartbeat freshness)\n2. Leader lease status (TTL, last refresh, time to expiry)\n3. Heartbeat service status (last cycle time, success rate, next scheduled)\n4. Orchestrator restart rate (restarts/hour, trend over time)\n5. Stale orchestrator count and cleanup status\n6. Historical leader transitions (last 24h with timestamps)\n\nImplementation approach:\n- Extend tools/cli.ts with new 'orchestrator-health' command\n- Integrate with existing realtime-monitor.ts\n- Leverage data from memory/orchestrator-state.json and heartbeat logs\n- Add color-coded status indicators (green/yellow/red)\n- Display both current snapshot and 24h trend\n\nThis complements the existing 'leader-history' command and provides comprehensive orchestrator visibility for operations monitoring.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-07T14:00:25.688Z",
+      "updated_at": "2026-01-07T14:00:25.692Z",
+      "created_by": "unknown",
+      "tags": [
+        "dashboard",
+        "monitoring",
+        "orchestrator",
+        "ui"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767794425688_implement-automated-orchestrat.md"
+    },
+    {
+      "id": "task_1767794428550_9fkjzy",
+      "title": "Add shell linting and shellcheck integration to CI/CD",
+      "description": "Current CI/CD pipeline (GitHub Actions) runs TypeScript tests but doesn't validate shell scripts. The critical heartbeat.sh syntax errors in Session 206 could have been caught earlier with shell linting.\n\nImplement:\n1. Add shellcheck to .github/workflows/test.yml\n2. Run shellcheck on all shell scripts in tools/, scripts/, etc\n3. Fail CI if shellcheck warnings found\n4. Document shell script best practices in docs/\n5. Integrate with pre-commit hooks (similar to import linting)\n\nBenefits:\n- Catch shell syntax errors before deployment (like Session 206's critical issue)\n- Enforce shell script best practices (quoting, variables, etc)\n- Prevent silent failures in background services\n- Improve code quality for infrastructure scripts\n\nFiles affected:\n- .github/workflows/test.yml (add shellcheck job)\n- Pre-commit hooks (optional: add shell validation)\n- docs/SHELL_SCRIPT_STANDARDS.md (new: best practices guide)\n\nThis is a preventative measure to avoid repeating shell syntax issues.",
+      "priority": "high",
+      "status": "pending",
+      "created_at": "2026-01-07T14:00:28.550Z",
+      "updated_at": "2026-01-07T14:00:28.565Z",
+      "created_by": "unknown",
+      "tags": [
+        "ci-cd",
+        "quality",
+        "shell",
+        "automation"
+      ],
+      "estimated_hours": 2,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767794428550_add-shell-linting-and-shellche.md"
+    },
+    {
+      "id": "task_1767794431598_pb7hbj",
+      "title": "Implement exponential backoff for leader election to reduce churn",
+      "description": "Current leader election system immediately attempts re-election when leader lease expires or during startup. This can cause rapid oscillation between orchestrators during transient issues (brief network hiccups, temporary resource exhaustion, etc).\n\nImplement exponential backoff strategy:\n1. First orchestrator startup: Register immediately\n2. Subsequent leadership attempts: Backoff delay (1s → 2s → 4s → 8s → max 60s)\n3. Successful leader election: Reset backoff counter\n4. Detection of healthy leader: Backoff for non-leader orchestrator cleanup\n\nConfiguration:\n- INITIAL_BACKOFF_MS=1000\n- MAX_BACKOFF_MS=60000\n- BACKOFF_MULTIPLIER=2\n\nImpact:\n- Reduces orchestrator churn during transient issues\n- Allows time for network/resource recovery\n- Smoother failover behavior\n- Prevents thundering-herd during mass failure scenarios\n\nImplementation: orchestrator-watchdog.sh and plugin/index.ts leader election logic\n\nSuccess criteria:\n- Backoff properly increases on repeated failures\n- Resets on successful leadership\n- System stabilizes faster after transient issues\n- No impact on normal operations",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-07T14:00:31.598Z",
+      "updated_at": "2026-01-07T14:00:31.615Z",
+      "created_by": "unknown",
+      "tags": [
+        "orchestrator",
+        "resilience",
+        "leader-election"
+      ],
+      "estimated_hours": 4,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767794431598_implement-exponential-backoff-.md"
+    },
+    {
+      "id": "task_1767794434754_t3tmth",
+      "title": "Document orchestrator failure scenarios and recovery procedures",
+      "description": "Create comprehensive documentation covering orchestrator failure modes and recovery procedures for operators.\n\nTopics to document:\n1. **Common failure scenarios**:\n   - Leader lease expiry (causes, diagnosis, recovery)\n   - Watchdog deadlock or crash (detection, manual recovery)\n   - Heartbeat service failure (symptoms, troubleshooting)\n   - Multiple orchestrators running simultaneously (diagnosis, resolution)\n   - Agent registry corruption (detection, recovery)\n\n2. **Diagnostic procedures**:\n   - How to check orchestrator health (CLI commands)\n   - Reading watchdog.log patterns\n   - Interpreting realtime.log events\n   - Heartbeat service status checks\n   - Leader lease validity checks\n\n3. **Recovery procedures**:\n   - Manual orchestrator restart\n   - Forceful leader election (if needed)\n   - Recovering from stuck agents\n   - Resetting leader election state\n   - When to escalate\n\n4. **Prevention & monitoring**:\n   - Recommended monitoring thresholds\n   - Alerting setup (email, Slack integration)\n   - Proactive checks to run regularly\n   - Performance baselines\n\nFile: docs/ORCHESTRATOR_TROUBLESHOOTING.md (300+ lines)\n\nThis complements existing docs (LEADER_ELECTION.md, HEARTBEAT_SERVICE.md) and provides operational runbook for teams running this system.",
+      "priority": "medium",
+      "status": "pending",
+      "created_at": "2026-01-07T14:00:34.754Z",
+      "updated_at": "2026-01-07T14:00:34.766Z",
+      "created_by": "unknown",
+      "tags": [
+        "documentation",
+        "operational",
+        "troubleshooting"
+      ],
+      "estimated_hours": 3,
+      "complexity": "moderate",
+      "spec_file": "docs/specs/task_1767794434754_document-orchestrator-failure-.md"
     }
   ],
   "completed_count": 191,
-  "last_updated": "2026-01-06T17:59:13.306Z"
+  "last_updated": "2026-01-07T14:00:34.766Z"
 }
