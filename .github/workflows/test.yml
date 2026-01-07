@@ -74,19 +74,92 @@ jobs:
           bun build tools/lib/coordinator.ts --no-bundle 2>&1 || true
         continue-on-error: true
 
+  shellcheck:
+    name: Shell Script Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install shellcheck
+        run: |
+          apt-get update
+          apt-get install -y shellcheck
+      
+      - name: Run shellcheck on shell scripts
+        run: |
+          echo "Linting shell scripts..."
+          
+          # Find all shell scripts excluding node_modules
+          shell_scripts=$(find . -name "*.sh" -type f \
+            ! -path "*/node_modules/*" \
+            ! -path "*/.git/*" \
+            ! -path "*/mcp-servers/*" \
+            -print0 | xargs -0)
+          
+          if [ -z "$shell_scripts" ]; then
+            echo "No shell scripts found"
+            exit 0
+          fi
+          
+          # Run shellcheck with warnings treated as errors
+          shellcheck --severity=warning \
+            ./tools/heartbeat-service.sh \
+            ./tools/lib/orchestrator-heartbeat.sh \
+            ./tools/cleanup-orchestrator-logs.sh \
+            ./orchestrator-watchdog.sh \
+            ./spawn-worker.sh \
+            ./start-main.sh
+          
+          exit_code=$?
+          
+          if [ $exit_code -eq 0 ]; then
+            echo "✓ All shell scripts passed shellcheck!"
+          else
+            echo "✗ Shell script linting failed with exit code $exit_code"
+          fi
+          
+          exit $exit_code
+
   results:
     name: Test Results Summary
     runs-on: ubuntu-latest
-    needs: [test, lint]
+    needs: [test, lint, shellcheck]
     if: always()
     
     steps:
       - name: Check test results
         run: |
-          if [ "${{ needs.test.result }}" == "success" ]; then
-            echo "✓ All tests passed!"
-            exit 0
+          test_result="${{ needs.test.result }}"
+          lint_result="${{ needs.lint.result }}"
+          shellcheck_result="${{ needs.shellcheck.result }}"
+          
+          all_passed=true
+          
+          if [ "$test_result" == "success" ]; then
+            echo "✓ Tests passed"
           else
             echo "✗ Tests failed"
+            all_passed=false
+          fi
+          
+          if [ "$lint_result" == "success" ] || [ "$lint_result" == "skipped" ]; then
+            echo "✓ Linting passed"
+          else
+            echo "✗ Linting failed"
+            all_passed=false
+          fi
+          
+          if [ "$shellcheck_result" == "success" ]; then
+            echo "✓ Shell scripts passed"
+          else
+            echo "✗ Shell script linting failed"
+            all_passed=false
+          fi
+          
+          if [ "$all_passed" == "true" ]; then
+            exit 0
+          else
             exit 1
           fi
